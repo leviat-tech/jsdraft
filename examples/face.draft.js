@@ -1,4 +1,4 @@
-export default function face(c, color, happy=true) {
+module.exports = function face(c, color, happy=true) {
   const eyes = c.group(
     c.line(20, 20, 20, 40),
     c.line(30, 20, 30, 40),
@@ -19,4 +19,4 @@ export default function face(c, color, happy=true) {
   const mouth = happy ? smile : frown;
 
   return c.group(eyes, mouth).stroke(1, color);
-}
+};

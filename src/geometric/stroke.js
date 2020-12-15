@@ -1,4 +1,4 @@
-export default function stroke(c, width, color) {
+module.exports = function stroke(c, width, color) {
   c.definition.stroke = {
     width,
     color

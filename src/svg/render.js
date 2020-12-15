@@ -1,5 +1,5 @@
-import { SVG, registerWindow } from '@svgdotjs/svg.js';
-import { createSVGWindow } from 'svgdom';
+const { SVG, registerWindow } = require('@svgdotjs/svg.js');
+const { createSVGWindow } = require('svgdom');
 
 
 function recurse(canvas, definition, stroke) {
@@ -17,7 +17,7 @@ function recurse(canvas, definition, stroke) {
   }
 }
 
-export default function render(c) {
+module.exports = function render(c) {
   // create document
   const window = createSVGWindow();
   const document = window.document;

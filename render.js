@@ -1,28 +1,23 @@
 #!/usr/bin/env node
-import { program } from 'commander';
+const { program } = require('commander');
 
 
-async function render(context, draft, args) {
-  try {
-    // parse parameters
-    const params = args.map(a => JSON.parse(a));
+function render(context, draft, args) {
+  // parse parameters
+  const params = args.map(a => JSON.parse(a));
 
-    // import desired context
-    const Context = (await import(`./src/${context}/context.js`)).default;
+  // import desired context
+  const Context = require(`./src/${context}/context.js`);
 
-    // import draft function
-    const model = (await import(draft)).default;
+  // import draft function
+  const model = require(draft);
 
-    // include draft function
-    Context.include(model);
+  // include draft function
+  Context.include(model);
 
-    // execute root draft function and render
-    const c = new Context();
-    c[model.name](...params).render()
-  }
-  catch (e) {
-    console.log(e);
-  }
+  // execute root draft function and render
+  const c = new Context();
+  c[model.name](...params).render();
 }
 
 program

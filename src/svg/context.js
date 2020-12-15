@@ -1,6 +1,6 @@
-import Context from '../geometric/context.js';
-import render from './render.js';
+const Context = require('../geometric/context.js');
+const render = require('./render.js');
 
 Context.include(render);
 
-export default Context;
+module.exports = Context;

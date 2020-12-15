@@ -1,3 +1,6 @@
+const path = require('path');
+
+
 class Context {
 
   // construct a new context with atomic definition, groups are like layers (an array of subcontext definitions)
@@ -14,6 +17,15 @@ class Context {
     const copy = new this();
     copy.definition = JSON.parse(JSON.stringify(ctx.definition));
     return copy;
+  }
+
+  // dynamically include a draft function without polluting context prototype
+  include(...paths) {
+    const func = require(path.join(...paths));
+    this[func.name] = function(...args) {
+      const c = this.constructor.clone(this);
+      return func(c, ...args);
+    }
   }
 
   // safely include a draft function and pass it a clone of the context, expect it to return a context
@@ -37,7 +49,5 @@ function implement(...methods) {
 }
 
 
-export {
-  Context,
-  implement
-};
+exports.Context = Context;
+exports.implement = implement;

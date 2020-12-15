@@ -8,7 +8,7 @@ function recurse(definition, depth) {
   }
 }
 
-export default function render(c) {
+module.exports = function render(c) {
   recurse(c.definition, 0);
   return c;
 }

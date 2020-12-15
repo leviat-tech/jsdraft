@@ -1,9 +1,8 @@
-import { implement } from '../context.js';
-import stroke from './stroke.js';
-import line from './line.js';
-import group from './group.js';
-import render from './render.js';
-
+const { implement } = require('../context.js');
+const stroke = require('./stroke.js');
+const line = require('./line.js');
+const group = require('./group.js');
+const render = require('./render.js');
 
 const Context = implement(
   line,
@@ -12,4 +11,4 @@ const Context = implement(
   render
 );
 
-export default Context;
+module.exports = Context;
