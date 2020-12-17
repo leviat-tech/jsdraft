@@ -4,7 +4,7 @@ JSDraft is a parametric functional drawing library adapted from Draft.
 
 There are two core constructs in JSDraft: **drawings** and **draft functions**.  A **drawing** is a data structure that
 stores 2d geometry and details about how render that geometry to an image.  A **draft function** is a function that
-operates on a drawing to draw shapes and modify the geometry of drawing.  A draft function is called on a drawing
+operates on a drawing to draw shapes and modify meta data of the drawing.  A draft function is called on a drawing
 and always returns a modified copy of the original drawing, it never mutates the drawing directly.  After a drawing is completed it can passed to a **render function** to output an image in various formats.
 
 
@@ -23,7 +23,7 @@ render(example, 'svg', {path: 'triangle.svg'})
 
 
 ## Creating a Draft Function
-We can also create a custom draft function to draw this same triangle if we wanted to re-use this code:
+We can also create a custom draft function to draw this same triangle if we wanted to re-use the code:
 ```js
 function triangle(drawing) {
   return drawing
@@ -38,8 +38,10 @@ render(example, 'svg', {path: 'triangle.svg'})
 ```
 
 
-## Registering a Draft Function
-Custom draft functions can also be registered on the drawing class or object for repeated use:
+## Registering a Custom Draft Function
+Custom draft functions can also be registered on the drawing class or object for repeated use.  When a draft
+function is registered a few things are done for you: the input drawing is automatically deeply cloned for you,
+the drawing argument is injected for you, and the function is attached to the drawing class.
 ```js
 function triangle(drawing) {
   return drawing
