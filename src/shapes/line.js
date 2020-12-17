@@ -18,8 +18,7 @@ class Line {
    }
 
    get length() {
-     console.log(math.sqrt(math.pow(this.b.x - this.a.x) + math.pow(this.b.y - this.a.y)))
-     return math.sqrt(math.pow(this.b.x - this.a.x) + math.pow(this.b.y - this.a.y));
+     return math.sqrt(math.pow(this.b.x - this.a.x, 2) + math.pow(this.b.y - this.a.y, 2));
    }
 }
 
