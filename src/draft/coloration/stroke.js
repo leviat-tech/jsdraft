@@ -1,7 +1,4 @@
 module.exports = function stroke(c, width, color) {
-  c.definition.stroke = {
-    width,
-    color
-  }
+  c.node.coloring.stroke = {width, color};
   return c;
 }
