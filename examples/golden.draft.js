@@ -1,4 +1,4 @@
-module.exports = function basic(c, size) {
+module.exports = function golden(c, size) {
 
   // draw square ruler
   square = c.square(0, 0, size, size).ruler();
