@@ -2,10 +2,10 @@
 
 JSDraft is a parametric functional drawing library adapted from Draft.
 
-There are two core constructs in JSDraft: *drawings* and *draft functions*.  A *drawing* is a data structure that
-stores 2d geometry and details about how render that geometry to an image.  A *draft function* is a function that
+There are two core constructs in JSDraft: **drawings** and **draft functions**.  A **drawing** is a data structure that
+stores 2d geometry and details about how render that geometry to an image.  A **draft function** is a function that
 operates on a drawing to draw shapes and modify the geometry of drawing.  A draft function is called on a drawing
-and always returns a modified copy of the original drawing, it never mutates the drawing directly.  After a drawing is completed it can passed to a *render function* to output an image in various formats.
+and always returns a modified copy of the original drawing, it never mutates the drawing directly.  After a drawing is completed it can passed to a **render function** to output an image in various formats.
 
 
 ## Basic Drawing
