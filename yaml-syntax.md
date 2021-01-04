@@ -184,7 +184,7 @@ features:
     - var: [area, 5 * 10]
 
   # Use the group name "my_rect" to access vars in that group.
-  - rectangle: [0, 0, sqrt(my_rect.vars.area), sqrt(my_rect.vars.area)] 
+  - rectangle: [0, 0, sqrt(my_rect.area), sqrt(my_rect.area)] 
 ```
 
 ## References
@@ -247,6 +247,33 @@ features:
   - layer: my_layer
 ```
 
-## Custom features
-
 ## Tables
+
+Tables are also features. Once a table has been defined, data can be accessed using the "find" function.
+
+```yaml
+parameters:
+  height: 160
+  thickness: 80
+  diameter: 6
+features:
+  - rectangle: [0, 0, thickness, height]
+  - table:
+      name: angles
+      data:
+        - { height: 160, thickness: 80, diameter: 6, angle: 40 }
+        - { height: 160, thickness: 80, diameter: 8, angle: 35 }
+        - { height: 160, thickness: 80, diameter: 10, angle: 35 }
+        - { height: 160, thickness: 120, diameter: 6, angle: 35 }
+        - { height: 160, thickness: 120, diameter: 8, angle: 35 }
+        - { height: 160, thickness: 120, diameter: 10, angle: 35 }
+        - { height: 170, thickness: 80, diameter: 6, angle: 45 }
+        - { height: 170, thickness: 80, diameter: 8, angle: 40 }
+        - { height: 170, thickness: 80, diameter: 10, angle: 35 }
+        - { height: 170, thickness: 120, diameter: 6, angle: 35 }
+        - { height: 170, thickness: 120, diameter: 8, angle: 35 }
+        - { height: 170, thickness: 120, diameter: 10, angle: 35 }
+  - rotate: "angles.find({ height: height, thickness: thickness, diameter: diameter }).angle"
+```
+
+## Custom features
