@@ -162,7 +162,7 @@ A "var" is an expression that can be evaluated and assigned a variable name, so 
 
 ```yaml
 parameters:
-  height: 10
+  - height: 10
 features:
   # "width" in this case is undefined, and will throw an error
   - rectangle: [0, 0, width, height]
@@ -277,3 +277,5 @@ features:
 ```
 
 ## Custom features
+
+Custom features can be written [in javascript](./js-syntax.md) and registered with Draft. They can then be used like any other feature using the standard YAML syntax.

@@ -3,19 +3,33 @@
   "version": "1.0.0",
   "description": "",
   "bin": "render.js",
+  "type": "module",
+  "engines": {
+    "node": ">= 13.2.0"
+  },
   "scripts": {
     "render": "./cli.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha",
+    "lint": "eslint --debug ./src/sketch.js",
+    "test:watch": "mocha --reporter min --colors -w"
   },
   "author": "",
   "dependencies": {
+    "@crhio/vector": "^0.0.2",
     "@svgdotjs/svg.js": "^3.0.16",
     "commander": "^6.2.1",
-    "glob": "^7.1.6",
-    "lodash.clonedeep": "^4.5.0",
     "mathjs": "^8.1.0",
     "pdf-lib": "^1.13.0",
     "svgdom": "^0.1.8",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "yup": "^0.32.8"
+  },
+  "devDependencies": {
+    "chai": "^4.3.0",
+    "eslint": "^7.19.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-vue": "^7.5.0",
+    "mocha": "^8.2.1"
   }
 }

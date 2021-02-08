@@ -1,18 +1,28 @@
-module.exports = function golden(c, size) {
+export default {
+  name: 'golden',
+  parameters: [
+    {
+      name: 'size',
+      type: 'number',
+      default: 2,
+      min: 0,
+      max: 10,
+    },
+  ],
+  func(sketch, size) {
+    // draw square
+    const square = sketch.square(0, 0, size, size);
 
-  // draw square ruler
-  square = c.square(0, 0, size, size).ruler();
+    // draw circle
+    const circle = sketch.circle(0, 0, square.shape.bottom.midpoint, square.shape.b);
 
-  // draw circle ruler
-  circle = c.circle(square.shape.bottom.midpoint, square.shape.b).ruler();
-
-  // draw golden rectangle
-  rectangle = c.rectangle(square.shape.a.x, square.shape.a.y, circle.shape.right.x, square.shape.b.y)
-
-  // return rulers and rectangle
-  return c.group(
-    square,
-    circle,
-    rectangle
-  )
+    // return golden rectangle
+    return sketch
+      .rectangle(
+        square.shape.a.x,
+        square.shape.a.y,
+        circle.shape.right.x,
+        square.shape.b.y,
+      );
+  },
 };
