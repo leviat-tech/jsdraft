@@ -1,4 +1,4 @@
-const Circle = require('../../shapes/circle.js');
+const Circle = require('../../entities/circle.js');
 
 
 module.exports = function circle(c, ...args) {

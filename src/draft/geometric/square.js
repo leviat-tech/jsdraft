@@ -1,4 +1,4 @@
-const Rectangle = require('../../shapes/rectangle.js');
+const Rectangle = require('../../entities/rectangle.js');
 
 
 module.exports = function square(c, ...args) {
