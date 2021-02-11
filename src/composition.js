@@ -21,12 +21,6 @@ class Composition {
     this.node = {...this.node, ...(options || {})}
   }
 
-  get shape() {
-    if (this.node.geometry.length == 1) {
-      return this.node.geometry[0];
-    } else {
-      throw Error("Called shape on a composition that doesn't have a single shape.", this);
-    }
   // convenience getter for new blank composition
   get new() {
     return new Composition();
@@ -75,6 +69,17 @@ class Composition {
       if (condition(sketch)) return sketch;
     }
   }
+
+  // query sketch for first availiable geometric entity
+  get shape() {
+    const sketch = this.find(s => s.node.geometry.length > 0);
+    if (sketch) {
+      return sketch.node.geometry[0];
+    } else {
+      throw Error("Called shape on a composition that doesn't have a single shape.", this);
+    }
+  }
+
   // dynamically provide a draft function to composition without polluting prototype
   include(...paths) {
     this.constructor.include(require(path.join(...paths)), this)
