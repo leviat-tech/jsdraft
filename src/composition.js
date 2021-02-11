@@ -7,7 +7,7 @@ const path = require('path');
 class Composition {
 
   // construct a new empty composition
-  constructor() {
+  constructor(options) {
     this.node = {
       id: uuidv4(),
       name: '',
@@ -18,6 +18,7 @@ class Composition {
       geometry: [],
       children: []
     };
+    this.node = {...this.node, ...(options || {})}
   }
 
   get shape() {
