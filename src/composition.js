@@ -73,6 +73,13 @@ class Composition {
   tree(order) {
     return iterators[order || 'level'](this);
   }
+
+  // find first node where condition returns true (searched in level order)
+  find(condition, order) {
+    for (const sketch of this.tree(order)) {
+      if (condition(sketch)) return sketch;
+    }
+  }
   // dynamically provide a draft function to composition
   static include(func, target) {
     const cls = this;
