@@ -34,6 +34,14 @@ class Composition {
 
   leaf() {
     return new Composition();
+  // append a child (composition can either be a sketch object or options used to create a new sketch)
+  add(sketch) {
+    if (!(sketch instanceof Composition)) {
+      sketch = new Composition(sketch)
+    }
+    this.node.children.push(sketch)
+    return this;
+  }
   }
 
   // return a clone of this composition
