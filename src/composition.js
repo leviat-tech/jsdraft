@@ -86,10 +86,10 @@ class Composition {
     const decorated = function(...args) {
       const input = cls.clone(this);
       const output = func(input, ...args);
-      output.node.draft = func.name;
+      output.node.draft = output.node.draft || func.identifier || func.name;
       return output;
     };
-    (target || this.prototype)[func.name] = decorated;
+    (target || this.prototype)[func.identifier || func.name] = decorated;
   }
 };
 
