@@ -69,6 +69,10 @@ class Composition {
     return copy;
   }
 
+  // create iterator to traverse the sketch tree
+  tree(order) {
+    return iterators[order || 'level'](this);
+  }
   // dynamically provide a draft function to composition
   static include(func, target) {
     const cls = this;
