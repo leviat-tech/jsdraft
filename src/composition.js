@@ -57,11 +57,6 @@ class Composition {
     return Composition.clone(this);
   }
 
-  // dynamically provide a draft function to composition without polluting prototype
-  include(...paths) {
-    this.constructor.include(require(path.join(...paths)), this)
-  }
-
   // construct a clone of a composition
   static clone(composition) {
     const copy = new Composition();
@@ -80,6 +75,11 @@ class Composition {
       if (condition(sketch)) return sketch;
     }
   }
+  // dynamically provide a draft function to composition without polluting prototype
+  include(...paths) {
+    this.constructor.include(require(path.join(...paths)), this)
+  }
+
   // dynamically provide a draft function to composition
   static include(func, target) {
     const cls = this;
@@ -94,9 +94,14 @@ class Composition {
 };
 
 
-// include all basic draft functions
-const modules = glob.sync('./draft/**/*.js', {cwd: __dirname});
+// include all built in js draft functions
+const modules = glob.sync('./features/**/*.js', {cwd: __dirname});
 modules.forEach(m => Composition.include(require(m)));
+
+// include all built in yaml functions
+const sketches = glob.sync('./features/**/*.yaml', {cwd: __dirname}).map(p => path.join(__dirname, p));
+sketches.forEach(p => Composition.include(dyaml.load(p)))
+
 
 
 module.exports = Composition;
