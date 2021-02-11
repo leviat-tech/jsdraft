@@ -27,14 +27,16 @@ class Composition {
     } else {
       throw Error("Called shape on a composition that doesn't have a single shape.", this);
     }
-  }
-
-  get free() {
-    return this.leaf();
-  }
-
-  leaf() {
+  // convenience getter for new blank composition
+  get new() {
     return new Composition();
+  }
+
+  // create new composition
+  create(options) {
+    return new Composition(options);
+  }
+
   // append a child (composition can either be a sketch object or options used to create a new sketch)
   add(sketch) {
     if (!(sketch instanceof Composition)) {
