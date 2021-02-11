@@ -42,6 +42,11 @@ class Composition {
     this.node.children.push(sketch)
     return this;
   }
+
+  // append multiple children
+  group(...sketches) {
+    sketches.forEach(s => this.add(s))
+    return this;
   }
 
   // return a clone of this composition
