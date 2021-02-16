@@ -25,6 +25,6 @@ function recurse(c, depth) {
   }
 }
 
-module.exports = function render(composition) {
-  recurse(composition, 0);
+module.exports = function render(sketch) {
+  recurse(sketch, 0);
 }
