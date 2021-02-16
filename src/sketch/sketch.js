@@ -2,11 +2,13 @@ const { v4: uuidv4 } = require('uuid');
 var cloneDeep = require('lodash.clonedeep');
 const glob = require('glob');
 const path = require('path');
+const iterators = require('./iterators');
+const load = require('../loaders/load');
 
 
-class Composition {
+class Sketch {
 
-  // construct a new empty composition
+  // construct a new empty sketch
   constructor(options) {
     this.node = {
       id: uuidv4(),
@@ -21,20 +23,20 @@ class Composition {
     this.node = {...this.node, ...(options || {})}
   }
 
-  // convenience getter for new blank composition
+  // convenience getter for new blank sketch
   get new() {
-    return new Composition();
+    return new Sketch();
   }
 
-  // create new composition
+  // create new sketch
   create(options) {
-    return new Composition(options);
+    return new Sketch(options);
   }
 
-  // append a child (composition can either be a sketch object or options used to create a new sketch)
+  // append a child (sketch can either be a sketch object or options used to create a new sketch)
   add(sketch) {
-    if (!(sketch instanceof Composition)) {
-      sketch = new Composition(sketch)
+    if (!(sketch instanceof Sketch)) {
+      sketch = new Sketch(sketch)
     }
     this.node.children.push(sketch)
     return this;
@@ -46,15 +48,15 @@ class Composition {
     return this;
   }
 
-  // return a clone of this composition
+  // return a clone of this sketch
   clone() {
-    return Composition.clone(this);
+    return Sketch.clone(this);
   }
 
-  // construct a clone of a composition
-  static clone(composition) {
-    const copy = new Composition();
-    copy.node = cloneDeep(composition.node);
+  // construct a clone of a sketch
+  static clone(sketch) {
+    const copy = new Sketch();
+    copy.node = cloneDeep(sketch.node);
     return copy;
   }
 
@@ -76,16 +78,16 @@ class Composition {
     if (sketch) {
       return sketch.node.geometry[0];
     } else {
-      throw Error("Called shape on a composition that doesn't have a single shape.", this);
+      throw Error("Called shape on a sketch that doesn't have a single shape.", this);
     }
   }
 
-  // dynamically provide a draft function to composition without polluting prototype
+  // dynamically provide a draft function to sketch without polluting prototype
   include(...paths) {
     this.constructor.include(require(path.join(...paths)), this)
   }
 
-  // dynamically provide a draft function to composition
+  // dynamically provide a draft function to sketch
   static include(func, target) {
     const cls = this;
     const decorated = function(...args) {
@@ -100,13 +102,13 @@ class Composition {
 
 
 // include all built in js draft functions
-const modules = glob.sync('./features/**/*.js', {cwd: __dirname});
-modules.forEach(m => Composition.include(require(m)));
+const modules = glob.sync('../features/**/*.js', {cwd: __dirname}).map(p => path.join(__dirname, p));
+modules.forEach(m => Sketch.include(load(m)));
 
 // include all built in yaml functions
-const sketches = glob.sync('./features/**/*.yaml', {cwd: __dirname}).map(p => path.join(__dirname, p));
-sketches.forEach(p => Composition.include(dyaml.load(p)))
+const sketches = glob.sync('../features/**/*.yaml', {cwd: __dirname}).map(p => path.join(__dirname, p));
+sketches.forEach(p => Sketch.include(load(p)))
 
 
 
-module.exports = Composition;
+module.exports = Sketch;
