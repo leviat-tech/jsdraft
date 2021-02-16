@@ -1,19 +1,19 @@
 function recurse(c, depth) {
   const padding = ' '.repeat(depth * 4)
 
-  // print node (without geometry)
-  const { geometry, children, ...node } = c.node;
+  // print node (without entities)
+  const { entities, children, ...node } = c.node;
   console.log(`${padding}=== META ===`)
   for (key in node) {
     console.log(`${padding}${key}:`, node[key]);
   }
 
-  // print shapes
-  if (geometry.length) {
-    console.log(`${padding}=== GEOMETRY ===`)
+  // print entities
+  if (entities.length) {
+    console.log(`${padding}=== ENTITIES ===`)
   }
-  for (const shape of geometry) {
-    console.log(`${padding}`, shape);
+  for (const entity of entities) {
+    console.log(`${padding}`, entity);
   }
 
   // print children

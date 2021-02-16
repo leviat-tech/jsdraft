@@ -1,8 +1,8 @@
-const Rectangle = require('../../entities/rectangle.js');
+const Rectangle = require('../../entities/geometric/rectangle.js');
 
 
 module.exports = function rectangle(sketch, ...args) {
   return sketch.add({
-    geometry: [new Rectangle(...args)]
+    entities: [new Rectangle(...args)]
   });
 }

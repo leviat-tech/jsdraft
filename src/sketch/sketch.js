@@ -17,7 +17,7 @@ class Sketch {
       tags: new Set([]),
       draft: '',
       coloring: {},
-      geometry: [],
+      entities: [],
       children: []
     };
     this.node = {...this.node, ...(options || {})}
@@ -74,9 +74,9 @@ class Sketch {
 
   // query sketch for first availiable geometric entity
   get shape() {
-    const sketch = this.find(s => s.node.geometry.length > 0);
+    const sketch = this.find(s => s.node.entities.length > 0);
     if (sketch) {
-      return sketch.node.geometry[0];
+      return sketch.node.entities[0];
     } else {
       throw Error("Called shape on a sketch that doesn't have a single shape.", this);
     }

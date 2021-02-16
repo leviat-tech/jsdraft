@@ -1,8 +1,8 @@
-const Line = require('../../entities/line.js');
+const Line = require('../../entities/geometric/line.js');
 
 
 module.exports = function line(sketch, ...args) {
   return sketch.add({
-    geometry: [new Line(...args)]
+    entities: [new Line(...args)]
   });
 }

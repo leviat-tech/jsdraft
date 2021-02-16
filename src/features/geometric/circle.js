@@ -1,8 +1,8 @@
-const Circle = require('../../entities/circle.js');
+const Circle = require('../../entities/geometric/circle.js');
 
 
 module.exports = function circle(sketch, ...args) {
   return sketch.add({
-    geometry: [new Circle(...args)]
+    entities: [new Circle(...args)]
   });
 }
