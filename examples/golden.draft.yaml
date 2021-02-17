@@ -1,0 +1,13 @@
+#golden.draft.yaml
+parameters:
+  - $size
+  - $a: 1
+reference:
+  - $height: '$size * 2'
+  - $title: '"GOLDEN " + String($height)'
+  - $square:
+    - square: [0, 0, $size, $size]
+  - $circle:
+    - circle: [$square.shape.bottom.midpoint, $square.shape.b]
+sketch:
+  - rectangle: [$square.shape.a.x, $square.shape.a.y, $circle.shape.right.x, $square.shape.b.y]
