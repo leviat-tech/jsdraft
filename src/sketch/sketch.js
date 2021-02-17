@@ -11,14 +11,14 @@ class Sketch {
   // construct a new empty sketch
   constructor(options) {
     this.node = {
-      id: uuidv4(),
-      name: '',
-      type: '',
-      tags: new Set([]),
-      draft: '',
-      coloring: {},
-      entities: [],
-      children: []
+      id: uuidv4(),   // id: the uuid of node
+      name: '',       // name: the name of this node
+      feature: '',    // feature: the name of the feature function that created this node
+      hidden: false,  // hidden: if false this node should not be rendered (except console renderer)
+      style: {},      // style: stroke, fill, etc that should be applied to paths in decendent nodes
+      entities: [],   // entities: all geometry, text, and other elements associated attached to this node
+      children: [],   // children: nodes attached as decendents to this node
+      attributes: {}, // attributes: a free space for meta data associated with this node
     };
     this.node = {...this.node, ...(options || {})}
   }
@@ -31,21 +31,6 @@ class Sketch {
   // create new sketch
   create(options) {
     return new Sketch(options);
-  }
-
-  // append a child (sketch can either be a sketch object or options used to create a new sketch)
-  add(sketch) {
-    if (!(sketch instanceof Sketch)) {
-      sketch = new Sketch(sketch)
-    }
-    this.node.children.push(sketch)
-    return this;
-  }
-
-  // append multiple children
-  group(...sketches) {
-    sketches.forEach(s => this.add(s))
-    return this;
   }
 
   // return a clone of this sketch
@@ -82,18 +67,18 @@ class Sketch {
     }
   }
 
-  // dynamically provide a draft function to sketch without polluting prototype
+  // dynamically provide a feature function to sketch without polluting prototype
   include(...paths) {
     this.constructor.include(require(path.join(...paths)), this)
   }
 
-  // dynamically provide a draft function to sketch
+  // dynamically provide a feature function to sketch
   static include(func, target) {
     const cls = this;
     const decorated = function(...args) {
       const input = cls.clone(this);
       const output = func(input, ...args);
-      output.node.draft = output.node.draft || func.identifier || func.name;
+      output.node.feature = output.node.feature || func.identifier || func.name;
       return output;
     };
     (target || this.prototype)[func.identifier || func.name] = decorated;
@@ -101,11 +86,11 @@ class Sketch {
 };
 
 
-// include all built in js draft functions
+// include all built in js feature functions
 const modules = glob.sync('../features/**/*.js', {cwd: __dirname}).map(p => path.join(__dirname, p));
 modules.forEach(m => Sketch.include(load(m)));
 
-// include all built in yaml functions
+// include all built in yaml feature functions
 const sketches = glob.sync('../features/**/*.yaml', {cwd: __dirname}).map(p => path.join(__dirname, p));
 sketches.forEach(p => Sketch.include(load(p)))
 
