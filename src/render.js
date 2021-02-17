@@ -5,30 +5,31 @@ const load = require('./loaders/load');
 const Sketch = require('./sketch/sketch.js');
 
 
-function main(renderer, feature, args) {
+function main(renderer, feature, arguments, options) {
   // parse parameters
-  const params = args.map(a => JSON.parse(a));
+  const params = arguments.map(a => JSON.parse(a));
 
   // import desired render function
   const render = require(`./renderers/${renderer}.js`);
 
-  // import root draft function
-  const draft = load(path.join(process.cwd(), feature))
+  // import root feature function
+  const func = load(path.join(process.cwd(), feature))
 
-  // create blank sketch to pass to root draft function
+  // create blank sketch to pass to root feature function
   const blank = new Sketch();
 
-  // execute root draft function and render
-  const sketch = draft(blank, ...args);
-  render(sketch);
+  // execute root feature function and render
+  const sketch = func(blank, ...arguments);
+  render(sketch, options);
 }
 
 program
-  .arguments('<renderer> <draft> [arguments...]')
+  .arguments('<renderer> <feature> [arguments...]')
   .description('renderer', {
     renderer: 'render function',
-    draft: 'root draft function to generate sketch',
-    args: 'json arguments to pass root draft function'
+    feature: 'root feature function to generate sketch',
+    arguments: 'json arguments to pass root feature function',
   })
+  .option('-f , --file <path>', 'output file path')
   .action(main);
-program.parse(process.argv);
+program.parse();
