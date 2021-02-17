@@ -8,6 +8,10 @@ operates on a drawing to draw shapes and modify meta data of the drawing.  A dra
 and always returns a modified copy of the original drawing, it never mutates the drawing directly.  After a drawing is completed it can passed to a **render function** to output an image in various formats.
 
 
+## Development
+`npm run render -- console ./examples/golden.draft.yaml`  
+`npm run render -- svg -f drawing.svg ./examples/draw.draft.js`
+
 ## Basic Drawing
 For example the code below creates a blank drawing, and chains 3 line functions together to draw a triangle.  Each
 call to line returns a new drawing with an additional line drawn.  The final call to stroke returns a new drawing
