@@ -1,23 +1,24 @@
+const fs = require('fs');
 const { SVG, registerWindow } = require('@svgdotjs/svg.js');
 const { createSVGWindow } = require('svgdom');
 
 
-function recurse(canvas, definition, stroke) {
-  // set brush
-  const s = definition.stroke ?? stroke;
+function recurse(canvas, sketch, style) {
+  // set style
+  const s = {...sketch.node.style, ...style};
 
-  // draw shapes
-  for (const l of definition.lines) {
-    canvas.line(l[0][0], l[0][1], l[1][0], l[1][1]).stroke(s);
+  // draw entities
+  for (const entity of sketch.node.entities) {
+    canvas.svg(entity.svg({stroke: s.stroke?.color, strokeWidth: s.stroke?.width, fill:s.fill}))
   }
 
-  // draw groups
-  for (const g of definition.groups) {
-    recurse(canvas, g, s);
+  // draw children
+  for (const child of sketch.node.children) {
+    recurse(canvas, child, s);
   }
 }
 
-module.exports = function render(c) {
+module.exports = function render(sketch, options) {
   // create document
   const window = createSVGWindow();
   const document = window.document;
@@ -27,8 +28,12 @@ module.exports = function render(c) {
   const canvas = SVG(document.documentElement);
 
   // render recursively
-  recurse(canvas, c.definition);
+  recurse(canvas, sketch);
 
   // spit out svg
-  console.log(canvas.svg());
+  if (options.file) {
+    fs.writeFileSync(options.file, canvas.svg())
+  } else {
+    console.log(canvas.svg());
+  }
 }
