@@ -1,38 +1,17 @@
 const math = require('mathjs')
-const Point = require('./point.js');
+const flatten = require('@flatten-js/core');
 
 
-class Circle {
-   constructor(center, radius) {
-     this.center = center;
-     if (typeof radius === 'number') {
-       this.radius = radius;
-     } else {
-       this.radius = radius.sub(center).norm;
-     }
-   }
-
-   point(t) {
-     return new Point(
-       this.center.x + math.cos(t) * this.radius,
-       this.center.y + math.sin(t) * this.radius);
-   }
-
-   get top() {
-     return this.point(0, 'deg');
-   }
-
-   get bottom() {
-     return this.point(90, 'deg');
-   }
-
-   get left() {
-     return this.point(180, 'deg');
-   }
-
-   get right() {
-     return this.point(270, 'deg');
-   }
+class Circle extends flatten.Circle {
+  constructor(...args) {
+    // construct from 3 numbers (x, y, r)
+    if (!(args[0] instanceof flatten.Point)) {
+      return super(flatten.point(args[0], args[1]), args[2]);
+    }
+    // construct from point and radius
+    return super(...args)
+  }
 }
+
 
 module.exports = Circle;
