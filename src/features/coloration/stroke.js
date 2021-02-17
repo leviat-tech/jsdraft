@@ -1,4 +1,4 @@
-module.exports = function stroke(c, width, color) {
-  c.node.coloring.stroke = {width, color};
-  return c;
+module.exports = function stroke(sketch, width, color) {
+  sketch.node.style.stroke = {width, color};
+  return sketch;
 }
