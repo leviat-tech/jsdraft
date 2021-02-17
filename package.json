@@ -9,8 +9,9 @@
   },
   "author": "",
   "dependencies": {
+    "@flatten-js/core": "^1.2.20",
     "@svgdotjs/svg.js": "^3.0.16",
-    "commander": "^6.2.1",
+    "commander": "^7.1.0",
     "glob": "^7.1.6",
     "js-yaml": "^4.0.0",
     "lodash.clonedeep": "^4.5.0",
