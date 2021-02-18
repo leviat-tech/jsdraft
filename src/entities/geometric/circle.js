@@ -11,6 +11,14 @@ class Circle extends flatten.Circle {
     // construct from point and radius
     return super(...args)
   }
+
+  transform(matrix = new Flatten.Matrix()) {
+    const p = flatten.point(this.pc.x, this.pc.y + this.r);
+    const t_p = p.transform(matrix);
+    const t_pc = this.pc.transform(matrix);
+    const t_r = t_pc.distanceTo(t_p)[0];
+    return new Circle(t_pc, t_r);
+  }
 }
 
 
