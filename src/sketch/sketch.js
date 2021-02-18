@@ -45,7 +45,16 @@ class Sketch {
     return copy;
   }
 
-  // create iterator to traverse the sketch tree
+  // create iterator to traverse entities in sketch
+  * entities(order) {
+    for (const s of sketch.tree(order)) {
+      for (const e in s.node.entities) {
+        yield e
+      }
+    }
+  }
+
+  // create iterator to traverse the sketch
   tree(order) {
     return iterators[order || 'level'](this);
   }
