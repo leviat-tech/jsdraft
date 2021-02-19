@@ -1,4 +1,5 @@
 const Vector = require('@crhio/vector').default;
+const Point = require('../../entities/geometric/point.js');
 
 
 // Takes three points and a radius and returns a curve of the filleted segment
@@ -27,7 +28,11 @@ function fillet(point_a, point_b, point_c, radius) {
   const s_sign = (turn_angle) > 0 ? 1 : -1;
   const bulge = s_sign * (sagitta / l);
 
-  return { point_a: fillet_pt_a, point_b: fillet_pt_b, bulge };
+  return {
+    point_a: new Point(fillet_pt_a.x, fillet_pt_a.y),
+    point_b: new Point(fillet_pt_b.x, fillet_pt_b.y),
+    bulge,
+  };
 }
 
 module.exports = fillet;
