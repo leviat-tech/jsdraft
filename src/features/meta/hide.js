@@ -1,4 +1,4 @@
-module.exports = function ruler(c) {
-  c.node.hidden = true;
-  return c;
+module.exports = function ruler(sketch) {
+  sketch.node.hidden = true;
+  return sketch;
 }
