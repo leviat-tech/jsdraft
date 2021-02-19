@@ -1,8 +1,6 @@
-const Polyline = require('../../entities/geometric/polyline.js');
+const polyline_bulge = require('./polyline-bulge.js');
 
 
-module.exports = function polyline(sketch, ...args) {
-  return sketch.create({
-    entities: [new Polyline(...args)],
-  });
+module.exports = function polyline(...args) {
+  return polyline_bulge(...args);
 };
