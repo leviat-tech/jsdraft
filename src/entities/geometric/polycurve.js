@@ -2,7 +2,7 @@ const math = require('mathjs')
 const flatten = require('@flatten-js/core');
 
 
-class Multiline extends flatten.Multiline {
+class Polycurve extends flatten.Multiline {
   constructor(...args) {
     if (Array.isArray(args[0]) && typeof args[0][0] == 'number') {
       return super(args.map(a => {
@@ -23,4 +23,4 @@ class Multiline extends flatten.Multiline {
 }
 
 
-module.exports = Multiline;
+module.exports = Polycurve;

@@ -11,7 +11,7 @@ module.exports = function draw(sketch) {
 
   const b = sketch.group(
     sketch.circle(25, 50, 10).stroke(3, 'green'),
-    sketch.multiline(
+    sketch.polycurve(
       [60, 30, 60, 100],
       [60, 100, 100, 30],
       [100, 30, 15, 0, 3.14 / 2],
