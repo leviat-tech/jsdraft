@@ -19,20 +19,20 @@ module.exports = function draw(sketch) {
   );
 
   const c = sketch.group(
-    sketch.polygon([
+    sketch.face([
       [100, 100],
       [100, 150],
       [150, 100],
     ]).stroke(2, 'orange')
   );
 
-  const p1 = sketch.polygon([
+  const p1 = sketch.face([
     [100, 100],
     [100, 150],
     [150, 100],
   ]).fill('black');
 
-  const p2 = sketch.polygon([
+  const p2 = sketch.face([
     [110, 110],
     [105, 120],
     [130, 110],
@@ -44,7 +44,7 @@ module.exports = function draw(sketch) {
 
   const t_d = d.translate(10, 10).fill('red');
 
-  const e = sketch.polygon([
+  const e = sketch.face([
     [110, 110],
     [105, 120],
     [130, 110],
@@ -61,7 +61,24 @@ module.exports = function draw(sketch) {
     sub.translate(10, 0),
     d,
     t_d,
-    e,
-    e_r
+    sketch.face([
+      [0, 0],
+      [0, 10],
+      [10, 10],
+      [10, 0],
+    ])
+    .rotate(45)
+    .translate(45, 45)
+    .fill('red'),
+    sketch.face([
+      [0, 0],
+      [0, 10],
+      [10, 10],
+      [10, 0],
+    ])
+    .rotate(45)
+    .fill('red')
+    // e,
+    // e_r
   )
 };

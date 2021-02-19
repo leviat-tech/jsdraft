@@ -2,8 +2,8 @@ const math = require('mathjs')
 const flatten = require('@flatten-js/core');
 
 
-class Polygon extends flatten.Polygon {
+class Face extends flatten.Polygon {
 }
 
 
-module.exports = Polygon;
+module.exports = Face;
