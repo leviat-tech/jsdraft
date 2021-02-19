@@ -13,6 +13,10 @@ class Circle extends flatten.Circle {
   }
 
   transform(matrix = new Flatten.Matrix()) {
+    // breaks x, y scaling would need be paramaterized with 2 vectors and center
+    // arcs are also only defined on a circle and break under some affine transforms
+    // at the very least we need to validate the transformation matrix
+    // and we should add that to arcs as well
     const p = flatten.point(this.pc.x, this.pc.y + this.r);
     const t_p = p.transform(matrix);
     const t_pc = this.pc.transform(matrix);
