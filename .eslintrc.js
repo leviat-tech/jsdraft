@@ -22,7 +22,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'import/extensions': ['error', 'ignorePackages', {
       js: 'always',
-      vue: 'never',
+      vue: 'always',
     }],
     'import/no-unresolved': ['error',
       { ignore: ['@/'] },

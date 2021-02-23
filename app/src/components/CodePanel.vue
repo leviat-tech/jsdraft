@@ -9,14 +9,14 @@
           >
           <tool
             name="JS"
-            id="js"
+            tool-id="js"
             text="JS"
             :selected="language"
             @click="selectLanguage('js')"
           />
           <tool
             name="YAML"
-            id="yaml"
+            tool-id="yaml"
             text="YAML"
             :selected="language"
             @click="selectLanguage('yaml')"
@@ -24,7 +24,7 @@
         </div>
         <tool
           name="Close Editor"
-          id="close-panel"
+          tool-id="close-panel"
           icon="chevron-right"
           @click="closeCodePanel"
         />
@@ -46,7 +46,7 @@
 import { mapMutations } from 'vuex';
 import { PrismEditor } from 'vue-prism-editor';
 import debounce from 'lodash/debounce';
-import 'vue-prism-editor/dist/prismeditor.min.css'
+import 'vue-prism-editor/dist/prismeditor.min.css';
 import { highlight, languages } from 'prismjs/components/prism-core';
 import { indentText, dedentText, comment } from '../utility/text-edits.js';
 import 'prismjs/components/prism-yaml';
@@ -144,7 +144,7 @@ export default {
       this.setCode(this.localCode);
     }, 500),
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

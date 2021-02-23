@@ -3,28 +3,27 @@
     <div class="tools">
       <tool-group>
         <tool
+          tool-id="select"
           name="Select"
-          id="select"
           icon="pointer-outline"
           :selected="currentTool"
           @click="chooseTool('select')"
         />
 
         <tool
+          tool-id="pan"
           name="Pan"
-          id="pan"
           icon="hand"
           :selected="currentTool"
           @click="chooseTool('pan')"
         />
 
         <tool
+          tool-id="fit"
           name="Fit View"
-          id="fit"
           icon="expand"
           @click="fitToExtents"
         />
-
       </tool-group>
 
       <!-- point -->
@@ -48,32 +47,31 @@
 
       <tool-group>
         <tool
+          tool-id="open"
           name="Open"
-          id="open"
           icon="folder-open"
           @click="openFolder"
         />
 
         <tool
+          tool-id="save"
           name="Download"
-          id="save"
           icon="save"
           @click="save"
         />
 
         <tool
+          tool-id="export"
           name="Export"
-          id="export"
           icon="file-export"
-          @click="export"
+          @click="exportFile"
         />
-
       </tool-group>
     </div>
     <tool
       v-if="!showCodePanel"
+      tool-id="code"
       name="Code"
-      id="code"
       icon="code"
       @click="openCodePanel"
     />
@@ -81,9 +79,9 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
 import ToolGroup from './ToolGroup.vue';
 import Tool from './Tool.vue';
-import { mapState, mapMutations } from 'vuex';
 
 
 export default {
@@ -109,14 +107,14 @@ export default {
     save() {
 
     },
-    export() {
+    exportFile() {
 
     },
     openCodePanel() {
       this.setShowCodePanel(true);
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

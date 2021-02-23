@@ -1,12 +1,11 @@
 import { createStore } from 'vuex';
-import { draft } from '../../dist/draft.js';
+import { Sketch } from '../../dist/draft.js';
 
 
-console.log('sketch', draft.sketch);
+console.log('draft', Sketch);
 
 
-
-export const store = createStore({
+export default createStore({
   state() {
     return {
       zoomScale: 1,
@@ -14,7 +13,7 @@ export const store = createStore({
       showCodePanel: false,
       code: '',
       viewBox: { minX: -100, minY: -100, width: 200, height: 200 },
-    }
+    };
   },
 
   mutations: {
@@ -40,4 +39,4 @@ export const store = createStore({
 
     },
   },
-})
+});

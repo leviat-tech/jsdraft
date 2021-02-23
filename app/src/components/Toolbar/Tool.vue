@@ -17,17 +17,17 @@ export default {
   name: 'Tool',
   props: {
     name: { type: String, required: true },
-    id: { type: String, required: true },
-    icon: { type: String },
-    text: { type: String },
+    toolId: { type: String, required: true },
+    icon: { type: String, default: null },
+    text: { type: String, default: null },
     selected: { type: String, default: null },
   },
   computed: {
     isActive() {
-      return this.selected === this.id;
-    }
-  }
-}
+      return this.selected === this.toolId;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
