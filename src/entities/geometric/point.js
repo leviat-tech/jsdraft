@@ -1,4 +1,4 @@
-const math = require('mathjs')
+const math = require('mathjs');
 const flatten = require('@flatten-js/core');
 
 
