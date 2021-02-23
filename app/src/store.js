@@ -1,4 +1,9 @@
 import { createStore } from 'vuex';
+import { draft } from '../../dist/draft.js';
+
+
+console.log('sketch', draft.sketch);
+
 
 
 export const store = createStore({

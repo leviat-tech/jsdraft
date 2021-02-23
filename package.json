@@ -5,7 +5,7 @@
   "bin": "src/render.js",
   "scripts": {
     "render": "./src/render.js",
-    "build": "rollup ./src/main.js --file dist/bundle.js --format umd --name \"Draft\"",
+    "build": "rollup --config",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -23,6 +23,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^17.1.0",
     "rollup": "^2.39.0"
   }
 }
