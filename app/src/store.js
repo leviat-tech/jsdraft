@@ -1,8 +1,5 @@
 import { createStore } from 'vuex';
-import { Sketch } from '../../dist/draft.js';
-
-
-console.log('draft', Sketch);
+// import draft from '../../dist/draft.js';
 
 
 export default createStore({

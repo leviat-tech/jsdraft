@@ -1,4 +1,5 @@
 import commonjs from '@rollup/plugin-commonjs';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 
 const config = {
@@ -8,7 +9,12 @@ const config = {
     format: 'umd',
     name: 'Draft',
   },
-  plugins: [commonjs()],
+  plugins: [
+    nodeResolve({
+      browser: true,
+    }),
+    commonjs(),
+  ],
 };
 
 export default config;
