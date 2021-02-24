@@ -1,11 +1,5 @@
 <template>
-  <g>
-    <g
-      v-for="(entity, index) in entities"
-      :key="index"
-      v-html="entity"
-    />
-  </g>
+  <g v-html="allEntities" />
 </template>
 
 <script>
@@ -16,6 +10,9 @@ export default {
   name: 'Drawing',
   computed: {
     ...mapGetters(['entities']),
+    allEntities() {
+      return this.entities.reduce((a, e) => a.concat(e), '');
+    },
   },
 };
 </script>
