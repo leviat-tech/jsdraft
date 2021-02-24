@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-// import draft from '../../dist/draft.js';
+import { Sketch, svg_entities } from '../../dist/draft.js';
 
 
 export default createStore({
@@ -9,6 +9,7 @@ export default createStore({
       currentTool: 'select',
       showCodePanel: false,
       code: '',
+      language: 'js',
       viewBox: { minX: -100, minY: -100, width: 200, height: 200 },
     };
   },
@@ -20,20 +21,33 @@ export default createStore({
     setCurrentTool(state, value) {
       state.currentTool = value;
     },
-    setViewBox(state, value) {
-      state.viewBox = value;
-    },
     setShowCodePanel(state, value) {
       state.showCodePanel = value;
     },
     setCode(state, value) {
       state.code = value;
     },
+    setLanguage(state, value) {
+      state.language = value;
+    },
+    setViewBox(state, value) {
+      state.viewBox = value;
+    },
   },
 
   getters: {
-    renderedSvg(s) {
-
+    codeFunction(s) {
+      return new Function('sketch', s.code); // eslint-disable-line
+    },
+    entities(s, g) {
+      const sketch = new Sketch();
+      try {
+        const result = g.codeFunction && g.codeFunction(sketch);
+        const entities = svg_entities(result);
+        return entities;
+      } catch (err) {
+        return [];
+      }
     },
   },
 });

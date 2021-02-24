@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapMutations, mapState } from 'vuex';
 import { PrismEditor } from 'vue-prism-editor';
 import debounce from 'lodash/debounce';
 import 'vue-prism-editor/dist/prismeditor.min.css';
@@ -65,12 +65,14 @@ export default {
   data() {
     return {
       localCode: '',
-      language: 'js',
       path: null,
     };
   },
+  computed: {
+    ...mapState(['language']),
+  },
   methods: {
-    ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'setCode']),
+    ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'setCode', 'setLanguage']),
     closeCodePanel() {
       this.setShowCodePanel(false);
     },
@@ -78,7 +80,7 @@ export default {
       return highlight(code, languages[this.language]);
     },
     selectLanguage(lang) {
-      this.language = lang;
+      this.setLanguage(lang);
     },
     handleKeydown(path, e) {
       if (e.metaKey) {

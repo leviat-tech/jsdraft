@@ -21,7 +21,7 @@
                      scale(${zoomScale} -${zoomScale})`"
       >
         <grid :view-box="viewBox" />
-        <!-- <drawing :drawing="plot" :settings="draft.settings" /> -->
+        <drawing />
       </g>
     </svg>
   </div>
@@ -32,6 +32,7 @@ import isEmpty from 'lodash/isEmpty';
 import Mousetrap from 'mousetrap';
 import { mapState, mapMutations } from 'vuex';
 import Grid from './Drawing/Grid.vue';
+import Drawing from './Drawing/Drawing.vue';
 
 
 function domToSVGCoords(el, pt) {
@@ -44,6 +45,7 @@ export default {
   name: 'Viewport',
   components: {
     Grid,
+    Drawing,
   },
 
 
@@ -212,7 +214,7 @@ export default {
       this.setViewBox(viewBox);
     },
   },
-}
+};
 </script>
 
 <style lang="scss">
