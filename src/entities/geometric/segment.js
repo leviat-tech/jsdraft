@@ -1,17 +1,28 @@
-const math = require('mathjs')
 const flatten = require('@flatten-js/core');
+const { normalize, matches } = require('../../utility/arguments');
 
 
 class Segment extends flatten.Segment {
   constructor(...args) {
+    args = normalize(args);
 
-    // construct from four numbers (x1, y1, x2, y2)
-    if (!(args[0] instanceof flatten.Point)) {
-      return super(flatten.point(args[0], args[1]), flatten.point(args[2], args[3]));
+    if (matches(args, 'point', 'point')) {
+      const [start, end] = args;
+      return super(flatten.point(...start), flatten.point(...end));
     }
 
-    // construct from 2 points
-    return super(...args)
+    if (matches(args, 'segment', 'number')) {
+      const [segment, number] = args;
+      return Segment.from_perpendicular(segment, number);
+    }
+  }
+
+  static from_points(start, end) {
+    return new Segment(start, end);
+  }
+
+  static from_perpendicular(segment, point) {
+    return new Segment(segment, point);
   }
 }
 
