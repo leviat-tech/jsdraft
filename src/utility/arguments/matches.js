@@ -25,8 +25,10 @@ function test(actual, expected) {
 function matches(args, ...spec) {
   const trim = spec.indexOf('...');
   if (trim > 0) {
-    args = args.slice(0, spec.indexOf('...'));
+    args = args.slice(0, trim);
+    spec = spec.slice(0, trim);
   }
+  if (args.length !== spec.length) return false;
   return args.every((a, i) => test(a, spec[i]));
 }
 
