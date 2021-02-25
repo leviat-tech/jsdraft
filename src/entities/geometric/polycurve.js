@@ -1,24 +1,34 @@
-const math = require('mathjs')
 const flatten = require('@flatten-js/core');
+const { normalize, every } = require('../../utility/arguments');
 
 
 class Polycurve extends flatten.Multiline {
   constructor(...args) {
-    if (Array.isArray(args[0]) && typeof args[0][0] == 'number') {
-      return super(args.map(a => {
-        // array numbers treated as segments
-        if (a.length == 4) {
-          return flatten.segment(...a)
-        }
-        // array of numbers treated as arcs
-        else {
-          return flatten.arc(flatten.point(a[0], a[1]), ...a.slice(2))
-        }
-      }));
+    args = normalize(args);
 
+    if (every(args, ['point', '<number>'])) {
+      return super();
     }
-    // construct from 2 points
-    return super(...args)
+
+    if (every(args, ['point or number'])) {
+      return Polycurve.from_bulge();
+    }
+
+    if (every(args, ['segment or arc'])) {
+      return Polycurve.from_segments();
+    }
+  }
+
+  static from_fillet(center, radius) {
+    return new Polycurve(center, radius);
+  }
+
+  static from_bulge(a, b) {
+    return new Polycurve(a, b);
+  }
+
+  static from_segments(a, b, c) {
+    return new Polycurve(a, b, c);
   }
 }
 
