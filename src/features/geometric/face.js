@@ -1,8 +1,8 @@
-const Face = require('../../entities/geometric/face.js');
+const Polyface = require('../../entities/geometric/polyface.js');
 
 
-module.exports = function face(sketch, ...args) {
+module.exports = function polyface(sketch, ...args) {
   return sketch.create({
-    entities: [new Face(...args)]
+    entities: [new Polyface(...args)]
   });
 }
