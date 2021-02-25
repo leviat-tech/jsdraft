@@ -1,5 +1,5 @@
-function load(path) {
-  return require(path)
+function load(name, contents) {
+  return require(path);
 }
 
 module.exports = { load };
