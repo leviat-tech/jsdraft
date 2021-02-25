@@ -18,11 +18,11 @@
 </template>
 
 <script>
-import Sidebar from './Sidebar.vue';
-import CodePanel from './CodePanel.vue';
-import Toolbar from './Toolbar/Toolbar.vue';
-import Viewport from './Viewport.vue';
 import { mapState } from 'vuex';
+import Sidebar from './sidebar/Sidebar.vue';
+import CodePanel from './CodePanel.vue';
+import Toolbar from './toolbar/Toolbar.vue';
+import Viewport from './Viewport.vue';
 
 
 export default {
@@ -41,7 +41,7 @@ export default {
   },
   computed: {
     ...mapState(['showCodePanel']),
-  }
+  },
 };
 </script>
 

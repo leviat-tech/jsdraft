@@ -31,8 +31,8 @@
 import isEmpty from 'lodash/isEmpty';
 import Mousetrap from 'mousetrap';
 import { mapState, mapMutations } from 'vuex';
-import Grid from './Drawing/Grid.vue';
-import Drawing from './Drawing/Drawing.vue';
+import Grid from './drawing/Grid.vue';
+import Drawing from './drawing/Drawing.vue';
 
 
 function domToSVGCoords(el, pt) {

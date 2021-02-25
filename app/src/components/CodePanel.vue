@@ -53,7 +53,7 @@ import 'prismjs/components/prism-yaml';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism-tomorrow.css';
-import Tool from './Toolbar/Tool.vue';
+import Tool from './toolbar/Tool.vue';
 
 
 export default {

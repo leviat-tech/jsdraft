@@ -3,12 +3,9 @@
     <div class="header">
       Draft
     </div>
-    <div class="panels">
+    <div class="panels" />
 
-    </div>
-
-    <div class="tree">
-    </div>
+    <div class="tree" />
   </div>
 </template>
 
@@ -28,7 +25,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/styles/variables.scss';
+@import '../../assets/styles/variables.scss';
 
 h2 {
   font-weight: bold;
