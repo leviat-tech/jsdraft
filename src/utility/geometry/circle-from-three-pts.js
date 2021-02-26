@@ -41,4 +41,4 @@ function circle_from_three_pts(start, through, end) {
   return { x, y, r };
 }
 
-export default circle_from_three_pts;
+module.exports = circle_from_three_pts;

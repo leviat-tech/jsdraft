@@ -1,6 +1,6 @@
 const flatten = require('@flatten-js/core');
 const Vector = require('@crhio/vector');
-const { normalize, matches } = require('../../utility/arguments.js');
+const { normalize, matches } = require('../../utility/arguments');
 const circle_from_three_pts = require('../../utility/geometry/circle-from-three-pts.js');
 const orientation = require('../../utility/geometry/orientation.js');
 const sagitta_arc = require('../../utility/geometry/sagitta-arc.js');
