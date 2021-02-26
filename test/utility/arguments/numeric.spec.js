@@ -5,6 +5,11 @@ const { numeric_arrays, nested_numeric_arrays } = require('../../../src/utility/
 
 
 describe('numeric_arrays', () => {
+  it.only('will return false when an empty array is passed', () => {
+    expect(numeric_arrays([[]], { eq: 1 })).to.be.false;
+    expect(numeric_arrays([])).to.be.false;
+  });
+
   it('will return true when a collection of numeric arrays is passed', () => {
     expect(numeric_arrays([
       [],
