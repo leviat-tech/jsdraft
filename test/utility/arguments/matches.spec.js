@@ -30,19 +30,22 @@ describe('matches', () => {
     expect(matches([[1, 2]], 'point')).to.be.true;
     expect(matches([[1]], 'number')).to.be.false;
     expect(matches([[1, 2, 3]], 'number')).to.be.false;
+    expect(matches([[]], 'point')).to.be.false;
   });
 
   it('can test a segment', () => {
     expect(matches([flatten.segment(pa, pb)], 'segment')).to.be.true;
     expect(matches([[[1, 2], [3, 4]]], 'segment')).to.be.true;
     expect(matches([[1, 2, 3, 4]], 'number')).to.be.false;
+    expect(matches([[]], 'segment')).to.be.false;
   });
 
   it('can test an arc', () => {
     expect(matches([flatten.arc(flatten.point(1, 2), 0, 10)], 'arc')).to.be.true;
-    expect(matches([[[1, 2], 3, 4, 5]], 'arc')).to.be.true;
-    expect(matches([[[1, 2], 3, 4, 5, true]], 'arc')).to.be.true;
-    expect(matches([[1, 2, 3, 4, 5]], 'number')).to.be.false;
+    expect(matches([[[1, 2], 3, 4]], 'arc')).to.be.true;
+    expect(matches([[[1, 2], 3, 4, true]], 'arc')).to.be.true;
+    expect(matches([[1, 2, 3, 4]], 'number')).to.be.false;
+    expect(matches([[]], 'arc')).to.be.false;
   });
 
   it('can test multiple arguments', () => {
