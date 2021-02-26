@@ -9,9 +9,6 @@ function almost_equal(
 ) {
   const d = abs(a - b);
 
-  if (absoluteError == null) absoluteError = almostEqual.DBL_EPSILON;
-  if (relativeError == null) relativeError = absoluteError;
-
   if (d <= absoluteError) {
     return true;
   }
