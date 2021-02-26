@@ -6,7 +6,6 @@
   "scripts": {
     "render": "./src/render.js",
     "build": "rollup --config",
-    "bt": "rollup src/test.js --file dist/test.js --format umd --name \"Test\"",
     "test": "mocha",
     "test:watch": "mocha --reporter min --colors -w"
   },
