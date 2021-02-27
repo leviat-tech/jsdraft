@@ -15,10 +15,9 @@ function test(actual, expected) {
   if (expected === 'arc') {
     return (actual instanceof flatten.Arc) || (
       Array.isArray(actual)
-      && actual.length >= 3
-      && actual.length <= 4
+      && actual.length >= 4
       && numeric_array(actual[0])
-      && numeric_array(actual.slice(1, 3)));
+      && numeric_array(actual.slice(1, 4)));
   }
   return typeof (actual) === expected;
 }
