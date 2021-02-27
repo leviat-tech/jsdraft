@@ -3,9 +3,9 @@ const stroke = require('./coloration/stroke.js');
 
 const arc = require('./geometric/arc.js');
 const circle = require('./geometric/circle.js');
-const face = require('./geometric/face.js');
 const point = require('./geometric/point.js');
 const polycurve = require('./geometric/polycurve.js');
+const rectangle = require('./geometric/rectangle.js');
 const segment = require('./geometric/segment.js');
 
 const hide = require('./meta/hide.js');
@@ -29,9 +29,9 @@ module.exports = [
   stroke,
   arc,
   circle,
-  face,
   point,
   polycurve,
+  rectangle,
   segment,
   hide,
   name,

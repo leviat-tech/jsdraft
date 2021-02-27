@@ -99,8 +99,18 @@ sketch:
   - point: [$x, $y]
   `);
 
+  draft.add_sketch('my_js_point', 'js', `
+return function my_js_point(sketch, a = 1, b = 2) {
+  return sketch
+    .point(a, b);
+}
+  `);
+
   it('should be able to render any of its sketches', () => {
-    const svg = draft.render('my_point', { format: 'svg' }, [3]);
+    const svg = draft.render('my_point', { format: 'svg-entities' }, [3]);
     expect(svg.length).to.eql(1);
+
+    const svg2 = draft.render('my_js_point', { format: 'svg-entities' }, [3, 5]);
+    expect(svg2.length).to.eql(1);
   });
 });

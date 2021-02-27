@@ -1,7 +1,7 @@
 const load = require('./loaders/load.js');
 const Sketch = require('./sketch/sketch.js');
 const is_object = require('./utility/misc/is-object.js');
-const svg = require('./renderers/svg-entities.js');
+const svg_entities = require('./renderers/svg-entities.js');
 const console_renderer = require('./renderers/console.js');
 
 
@@ -9,7 +9,7 @@ class Draft {
   constructor() {
     this.sketches = {};
     this.renderers = { // Perhaps a user could add a custom renderer to this object?
-      svg,
+      'svg-entities': svg_entities,
       console: console_renderer,
     };
   }
@@ -22,6 +22,13 @@ class Draft {
       contents, // raw string of file contents
       func, // the sketch's function
     };
+  }
+
+  rename_sketch(old_name, new_name) {
+    const { filetype, contents } = this.sketches[old_name];
+
+    this.add_sketch(new_name, filetype, contents);
+    this.remove_sketch(old_name);
   }
 
   remove_sketch(name) {

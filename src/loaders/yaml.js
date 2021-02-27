@@ -91,12 +91,12 @@ function parse(draft, identifier) {
     let context = {};
 
     // load parameters
-    if (draft.parameters) {
+    if (draft.parameters && Array.isArray(draft.parameters)) {
       context = { ...context, ...parameters(draft.parameters, args) };
     }
 
     // evaluate reference
-    if (draft.reference) {
+    if (draft.reference && Array.isArray(draft.reference)) {
       context = { ...context, ...reference(draft.reference, sketch, context) };
     }
 

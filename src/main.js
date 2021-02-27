@@ -1,10 +1,10 @@
+import Draft from './draft.js';
 import Sketch from './sketch/sketch.js';
-import svg_entities from './renderers/svg-entities.js';
 
 
 export {
+  Draft,
   Sketch,
-  svg_entities,
 };
 
 export default Sketch;
