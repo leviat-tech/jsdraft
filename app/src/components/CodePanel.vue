@@ -1,5 +1,14 @@
 <template>
   <div class="container">
+    <warning-modal
+      v-if="showLanguageModal"
+      :title="`Warning: Switch from ${language.toUpperCase()}`"
+      :text="languageModalText"
+      cancel="Cancel"
+      :proceed="`Switch to ${newLanguage.toUpperCase()}`"
+      @cancel="showLanguageModal = false"
+      @proceed="selectLanguage(newLanguage)"
+    />
     <div class="header-container">
       <div class="header">
         <div class="code-icon">
@@ -7,24 +16,26 @@
             class="code-symbol"
             src="icons/code.svg"
           >
+          <div class="sketch-name">
+            {{ currentSketch }}
+          </div>
           <tool
             name="JS"
             tool-id="js"
             text="JS"
             :selected="language"
-            @click="selectLanguage('js')"
+            @click="confirmSelectLanguage('js')"
           />
           <tool
             name="YAML"
             tool-id="yaml"
             text="YAML"
             :selected="language"
-            @click="selectLanguage('yaml')"
+            @click="confirmSelectLanguage('yaml')"
           />
         </div>
-        <tool
+        <d-button
           name="Close Editor"
-          tool-id="close-panel"
           icon="chevron-right"
           @click="closeCodePanel"
         />
@@ -36,7 +47,7 @@
       class="my-editor"
       :highlight="highlighter"
       :line-numbers="true"
-      @keydown="handleKeydown(path, $event)"
+      @keydown="handleKeydown"
       @input="validate"
     />
   </div>
@@ -54,35 +65,80 @@ import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism-tomorrow.css';
 import Tool from './toolbar/Tool.vue';
+import DButton from './DButton.vue';
+import WarningModal from './WarningModal.vue';
+import { yaml, js } from '../utility/default-blank-sketches.js';
 
 
 export default {
   name: 'CodePanel',
   components: {
+    WarningModal,
     Tool,
+    DButton,
     PrismEditor,
   },
   data() {
     return {
       localCode: '',
+      language: 'js',
+      newLanguage: null,
       path: null,
+      showLanguageModal: false,
     };
   },
   computed: {
-    ...mapState(['language']),
+    ...mapState(['currentSketch', 'draft']),
+    languageModalText() {
+      return `Are you sure you want to switch from ${this.language.toUpperCase()} to ${this.newLanguage.toUpperCase()}? Changes will be lost.`;
+    },
+  },
+  watch: {
+    currentSketch: {
+      immediate: true,
+      handler() {
+        this.localCode = this.draft.sketches[this.currentSketch].contents;
+        this.language = this.draft.sketches[this.currentSketch].filetype;
+      },
+    },
   },
   methods: {
-    ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'setCode', 'setLanguage']),
+    ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'updateSketch']),
     closeCodePanel() {
       this.setShowCodePanel(false);
     },
     highlighter(code) {
       return highlight(code, languages[this.language]);
     },
-    selectLanguage(lang) {
-      this.setLanguage(lang);
+    confirmSelectLanguage(language) {
+      if (language === this.language) return;
+
+      const code = {
+        yaml: yaml(this.currentSketch),
+        js: js(this.currentSketch),
+      }[this.language];
+
+      // If no changes from default, no need to warn
+      if (this.localCode === code) {
+        this.selectLanguage(language);
+        return;
+      }
+
+      this.newLanguage = language;
+      this.showLanguageModal = true;
     },
-    handleKeydown(path, e) {
+    selectLanguage(language) {
+      if (language === this.language) return;
+      const code = {
+        yaml: yaml(this.currentSketch),
+        js: js(this.currentSketch),
+      }[language];
+      this.localCode = code;
+      this.updateSketch({ name: this.currentSketch, language, code });
+      this.language = language;
+      this.showLanguageModal = false;
+    },
+    handleKeydown(e) {
       if (e.metaKey) {
         const metaKeys = {
           '[': 'dedentSelection',
@@ -93,11 +149,11 @@ export default {
         if (metaKeys[e.key]) {
           e.preventDefault();
           e.stopPropagation();
-          this[metaKeys[e.key]](path, e);
+          this[metaKeys[e.key]](e);
         }
       }
     },
-    indentSelection(path, e) {
+    indentSelection(e) {
       const ss = e.target.selectionStart;
       const se = e.target.selectionEnd;
 
@@ -112,7 +168,7 @@ export default {
         e.target.setSelectionRange(selectionStart, selectionEnd);
       });
     },
-    dedentSelection(path, e) {
+    dedentSelection(e) {
       const ss = e.target.selectionStart;
       const se = e.target.selectionEnd;
 
@@ -127,7 +183,7 @@ export default {
         e.target.setSelectionRange(selectionStart, selectionEnd);
       });
     },
-    comment(path, e) {
+    comment(e) {
       const ss = e.target.selectionStart;
       const se = e.target.selectionEnd;
 
@@ -143,7 +199,11 @@ export default {
       });
     },
     validate: debounce(function validate() {
-      this.setCode(this.localCode);
+      this.updateSketch({
+        name: this.currentSketch,
+        language: this.language,
+        code: this.localCode,
+      });
     }, 500),
   },
 };
@@ -183,8 +243,10 @@ export default {
 
 .code-icon {
   display: flex;
+  width: 100%;
   align-items: center;
   padding-left: .5rem;
+  padding-right: 1rem;
 }
 
 .footer {
@@ -210,6 +272,10 @@ export default {
     cursor: pointer;
     margin-right: 1.5rem;
   }
+}
+
+.sketch-name {
+  flex-grow: 1;
 }
 
 .errors {

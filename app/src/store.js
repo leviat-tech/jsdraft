@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { Sketch, svg_entities } from '../../dist/draft.js';
+import { Draft } from '../../dist/draft.js';
 
 
 export default createStore({
@@ -8,9 +8,9 @@ export default createStore({
       zoomScale: 1,
       currentTool: 'select',
       showCodePanel: false,
-      code: '',
-      language: 'js',
       viewBox: { minX: -100, minY: -100, width: 200, height: 200 },
+      draft: new Draft(),
+      currentSketch: null,
     };
   },
 
@@ -24,28 +24,31 @@ export default createStore({
     setShowCodePanel(state, value) {
       state.showCodePanel = value;
     },
-    setCode(state, value) {
-      state.code = value;
-    },
-    setLanguage(state, value) {
-      state.language = value;
-    },
     setViewBox(state, value) {
       state.viewBox = value;
+    },
+    setCurrentSketch(state, value) {
+      state.currentSketch = value;
+    },
+    updateSketch(state, { name, language, code }) {
+      state.draft.add_sketch(name, language, code);
+    },
+    renameSketch(state, { name, newName }) {
+      state.draft.rename_sketch(name, newName);
     },
   },
 
   getters: {
-    codeFunction(s) {
-      return new Function('sketch', s.code); // eslint-disable-line
-    },
-    entities(s, g) {
-      const sketch = new Sketch();
+    entities(state) {
+      if (!state.currentSketch) return [];
       try {
-        const result = g.codeFunction && g.codeFunction(sketch);
-        const entities = svg_entities(result);
-        return entities;
-      } catch (err) {
+        return state.draft.render(
+          state.currentSketch,
+          { format: 'svg-entities' },
+          [],
+        );
+      } catch (e) {
+        // console.log(e);
         return [];
       }
     },

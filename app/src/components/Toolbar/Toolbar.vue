@@ -68,9 +68,8 @@
         />
       </tool-group>
     </div>
-    <tool
-      v-if="!showCodePanel"
-      tool-id="code"
+    <d-button
+      v-if="!showCodePanel && sketchesExist"
       name="Code"
       icon="code"
       @click="openCodePanel"
@@ -82,6 +81,7 @@
 import { mapState, mapMutations } from 'vuex';
 import ToolGroup from './ToolGroup.vue';
 import Tool from './Tool.vue';
+import DButton from '../DButton.vue';
 
 
 export default {
@@ -89,9 +89,13 @@ export default {
   components: {
     ToolGroup,
     Tool,
+    DButton,
   },
   computed: {
-    ...mapState(['currentTool', 'showCodePanel']),
+    ...mapState(['currentTool', 'showCodePanel', 'draft']),
+    sketchesExist() {
+      return Object.keys(this.draft.sketches).length > 0;
+    },
   },
   methods: {
     ...mapMutations(['setCurrentTool', 'setShowCodePanel']),

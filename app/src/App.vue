@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import Layout from './components/Layout.vue'
+import Layout from './components/Layout.vue';
 </script>
 
 <style lang="scss">
@@ -74,7 +74,9 @@ h1 {
 }
 
 h2 {
-  font-size: 1.25rem;
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 0 0 0.25rem 0;
 }
 
 #app {
@@ -90,6 +92,110 @@ h2 {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   border-top: 1px solid $color-gray-03;
+}
+
+.svg-inline {
+  font-size: inherit;
+  overflow: visible;
+  display: inline-block;
+  height: .8em;
+  vertical-align: -0.1em;
+
+  &.xs {
+    font-size: $text-xs;
+  }
+
+  &.sm {
+    font-size: $text-sm;
+  }
+
+  &.md {
+    font-size: $text-base;
+  }
+
+  &.lg {
+    font-size: $text-lg;
+  }
+
+  &.xl {
+    font-size: $text-xl;
+  }
+
+  &.xxl {
+    font-size: $text-2xl;
+  }
+
+  &.xxxl {
+    font-size: $text-3xl;
+  }
+}
+
+.btn {
+  padding: 0.25rem 0.75rem;
+  font-weight: bold;
+  font-size: $text-sm;
+  border-radius: $radius;
+  height: 2rem;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+  appearance: none;
+  text-decoration: none;
+  cursor: pointer;
+
+  &.btn-default {
+    color: $color-gray-09;
+    background: linear-gradient($color-white, $color-gray-03);
+
+    &:hover {
+      background: linear-gradient($color-gray-01, $color-gray-03);
+    }
+
+    &:active, &.active {
+      background: $color-gray-03;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15),
+        inset 0 1px 3px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  &.btn-primary {
+    color: $color-white;
+    background: linear-gradient(#209cef, #1985dd);
+
+    &:hover {
+      background: linear-gradient(#168fd3, #126fcc);
+    }
+
+    &:active, &.active {
+      background: #0e5fc1;
+    }
+  }
+
+  &.btn-danger {
+    color: $color-white;
+    background-color: $color-red;
+
+    &:hover {
+      background-color: #cf3945;
+      border-color: rgba(27, 31, 35, 0.5);
+    }
+
+    &:active, &.active {
+      background: #ac0211;
+    }
+  }
+
+  &.btn-danger-minimal {
+    color: $color-red;
+    background-color: transparent;
+    border: none;
+
+    &:hover {
+      color: #cf3945;
+    }
+
+    &:active {
+      color: #ac0211;
+    }
+  }
 }
 
 </style>

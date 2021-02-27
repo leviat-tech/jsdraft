@@ -5,33 +5,29 @@
     </div>
     <div class="panels" />
 
-    <div class="tree" />
+    <file-browser />
   </div>
 </template>
 
 <script>
+import FileBrowser from './FileBrowser.vue';
+
+
 export default {
   name: 'Sidebar',
   components: {
+    FileBrowser,
   },
   data() {
     return {
       showParamForm: false,
     };
   },
-  computed: {
-  },
 };
 </script>
 
 <style lang="scss" scoped>
 @import '../../assets/styles/variables.scss';
-
-h2 {
-  font-weight: bold;
-  font-size: 1rem;
-  margin: 0 0 0 0;
-}
 
 button {
   background-color: #ddd;
@@ -40,7 +36,7 @@ button {
 }
 
 .header {
-  font-size: 1rem;
+  font-size: $text-base;
   width: 100%;
   background-color: $color-gray-01;
   border-bottom: $border-sm solid $color-gray-03;
@@ -57,13 +53,6 @@ button {
   flex-direction: column;
   justify-content: space-between;
   border-left: $border-sm solid $color-gray-03;
-}
-
-.tree {
-  border-top: $border-sm solid $color-gray-03;
-  margin-bottom: 0.5rem;
-  padding-top: 1rem;
-  padding-left: 1rem;
 }
 
 .draft-editor {
