@@ -16,6 +16,7 @@ function test(actual, expected) {
     return (actual instanceof flatten.Arc) || (
       Array.isArray(actual)
       && actual.length >= 4
+      && actual.length <= 5
       && numeric_array(actual[0])
       && numeric_array(actual.slice(1, 4)));
   }
