@@ -137,7 +137,7 @@ export default {
   methods: {
     ...mapMutations(['setCurrentSketch', 'updateSketch', 'renameSketch']),
     async beginAddingFile() {
-      this.newSketchName = incrementName('sketch', this.existingFilenames);
+      this.newSketchName = incrementName('untitled', this.existingFilenames);
       this.isAddingFile = true;
       await nextTick();
       this.$refs.new_file_input.focus();

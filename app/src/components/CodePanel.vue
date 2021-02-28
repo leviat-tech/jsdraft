@@ -14,7 +14,7 @@
         <div class="code-icon">
           <img
             class="code-symbol"
-            src="icons/code.svg"
+            :src="'icons/code.svg'"
           >
           <div class="sketch-name">
             {{ currentSketch }}
