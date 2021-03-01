@@ -75,7 +75,7 @@
       @click="openCodePanel"
     />
     <input
-      v-if="!isElectron()"
+      v-if="!isElectron"
       id="fileReader"
       type="file"
       webkitdirectory
@@ -94,6 +94,7 @@ import ToolGroup from './ToolGroup.vue';
 import Tool from './Tool.vue';
 import DButton from '../DButton.vue';
 import loadFileInBrowser from '../../utility/load-file-in-browser.js';
+import saveFileInBrowser from '../../utility/save-file-in-browser.js';
 
 
 export default {
@@ -103,8 +104,13 @@ export default {
     Tool,
     DButton,
   },
+  data() {
+    return {
+      isElectron: isElectron(),
+    };
+  },
   computed: {
-    ...mapState(['currentTool', 'showCodePanel', 'draft']),
+    ...mapState(['currentTool', 'showCodePanel', 'draft', 'filename']),
     sketchesExist() {
       return Object.keys(this.draft.sketches).length > 0;
     },
@@ -112,7 +118,6 @@ export default {
   methods: {
     ...mapMutations(['setCurrentTool', 'setShowCodePanel']),
     ...mapActions(['loadFiles']),
-    isElectron,
     chooseTool(id) {
       this.setCurrentTool(id);
     },
@@ -125,15 +130,17 @@ export default {
     },
     async loadFile(e) {
       let files;
-      if (!isElectron()) {
+      if (!this.isElectron) {
         files = await loadFileInBrowser(e);
       }
 
       this.loadFiles(files);
-      // this.zoomToFit();
+      this.fitToExtents();
     },
     save() {
-
+      if (!this.isElectron) {
+        saveFileInBrowser(this.filename, this.draft);
+      }
     },
     exportFile() {
 

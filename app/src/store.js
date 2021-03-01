@@ -9,6 +9,7 @@ export default createStore({
       currentTool: 'select',
       showCodePanel: false,
       viewBox: { minX: -100, minY: -100, width: 200, height: 200 },
+      filename: 'Draft',
       draft: new Draft(),
       currentSketch: null,
     };

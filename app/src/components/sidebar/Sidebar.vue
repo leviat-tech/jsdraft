@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar">
     <div class="header">
-      Draft
+      {{ filename }}
     </div>
     <div class="panels" />
 
@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import FileBrowser from './FileBrowser.vue';
 
 
@@ -22,6 +23,9 @@ export default {
     return {
       showParamForm: false,
     };
+  },
+  computed: {
+    ...mapState(['filename']),
   },
 };
 </script>
