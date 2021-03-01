@@ -30,11 +30,42 @@ export default createStore({
     setCurrentSketch(state, value) {
       state.currentSketch = value;
     },
+    newDraft(state) {
+      state.draft = new Draft();
+    },
     updateSketch(state, { name, language, code }) {
       state.draft.add_sketch(name, language, code);
     },
     renameSketch(state, { name, newName }) {
       state.draft.rename_sketch(name, newName);
+    },
+  },
+
+  actions: {
+    loadFiles({ commit }, files) {
+      // Make a new blank draft
+      commit('newDraft');
+
+      // Sort files alphabetically
+      files.sort((a, b) => {
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+        return 0;
+      });
+
+      // Add files to draft
+      files.forEach((file) => {
+        commit('updateSketch', {
+          name: file.name,
+          language: file.extension,
+          code: file.contents,
+        });
+      });
+
+      // Choose the first as the new active sketch
+      if (files.length > 0) {
+        commit('setCurrentSketch', files[0].name);
+      }
     },
   },
 

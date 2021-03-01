@@ -134,6 +134,17 @@ export default {
       return `Are you sure you want to delete the sketch "${this.sketchToDelete}"?`;
     },
   },
+  mounted() {
+    // create a new untitled sketch in a blank draft file
+    if (this.sketches.length === 0) {
+      this.updateSketch({
+        name: 'untitled',
+        language: 'yaml',
+        code: yaml(),
+      });
+      this.setCurrentSketch('untitled');
+    }
+  },
   methods: {
     ...mapMutations(['setCurrentSketch', 'updateSketch', 'renameSketch']),
     async beginAddingFile() {

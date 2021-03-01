@@ -74,14 +74,26 @@
       icon="code"
       @click="openCodePanel"
     />
+    <input
+      v-if="!isElectron()"
+      id="fileReader"
+      type="file"
+      webkitdirectory
+      mozdirectory
+      style="display:none;"
+      accept=".draft"
+      @change="loadFile"
+    >
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
+import isElectron from 'is-electron';
 import ToolGroup from './ToolGroup.vue';
 import Tool from './Tool.vue';
 import DButton from '../DButton.vue';
+import loadFileInBrowser from '../../utility/load-file-in-browser.js';
 
 
 export default {
@@ -99,6 +111,8 @@ export default {
   },
   methods: {
     ...mapMutations(['setCurrentTool', 'setShowCodePanel']),
+    ...mapActions(['loadFiles']),
+    isElectron,
     chooseTool(id) {
       this.setCurrentTool(id);
     },
@@ -106,7 +120,17 @@ export default {
 
     },
     openFolder() {
+      const fileReader = document.getElementById('fileReader');
+      fileReader.click();
+    },
+    async loadFile(e) {
+      let files;
+      if (!isElectron()) {
+        files = await loadFileInBrowser(e);
+      }
 
+      this.loadFiles(files);
+      // this.zoomToFit();
     },
     save() {
 
