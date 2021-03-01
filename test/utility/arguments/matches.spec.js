@@ -51,7 +51,7 @@ describe('matches', () => {
 
   it('tests every argument', () => {
     expect(matches([1, 2, pa], 'number', 'number')).to.be.false;
-    expect(matches([1, 2], 'number', 'number', 'point')).to.be.true;
+    expect(matches([1, 2], 'number', 'number', 'point')).to.be.false;
   });
 
   it('allows arbitrary arguments using ...', () => {
@@ -65,6 +65,12 @@ describe('matches', () => {
     expect(matches([1], 'number or string')).to.be.true;
     expect(matches(['a'], 'number or string')).to.be.true;
     expect(matches([pa], 'number or string')).to.be.false;
+  });
+
+  it('handles undefined arguments', () => {
+    expect(matches([undefined], 'number')).to.be.false;
+    expect(matches([1, undefined], 'number', 'number')).to.be.false;
+    expect(matches([1], 'number', 'number')).to.be.false;
   });
 
 });
