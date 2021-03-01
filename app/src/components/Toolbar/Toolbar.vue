@@ -94,6 +94,7 @@ import ToolGroup from './ToolGroup.vue';
 import Tool from './Tool.vue';
 import DButton from '../DButton.vue';
 import loadFileInBrowser from '../../utility/load-file-in-browser.js';
+import loadFileInElectron from '../../utility/load-file-in-electron.js';
 import saveFileInBrowser from '../../utility/save-file-in-browser.js';
 
 
@@ -125,13 +126,19 @@ export default {
 
     },
     openFolder() {
-      const fileReader = document.getElementById('fileReader');
-      fileReader.click();
+      if (!this.isElectron) {
+        const fileReader = document.getElementById('fileReader');
+        fileReader.click();
+      } else {
+        this.loadFile();
+      }
     },
     async loadFile(e) {
       let files;
       if (!this.isElectron) {
         files = await loadFileInBrowser(e);
+      } else {
+        files = await loadFileInElectron();
       }
 
       this.loadFiles(files);

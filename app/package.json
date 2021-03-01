@@ -44,7 +44,7 @@
     },
     "files": [
       "src/background.js",
-      "src/helpers",
+      "src/electron",
       "dist",
       "package.json"
     ]

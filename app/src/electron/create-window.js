@@ -1,4 +1,5 @@
 const { app, screen, BrowserWindow } = require('electron');
+const path = require('path');
 const windowStateKeeper = require('electron-window-state');
 
 
@@ -19,6 +20,7 @@ module.exports = function createWindow(windowName = 'main', options = {}) {
       devTools: !isProd,
       spellcheck: false,
       nodeIntegration: true,
+      preload: path.join(app.getAppPath(), 'electron/preload.js'),
       ...(options.webPreferences || {}),
     },
   };

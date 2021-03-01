@@ -1,6 +1,6 @@
 const { app } = require('electron');
 const contextMenu = require('electron-context-menu');
-const createWindow = require('./helpers/create-window.js');
+const createWindow = require('./electron/create-window.js');
 
 
 try {
@@ -10,11 +10,6 @@ try {
 contextMenu({
   showSearchWithGoogle: false,
   showCopyImage: false,
-  prepend: (defaultActions, params, browserWindow) => [
-    {
-      label: 'its like magic 💥',
-    },
-  ],
 });
 
 const isDev = !app.isPackaged;
