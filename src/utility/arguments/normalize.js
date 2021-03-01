@@ -8,6 +8,17 @@ function normalize(args) {
   if (args instanceof flatten.Point) {
     return [args.x, args.y];
   }
+  if (args instanceof flatten.Segment) {
+    return [normalize(args.start), normalize(args.end)];
+  }
+  if (args instanceof flatten.Arc) {
+    return [
+      normalize(args.center),
+      args.r,
+      args.startAngle,
+      args.endAngle,
+      args.counterClockwise];
+  }
   return args;
 }
 
