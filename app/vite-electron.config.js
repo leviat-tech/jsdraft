@@ -10,6 +10,6 @@ export default defineConfig({
   },
   plugins: [vue(), svgLoader()],
   optimizeDeps: {
-    exclude: ['path', 'electron-window-state'],
+    exclude: ['path', 'fs', 'electron-window-state'],
   },
 });

@@ -94,7 +94,6 @@ import ToolGroup from './ToolGroup.vue';
 import Tool from './Tool.vue';
 import DButton from '../DButton.vue';
 import loadFileInBrowser from '../../utility/load-file-in-browser.js';
-import loadFileInElectron from '../../utility/load-file-in-electron.js';
 import saveFileInBrowser from '../../utility/save-file-in-browser.js';
 
 
@@ -111,13 +110,13 @@ export default {
     };
   },
   computed: {
-    ...mapState(['currentTool', 'showCodePanel', 'draft', 'filename']),
+    ...mapState(['currentTool', 'showCodePanel', 'draft', 'filename', 'path']),
     sketchesExist() {
       return Object.keys(this.draft.sketches).length > 0;
     },
   },
   methods: {
-    ...mapMutations(['setCurrentTool', 'setShowCodePanel']),
+    ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'setFilename', 'setPath']),
     ...mapActions(['loadFiles']),
     chooseTool(id) {
       this.setCurrentTool(id);
@@ -135,18 +134,38 @@ export default {
     },
     async loadFile(e) {
       let files;
+      let path;
+      let filename = 'Draft';
+
       if (!this.isElectron) {
         files = await loadFileInBrowser(e);
       } else {
-        files = await loadFileInElectron();
+        const loaded = await window.electron.openFile();
+        files = loaded.files;
+        path = loaded.path;
+        filename = loaded.filename;
       }
 
+      this.setFilename(filename);
+      this.setPath(path);
       this.loadFiles(files);
       this.fitToExtents();
     },
     save() {
+      const sketches = Object.entries(this.draft.sketches)
+        .map(([name, sketch]) => ({
+          name,
+          filetype: sketch.filetype,
+          contents: sketch.contents,
+        }));
+
       if (!this.isElectron) {
         saveFileInBrowser(this.filename, this.draft);
+      } else if (this.path) {
+        window.electron.saveFile(this.path, sketches);
+      } else {
+        const path = window.electron.saveAs(this.filename, sketches);
+        this.setPath(path);
       }
     },
     exportFile() {

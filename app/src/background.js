@@ -1,6 +1,6 @@
-const { app } = require('electron');
+const { app, ipcMain, dialog } = require('electron');
 const contextMenu = require('electron-context-menu');
-const createWindow = require('./electron/create-window.js');
+const createWindow = require('./electron/main/create-window.js');
 
 
 try {
@@ -27,10 +27,16 @@ function loadVitePage(port) {
 }
 
 function createMainWindow() {
-  mainWindow = createWindow('main', {});
+  mainWindow = createWindow('main');
   mainWindow.once('close', () => {
     mainWindow = null;
   });
+
+  ipcMain.handle('open-file', async () => dialog
+    .showOpenDialog({ properties: ['openDirectory'] }));
+
+  ipcMain.handle('save-as', async () => dialog
+    .showSaveDialog({ properties: ['createDirectory'] }));
 
   const port = process.env.PORT || 3333;
   if (isDev) {

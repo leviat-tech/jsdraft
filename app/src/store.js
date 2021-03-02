@@ -9,9 +9,10 @@ export default createStore({
       currentTool: 'select',
       showCodePanel: false,
       viewBox: { minX: -100, minY: -100, width: 200, height: 200 },
-      filename: 'Draft',
-      draft: new Draft(),
       currentSketch: null,
+      filename: 'Draft',
+      path: undefined,
+      draft: new Draft(),
     };
   },
 
@@ -30,6 +31,12 @@ export default createStore({
     },
     setCurrentSketch(state, value) {
       state.currentSketch = value;
+    },
+    setFilename(state, value) {
+      state.filename = value;
+    },
+    setPath(state, value) {
+      state.path = value;
     },
     newDraft(state) {
       state.draft = new Draft();

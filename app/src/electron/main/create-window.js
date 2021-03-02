@@ -20,7 +20,7 @@ module.exports = function createWindow(windowName = 'main', options = {}) {
       devTools: !isProd,
       spellcheck: false,
       nodeIntegration: true,
-      preload: path.join(app.getAppPath(), 'electron/preload.js'),
+      preload: path.join(app.getAppPath(), 'electron/renderer/preload.js'),
       ...(options.webPreferences || {}),
     },
   };

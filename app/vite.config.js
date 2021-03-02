@@ -6,6 +6,6 @@ import svgLoader from 'vite-svg-loader';
 export default defineConfig({
   plugins: [vue(), svgLoader()],
   optimizeDeps: {
-    exclude: ['path', 'electron-window-state', 'electron'],
+    exclude: ['path', 'fs', 'electron-window-state'],
   },
 });
