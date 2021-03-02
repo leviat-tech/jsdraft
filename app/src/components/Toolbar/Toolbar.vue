@@ -53,6 +53,8 @@
           @click="openFolder"
         />
 
+        <!-- new file -->
+
         <tool
           tool-id="save"
           name="Download"

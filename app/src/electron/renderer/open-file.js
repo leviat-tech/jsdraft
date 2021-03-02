@@ -10,7 +10,7 @@ async function openFile() {
   const directoryFiles = await fs.readdir(d);
   const files = directoryFiles
     .map((filename) => parseFilename(filename))
-    .filter((file) => file.name)
+    .filter((file) => file)
     .map(async (file) => ({
       ...file,
       contents: await fs.readFile(path.join(d, file.filename), 'utf-8'),

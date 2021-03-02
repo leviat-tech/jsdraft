@@ -44,6 +44,9 @@ export default createStore({
     updateSketch(state, { name, language, code }) {
       state.draft.add_sketch(name, language, code);
     },
+    removeSketch(state, name) {
+      state.draft.remove_sketch(name);
+    },
     renameSketch(state, { name, newName }) {
       state.draft.rename_sketch(name, newName);
     },

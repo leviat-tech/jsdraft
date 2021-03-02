@@ -146,7 +146,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setCurrentSketch', 'updateSketch', 'renameSketch']),
+    ...mapMutations(['setCurrentSketch', 'updateSketch', 'removeSketch', 'renameSketch']),
     async beginAddingFile() {
       this.newSketchName = incrementName('untitled', this.existingFilenames);
       this.isAddingFile = true;
@@ -194,7 +194,7 @@ export default {
       this.showDeleteModal = true;
     },
     deleteSketch(name) {
-      this.draft.remove_sketch(name);
+      this.removeSketch(name);
       this.showDeleteModal = false;
     },
   },

@@ -4,8 +4,59 @@
   </div>
 </template>
 
-<script setup>
+<script>
+import { mapState, mapMutations } from 'vuex';
+import isElectron from 'is-electron';
 import Layout from './components/Layout.vue';
+
+
+export default {
+  name: 'App',
+  components: {
+    Layout,
+  },
+  data() {
+    return {
+      isElectron: isElectron(),
+      closeWatcher: null,
+    };
+  },
+  computed: {
+    ...mapState(['path', 'draft']),
+  },
+  watch: {
+    path: {
+      immediate: true,
+      async handler(nv) {
+        if (this.isElectron) {
+          if (this.closeWatcher) {
+            await this.closeWatcher();
+          }
+
+          if (nv) {
+            this.closeWatcher = window.electron.watchDirectory(nv, this.updateFile);
+          }
+        }
+      },
+    },
+  },
+  methods: {
+    ...mapMutations(['updateSketch', 'removeSketch']),
+    updateFile(updateType, file) {
+      if (updateType === 'change') {
+        this.updateSketch({
+          name: file.name,
+          language: file.extension,
+          code: file.contents,
+        });
+      }
+
+      if (updateType === 'unlink') {
+        this.removeSketch(file.name);
+      }
+    },
+  },
+};
 </script>
 
 <style lang="scss">
