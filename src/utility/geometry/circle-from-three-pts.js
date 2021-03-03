@@ -2,9 +2,9 @@ const { det } = require('mathjs');
 
 
 function circle_from_three_pts(start, through, end) {
-  const { x: x1, y: y1 } = start;
-  const { x: x2, y: y2 } = through;
-  const { x: x3, y: y3 } = end;
+  const [x1, y1] = start;
+  const [x2, y2] = through;
+  const [x3, y3] = end;
 
   const A = det([
     [x1, y1, 1],
