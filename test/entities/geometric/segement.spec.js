@@ -23,7 +23,7 @@ describe('Segment', () => {
     expect(new Segment([1, 1], [2, 3])).to.be.instanceof(Segment);
   });
 
-  it.only('can be constructed from perpendicular', () => {
+  it('can be constructed from perpendicular', () => {
     const seg = new Segment([0, 0], [10, 0]);
     const pt = new Point(0, 5);
     const perp = new Segment(seg, pt);
@@ -37,7 +37,7 @@ describe('Segment', () => {
     expect(perp.end).to.be.eql(pt);
   });
 
-  it.only('perpendicular constructions are shifted onto segment', () => {
+  it('perpendicular constructions are shifted onto segment', () => {
     const seg = new Segment([0, 0], [10, 0]);
     const pt = new Point(-1, 5);
     const perp = new Segment(seg, pt);
