@@ -9,8 +9,8 @@ const determinant = (m) => (m.length == 1 // eslint-disable-line
 
 const slice_matrix = (m, s) => m.map((row) => s.map((i) => row[i]));
 
-function sagitta_arc(pta, ptb, bulge) {
-  let n = [ptb.y - pta.y, pta.x - ptb.x];
+function sagitta_arc([ax, ay], [bx, by], bulge) {
+  let n = [by - ay, ax - bx];
   const sum = n.map((v) => v ** 2).reduce((a, v) => a + v, 0);
   const n_dist = Math.sqrt(sum);
   if (n_dist === 0) {
@@ -19,16 +19,22 @@ function sagitta_arc(pta, ptb, bulge) {
   const sagitta = bulge * (n_dist / 2);
 
   n = n.map((v) => (v * sagitta) / n_dist);
-  const ptc = Vector(pta).add(ptb).scale(0.5).add(Vector({ x: n[0], y: n[1] }));
+  const ptc = Vector({ x: ax, y: ay })
+    .add({ x: bx, y: by })
+    .scale(0.5)
+    .add(Vector({ x: n[0], y: n[1] }));
+
   const matrix = [
-    [pta.x ** 2 + pta.y ** 2, pta.x, pta.y, 1],
-    [ptb.x ** 2 + ptb.y ** 2, ptb.x, ptb.y, 1],
+    [ax ** 2 + ay ** 2, ax, ay, 1],
+    [bx ** 2 + by ** 2, bx, by, 1],
     [ptc.x ** 2 + ptc.y ** 2, ptc.x, ptc.y, 1],
   ];
+
   const m11 = determinant(slice_matrix(matrix, [1, 2, 3]));
   const m12 = determinant(slice_matrix(matrix, [0, 2, 3]));
   const m13 = determinant(slice_matrix(matrix, [0, 1, 3]));
   const m14 = determinant(slice_matrix(matrix, [0, 1, 2]));
+
   if (m11 === 0) {
     return { radius: null, center: null };
   }
@@ -37,11 +43,11 @@ function sagitta_arc(pta, ptb, bulge) {
   const cy = -0.5 * (m13 / m11);
   const radius = Math.sqrt(cx ** 2 + cy ** 2 + m14 / m11);
 
-  const start_angle = Vector(pta).subtract({ x: cx, y: cy }).angle();
-  const end_angle = Vector(ptb).subtract({ x: cx, y: cy }).angle();
+  const start_angle = Vector({ x: ax, y: ay }).subtract({ x: cx, y: cy }).angle();
+  const end_angle = Vector({ x: bx, y: by }).subtract({ x: cx, y: cy }).angle();
   const ccw = bulge < 0;
 
-  return { radius, center: { x: cx, y: cy }, start_angle, end_angle, ccw };
+  return { radius, center: [cx, cy], start_angle, end_angle, ccw };
 }
 
 module.exports = sagitta_arc;

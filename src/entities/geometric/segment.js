@@ -22,7 +22,7 @@ class Segment extends flatten.Segment {
       return Segment.from_perpendicular(segment, point);
     }
 
-    throw Error('Unexpected arguments for Segment constructor.');
+    return super(...args);
   }
 
   static from_points(start, end) {
