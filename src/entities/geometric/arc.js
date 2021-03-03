@@ -97,7 +97,6 @@ class Arc extends flatten.Arc {
 
 
     const { point_a, point_b, bulge } = fillet(a, i, b, radius);
-    console.log('a', point_a, 'b', point_b, 'bulge', bulge);
     // TODO: select proper arc seg depending on side prop
     return new Arc(point_a, bulge, point_b);
   }
