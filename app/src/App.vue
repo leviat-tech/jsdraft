@@ -40,6 +40,9 @@ export default {
       },
     },
   },
+  unmounted() {
+    if (this.closeWatcher) this.closeWatcher();
+  },
   methods: {
     ...mapMutations(['updateSketch', 'removeSketch']),
     updateFile(updateType, file) {
