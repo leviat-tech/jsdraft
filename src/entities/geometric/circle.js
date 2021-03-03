@@ -64,7 +64,6 @@ class Circle extends Polyface {
     const theta = Math.acos(va.dot(vb)) / 2.0; // va.angleTo(vb) / 2.0
     const hypotenuse = radius / Math.sin(theta);
     const center = i.translate(bisect.multiply(hypotenuse));
-    console.log(center);
     return new Circle(center, radius);
   }
 }

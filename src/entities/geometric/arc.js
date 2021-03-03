@@ -4,7 +4,7 @@ const { normalize, matches } = require('../../utility/arguments');
 const circle_from_three_pts = require('../../utility/geometry/circle-from-three-pts.js');
 const orientation = require('../../utility/geometry/orientation.js');
 const sagitta_arc = require('../../utility/geometry/sagitta-arc.js');
-const fillet = require('../../utility/geometry/fillet.js');
+const Segment = require('./segment.js');
 
 
 class Arc extends flatten.Arc {
@@ -31,7 +31,7 @@ class Arc extends flatten.Arc {
       return Arc.from_bulge(start, bulge, end);
     }
 
-    if (matches('segment', 'segment', 'number', '...')) {
+    if (matches(args, 'segment', 'segment', 'number', '...')) {
       const [tan_a, tab_b, radius, side] = args;
       return Arc.from_tangents(tan_a, tab_b, radius, side);
     }
@@ -46,8 +46,6 @@ class Arc extends flatten.Arc {
   }
 
   static from_center_start(center, start, angle, cc = true) {
-    [center, start] = normalize([center, start]);
-
     const start_pt = Vector({ x: start[0], y: start[1] });
     const center_pt = Vector({ x: center[0], y: center[1] });
     const radius = start_pt.dist(center_pt);
@@ -57,8 +55,6 @@ class Arc extends flatten.Arc {
   }
 
   static from_through_point(start, through, end) {
-    [start, through, end] = normalize([start, through, end]);
-
     const { x, y, r } = circle_from_three_pts(start, through, end);
     const start_pt = Vector({ x: start[0], y: start[1] });
     const end_pt = Vector({ x: end[0], y: end[1] });
@@ -70,35 +66,27 @@ class Arc extends flatten.Arc {
   }
 
   static from_bulge(start, bulge, end) {
-    [start, end] = normalize([start, end]);
-
     const { radius, center, start_angle, end_angle, ccw } = sagitta_arc(start, end, bulge);
     return new Arc(center, radius, start_angle, end_angle, ccw);
   }
 
-  static from_tangents(tan_a, tan_b, radius, side) {
-    [tan_a, tan_b] = normalize([tan_a, tan_b]);
+  static from_tangents(a, b, radius, cc) {
+    [a, b] = [a, b].map((x) => new Segment(x));
+    const i = a.intersect(b)[0];
+    const va = flatten.vector(i, a.start).normalize();
+    const vb = flatten.vector(i, b.start).normalize();
+    const bisect = flatten.vector(i, flatten.segment(a.start, b.start).middle()).normalize();
+    const theta = Math.acos(va.dot(vb)) / 2.0; // va.angleTo(vb) / 2.0
+    const l_tan = radius / Math.tan(theta);
+    const hypotenuse = radius / Math.sin(theta);
+    const center = i.translate(bisect.multiply(hypotenuse));
 
-    const line_a = flatten.Line(tan_a[0], tan_a[1]);
-    const line_b = flatten.Line(tan_b[0], tan_b[1]);
-    const intersections = line_a.intersect(line_b);
-    const i = intersections[0];
-    if (!i) throw new Error('Lines are parallel');
-    const ta_s = Vector({ x: tan_a[0][0], y: tan_a[0][1] });
-    const ta_e = Vector({ x: tan_a[1][0], y: tan_a[1][1] });
-    const tb_s = Vector({ x: tan_b[0][0], y: tan_b[0][1] });
-    const tb_e = Vector({ x: tan_b[1][0], y: tan_b[1][1] });
-    const ta_s_dsq = ta_s.distSq(i);
-    const ta_e_dsq = ta_e.distSq(i);
-    const tb_s_dsq = tb_s.distSq(i);
-    const tb_e_dsq = tb_e.distSq(i);
-    const a = ta_s_dsq > ta_e_dsq ? ta_s : ta_e;
-    const b = tb_s_dsq > tb_e_dsq ? tb_s : tb_e;
+    const pt_a = flatten.vector(i.x, i.y).add(va.multiply(l_tan));
+    const pt_b = flatten.vector(i.x, i.y).add(vb.multiply(l_tan));
+    const start = Math.atan2(pt_a.y, pt_a.x);
+    const end = Math.atan2(pt_b.y, pt_b.x);
 
-
-    const { point_a, point_b, bulge } = fillet(a, i, b, radius);
-    // TODO: select proper arc seg depending on side prop
-    return new Arc(point_a, bulge, point_b);
+    return new Arc(center, radius, start, end, cc);
   }
 }
 
