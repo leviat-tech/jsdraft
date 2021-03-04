@@ -1,4 +1,5 @@
 const flatten = require('@flatten-js/core');
+const Point = require('./point');
 const Segment = require('./segment');
 const Polyface = require('./polyface');
 const { normalize, matches } = require('../../utility/arguments');
@@ -64,8 +65,16 @@ class Circle extends Polyface {
     const theta = Math.acos(va.dot(vb)) / 2.0; // va.angleTo(vb) / 2.0
     const hypotenuse = radius / Math.sin(theta);
     const center = i.translate(bisect.multiply(hypotenuse));
-    console.log(center);
     return new Circle(center, radius);
+  }
+
+  get radius() {
+    return (this.box.xmax - this.box.xmin) / 2;
+  }
+
+  get center() {
+    const r = this.radius;
+    return new Point(this.box.xmin + r, this.box.ymin + r);
   }
 }
 
