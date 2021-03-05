@@ -27,6 +27,12 @@ function test(actual, expected) {
   if (expected === 'arc') {
     return (actual instanceof flatten.Arc) || matches_arc_array(actual);
   }
+  if (expected === 'polygon' || expected === 'polyface') {
+    return (actual instanceof flatten.Polygon);
+  }
+  if (expected === 'polycurve' || expected === 'multiline') {
+    return (actual instanceof flatten.Multiline);
+  }
   return typeof (actual) === expected;
 }
 
@@ -41,10 +47,10 @@ function matches(args, ...spec) {
 }
 
 function every(args, pattern) {
+  if (args.length === 0) return false;
   if (Array.isArray(pattern)) {
     return args.every((arg) => Array.isArray(arg) && matches(arg, ...pattern));
   }
-
   return args.every((arg) => test(arg, pattern));
 }
 
