@@ -5,8 +5,9 @@
   "bin": "src/render.js",
   "scripts": {
     "render": "./src/render.js",
-    "test": "mocha --recursive",
-    "test:watch": "mocha --recursive --reporter min --colors -w"
+    "build": "rollup --config",
+    "test": "mocha",
+    "test:watch": "mocha --reporter min --colors -w"
   },
   "author": "",
   "dependencies": {
@@ -24,11 +25,14 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^17.1.0",
+    "@rollup/plugin-node-resolve": "^11.2.0",
     "chai": "^4.3.0",
     "eslint": "^7.20.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-vue": "^7.6.0",
-    "mocha": "^8.3.0"
+    "mocha": "^8.3.0",
+    "rollup": "^2.40.0"
   }
 }
