@@ -34,7 +34,11 @@ function matches(args, ...spec) {
 }
 
 function every(args, pattern) {
-  return args.every((arg) => Array.isArray(arg) && matches(arg, ...pattern));
+  if (Array.isArray(pattern)) {
+    return args.every((arg) => Array.isArray(arg) && matches(arg, ...pattern));
+  }
+
+  return args.every((arg) => test(arg, pattern));
 }
 
 
