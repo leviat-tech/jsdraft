@@ -19,6 +19,12 @@ describe('Polycurve', () => {
       [[2, 0], [5, 5]],
     );
     expect(c).to.be.a.polycurve(4);
+    expect(c.vertices).to.eql([
+      { x: 0, y: 0 },
+      { x: 1, y: 1 },
+      { x: 2, y: 0 },
+      { x: 5, y: 5 },
+    ]);
   });
 
   it('can be constructed from points and bulges', () => {
@@ -42,7 +48,6 @@ describe('Polycurve', () => {
       [[20, 0], 1.5],
       [[30, 10], 0],
     );
-
     expect(c).to.be.a.polycurve(6);
   });
 });

@@ -1,5 +1,6 @@
 const flatten = require('@flatten-js/core');
 const { normalize, every } = require('../../utility/arguments');
+const { matches_segment_array } = require('../../utility/arguments/matches.js');
 const sagitta_arc = require('../../utility/geometry/sagitta-arc.js');
 const fillet = require('../../utility/geometry/fillet.js');
 const Arc = require('./arc.js');
@@ -31,7 +32,15 @@ class Polycurve extends flatten.Multiline {
     }
 
     if (every(args, 'segment or arc')) {
-      return super(args);
+      const segs = args.map((arg) => {
+        if (arg instanceof flatten.Arc || arg instanceof flatten.Segment) return arg;
+
+        if (matches_segment_array(arg)) return new Segment(...arg);
+
+        return new Arc(...arg);
+      });
+
+      return super(segs);
     }
 
     throw new Error('Unexpected arguments for a Polycurve constructor.');

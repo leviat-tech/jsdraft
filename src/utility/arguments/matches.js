@@ -2,6 +2,18 @@ const flatten = require('@flatten-js/core');
 const { numeric_array, numeric_arrays } = require('./numeric');
 
 
+function matches_segment_array(arg) {
+  return numeric_arrays(arg, { eq: 2 });
+}
+
+function matches_arc_array(arg) {
+  return Array.isArray(arg)
+  && arg.length >= 4
+  && arg.length <= 5
+  && numeric_array(arg[0])
+  && numeric_array(arg.slice(1, 4));
+}
+
 function test(actual, expected) {
   if (expected && expected.indexOf(' or ') > -1) {
     return expected.split(' or ').map((e) => e.trim()).some((e) => test(actual, e));
@@ -10,15 +22,10 @@ function test(actual, expected) {
     return actual instanceof flatten.Point || numeric_array(actual, { eq: 2 });
   }
   if (expected === 'segment') {
-    return actual instanceof flatten.Segment || numeric_arrays(actual, { eq: 2 });
+    return actual instanceof flatten.Segment || matches_segment_array(actual);
   }
   if (expected === 'arc') {
-    return (actual instanceof flatten.Arc) || (
-      Array.isArray(actual)
-      && actual.length >= 4
-      && actual.length <= 5
-      && numeric_array(actual[0])
-      && numeric_array(actual.slice(1, 4)));
+    return (actual instanceof flatten.Arc) || matches_arc_array(actual);
   }
   return typeof (actual) === expected;
 }
@@ -42,4 +49,4 @@ function every(args, pattern) {
 }
 
 
-module.exports = { matches, every };
+module.exports = { matches, every, matches_segment_array, matches_arc_array };
