@@ -5,7 +5,7 @@ const load = require('./loaders/load');
 const Sketch = require('./sketch/sketch.js');
 
 
-function main(renderer, feature, arg, options) {
+function main(renderer, feature, args, options) {
   // parse parameters
   const params = args.map((a) => JSON.parse(a));
 
