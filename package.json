@@ -6,8 +6,8 @@
   "scripts": {
     "render": "./src/render.js",
     "build": "rollup --config",
-    "test": "mocha",
-    "test:watch": "mocha --reporter min --colors -w"
+    "test": "mocha --recursive",
+    "test:watch": "mocha --recursive --reporter min --colors -w"
   },
   "author": "",
   "dependencies": {
