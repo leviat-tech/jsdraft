@@ -4,7 +4,7 @@ const evaluate = require('../utility/misc/evaluate');
 
 
 function parse(contents, identifier) {
-  const func = evaluate(`feature = ${contents}`);
+  const func = evaluate(contents.trim());
   func.identifier = identifier;
   return func;
 }
