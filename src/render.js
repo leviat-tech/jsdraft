@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const fs = require('fs');
 const { program } = require('commander');
 const path = require('path');
 const load = require('./loaders/load');
@@ -20,7 +21,14 @@ function main(renderer, feature, args, options) {
 
   // execute root feature function and render
   const sketch = func(blank, ...params);
-  render(sketch, options);
+  const result = render(sketch);
+
+  // write to file or stdout
+  if (options.file) {
+    fs.writeFileSync(options.file, result);
+  } else {
+    console.log(result);
+  }
 }
 
 program
