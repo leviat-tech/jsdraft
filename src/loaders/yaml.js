@@ -82,6 +82,7 @@ function reference(definition, sketch, context) {
 
 // create a draft function from yaml definition and function name
 function parse(draft, identifier) {
+  draft = yaml.load(draft);
   const func = function feature(sketch, ...args) {
     // define context
     let context = {};
@@ -103,7 +104,7 @@ function parse(draft, identifier) {
 function load(file) {
   try {
     const identifier = path.basename(file, path.extname(file));
-    const doc = yaml.load(fs.readFileSync(file, 'utf8'));
+    const doc = fs.readFileSync(file, 'utf8');
     return parse(doc, identifier);
   } catch (e) {
     throw new Error(`Invalid yaml sketch: ${file} ${e}`);
