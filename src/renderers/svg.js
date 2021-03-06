@@ -3,21 +3,22 @@ const { SVG, registerWindow } = require('@svgdotjs/svg.js');
 const { createSVGWindow } = require('svgdom');
 
 
-const DEFAULT_STROKE_WIDTH = 2
-const DEFAULT_STROKE = 'rgba(0,0,0,0)'
-const DEFAULT_FILL = 'rgba(0,0,0,0)'
+const DEFAULT_STROKE_WIDTH = 2;
+const DEFAULT_STROKE = 'rgba(0,0,0,1)';
+const DEFAULT_FILL = 'rgba(255,255,255,1)';
 
 
 function recurse(canvas, sketch, style) {
   // set style
-  const s = {...sketch.node.style, ...style};
+  const s = { ...sketch.node.style, ...style };
 
   // draw entities
   for (const entity of sketch.node.entities) {
     canvas.svg(entity.svg({
       stroke: s.stroke?.color || DEFAULT_STROKE,
-      strokeWidth: s.stroke?.width || 0,
-      fill:s.fill || DEFAULT_FILL}))
+      strokeWidth: s.stroke?.width || DEFAULT_STROKE_WIDTH,
+      fill: s.fill || DEFAULT_FILL,
+    }));
   }
 
   // draw children
@@ -40,7 +41,7 @@ function render(sketch, options) {
 
   // spit out svg
   if (options.file) {
-    fs.writeFileSync(options.file, canvas.svg())
+    fs.writeFileSync(options.file, canvas.svg());
   } else {
     console.log(canvas.svg());
   }
