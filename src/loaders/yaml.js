@@ -1,27 +1,30 @@
+const fs = require('fs');
+const path = require('path');
 const yaml = require('js-yaml');
-const safe = require('notevil');
+const safe = require('notevil')
 
 
 // WARNING: BETA! THIS IS INSECURE,REPLACE WITH SECURE PARSING AND EVALUATION TO PREVENT POISONED DRAFT FILES
 
 // extract the key from a single label yaml object
 function unwind(obj) {
-  return Object.keys(obj)[0];
+ return Object.keys(obj)[0];
 }
 
 // evaluate yaml chain expression
 function chain(sketch, exp, context) {
   let s = sketch.new;
 
-  exp.forEach((x) => {
+  exp.forEach(x => {
     const func = unwind(x);
-    const args = x[func].map((a) => {
+    const args = x[func].map(a => {
       if (typeof a === 'string' && a.startsWith('$')) {
         return safe(a, context);
+      } else {
+        return a;
       }
-      return a;
     });
-    s = s[func](...args);
+    s = s[func](...args)
   });
 
   return s;
@@ -29,36 +32,36 @@ function chain(sketch, exp, context) {
 
 // parse draft yaml parameter definition
 function parameters(definition, args) {
-  const params = {};
+  params = {}
 
   definition.forEach((param, i) => {
     // get parameter name
     let name = param;
     if (typeof param === 'object') {
-      name = unwind(param);
+      name = unwind(param)
     }
 
     // get parameter definition
-    let def = param[name];
+    let def = param[name]
     if (typeof def !== 'object') {
       def = {
-        default: def,
-      };
+        default: def
+      }
     }
 
     // get parameter value
-    const val = args[i] ?? def.default;
+    const val  = args[i] ?? def.default;
 
     // store parameter
     params[name] = val;
-  });
+  })
 
   return params;
 }
 
 // parse draft yaml constant definition
 function reference(definition, sketch, context) {
-  const refs = {};
+  refs = {}
 
   definition.forEach((constant) => {
     // get id and expression
@@ -67,53 +70,45 @@ function reference(definition, sketch, context) {
 
     // evaluate constant from vanilla js expression
     if (typeof exp === 'string') {
-      refs[id] = safe(exp, { ...context, ...refs });
-    }
-
-    // numbers/booleans are passed through unchanged
-    if (['boolean', 'number'].includes(typeof exp)) {
-      refs[id] = exp;
+      refs[id] = safe(exp, {...context, ...refs})
     }
 
     // evaluate constant from sketch chain expression
     if (Array.isArray(exp)) {
-      refs[id] = chain(sketch, exp, { ...context, ...refs });
+      refs[id] = chain(sketch, exp, {...context, ...refs});
     }
-  });
+  })
 
-  return refs;
+  return refs
 }
 
 // create a draft function from yaml definition and function name
 function parse(draft, identifier) {
-  const func = function (sketch, ...args) {
+  const func =  function(sketch, ...args) {
     // define context
     let context = {};
 
     // load parameters
-    if (draft.parameters && Array.isArray(draft.parameters)) {
-      context = { ...context, ...parameters(draft.parameters, args) };
-    }
+    context = {...context, ...parameters(draft.parameters, args)}
 
     // evaluate reference
-    if (draft.reference && Array.isArray(draft.reference)) {
-      context = { ...context, ...reference(draft.reference, sketch, context) };
-    }
+    context = {...context, ...reference(draft.reference, sketch, context)}
 
     // evaluate sketch
     return chain(sketch, draft.sketch, context);
-  };
+  }
   func.identifier = identifier;
   return func;
 }
 
 // load draft yaml function from file
-function load(identifier, file) {
+function load(file) {
   try {
-    const doc = yaml.load(file);
+    const identifier = path.basename(file, path.extname(file))
+    const doc = yaml.load(fs.readFileSync(file, 'utf8'));
     return parse(doc, identifier);
   } catch (e) {
-    console.error(`Invalid yaml sketch: ${identifier} ${e}`);
+    console.error(`Invalid yaml sketch: ${file} ${e}`);
   }
 }
 
