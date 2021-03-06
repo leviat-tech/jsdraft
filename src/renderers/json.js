@@ -1,3 +1,3 @@
-module.exports = function render(sketch) {
+module.exports = function render(sketch, options) {
   return JSON.stringify(sketch, null, 2);
 };

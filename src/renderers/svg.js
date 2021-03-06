@@ -24,14 +24,12 @@ function recurse(svg, sketch, style) {
   return svg;
 }
 
-function render(sketch, viewport) {
-  if (viewport === null) {
+function render(sketch, options) {
+  options = options || { viewport: 'svg' };
+  if (options.viewport === null) {
     return recurse('', sketch);
   }
-  if (viewport === undefined) {
-    viewport = 'svg';
-  }
-  return `<${viewport}>${recurse('', sketch)}</svg>`;
+  return `<${options.viewport}>${recurse('', sketch)}</svg>`;
 }
 
 
