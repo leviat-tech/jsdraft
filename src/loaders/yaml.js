@@ -1,10 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
-const safe = require('notevil');
+const evaluate = require('../utility/misc/evaluate');
 
-
-// WARNING: THIS IS INSECURE: USE SECURE PARSING AND EVALUATION TO PREVENT POISONED DRAFT FILES
 
 // extract the key from a single label yaml object
 function unwind(obj) {
@@ -19,7 +17,7 @@ function chain(sketch, exp, context) {
     const func = unwind(x);
     const args = x[func].map((a) => {
       if (typeof a === 'string' && a.startsWith('$')) {
-        return safe(a, context);
+        return evaluate(a, context);
       }
       return a;
 
@@ -70,7 +68,7 @@ function reference(definition, sketch, context) {
 
     // evaluate constant from vanilla js expression
     if (typeof exp === 'string') {
-      refs[id] = safe(exp, { ...context, ...refs });
+      refs[id] = evaluate(exp, { ...context, ...refs });
     }
 
     // evaluate constant from sketch chain expression
@@ -112,4 +110,4 @@ function load(file) {
   }
 }
 
-module.exports = { load };
+module.exports = { load, parse };
