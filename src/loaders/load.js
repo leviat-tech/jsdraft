@@ -8,5 +8,5 @@ module.exports = function load(path) {
   } if (path.endsWith('yaml')) {
     return yaml.load(path);
   }
-  throw new Error(`Unable to load feature fuction from ${path}`);
+  throw new Error(`Unable to load feature function from ${path}`);
 };
