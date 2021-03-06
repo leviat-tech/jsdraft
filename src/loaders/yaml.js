@@ -88,10 +88,10 @@ function parse(draft, identifier) {
     let context = {};
 
     // load parameters
-    context = { ...context, ...parameters(draft.parameters, args) };
+    context = { ...context, ...parameters(draft.parameters ?? [], args) };
 
     // evaluate reference
-    context = { ...context, ...reference(draft.reference, sketch, context) };
+    context = { ...context, ...reference(draft.reference ?? [], sketch, context) };
 
     // evaluate sketch
     return chain(sketch, draft.sketch, context);
