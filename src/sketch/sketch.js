@@ -1,9 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const cloneDeep = require('lodash.clonedeep');
-const glob = require('glob');
-const path = require('path');
 const iterators = require('./iterators');
-const load = require('../loaders/load');
+const features = require('../features/index.js');
 
 
 class Sketch {
@@ -77,9 +75,9 @@ class Sketch {
   }
 
   // dynamically provide a feature function to sketch without polluting prototype
-  include(...paths) {
-    this.constructor.include(require(path.join(...paths)), this);
-  }
+  // include(...paths) {
+  //   this.constructor.include(require(path.join(...paths)), this)
+  // }
 
   // dynamically provide a feature function to sketch
   static include(func, target) {
@@ -96,12 +94,7 @@ class Sketch {
 
 
 // include all built in js feature functions
-const modules = glob.sync('../features/**/*.js', { cwd: __dirname }).map((p) => path.join(__dirname, p));
-modules.forEach((m) => Sketch.include(load(m)));
-
-// include all built in yaml feature functions
-const sketches = glob.sync('../features/**/*.yaml', { cwd: __dirname }).map((p) => path.join(__dirname, p));
-sketches.forEach((p) => Sketch.include(load(p)));
+features.forEach((feature) => Sketch.include(feature));
 
 
 module.exports = Sketch;
