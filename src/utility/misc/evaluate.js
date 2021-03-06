@@ -12,8 +12,10 @@ return sketch.draw(
 Breaks because of the trailing comma on the last argument. At least lets create a test case
 that breaks or warns until secure evaluation is completed.
 */
-function evaluate(expression) {
-  return eval(expression);
+function evaluate(expression, context) {
+  // return safe(expression, context);
+  context = context || {};
+  return eval(`with(${JSON.stringify(context)}) { ${expression}; }`);
 }
 
 module.exports = evaluate;
