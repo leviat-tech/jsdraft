@@ -1,4 +1,4 @@
-const safe = require('notevil');
+const notevil = require('notevil');
 
 
 /*
@@ -13,9 +13,7 @@ Breaks because of the trailing comma on the last argument. At least lets create 
 that breaks or warns until secure evaluation is completed.
 */
 function evaluate(expression, context) {
-  // return safe(expression, context);
-  context = context || {};
-  return eval(`with(${JSON.stringify(context)}) { ${expression}; }`);
+  return notevil(expression, context);
 }
 
 module.exports = evaluate;
