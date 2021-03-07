@@ -1,22 +1,21 @@
-const load = require('./loaders/load.js');
+const parse = require('./loaders/parse.js');
 const Sketch = require('./sketch/sketch.js');
 const is_object = require('./utility/misc/is-object.js');
-const svg_entities = require('./renderers/svg-entities.js');
-const console_renderer = require('./renderers/console.js');
+const svg = require('./renderers/svg.js');
+const yaml = require('./renderers/yaml.js');
+const json = require('./renderers/json.js');
 
 
 class Draft {
   constructor() {
     this.sketches = {};
     this.renderers = { // Perhaps a user could add a custom renderer to this object?
-      'svg-entities': svg_entities,
-      console: console_renderer,
+      json, yaml, svg
     };
   }
 
   add_sketch(name, filetype, contents) {
-    const func = load(name, filetype, contents);
-
+    const func = parse(filetype, contents, name);
     this.sketches[name] = {
       filetype, // yaml or js
       contents, // raw string of file contents
@@ -35,18 +34,11 @@ class Draft {
     delete this.sketches[name];
   }
 
-  render(name, options, params) {
+  render(name, params, format, options) {
     const func = this.sketches[name].func;
-    let sketch;
-    if (is_object(params)) {
-      sketch = func(new Sketch(), params);
-    } else { // params is Array
-      sketch = func(new Sketch(), ...params);
-    }
-
-    const { format, opts } = options;
+    const sketch = func(new Sketch(), ...params);
     const renderer = this.renderers[format];
-    return renderer(sketch, opts);
+    return renderer(sketch, options);
   }
 }
 

@@ -81,16 +81,17 @@ export default createStore({
   },
 
   getters: {
-    entities(state) {
+    svg(state) {
       if (!state.currentSketch) return [];
       try {
         return state.draft.render(
           state.currentSketch,
-          { format: 'svg-entities' },
           [],
+          'svg',
+          { viewport: null },
         );
       } catch (e) {
-        // console.log(e);
+        console.debug(e);
         return [];
       }
     },

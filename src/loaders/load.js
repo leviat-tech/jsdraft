@@ -2,14 +2,11 @@ const javascript = require('./javascript');
 const yaml = require('./yaml');
 
 
-module.exports = function load(name, filetype, contents) {
-  if (filetype === 'js') {
-    return javascript.load(name, contents);
+module.exports = function load(path) {
+  if (path.endsWith('js')) {
+    return javascript.load(path);
+  } if (path.endsWith('yaml')) {
+    return yaml.load(path);
   }
-
-  if (filetype === 'yaml') {
-    return yaml.load(name, contents);
-  }
-
-  throw new Error(`Unable to load feature function from ${filetype}`);
+  throw new Error(`Unable to load feature function from ${path}`);
 };

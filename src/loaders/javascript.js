@@ -1,21 +1,22 @@
-// create a draft function from js definition and function name
-function parse(input, identifier) {
-  const func = new Function(input);
+const fs = require('fs');
+const path = require('path');
+const evaluate = require('../utility/misc/evaluate');
 
-  const result = func();
 
-  // TODO: test for the case of an object w/ parameter definitions, etc.
-  const sketchfunc = result;
-  sketchfunc.identifier = identifier;
-  return sketchfunc;
+function parse(contents, identifier) {
+  const func = evaluate(contents.trim());
+  func.identifier = identifier;
+  return func;
 }
 
-function load(name, contents) {
+function load(file) {
   try {
-    return parse(contents, name);
+    const identifier = path.basename(file, path.extname(file));
+    const doc = fs.readFileSync(file, 'utf8');
+    return parse(doc, identifier);
   } catch (e) {
-    console.error(`Invalid js sketch: ${name} ${e}`);
+    throw new Error(`Invalid js sketch: ${file} ${e}`);
   }
 }
 
-module.exports = { load };
+module.exports = { load, parse };
