@@ -1,6 +1,5 @@
 const parse = require('./loaders/parse.js');
 const Sketch = require('./sketch/sketch.js');
-const is_object = require('./utility/misc/is-object.js');
 const svg = require('./renderers/svg.js');
 const yaml = require('./renderers/yaml.js');
 const json = require('./renderers/json.js');
@@ -10,7 +9,7 @@ class Draft {
   constructor() {
     this.sketches = {};
     this.renderers = { // Perhaps a user could add a custom renderer to this object?
-      json, yaml, svg
+      json, yaml, svg,
     };
   }
 
