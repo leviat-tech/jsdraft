@@ -12,7 +12,7 @@ function numeric_arrays(args, options) {
   options = options || {};
   if (!Array.isArray(args)) return false;
   if (args.length === 0) return false;
-  for (arg of args) {
+  for (const arg of args) {
     if (!numeric_array(arg, options)) return false;
   }
   return true;
