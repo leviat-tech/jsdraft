@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
-const cloneDeep = require('lodash.clonedeep');
+const cloneDeep = require('lodash/cloneDeep');
 const iterators = require('./iterators');
 const features = require('../features/index.js');
 
