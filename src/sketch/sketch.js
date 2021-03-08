@@ -31,6 +31,12 @@ class Sketch {
     return new Sketch(options);
   }
 
+  // add entities to sketch
+  add_entities(...entities) {
+    this.node.entities.push(...entities);
+    return this;
+  }
+
   // return a clone of this sketch
   clone() {
     return Sketch.clone(this);
@@ -45,7 +51,7 @@ class Sketch {
 
   // create iterator to traverse entities in sketch
   * entities(order) {
-    for (const s of sketch.tree(order)) {
+    for (const s of this.tree(order)) {
       for (const e in s.node.entities) {
         yield e;
       }
