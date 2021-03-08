@@ -15,14 +15,23 @@ function chain(sketch, exp, context) {
 
   exp.forEach((x) => {
     const func = unwind(x);
-    const args = x[func].map((a) => {
-      if (typeof a === 'string' && a.startsWith('$')) {
-        return evaluate(a, context);
-      }
-      return a;
 
-    });
-    s = s[func](...args);
+    // 'sketch' keyword becomes a new chain
+    if (func === 'sketch') {
+      s = s.add(chain(s, x[func], context));
+
+    // otherwise we have a standard sketch function
+    } else {
+      const args = x[func].map((a) => {
+        if (typeof a === 'string' && a.startsWith('$')) {
+          return evaluate(a, context);
+        }
+        return a;
+
+      });
+      s = s[func](...args);
+    }
+
   });
 
   return s;
