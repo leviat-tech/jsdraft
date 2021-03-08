@@ -1,5 +1,5 @@
-const fill = require('./coloration/fill.js');
-const stroke = require('./coloration/stroke.js');
+const fill = require('./style/fill.js');
+const stroke = require('./style/stroke.js');
 
 const arc = require('./geometric/arc.js');
 const circle = require('./geometric/circle.js');
