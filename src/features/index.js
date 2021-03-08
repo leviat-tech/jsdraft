@@ -7,6 +7,7 @@ const point = require('./geometric/point.js');
 const polycurve = require('./geometric/polycurve.js');
 const rectangle = require('./geometric/rectangle.js');
 const segment = require('./geometric/segment.js');
+const polyface = require('./geometric/polyface.js');
 
 const hide = require('./meta/hide.js');
 const name = require('./meta/name.js');
@@ -31,6 +32,7 @@ module.exports = [
   circle,
   point,
   polycurve,
+  polyface,
   rectangle,
   segment,
   hide,
