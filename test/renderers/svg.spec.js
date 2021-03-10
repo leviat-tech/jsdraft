@@ -10,7 +10,7 @@ chai.expect();
 
 const { expect } = chai;
 
-describe('A sketch rendered to SVG', () => {
+describe('SVG', () => {
   const sketch = new Sketch()
     .point(1, 2)
     .segment([1, 1], [10, 10])

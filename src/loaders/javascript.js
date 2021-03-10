@@ -4,9 +4,23 @@ const evaluate = require('../utility/misc/evaluate');
 
 
 function parse(contents, identifier) {
-  const func = evaluate(contents.trim());
+  const result = evaluate(contents.trim());
+  let func;
+  let register = false;
+
+  // result is a function
+  if (typeof result === 'function') {
+    func = result;
+
+  // result is an object
+  } else {
+    register = !!result.register;
+    func = result.func;
+  }
+
+
   func.identifier = identifier;
-  return func;
+  return { func, register };
 }
 
 function load(file) {

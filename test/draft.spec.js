@@ -1,40 +1,14 @@
 /* global describe, it */
 
 const chai = require('chai');
-const Sketch = require('../src/sketch/sketch.js');
 const Draft = require('../src/draft.js');
-const svg = require('../src/renderers/svg.js');
 
 
 chai.expect();
 
 const { expect } = chai;
 
-describe('Point feature', () => {
-  const sketch = new Sketch();
-  const s = sketch.point(1, 2);
-  it('will return a point entity', () => {
-    expect(s.shape.x).to.eql(1);
-    expect(s.shape.y).to.eql(2);
-  });
-});
-
-describe('SVG renderer', () => {
-  const sketch = new Sketch();
-
-  const result = sketch.draw(
-    sketch.point([0, 0]),
-    sketch.point([10, 10]),
-  );
-
-  it('will render two points', () => {
-    const rendering = svg(result);
-    expect(rendering).to.contain('circle');
-  });
-});
-
-describe('Draft construct', () => {
-
+describe('Draft', () => {
   it('should be able to parse and render a javascript sketch', () => {
     const draft = new Draft();
     draft.add_sketch('my_point', 'js', `
@@ -43,7 +17,7 @@ describe('Draft construct', () => {
       }
     `);
     const result = draft.render('my_point', [3, 5], 'svg');
-    expect(result).to.contain('circle');
+    expect(result).to.contain('path');
   });
 
   it('should be able to parse and render a yaml sketch', () => {
@@ -57,7 +31,38 @@ describe('Draft construct', () => {
         - point: [$x, $y]
     `);
     const result = draft.render('my_point', [3, 5], 'svg');
-    expect(result).to.contain('circle');
+    expect(result).to.contain('path');
+  });
+
+  it('should be able to register a user function', () => {
+    const draft = new Draft();
+    draft.add_sketch('my_point', 'yaml', `
+      register: true
+      parameters:
+        - $x: 5
+        - $y: 5
+      reference:
+        - $x2: $x * 2
+        - $y2: $y * 2
+      sketch:
+        - point: [$x, $y]
+        - point: [$x2, $y2]
+        - point: [40, 40]
+    `);
+
+    expect(draft.sketch.my_point(1, 2).shape).to.eql({ x: 1, y: 2 });
+
+    draft.add_sketch('instances', 'yaml', `
+      register: true
+      parameters:
+      sketch:
+        - my_point: [1, 1]
+        - my_point: [10, 10]
+        - my_point: [20, 20]
+    `);
+
+    const result = draft.render('instances', [], 'svg', { viewport: null });
+    expect(result).to.contain('path');
   });
 
   it('should be able to parse and render the default javascript sketch', () => {
