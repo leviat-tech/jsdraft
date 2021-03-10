@@ -106,7 +106,7 @@ function parse(draft, identifier) {
     return chain(sketch, draft.sketch, context);
   };
   func.identifier = identifier;
-  return func;
+  return { func, register: !!draft.register };
 }
 
 // load draft yaml function from file
