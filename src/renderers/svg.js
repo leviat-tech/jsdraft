@@ -95,7 +95,7 @@ function recurse(svg, sketch, style) {
   const s = { ...sketch.node.style, ...style };
 
   // draw entities
-  for (const entity of sketch.node.entities) {
+  for (const entity of sketch.entities()) {
     const type = entity_type(entity);
     const styles = {
       ...DEFAULT_ATTRIBUTES,
@@ -103,11 +103,6 @@ function recurse(svg, sketch, style) {
     };
 
     svg += `\n${entity_svg[type](entity, styles)}`;
-  }
-
-  // draw children
-  for (const child of sketch.node.children) {
-    svg += recurse(svg, child, s);
   }
 
   return svg;
