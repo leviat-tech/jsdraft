@@ -14,7 +14,7 @@ class Sketch {
       feature: '', // feature: the name of the feature function that created this node
       hidden: false, // hidden: if false this node should not be rendered (except console renderer)
       style: {}, // style: stroke, fill, etc that should be applied to paths in decendent nodes
-      entities: [], // entities: all geometry, text, and other elements associated attached to this node
+      entities: [], // entities: all geometry, text, and other elements attached to this node
       children: [], // children: nodes attached as decendents to this node
       attributes: {}, // attributes: a free space for meta data associated with this node
     };
@@ -23,12 +23,21 @@ class Sketch {
 
   // convenience getter for new blank sketch
   get new() {
-    return new Sketch();
+    const sketch = new Sketch();
+    sketch.clone_dynamic_features(this);
+    return sketch;
+  }
+
+  clone_dynamic_features(sketch) {
+    const { node, ...dynamic_features } = sketch;
+    Object.values(dynamic_features).forEach((f) => { this.include(f.original); });
   }
 
   // create new sketch
   create(options) {
-    return new Sketch(options);
+    const sketch = new Sketch(options);
+    sketch.clone_dynamic_features(this);
+    return sketch;
   }
 
   // add entities to sketch
@@ -46,6 +55,7 @@ class Sketch {
   static clone(sketch) {
     const copy = new Sketch();
     copy.node = cloneDeep(sketch.node);
+    copy.clone_dynamic_features(sketch);
     return copy;
   }
 
@@ -81,19 +91,23 @@ class Sketch {
   }
 
   // dynamically provide a feature function to sketch without polluting prototype
-  // include(...paths) {
-  //   this.constructor.include(require(path.join(...paths)), this)
-  // }
+  include(func) {
+    this.constructor.include(func, this);
+  }
 
   // dynamically provide a feature function to sketch
   static include(func, target) {
     const cls = this;
-    const decorated = function (...args) {
+    const decorated = function decorated(...args) {
       const input = cls.clone(this);
       const output = func(input, ...args);
       output.node.feature = output.node.feature || func.identifier || func.name;
       return output;
     };
+
+    // dynamic functions not on prototype need to be preserved for cloning
+    if (target) decorated.original = func;
+
     (target || this.prototype)[func.identifier || func.name] = decorated;
   }
 }
