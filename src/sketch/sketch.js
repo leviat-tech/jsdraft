@@ -52,7 +52,7 @@ class Sketch {
   // create iterator to traverse entities in sketch
   * entities(order) {
     for (const s of this.tree(order)) {
-      for (const e in s.node.entities) {
+      for (const e of s.node.entities) {
         yield e;
       }
     }
