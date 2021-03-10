@@ -90,12 +90,14 @@ const entity_svg = {
   },
 };
 
-function recurse(svg, sketch, style) {
+function recurse(sketch, style) {
+  let svg = '';
+
   // set style
   const s = { ...sketch.node.style, ...style };
 
   // draw entities
-  for (const entity of sketch.entities()) {
+  for (const entity of sketch.node.entities) {
     const type = entity_type(entity);
     const styles = {
       ...DEFAULT_ATTRIBUTES,
@@ -105,15 +107,20 @@ function recurse(svg, sketch, style) {
     svg += `\n${entity_svg[type](entity, styles)}`;
   }
 
+  // draw children
+  for (const child of sketch.node.children) {
+    svg += recurse(child, s);
+  }
+
   return svg;
 }
 
 function render(sketch, options) {
   options = options || { viewport: 'svg' };
   if (options.viewport === null) {
-    return recurse('', sketch);
+    return recurse(sketch);
   }
-  return `<${options.viewport}>${recurse('', sketch)}</svg>`;
+  return `<${options.viewport}>${recurse(sketch)}</svg>`;
 }
 
 
