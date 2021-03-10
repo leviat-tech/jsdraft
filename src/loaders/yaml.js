@@ -18,7 +18,7 @@ function chain(sketch, exp, context) {
 
     // 'sketch' keyword becomes a new chain
     if (func === 'sketch') {
-      s = s.add(chain(s, x[func], context));
+      s = chain(s, x[func], context);
 
     // otherwise we have a standard sketch function
     } else {
@@ -34,7 +34,7 @@ function chain(sketch, exp, context) {
 
   });
 
-  return s;
+  return sketch.add(s);
 }
 
 // parse draft yaml parameter definition
