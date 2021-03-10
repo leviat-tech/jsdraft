@@ -17,6 +17,7 @@ class Sketch {
       entities: [], // entities: all geometry, text, and other elements attached to this node
       children: [], // children: nodes attached as decendents to this node
       attributes: {}, // attributes: a free space for meta data associated with this node
+      chain: null, // refers to parent sketch when sketch is being chained
     };
     this.node = { ...this.node, ...(options || {}) };
   }
@@ -44,6 +45,20 @@ class Sketch {
   add_entities(...entities) {
     this.node.entities.push(...entities);
     return this;
+  }
+
+  get chain() {
+    const sketch = this.new;
+    sketch.node.chain = this;
+    return sketch;
+  }
+
+  draw(sketches) {
+    if (this.node.chain) {
+      return this.node.chain.add(this);
+    }
+
+    return this.add(...sketches);
   }
 
   // return a clone of this sketch
