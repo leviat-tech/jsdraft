@@ -36,6 +36,7 @@ class Draft {
 
   remove_sketch(name) {
     delete this.sketches[name];
+    delete this.sketch[name];
   }
 
   render(name, params, format, options) {
