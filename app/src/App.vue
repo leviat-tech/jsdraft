@@ -10,25 +10,21 @@ import isElectron from 'is-electron';
 import Layout from './components/Layout.vue';
 
 
+const electron = isElectron();
+
 export default {
   name: 'App',
   components: {
     Layout,
   },
-  data() {
-    return {
-      isElectron: isElectron(),
-      closeWatcher: null,
-    };
-  },
   computed: {
-    ...mapState(['path', 'draft']),
+    ...mapState(['path', 'draft', 'currentSketch']),
   },
   watch: {
     path: {
       immediate: true,
       async handler(nv) {
-        if (this.isElectron) {
+        if (electron) {
           if (this.closeWatcher) {
             await this.closeWatcher();
           }
@@ -39,12 +35,18 @@ export default {
         }
       },
     },
+    currentSketch: {
+      handler() {
+        this.setHovered({});
+        this.setSelected({});
+      },
+    },
   },
   unmounted() {
     if (this.closeWatcher) this.closeWatcher();
   },
   methods: {
-    ...mapMutations(['updateSketch', 'removeSketch']),
+    ...mapMutations(['updateSketch', 'removeSketch', 'setHovered', 'setSelected']),
     updateFile(updateType, file) {
       if (updateType === 'change') {
         this.updateSketch({
@@ -249,6 +251,30 @@ h2 {
     &:active {
       color: #ac0211;
     }
+  }
+}
+
+.sidebar-section {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+
+  h2 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+.sidebar-list-item {
+  font-size: $text-sm;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $color-gray-02;
+    border-top-color: $color-gray-03;
+    border-bottom-color: $color-gray-03;
   }
 }
 

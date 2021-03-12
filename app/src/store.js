@@ -1,5 +1,6 @@
 import { createStore } from 'vuex';
-import { Draft } from '../../dist/draft.js';
+import upperFirst from 'lodash/upperFirst';
+import { Draft, entity_type } from '../../dist/draft.js';
 
 
 export default createStore({
@@ -13,6 +14,8 @@ export default createStore({
       filename: 'Draft',
       path: undefined,
       draft: new Draft(),
+      hovered: {},
+      selected: {},
     };
   },
 
@@ -50,6 +53,18 @@ export default createStore({
     renameSketch(state, { name, newName }) {
       state.draft.rename_sketch(name, newName);
     },
+    setHovered(state, value) {
+      state.hovered = value;
+    },
+    hoverEntity(state, value) {
+      state.hovered[value] = true;
+    },
+    unhoverEntity(state, value) {
+      delete state.hovered[value];
+    },
+    setSelected(state, value) {
+      state.selected = value;
+    },
   },
 
   actions: {
@@ -81,6 +96,14 @@ export default createStore({
   },
 
   getters: {
+    sketch(state) {
+      try {
+        const func = state.draft.sketches[state.currentSketch].func;
+        return func(state.draft.sketch, []);
+      } catch (e) {
+        return null;
+      }
+    },
     svg(state) {
       if (!state.currentSketch) return [];
       try {
@@ -91,9 +114,17 @@ export default createStore({
           { viewport: null },
         );
       } catch (e) {
-        console.debug(e);
-        return [];
+        return null;
       }
+    },
+    entities(state, getters) {
+      if (!getters.sketch) return [];
+
+      return Array.from(getters.sketch.entities())
+        .map((entity) => ({
+          type: upperFirst(entity_type(entity)),
+          entity,
+        }));
     },
   },
 });

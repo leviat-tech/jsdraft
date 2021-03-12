@@ -3,8 +3,9 @@
     <div class="header">
       {{ filename }}
     </div>
-    <div class="panels" />
-
+    <div class="panels">
+      <entity-list />
+    </div>
     <file-browser />
   </div>
 </template>
@@ -12,12 +13,14 @@
 <script>
 import { mapState } from 'vuex';
 import FileBrowser from './FileBrowser.vue';
+import EntityList from './EntityList.vue';
 
 
 export default {
   name: 'Sidebar',
   components: {
     FileBrowser,
+    EntityList,
   },
   data() {
     return {
@@ -64,7 +67,8 @@ button {
 }
 
 .panels {
-  overflow: hidden;
+  flex: 1 1 0%;
+  overflow: auto;
 }
 
 </style>
