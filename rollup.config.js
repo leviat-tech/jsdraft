@@ -1,5 +1,5 @@
 import commonjs from '@rollup/plugin-commonjs';
-import resolve from '@rollup/plugin-node-resolve';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 
 const config = {
@@ -10,8 +10,8 @@ const config = {
     name: 'Draft',
   },
   plugins: [
+    nodeResolve({ browser: true }),
     commonjs(),
-    resolve(),
   ],
 };
 
