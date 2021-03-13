@@ -19,6 +19,7 @@
     "lodash": "^4.17.21",
     "mathjs": "^8.1.0",
     "pdf-lib": "^1.13.0",
+    "rbush": "^3.0.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
