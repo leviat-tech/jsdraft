@@ -13,6 +13,7 @@ const hide = require('./meta/hide.js');
 const name = require('./meta/name.js');
 const tag = require('./meta/tag.js');
 
+const interpolate = require('./operations/interpolate.js');
 const join = require('./operations/join.js');
 const subtract = require('./operations/subtract.js');
 
@@ -35,6 +36,7 @@ module.exports = [
   hide,
   name,
   tag,
+  interpolate,
   join,
   subtract,
   rotate,
