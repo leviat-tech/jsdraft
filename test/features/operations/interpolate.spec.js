@@ -21,7 +21,7 @@ describe('Interpolate', () => {
   const sketch = new Sketch()
     .interpolate(block, [0, 0], [50, 50], [10, 25, 40]);
 
-  it.only('should place blocks along a line', () => {
+  it('should place blocks along a line', () => {
     const pcurve = sketch.shape;
     expect(pcurve.vertices.length).to.eql(14);
   });
