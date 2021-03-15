@@ -29,7 +29,7 @@ function fillet(point_a, point_b, point_c, radius) {
   // compute "bulge" property
   const l = fillet_pt_a.dist(fillet_pt_b) / 2;
   const sagitta = radius - Math.sqrt(radius * radius - l * l);
-  const s_sign = (turn_angle) > 0 ? 1 : -1;
+  const s_sign = (turn_angle) > 0 ? -1 : 1;
   const bulge = s_sign * (sagitta / l);
 
   return {
