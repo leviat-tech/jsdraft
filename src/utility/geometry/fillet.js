@@ -20,7 +20,8 @@ function fillet(point_a, point_b, point_c, radius) {
   } else {
     turn_angle = diff;
   }
-  const angle = vec_0.angleBetween(vec_1);
+
+  const angle = vec_0.angleBetween(vec_1.reverse());
   const ltt = Math.abs(radius / Math.tan(angle / 2));
   const fillet_pt_a = b.subtract(vec_0.scale(ltt));
   const fillet_pt_b = b.add(vec_1.scale(ltt));
