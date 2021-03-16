@@ -10,12 +10,10 @@ describe('evaluate', () => {
     expect(evaluate('1')).to.be.eql(1);
     expect(evaluate('1.0')).to.be.eql(1);
     expect(evaluate('"a"')).to.be.eql('a');
-    // expect(evaluate('{"a": 1}')).to.be.eql({ a: 1 });
   });
 
   it('can process arrays expressions', () => {
     expect(evaluate('[1, 2]')).to.be.eql([1, 2]);
-    // expect(evaluate('{"a": 1}')).to.be.eql({ a: 1 });
   });
 
   it('can process arrays expressions with trailing commas', () => {
