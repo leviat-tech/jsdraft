@@ -20,10 +20,6 @@ const scale = require('./transformations/scale.js');
 const transform = require('./transformations/transform.js');
 const translate = require('./transformations/translate.js');
 
-const add = require('./add.js');
-const draw = require('./draw.js');
-const group = require('./group.js');
-
 
 module.exports = [
   fill,
@@ -43,7 +39,4 @@ module.exports = [
   scale,
   transform,
   translate,
-  add,
-  draw,
-  group,
 ];
