@@ -45,7 +45,7 @@ function sagitta_arc([ax, ay], [bx, by], bulge) {
 
   const start_angle = Vector({ x: ax, y: ay }).subtract({ x: cx, y: cy }).angle();
   const end_angle = Vector({ x: bx, y: by }).subtract({ x: cx, y: cy }).angle();
-  const ccw = bulge < 0;
+  const ccw = bulge > 0;
 
   return { radius, center: [cx, cy], start_angle, end_angle, ccw };
 }

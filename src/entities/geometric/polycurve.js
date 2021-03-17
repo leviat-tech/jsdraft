@@ -87,14 +87,21 @@ class Polycurve extends flatten.Multiline {
 
     // first put args into point/bulge pairs
     const points = [];
+    let adding_bulge = false;
     args.forEach((arg) => {
       // arg is a point
       if (is_point(arg)) {
-        points.push({ point: arg });
+        if (adding_bulge) {
+          points[points.length - 1].point = arg;
+          adding_bulge = false;
+        } else {
+          points.push({ point: arg });
+        }
 
       // arg is a bulge
       } else {
-        points[points.length - 1].bulge = arg;
+        points.push({ bulge: arg });
+        adding_bulge = true;
       }
     });
 

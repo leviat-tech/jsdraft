@@ -28,7 +28,7 @@ describe('SVG renderer', () => {
 
   it('will render two points', () => {
     const rendering = svg(result);
-    expect(rendering).to.contain('circle');
+    expect(rendering).to.contain('path');
   });
 });
 
@@ -42,7 +42,7 @@ describe('Draft construct', () => {
       }
     `);
     const result = draft.render('my_point', [3, 5], 'svg');
-    expect(result).to.contain('circle');
+    expect(result).to.contain('path');
   });
 
   it('should be able to parse and render a yaml sketch', () => {
@@ -56,7 +56,7 @@ describe('Draft construct', () => {
         - point: [$x, $y]
     `);
     const result = draft.render('my_point', [3, 5], 'svg');
-    expect(result).to.contain('circle');
+    expect(result).to.contain('path');
   });
 
   it('should be able to parse and render the default javascript sketch', () => {
