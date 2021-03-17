@@ -35,5 +35,5 @@ module.exports = function interpolate(sketch, block, pt_a, pt_b, positions) {
 
   const pcurve = new Polycurve(...segs);
 
-  return sketch.add_entities(pcurve);
+  return sketch.add(sketch.create({ entities: [pcurve] }));
 };

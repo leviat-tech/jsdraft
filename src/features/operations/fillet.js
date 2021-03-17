@@ -32,5 +32,5 @@ module.exports = function fillet(sketch, radius, pcurve_a, pcurve_b) {
   const seg_b = new Segment(point_b, b0);
   const joined_pline = new Polycurve(...a, seg_a, arc, seg_b, ...b);
 
-  return sketch.add_entities(joined_pline);
+  return sketch.add(sketch.create({ entities: [joined_pline] }));
 };
