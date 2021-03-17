@@ -37,12 +37,6 @@ class Sketch {
     return new Sketch(options);
   }
 
-  // add entities to sketch
-  add_entities(...entities) {
-    this.node.entities.push(...entities);
-    return this;
-  }
-
   // return a clone of this sketch
   clone() {
     return Sketch.clone(this);
