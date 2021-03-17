@@ -22,10 +22,9 @@ describe('Point feature', () => {
 describe('SVG renderer', () => {
   const sketch = new Sketch();
 
-  const result = sketch.draw(
-    sketch.point([0, 0]),
-    sketch.point([10, 10]),
-  );
+  const result = sketch
+    .point([0, 0])
+    .point([10, 10]);
 
   it('will render two points', () => {
     const rendering = svg(result);
