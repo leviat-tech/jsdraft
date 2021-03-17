@@ -14,7 +14,7 @@ class Sketch {
       feature: '', // feature: the name of the feature function that created this node
       hidden: false, // hidden: if false this node should not be rendered (except console renderer)
       style: {}, // style: stroke, fill, etc that should be applied to paths in decendent nodes
-      entities: [], // entities: all geometry, text, and other elements associated attached to this node
+      entities: [], // entities: all geometry, text, and other elements attached to this node
       children: [], // children: nodes attached as decendents to this node
       attributes: {}, // attributes: a free space for meta data associated with this node
     };
@@ -68,6 +68,7 @@ class Sketch {
     for (const sketch of this.tree(order)) {
       if (condition(sketch)) return sketch;
     }
+    return null;
   }
 
   // query sketch for first availiable geometric entity
