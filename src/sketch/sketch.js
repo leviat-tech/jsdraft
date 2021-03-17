@@ -21,6 +21,12 @@ class Sketch {
     this.node = { ...this.node, ...(options || {}) };
   }
 
+  // add children to sketch
+  add(...sketches) {
+    sketches.forEach((s) => this.node.children.push(s));
+    return this;
+  }
+
   // convenience getter for new blank sketch
   get new() {
     return new Sketch();
