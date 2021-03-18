@@ -9,6 +9,25 @@ function unwind(obj) {
   return Object.keys(obj)[0];
 }
 
+// evaluate YAML argument
+function evaluate_argument(arg, scope) {
+  if (Array.isArray(arg)) {
+    return arg.map((a) => evaluate_argument(a, scope));
+  }
+
+  if (typeof arg === 'object') {
+    return Object.entries(arg)
+      .reduce((obj, [key, a]) => {
+        obj[key] = evaluate_argument(a, scope);
+        return obj;
+      }, {});
+  }
+
+  if (typeof arg === 'string') return evaluate(arg, scope);
+
+  return arg;
+}
+
 // evaluate yaml chain expression
 function chain(sketch, exp, context) {
   let s = sketch.new;
@@ -22,16 +41,9 @@ function chain(sketch, exp, context) {
 
     // otherwise we have a standard sketch function
     } else {
-      const args = x[func].map((a) => {
-        if (typeof a === 'string' && a.startsWith('$')) {
-          return evaluate(a, context);
-        }
-        return a;
-
-      });
+      const args = evaluate_argument(x[func], context);
       s = s[func](...args);
     }
-
   });
 
   return sketch.add(s);
@@ -75,14 +87,14 @@ function reference(definition, sketch, context) {
     const id = unwind(constant);
     const exp = constant[id];
 
-    // evaluate constant from vanilla js expression
-    if (typeof exp === 'string') {
-      refs[id] = evaluate(exp, { ...context, ...refs });
-    }
+    // check if reference is a sketch
+    const match = id.match(/(.+):sketch/);
+    if (match) {
+      refs[match[1]] = chain(sketch.new, exp, { ...context, ...refs });
 
-    // evaluate constant from sketch chain expression
-    if (Array.isArray(exp)) {
-      refs[id] = chain(sketch, exp, { ...context, ...refs });
+      // otherwise evaluate as typical argument
+    } else {
+      refs[id] = evaluate_argument(exp, { ...context, ...refs });
     }
   });
 
