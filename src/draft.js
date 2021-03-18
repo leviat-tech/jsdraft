@@ -14,11 +14,9 @@ class Draft {
   }
 
   add_sketch(name, filetype, contents) {
-    const func = parse(filetype, contents, name);
     this.sketches[name] = {
       filetype, // yaml or js
       contents, // raw string of file contents
-      func, // the sketch's function
     };
   }
 
@@ -34,7 +32,8 @@ class Draft {
   }
 
   render(name, params, format, options) {
-    const func = this.sketches[name].func;
+    const source = this.sketches[name];
+    const func = parse(source.filetype, source.contents, source.name);
     const sketch = func(new Sketch(), ...params);
     const renderer = this.renderers[format];
     return renderer(sketch, options);
