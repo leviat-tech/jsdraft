@@ -5,9 +5,9 @@ parameters:
 reference:
   - $height: '$size * 2'
   - $title: '"GOLDEN " + String($height)'
-  - $square:
+  - $square:sketch:
     - square: [0, 0, $size, $size]
-  - $circle:
+  - $circle:sketch:
     - circle: [$square.shape.bottom.midpoint, $square.shape.b]
 sketch:
   - rectangle: [$square.shape.a.x, $square.shape.a.y, $circle.shape.right.x, $square.shape.b.y]
