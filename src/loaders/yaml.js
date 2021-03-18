@@ -41,7 +41,7 @@ function chain(sketch, exp, context) {
 
     // otherwise we have a standard sketch function
     } else {
-      const args = x[func].map((a) => evaluate_argument(a, context));
+      const args = evaluate_argument(x[func], context);
       s = s[func](...args);
     }
   });
