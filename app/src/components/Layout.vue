@@ -1,19 +1,22 @@
 <template>
   <div class="layout">
-    <div class="drawing-container">
-      <div class="toolbar-container">
-        <toolbar />
-      </div>
+    <div class="horizontal-container">
+      <div class="drawing-container">
+        <div class="toolbar-container">
+          <toolbar />
+        </div>
 
-      <div class="viewport-container">
-        <viewport />
+        <div class="viewport-container">
+          <viewport />
+        </div>
       </div>
+      <code-panel
+        v-if="showCodePanel"
+        class="code-panel"
+      />
+      <sidebar class="sidebar" />
     </div>
-    <code-panel
-      v-if="showCodePanel"
-      class="code-panel"
-    />
-    <sidebar class="sidebar" />
+    <statusbar />
   </div>
 </template>
 
@@ -22,8 +25,11 @@ import { mapState } from 'vuex';
 import Sidebar from './sidebar/Sidebar.vue';
 import CodePanel from './CodePanel.vue';
 import Toolbar from './toolbar/Toolbar.vue';
+import Statusbar from './Statusbar.vue';
 import Viewport from './Viewport.vue';
 
+
+console.log(Statusbar);
 
 export default {
   name: 'Layout',
@@ -31,6 +37,7 @@ export default {
     Sidebar,
     CodePanel,
     Toolbar,
+    Statusbar,
     Viewport,
   },
   data() {
@@ -62,6 +69,13 @@ export default {
 }
 
 .layout {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.horizontal-container {
   height: 100%;
   width: 100%;
   display: flex;
@@ -115,5 +129,4 @@ export default {
   width: 40rem;
   flex: none;
 }
-
 </style>
