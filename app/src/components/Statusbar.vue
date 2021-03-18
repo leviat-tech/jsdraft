@@ -13,6 +13,7 @@ export default {
 
   .statusbar {
     height: 2rem;
+    flex-shrink: 0;
     border-top: $border-sm solid $color-gray-03;
   }
 </style>

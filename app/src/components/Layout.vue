@@ -53,11 +53,18 @@ export default {
 <style lang="scss">
 @import '../assets/styles/variables.scss';
 
-.viewport-container {
+.layout {
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.viewport-container {
   position: relative;
   overflow: hidden;
+  height: 100%;
+  width: 100%;
 }
 
 .viewport-switcher {
@@ -66,17 +73,12 @@ export default {
   left: 0;
 }
 
-.layout {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
 .horizontal-container {
-  height: 100%;
-  width: 100%;
   display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  min-width:0;
+  min-height:0;
 }
 
 .p {
