@@ -1,19 +1,22 @@
 <template>
   <div class="layout">
-    <div class="drawing-container">
-      <div class="toolbar-container">
-        <toolbar />
-      </div>
+    <div class="horizontal-container">
+      <div class="drawing-container">
+        <div class="toolbar-container">
+          <toolbar />
+        </div>
 
-      <div class="viewport-container">
-        <viewport />
+        <div class="viewport-container">
+          <viewport />
+        </div>
       </div>
+      <code-panel
+        v-if="showCodePanel"
+        class="code-panel"
+      />
+      <sidebar class="sidebar" />
     </div>
-    <code-panel
-      v-if="showCodePanel"
-      class="code-panel"
-    />
-    <sidebar class="sidebar" />
+    <statusbar />
   </div>
 </template>
 
@@ -22,6 +25,7 @@ import { mapState } from 'vuex';
 import Sidebar from './sidebar/Sidebar.vue';
 import CodePanel from './CodePanel.vue';
 import Toolbar from './toolbar/Toolbar.vue';
+import Statusbar from './Statusbar.vue';
 import Viewport from './Viewport.vue';
 
 
@@ -31,6 +35,7 @@ export default {
     Sidebar,
     CodePanel,
     Toolbar,
+    Statusbar,
     Viewport,
   },
   data() {
@@ -48,11 +53,18 @@ export default {
 <style lang="scss">
 @import '../assets/styles/variables.scss';
 
-.viewport-container {
+.layout {
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.viewport-container {
   position: relative;
   overflow: hidden;
+  height: 100%;
+  width: 100%;
 }
 
 .viewport-switcher {
@@ -61,10 +73,12 @@ export default {
   left: 0;
 }
 
-.layout {
-  height: 100%;
-  width: 100%;
+.horizontal-container {
   display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  min-width:0;
+  min-height:0;
 }
 
 .p {
@@ -115,5 +129,4 @@ export default {
   width: 40rem;
   flex: none;
 }
-
 </style>
