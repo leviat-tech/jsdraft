@@ -29,8 +29,6 @@ import Statusbar from './Statusbar.vue';
 import Viewport from './Viewport.vue';
 
 
-console.log(Statusbar);
-
 export default {
   name: 'Layout',
   components: {
