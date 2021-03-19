@@ -13,6 +13,9 @@ function validate(defs, args) {
   defs.forEach((def, i) => {
     let arg = args[i];
 
+    // set default
+    arg = arg ?? def.default;
+
     // check type
     if (def.type !== undefined && !confirm(arg, def.type)) {
       throw new TypeError(`Expected argument type ${typeof arg}/${arg.constructor.name} to be of type ${def.type}`);
@@ -22,9 +25,6 @@ function validate(defs, args) {
     if (def.cast !== undefined) {
       arg = convert(arg, def.cast);
     }
-
-    // set default
-    arg = arg ?? def.default;
 
     // save validated argument
     validated.push(arg);
