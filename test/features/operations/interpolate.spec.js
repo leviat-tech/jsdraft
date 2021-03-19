@@ -19,7 +19,7 @@ describe('Interpolate', () => {
     );
 
   const sketch = new Sketch()
-    .interpolate(block, [0, 0], [50, 50], [10, 25, 40]);
+    .interpolate(block.shape, [0, 0], [50, 50], [10, 25, 40]);
 
   it('should place blocks along a line', () => {
     const pcurve = sketch.shape;
