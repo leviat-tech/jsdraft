@@ -1,12 +1,31 @@
 const fs = require('fs');
 const path = require('path');
 const evaluate = require('../utility/misc/evaluate');
+const validate = require('../utility/validation/validate');
 
 
 function parse(contents, identifier) {
-  const func = evaluate(contents.trim());
-  func.identifier = identifier;
-  return func;
+  let def = evaluate(contents.trim());
+
+  // accept simple functions
+  if (typeof def === 'function') {
+    def = {
+      func: def,
+    };
+  }
+
+  // decorate with parameter validation if provided
+  if (def.parameters) {
+    const original = def.func;
+    def.func = function feature(sketch, ...args) {
+      return original(sketch, ...validate(def.parameters, args));
+    };
+  }
+
+  // set feature function identifier
+  def.func.identifier = identifier ?? def.name ?? def.func.name;
+
+  return def.func;
 }
 
 function load(file) {
