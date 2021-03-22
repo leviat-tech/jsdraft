@@ -22,7 +22,7 @@ describe('Explode', () => {
       [15, 35],
     );
 
-  it.only('can explode polycurves into segments', () => {
+  it('can explode polycurves into segments', () => {
     const result = sketch.explode();
     const e = [...result.entities()];
     expect(e.length).to.eql(5);

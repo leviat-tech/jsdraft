@@ -2,18 +2,10 @@ const flatten = require('@flatten-js/core');
 const { normalize, every } = require('../../utility/arguments');
 const { matches_segment_array } = require('../../utility/arguments/matches.js');
 const sagitta_arc = require('../../utility/geometry/sagitta-arc.js');
-const fillet = require('../../utility/geometry/fillet.js');
+const fillet_points_to_segments = require('../../utility/geometry/fillet-points-to-segments.js');
 const Arc = require('./arc.js');
 const Segment = require('./segment.js');
 
-
-function should_fillet(point_array, index) {
-  const point = point_array[index];
-
-  return point[1]
-    && point_array[index + 1]
-    && point_array[index - 1];
-}
 
 function is_point(arg) {
   return Array.isArray(arg);
@@ -47,35 +39,7 @@ class Polycurve extends flatten.Multiline {
   }
 
   static from_fillet(...points) {
-    const segs = [];
-    let pen = points[0][0];
-    points.slice(1).forEach((point, i) => {
-      if (should_fillet(points, i + 1)) {
-        const fc = fillet(
-          points[i][0],
-          point[0],
-          points[(i + 2) % points.length][0],
-          point[1],
-        );
-
-        const {
-          radius,
-          center,
-          start_angle,
-          end_angle,
-          ccw,
-        } = sagitta_arc(fc.point_a, fc.point_b, fc.bulge);
-
-        segs.push(
-          new Segment(pen, fc.point_a),
-          new Arc(center, radius, start_angle, end_angle, ccw),
-        );
-        pen = fc.point_b;
-      } else {
-        segs.push(new Segment(pen, point[0]));
-        pen = point[0];
-      }
-    });
+    const segs = fillet_points_to_segments(points);
 
     return new Polycurve(...segs);
   }

@@ -32,7 +32,6 @@ describe('Join', () => {
       { x: 0, y: 0 },
       { x: 10, y: 10 },
       { x: 20, y: 0 },
-      { x: -20, y: -20 },
     ]);
     expect(base_entity_type(e[1])).to.eql('segment');
   });
