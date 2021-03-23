@@ -79,4 +79,14 @@ describe('Polyface', () => {
     );
     expect(c).to.be.a.polyface(6);
   });
+
+  it('can fillet the initial vertex', () => {
+    const c = new Polyface(
+      [[0, 0], 1],
+      [[10, 0], 1],
+      [[10, 10], 1],
+      [[0, 10], 1],
+    );
+    expect(c).to.be.a.polyface(8);
+  });
 });

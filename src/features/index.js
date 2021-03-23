@@ -14,9 +14,11 @@ const name = require('./meta/name.js');
 const tag = require('./meta/tag.js');
 
 const add_face = require('./operations/add-face.js');
+const explode = require('./operations/explode.js');
 const fillet = require('./operations/fillet.js');
 const interpolate = require('./operations/interpolate.js');
 const join = require('./operations/join.js');
+const offset = require('./operations/offset.js');
 const subtract = require('./operations/subtract.js');
 
 const rotate = require('./transformations/rotate.js');
@@ -39,9 +41,11 @@ module.exports = [
   name,
   tag,
   add_face,
+  explode,
   fillet,
   interpolate,
   join,
+  offset,
   subtract,
   rotate,
   scale,

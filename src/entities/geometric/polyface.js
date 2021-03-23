@@ -1,6 +1,9 @@
 const flatten = require('@flatten-js/core');
 const { normalize, every, matches } = require('../../utility/arguments');
 const Polycurve = require('./polycurve.js');
+const Arc = require('./arc.js');
+const fillet_points_to_segments = require('../../utility/geometry/fillet-points-to-segments.js');
+const points_are_near = require('../../utility/geometry/points-are-near.js');
 
 
 class Polyface extends flatten.Polygon {
@@ -38,20 +41,31 @@ class Polyface extends flatten.Polygon {
     return p;
   }
 
-  static from_polycurve(polycurve) {
+  static from_polycurve(polycurve, bulge = 0) {
     const p = new Polyface();
     const vertices = polycurve.vertices;
-    const closing = flatten.segment(vertices[vertices.length - 1], vertices[0]);
-    p.addFace([...polycurve.toShapes(), closing]);
+    const should_add_segment = !points_are_near(vertices[0], vertices[vertices.length - 1]);
+    const face = polycurve.toShapes();
+    if (bulge && should_add_segment) {
+      const closing = new Arc(vertices[vertices.length - 1], bulge, vertices[0]);
+      face.push(closing);
+    } else if (should_add_segment) {
+      const closing = flatten.segment(vertices[vertices.length - 1], vertices[0]);
+      face.push(closing);
+    }
+    p.addFace(face);
     return p;
   }
 
   static from_fillet(...points) {
-    return this.from_polycurve(new Polycurve(...points));
+    const segs = fillet_points_to_segments(points, true);
+    return this.from_segments(...segs);
   }
 
   static from_bulge(...args) {
-    return this.from_polycurve(new Polycurve(...args));
+    // get bulge property of closing segment
+    const bulge = typeof args[args.length - 1] === 'number' ? args[args.length - 1] : 0;
+    return this.from_polycurve(new Polycurve(...args), bulge);
   }
 
   static from_segments(...segs) {
