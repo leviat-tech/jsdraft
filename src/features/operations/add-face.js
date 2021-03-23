@@ -1,9 +1,15 @@
 // Add a face to a polygon
-module.exports = function add_face(sketch, face) {
-  const polyface = sketch.shape;
+module.exports = {
+  name: 'add_face',
+  parameters: [
+    { name: 'face', cast: 'polyface' },
+  ],
+  func: function add_face(sketch, face) {
+    const polyface = sketch.shape;
 
-  const f = face.shape.faces.values().next().value;
-  polyface.addFace(f);
+    const f = face.faces.values().next().value;
+    polyface.addFace(f);
 
-  return sketch.create({ entities: [polyface] });
+    return sketch.create({ entities: [polyface] });
+  },
 };

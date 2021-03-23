@@ -1,7 +1,8 @@
 const { v4: uuidv4 } = require('uuid');
 const cloneDeep = require('lodash/cloneDeep');
 const iterators = require('./iterators');
-const features = require('../features/index.js');
+const features = require('../features');
+const { decorate } = require('../loaders/javascript');
 
 
 class Sketch {
@@ -86,7 +87,7 @@ class Sketch {
   //   this.constructor.include(require(path.join(...paths)), this)
   // }
 
-  // dynamically provide a feature function to sketch
+  // Provide a feature function to sketch
   static include(func, target) {
     const cls = this;
     const decorated = function (...args) {
@@ -99,9 +100,8 @@ class Sketch {
   }
 }
 
-
 // include all built in js feature functions
-features.forEach((feature) => Sketch.include(feature));
+features.forEach((feature) => Sketch.include(decorate(feature)));
 
 
 module.exports = Sketch;

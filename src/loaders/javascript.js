@@ -4,28 +4,29 @@ const evaluate = require('../utility/misc/evaluate');
 const validate = require('../utility/validation/validate');
 
 
-function parse(contents, identifier) {
-  let def = evaluate(contents.trim());
-
-  // accept simple functions
-  if (typeof def === 'function') {
-    def = {
-      func: def,
-    };
-  }
+function decorate(def, identifier) {
+  const result = typeof def === 'function'
+    ? { func: def }
+    : { ...def };
 
   // decorate with parameter validation if provided
-  if (def.parameters) {
-    const original = def.func;
-    def.func = function feature(sketch, ...args) {
+  if (result.parameters) {
+    const original = result.func;
+    result.func = function feature(sketch, ...args) {
       return original(sketch, ...validate(def.parameters, args));
     };
   }
 
   // set feature function identifier
-  def.func.identifier = identifier ?? def.name ?? def.func.name;
+  result.func.identifier = identifier ?? result.name ?? result.func.name;
 
-  return def.func;
+  return result.func;
+}
+
+function parse(contents, identifier) {
+  const def = evaluate(contents.trim());
+
+  return decorate(def, identifier);
 }
 
 function load(file) {
@@ -38,4 +39,4 @@ function load(file) {
   }
 }
 
-module.exports = { load, parse };
+module.exports = { decorate, load, parse };
