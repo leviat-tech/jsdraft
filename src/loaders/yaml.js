@@ -6,6 +6,7 @@ const evaluate = require('../utility/misc/evaluate');
 
 // extract the key from a single label yaml object
 function unwind(obj) {
+  if (typeof obj === 'string') return obj;
   return Object.keys(obj)[0];
 }
 
@@ -39,10 +40,14 @@ function chain(sketch, exp, context) {
     if (func === 'sketch') {
       s = chain(s, x[func], context);
 
+    // A sole feature name is executed with no arguments
+    } else if (typeof x === 'string') {
+      s = s[func]();
+
     // otherwise we have a standard sketch function
     } else {
       const args = evaluate_argument(x[func], context);
-      s = s[func](...args);
+      s = s[func](...(Array.isArray(args) ? args : [args]));
     }
   });
 
