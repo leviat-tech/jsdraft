@@ -64,3 +64,30 @@ describe('A sketch rendered to SVG', () => {
     expect(polycurve.properties.d).to.eql('M0,0 L1,1 L2,0 L5,5');
   });
 });
+
+describe('Raw entities', () => {
+  const sketch = new Sketch()
+    .point(1, 2)
+    .segment([1, 1], [10, 10])
+    .arc([0, 0], 3, 0, Math.PI / 2, true)
+    .circle([0, 0], 20)
+    .rectangle([0, 0], 20, 20);
+
+  const entities = [...sketch.entities()];
+
+  const point = parse(entities[0].svg({ color: 'red' }));
+  const segment = parse(entities[1].svg({ fill: 'blue' }));
+  const arc = parse(entities[2].svg());
+  const circle = parse(entities[3].svg());
+  const rect = parse(entities[4].svg());
+
+  it('Can be rendered to SVG', () => {
+    expect(point.children[0].tagName).to.eql('path');
+    expect(point.children[0].properties.color).to.eql('red');
+    expect(segment.children[0].tagName).to.eql('path');
+    expect(segment.children[0].properties.fill).to.eql('blue');
+    expect(arc.children[0].tagName).to.eql('path');
+    expect(circle.children[0].tagName).to.eql('path');
+    expect(rect.children[0].tagName).to.eql('path');
+  });
+});

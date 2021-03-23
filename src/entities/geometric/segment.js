@@ -1,6 +1,14 @@
 const flatten = require('@flatten-js/core');
 const { normalize, matches } = require('../../utility/arguments');
 const Point = require('./point');
+const { entity_svg } = require('../../utility/misc/entity-to-svg.js');
+
+
+// Modifying prototype in the event that a user wants to render an
+// entity obtained through flatten.js methods.
+flatten.Segment.prototype.svg = function svg(styles) {
+  return entity_svg.segment(this, styles);
+};
 
 
 class Segment extends flatten.Segment {

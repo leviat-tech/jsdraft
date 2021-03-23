@@ -1,4 +1,4 @@
-const entity_to_svg = require('../utility/misc/entity-to-svg.js');
+const { entity_to_svg } = require('../utility/misc/entity-to-svg.js');
 
 
 const DEFAULT_ATTRIBUTES = {

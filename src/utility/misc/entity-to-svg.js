@@ -67,4 +67,4 @@ function entity_to_svg(entity, styles) {
   return entity_svg[type](entity, styles);
 }
 
-module.exports = entity_to_svg;
+module.exports = { entity_svg, entity_to_svg };
