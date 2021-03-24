@@ -1,7 +1,8 @@
 /* global describe, it */
 /* eslint-disable no-unused-expressions */
-const { expect, Assertion } = require('chai');
+const { expect, use } = require('chai');
 const Sketch = require('../../src/sketch/sketch.js');
+use(require('../helpers'));
 
 
 function simple(sketch) {
@@ -11,11 +12,6 @@ function simple(sketch) {
 function composed(sketch) {
   return sketch.user.simple();
 }
-
-
-Assertion.addMethod('render', function (entity) {
-  expect(Array.from(this._obj.entities())).to.deep.include(entity);
-});
 
 
 describe('sketch', () => {
@@ -28,7 +24,7 @@ describe('sketch', () => {
     const root = new Sketch();
     root.inject(simple);
     const sketch = composed(root);
-    expect(sketch).to.render({ x: 0, y: 0 });
+    expect(sketch).to.have.entity({ x: 0, y: 0 });
   });
 
   it('injected user features should not pollute other non-derived sketches', () => {
@@ -41,9 +37,9 @@ describe('sketch', () => {
   it('injected user features should be availiable on all derived sketches', () => {
     const root = new Sketch();
     root.inject(simple);
-    expect(composed(root.clone())).to.render({ x: 0, y: 0 });
-    expect(composed(root.new)).to.render({ x: 0, y: 0 });
-    expect(composed(root.create())).to.render({ x: 0, y: 0 });
-    expect(composed(Sketch.clone(root))).to.render({ x: 0, y: 0 });
+    expect(composed(root.clone())).to.have.entity({ x: 0, y: 0 });
+    expect(composed(root.new)).to.have.entity({ x: 0, y: 0 });
+    expect(composed(root.create())).to.have.entity({ x: 0, y: 0 });
+    expect(composed(Sketch.clone(root))).to.have.entity({ x: 0, y: 0 });
   });
 });
