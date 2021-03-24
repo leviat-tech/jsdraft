@@ -7,7 +7,7 @@ const json = require('./renderers/json.js');
 
 class Draft {
   constructor() {
-    this.sketches = {};
+    this.sketches = {}; // sketches is a bit confusing, alternate terms might be "draft files" or "features"
     this.renderers = { // Perhaps a user could add a custom renderer to this object?
       json, yaml, svg,
     };
@@ -33,8 +33,13 @@ class Draft {
 
   render(name, params, format, options) {
     const source = this.sketches[name];
+    const root = new Sketch();
+    Object.keys(this.sketches).forEach((key) => {
+      const file = this.sketches[key];
+      root.inject(parse(file.filetype, file.contents, key));
+    });
     const func = parse(source.filetype, source.contents, source.name);
-    const sketch = func(new Sketch(), ...params);
+    const sketch = func(root, ...params);
     const renderer = this.renderers[format];
     return renderer(sketch, options);
   }

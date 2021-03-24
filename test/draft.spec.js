@@ -20,6 +20,11 @@ function composed(sketch) {
 
 describe('draft', () => {
 
+  it('should render a feature', () => {
+    const draft = new Draft();
+    draft.add_sketch('simple', 'js', simple);
+    expect(draft).to.render({ name: 'point', x: 0, y: 0 }, { sketch: 'simple' });
+  });
 
   it('should inject all files as user features when rendering', () => {
     const draft = new Draft();
