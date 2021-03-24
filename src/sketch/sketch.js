@@ -22,7 +22,7 @@ class Sketch {
     options = options || {};
     delete options.uuidv4;
     this.node = { ...this.node, ...options };
-    this.node.index.binding = this;
+    this.node.index.binding = () => this;
   }
 
   // add children to sketch
@@ -98,7 +98,7 @@ class Sketch {
     const cls = this;
     function feature(...args) {
       const input = cls.clone(this);
-      const output = func.bind(this.binding || this)(input, ...args);
+      const output = func.bind(this.binding ? this.binding() : this)(input, ...args);
       output.node.feature = output.node.feature || func.identifier || func.name;
       return output;
     }
