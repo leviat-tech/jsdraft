@@ -19,6 +19,9 @@ class Sketch {
       attributes: {}, // attributes: a free space for meta data associated with this node
     };
     this.node = { ...this.node, ...(options || {}) };
+    options = options || {};
+    delete options.uuidv4;
+    this.node = { ...this.node, ...options };
   }
 
   // add children to sketch
@@ -44,9 +47,7 @@ class Sketch {
 
   // construct a clone of a sketch
   static clone(sketch) {
-    const copy = new Sketch();
-    copy.node = cloneDeep(sketch.node);
-    return copy;
+    return new Sketch(cloneDeep(sketch.node));
   }
 
   // create iterator to traverse entities in sketch
