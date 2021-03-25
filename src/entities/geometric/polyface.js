@@ -4,13 +4,21 @@ const Polycurve = require('./polycurve.js');
 const Arc = require('./arc.js');
 const fillet_points_to_segments = require('../../utility/geometry/fillet-points-to-segments.js');
 const points_are_near = require('../../utility/geometry/points-are-near.js');
-const { entity_svg } = require('../../utility/misc/entity-to-svg.js');
+const svg_string = require('../../utility/misc/svg-string');
 
 
 // Modifying prototype in the event that a user wants to render an
 // entity obtained through flatten.js methods.
 flatten.Polygon.prototype.svg = function svg(styles) {
-  return entity_svg.polyface(this, styles);
+  let d = '';
+  for (const face of this.faces) { d += face.svg(); }
+
+  const attributes = {
+    ...styles,
+    d,
+  };
+
+  return svg_string('path', attributes);
 };
 
 

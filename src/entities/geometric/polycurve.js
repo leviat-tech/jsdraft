@@ -5,13 +5,21 @@ const sagitta_arc = require('../../utility/geometry/sagitta-arc.js');
 const fillet_points_to_segments = require('../../utility/geometry/fillet-points-to-segments.js');
 const Arc = require('./arc.js');
 const Segment = require('./segment.js');
-const { entity_svg } = require('../../utility/misc/entity-to-svg.js');
+const svg_string = require('../../utility/misc/svg-string');
 
 
 // Modifying prototype in the event that a user wants to render an
 // entity obtained through flatten.js methods.
 flatten.Multiline.prototype.svg = function svg(styles) {
-  return entity_svg.polycurve(this, styles);
+  let d = `M${this.first.start.x},${this.first.start.y}`;
+  for (const edge of this) { d += edge.svg(); }
+
+  const attributes = {
+    ...styles,
+    d,
+  };
+
+  return svg_string('path', attributes);
 };
 
 function is_point(arg) {

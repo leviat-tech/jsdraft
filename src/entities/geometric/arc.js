@@ -5,13 +5,21 @@ const circle_from_three_pts = require('../../utility/geometry/circle-from-three-
 const orientation = require('../../utility/geometry/orientation.js');
 const sagitta_arc = require('../../utility/geometry/sagitta-arc.js');
 const Segment = require('./segment.js');
-const { entity_svg } = require('../../utility/misc/entity-to-svg.js');
+const svg_string = require('../../utility/misc/svg-string');
 
 
 // Modifying prototype in the event that a user wants to render an
 // entity obtained through flatten.js methods.
 flatten.Arc.prototype.svg = function svg(styles) {
-  return entity_svg.arc(this, styles);
+  const laf = this.sweep <= Math.PI ? '0' : '1';
+  const sf = this.counterClockwise ? '1' : '0';
+  const d = `M${this.start.x},${this.start.y} A${this.r},${this.r},${laf},${sf},${this.end.x},${this.end.y}`;
+  const attributes = {
+    ...styles,
+    d,
+  };
+
+  return svg_string('path', attributes);
 };
 
 class Arc extends flatten.Arc {

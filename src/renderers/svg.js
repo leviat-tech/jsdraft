@@ -1,6 +1,3 @@
-const { entity_to_svg } = require('../utility/misc/entity-to-svg.js');
-
-
 const DEFAULT_ATTRIBUTES = {
   stroke: 'black',
   stroke_width: '1.5px',
@@ -34,7 +31,7 @@ function recurse(sketch, style) {
       ...style_to_svg_attributes(s),
     };
 
-    svg += `\n${entity_to_svg(entity, styles)}`;
+    svg += `\n${entity.svg(styles)}`;
   }
 
   // draw children
