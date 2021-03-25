@@ -18,8 +18,12 @@ class Sketch {
       entities: [], // entities: all geometry, text, and other elements attached to this node
       children: [], // children: nodes attached as decendents to this node
       attributes: {}, // attributes: a free space for meta data associated with this node
+      index: {}, // injected user feature index
     };
-    this.node = { ...this.node, ...(options || {}) };
+    options = options || {};
+    delete options.uuidv4;
+    this.node = { ...this.node, ...options };
+    this.node.index.binding = () => this;
   }
 
   // add children to sketch
@@ -30,12 +34,12 @@ class Sketch {
 
   // convenience getter for new blank sketch
   get new() {
-    return new Sketch();
+    return new Sketch({ index: cloneDeep(this.node.index) });
   }
 
   // create new sketch
   create(options) {
-    return new Sketch(options);
+    return new Sketch({ index: cloneDeep(this.node.index), ...options });
   }
 
   // return a clone of this sketch
@@ -45,9 +49,7 @@ class Sketch {
 
   // construct a clone of a sketch
   static clone(sketch) {
-    const copy = new Sketch();
-    copy.node = cloneDeep(sketch.node);
-    return copy;
+    return new Sketch(cloneDeep(sketch.node));
   }
 
   // create iterator to traverse entities in sketch
@@ -82,21 +84,34 @@ class Sketch {
 
   }
 
-  // dynamically provide a feature function to sketch without polluting prototype
-  // include(...paths) {
-  //   this.constructor.include(require(path.join(...paths)), this)
-  // }
+  // access user defined / injected features
+  get user() {
+    return this.node.index;
+  }
 
-  // Provide a feature function to sketch
-  static include(func, target) {
+  // create feature from a vanilla function
+  static featurize(func) {
     const cls = this;
-    const decorated = function (...args) {
+    function feature(...args) {
       const input = cls.clone(this);
-      const output = func(input, ...args);
+      const output = func.bind(this.binding ? this.binding() : this)(input, ...args);
       output.node.feature = output.node.feature || func.identifier || func.name;
       return output;
-    };
-    (target || this.prototype)[func.identifier || func.name] = decorated;
+    }
+    feature.identifier = func.identifier || func.name;
+    return feature;
+  }
+
+  // globally provide a feature function to sketch
+  static include(func, target) {
+    const feature = Sketch.featurize(func);
+    (target || this.prototype)[feature.identifier] = feature;
+  }
+
+  // inject user defined feature onto sketch and all copies created from sketch
+  inject(func) {
+    const feature = Sketch.featurize(func);
+    this.node.index[feature.identifier] = feature;
   }
 }
 
