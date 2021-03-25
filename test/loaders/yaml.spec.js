@@ -25,10 +25,16 @@ reference:
       baz: '"red"'
   - $my_point:sketch:
       - point: [2, 4]
+  - $my_pline:sketch:
+      - segment: [[0, 0], [5, -5]]
+      - segment: [[5, -5], [0, -10]]
+      - join
 sketch:
   - point: [$num, $str]
   - point: ["$arr[0]", "$arr[2]"]
   - segment: [$my_point.shape, [$obj.foo, $obj.bar]]
+  - add: $my_point
+  - add: $my_pline
   `;
 
   const func = parse(yaml, 'test');
@@ -45,5 +51,15 @@ sketch:
 
   it('can parse a sketch reference', () => {
     expect(entities[2].ps).to.eql({ x: 2, y: 4 });
+  });
+
+  it('can parse a single non-array argument', () => {
+    expect(entities[4]).to.eql({ x: 2, y: 4 });
+  });
+
+  it('can parse a single string key if no arguments are necessary', () => {
+    expect(entities[3].vertices).to.eql([
+      { x: 0, y: 0 }, { x: 5, y: -5 }, { x: 0, y: -10 },
+    ]);
   });
 });

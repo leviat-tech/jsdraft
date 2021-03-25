@@ -1,7 +1,8 @@
 const { v4: uuidv4 } = require('uuid');
 const cloneDeep = require('lodash/cloneDeep');
 const iterators = require('./iterators');
-const features = require('../features/index.js');
+const features = require('../features');
+const { decorate } = require('../loaders/javascript');
 
 
 class Sketch {
@@ -88,11 +89,6 @@ class Sketch {
     return this.node.index;
   }
 
-  // dynamically provide a feature function to sketch without polluting prototype
-  // include(...paths) {
-  //   this.constructor.include(require(path.join(...paths)), this)
-  // }
-
   // create feature from a vanilla function
   static featurize(func) {
     const cls = this;
@@ -119,9 +115,8 @@ class Sketch {
   }
 }
 
-
 // include all built in js feature functions
-features.forEach((feature) => Sketch.include(feature));
+features.forEach((feature) => Sketch.include(decorate(feature)));
 
 
 module.exports = Sketch;

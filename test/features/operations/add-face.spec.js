@@ -22,7 +22,7 @@ describe('Add Face', () => {
   const face = new Sketch()
     .circle([0, 15], 5);
 
-  const result = sketch.add_face(face);
+  const result = sketch.add_face(face.shape);
 
   it('should add a face to a polyface', () => {
     const entities = [...result.entities()];
