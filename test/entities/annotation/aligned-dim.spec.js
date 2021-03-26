@@ -4,6 +4,7 @@ const { expect, use } = require('chai');
 use(require('../../helpers'));
 const flatten = require('@flatten-js/core');
 const AlignedDim = require('../../../src/entities/annotation/aligned-dim');
+const render = require('../../../src/render');
 
 
 describe('Aligned Dim', () => {
@@ -22,6 +23,6 @@ describe('Aligned Dim', () => {
   });
 
   it('can output an svg', () => {
-    expect(dim.svg()).to.contain('text');
+    expect(render(dim, 'svg')).to.contain('text');
   });
 });

@@ -4,6 +4,7 @@ const { expect, use } = require('chai');
 use(require('../../helpers'));
 const flatten = require('@flatten-js/core');
 const Text = require('../../../src/entities/annotation/text');
+const render = require('../../../src/render');
 
 
 describe('Text', () => {
@@ -19,6 +20,6 @@ describe('Text', () => {
   });
 
   it('can output an svg', () => {
-    expect(text.svg()).to.contain('hello, world');
+    expect(render(text, 'svg')).to.contain('hello, world');
   });
 });
