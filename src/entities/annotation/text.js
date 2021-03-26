@@ -11,8 +11,8 @@ class Text {
     args = normalize(args);
 
     /*
-      Args consist of a point, a text string, and a rotation property
-      [[0, 0], "text", Math.PI / 4]
+      Args consist of a text string, a point, and a rotation property
+      ["text", [0, 0], Math.PI / 4]
     */
 
     this.text = args[0];
