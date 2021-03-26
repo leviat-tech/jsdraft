@@ -3,6 +3,7 @@ const Vector = require('@crhio/vector').default;
 const Point = require('../geometric/point.js');
 const { normalize } = require('../../utility/arguments');
 const svg_string = require('../../utility/misc/svg-string.js');
+const { svg_v_align, svg_h_align } = require('../../utility/misc/svg-style');
 
 
 class AlignedDim {
@@ -16,6 +17,7 @@ class AlignedDim {
 
     this.ps = new Point(...args[0]);
     this.pe = new Point(...args[1]);
+    this.side = args[2] ? args[2] : 'left';
   }
 
   transform(matrix = new flatten.Matrix()) {
@@ -31,7 +33,8 @@ class AlignedDim {
       precision: pr = 0,
       scale: s = 1,
       font_size = 12,
-      side = 'left',
+      h_align = 'center',
+      v_align = 'middle',
       color = 'black',
       width = '1px',
     } = {},
@@ -40,7 +43,7 @@ class AlignedDim {
     const v2 = Vector({ x: this.pe.x, y: this.pe.y });
     const length = v2.subtract(v1).magnitude();
     const dim_vector = length !== 0 ? v2.subtract(v1).normalize() : Vector({ x: 1, y: 0 });
-    const ovec = side === 'left' ? dim_vector.rotate(Math.PI / 2) : dim_vector.rotate(-Math.PI / 2);
+    const ovec = this.side === 'left' ? dim_vector.rotate(Math.PI / 2) : dim_vector.rotate(-Math.PI / 2);
 
     const hashoffset1 = ovec.scale(ex * s);
     const crossoffset = ovec.scale(os * s);
@@ -74,6 +77,8 @@ class AlignedDim {
       x: cp.x,
       y: -cp.y,
       rotation,
+      dominant_baseline: svg_v_align(v_align),
+      text_anchor: svg_h_align(h_align),
       transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
       font_size: font_size * s,
     };

@@ -18,4 +18,20 @@ function style_to_svg(style) {
   };
 }
 
-module.exports = { DEFAULT_ATTRIBUTES, style_to_svg };
+function svg_v_align(prop) {
+  return {
+    top: 'hanging',
+    middle: 'central',
+    bottom: 'baseline',
+  }[prop];
+}
+
+function svg_h_align(prop) {
+  return {
+    center: 'middle',
+    left: 'start',
+    right: 'end',
+  }[prop];
+}
+
+module.exports = { DEFAULT_ATTRIBUTES, style_to_svg, svg_v_align, svg_h_align };
