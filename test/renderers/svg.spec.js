@@ -36,7 +36,6 @@ describe('A sketch rendered to SVG', () => {
   it('Will render points', () => {
     const point = parsed.children[0].children[0];
     expect(point.properties.d).to.eql('M1,2 L1,2.0001');
-    expect(point.properties.fill).to.eql('white');
   });
 
   it('Will render segments', () => {
@@ -71,23 +70,26 @@ describe('Raw entities', () => {
     .segment([1, 1], [10, 10])
     .arc([0, 0], 3, 0, Math.PI / 2, true)
     .circle([0, 0], 20)
-    .rectangle([0, 0], 20, 20);
+    .rectangle([0, 0], 20, 20)
+    .aligned_dim([0, 0], [10, 5]);
 
   const entities = [...sketch.entities()];
-
-  const point = parse(entities[0].svg({ color: 'red' }));
-  const segment = parse(entities[1].svg({ fill: 'blue' }));
+  const point = parse(entities[0].svg({ stroke: { color: 'red' } }));
+  const segment = parse(entities[1].svg({ fill: { color: 'blue' } }));
   const arc = parse(entities[2].svg());
   const circle = parse(entities[3].svg());
   const rect = parse(entities[4].svg());
+  const dim = parse(entities[5].svg());
 
   it('Can be rendered to SVG', () => {
     expect(point.children[0].tagName).to.eql('path');
-    expect(point.children[0].properties.color).to.eql('red');
+    expect(point.children[0].properties.stroke).to.eql('red');
     expect(segment.children[0].tagName).to.eql('path');
     expect(segment.children[0].properties.fill).to.eql('blue');
     expect(arc.children[0].tagName).to.eql('path');
     expect(circle.children[0].tagName).to.eql('path');
     expect(rect.children[0].tagName).to.eql('path');
+    expect(dim.children[0].children[0].tagName).to.eql('path');
+    expect(dim.children[0].children[1].tagName).to.eql('text');
   });
 });
