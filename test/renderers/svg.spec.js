@@ -3,7 +3,8 @@
 const chai = require('chai');
 const { parse } = require('svg-parser');
 const Sketch = require('../../src/sketch/sketch.js');
-const svg = require('../../src/renderers/svg.js');
+const svg = require('../../src/renderers/sketch/svg.js');
+const render = require('../../src/render.js');
 
 
 chai.expect();
@@ -74,12 +75,12 @@ describe('Raw entities', () => {
     .aligned_dim([0, 0], [10, 5]);
 
   const entities = [...sketch.entities()];
-  const point = parse(entities[0].svg({ stroke: { color: 'red' } }));
-  const segment = parse(entities[1].svg({ fill: { color: 'blue' } }));
-  const arc = parse(entities[2].svg());
-  const circle = parse(entities[3].svg());
-  const rect = parse(entities[4].svg());
-  const dim = parse(entities[5].svg());
+  const point = parse(render(entities[0], 'svg', { stroke: { color: 'red' } }));
+  const segment = parse(render(entities[1], 'svg', { fill: { color: 'blue' } }));
+  const arc = parse(render(entities[2], 'svg'));
+  const circle = parse(render(entities[3], 'svg'));
+  const rect = parse(render(entities[4], 'svg'));
+  const dim = parse(render(entities[5], 'svg'));
 
   it('Can be rendered to SVG', () => {
     expect(point.children[0].tagName).to.eql('path');

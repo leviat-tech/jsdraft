@@ -11,7 +11,7 @@ function main(renderer, feature, args, options) {
   const params = args.map((a) => JSON.parse(a));
 
   // import desired render function
-  const render = require(`./renderers/${renderer}.js`);
+  const render = require(`./renderers/sketch/${renderer}.js`);
 
   // import root feature function
   const func = load(path.join(process.cwd(), feature));

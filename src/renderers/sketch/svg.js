@@ -1,3 +1,6 @@
+const svg_renderer = require('../entity/svg');
+
+
 function recurse(sketch, style) {
   let svg = '';
 
@@ -6,7 +9,7 @@ function recurse(sketch, style) {
 
   // draw entities
   for (const entity of sketch.node.entities) {
-    svg += `\n${entity.svg(s)}`;
+    svg += `\n${svg_renderer(entity, s)}`;
   }
 
   // draw children
