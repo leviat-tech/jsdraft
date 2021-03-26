@@ -1,16 +1,11 @@
 const parse = require('./loaders/parse.js');
 const Sketch = require('./sketch/sketch.js');
-const svg = require('./renderers/svg.js');
-const yaml = require('./renderers/yaml.js');
-const json = require('./renderers/json.js');
+const render = require('./render');
 
 
 class Draft {
   constructor() {
     this.sketches = {}; // sketches is a bit confusing, alternate terms might be "draft files" or "features"
-    this.renderers = { // Perhaps a user could add a custom renderer to this object?
-      json, yaml, svg,
-    };
   }
 
   add_sketch(name, filetype, contents) {
@@ -40,8 +35,7 @@ class Draft {
     });
     const func = parse(source.filetype, source.contents, source.name);
     const sketch = func(root, ...params);
-    const renderer = this.renderers[format];
-    return renderer(sketch, options);
+    return render(sketch, format, options);
   }
 }
 

@@ -3,7 +3,8 @@
 const chai = require('chai');
 const { parse } = require('svg-parser');
 const Sketch = require('../../src/sketch/sketch.js');
-const svg = require('../../src/renderers/svg.js');
+const svg = require('../../src/renderers/sketch/svg.js');
+const render = require('../../src/render.js');
 
 
 chai.expect();
@@ -36,7 +37,6 @@ describe('A sketch rendered to SVG', () => {
   it('Will render points', () => {
     const point = parsed.children[0].children[0];
     expect(point.properties.d).to.eql('M1,2 L1,2.0001');
-    expect(point.properties.fill).to.eql('white');
   });
 
   it('Will render segments', () => {
@@ -62,5 +62,35 @@ describe('A sketch rendered to SVG', () => {
   it('Will render polycurve', () => {
     const polycurve = parsed.children[0].children[5];
     expect(polycurve.properties.d).to.eql('M0,0 L1,1 L2,0 L5,5');
+  });
+});
+
+describe('Raw entities', () => {
+  const sketch = new Sketch()
+    .point(1, 2)
+    .segment([1, 1], [10, 10])
+    .arc([0, 0], 3, 0, Math.PI / 2, true)
+    .circle([0, 0], 20)
+    .rectangle([0, 0], 20, 20)
+    .aligned_dim([0, 0], [10, 5]);
+
+  const entities = [...sketch.entities()];
+  const point = parse(render(entities[0], 'svg', { stroke: { color: 'red' } }));
+  const segment = parse(render(entities[1], 'svg', { fill: { color: 'blue' } }));
+  const arc = parse(render(entities[2], 'svg'));
+  const circle = parse(render(entities[3], 'svg'));
+  const rect = parse(render(entities[4], 'svg'));
+  const dim = parse(render(entities[5], 'svg'));
+
+  it('Can be rendered to SVG', () => {
+    expect(point.children[0].tagName).to.eql('path');
+    expect(point.children[0].properties.stroke).to.eql('red');
+    expect(segment.children[0].tagName).to.eql('path');
+    expect(segment.children[0].properties.fill).to.eql('blue');
+    expect(arc.children[0].tagName).to.eql('path');
+    expect(circle.children[0].tagName).to.eql('path');
+    expect(rect.children[0].tagName).to.eql('path');
+    expect(dim.children[0].children[0].tagName).to.eql('path');
+    expect(dim.children[0].children[1].tagName).to.eql('text');
   });
 });

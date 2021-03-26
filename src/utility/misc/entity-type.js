@@ -1,4 +1,5 @@
 const flatten = require('@flatten-js/core');
+const snakeCase = require('lodash/snakeCase');
 
 
 function base_entity_type(entity) {
@@ -7,7 +8,7 @@ function base_entity_type(entity) {
   if (entity instanceof flatten.Arc) return 'arc';
   if (entity instanceof flatten.Multiline) return 'polycurve';
   if (entity instanceof flatten.Polygon) return 'polyface';
-  return null;
+  return snakeCase(entity.constructor.name);
 }
 
 function entity_type(entity) {
@@ -21,7 +22,9 @@ function entity_type(entity) {
     'Polyface',
     'Rectangle',
     'Segment',
-  ].includes(constructor_name)) return constructor_name.toLowerCase();
+    'AlignedDim',
+    'Text',
+  ].includes(constructor_name)) return snakeCase(constructor_name);
 
   return base_entity_type(entity);
 }

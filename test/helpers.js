@@ -1,4 +1,5 @@
 const { expect } = require('chai');
+const flatten = require('@flatten-js/core');
 
 
 module.exports = function helpers(chai) {
@@ -11,5 +12,13 @@ module.exports = function helpers(chai) {
   Assertion.addMethod('render', function (entity, options) {
     const entities = this._obj.render(options.sketch, options.args || [], 'json', { nodes: false });
     expect(JSON.parse(entities)).to.deep.include(entity);
+  });
+
+  Assertion.addMethod('point', function (entity) {
+    const x = parseFloat(this._obj.x.toFixed(4), 10);
+    const y = parseFloat(this._obj.y.toFixed(4), 10);
+
+    expect(this._obj).to.be.instanceof(flatten.Point);
+    expect({ x, y }).to.eql(entity);
   });
 };

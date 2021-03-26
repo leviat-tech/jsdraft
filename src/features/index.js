@@ -1,6 +1,9 @@
 const fill = require('./style/fill.js');
 const stroke = require('./style/stroke.js');
 
+const aligned_dim = require('./annotation/aligned-dim.js');
+const text = require('./annotation/text.js');
+
 const arc = require('./geometric/arc.js');
 const circle = require('./geometric/circle.js');
 const point = require('./geometric/point.js');
@@ -30,6 +33,8 @@ const translate = require('./transformations/translate.js');
 module.exports = [
   fill,
   stroke,
+  aligned_dim,
+  text,
   arc,
   circle,
   point,

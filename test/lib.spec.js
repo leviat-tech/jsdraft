@@ -3,7 +3,7 @@
 const chai = require('chai');
 const Sketch = require('../src/sketch/sketch.js');
 const Draft = require('../src/draft.js');
-const svg = require('../src/renderers/svg.js');
+const svg = require('../src/renderers/sketch/svg.js');
 
 
 chai.expect();
