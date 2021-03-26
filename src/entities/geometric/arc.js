@@ -6,16 +6,20 @@ const orientation = require('../../utility/geometry/orientation.js');
 const sagitta_arc = require('../../utility/geometry/sagitta-arc.js');
 const Segment = require('./segment.js');
 const svg_string = require('../../utility/misc/svg-string');
+const { style_to_svg, DEFAULT_ATTRIBUTES } = require('../../utility/misc/svg-style');
 
 
 // Modifying prototype in the event that a user wants to render an
 // entity obtained through flatten.js methods.
-flatten.Arc.prototype.svg = function svg(styles) {
+flatten.Arc.prototype.svg = function svg(styles = {}) {
   const laf = this.sweep <= Math.PI ? '0' : '1';
   const sf = this.counterClockwise ? '1' : '0';
   const d = `M${this.start.x},${this.start.y} A${this.r},${this.r},${laf},${sf},${this.end.x},${this.end.y}`;
+
   const attributes = {
-    ...styles,
+    ...DEFAULT_ATTRIBUTES,
+    fill: 'transparent',
+    ...style_to_svg(styles),
     d,
   };
 

@@ -1,23 +1,3 @@
-const DEFAULT_ATTRIBUTES = {
-  stroke: 'black',
-  stroke_width: '1.5px',
-  fill: 'white',
-  vector_effect: 'non-scaling-stroke',
-};
-
-function style_to_svg_attributes(style) {
-  return {
-    ...(style.stroke?.width && { stroke_width: style.stroke.width }),
-    ...(style.stroke?.color && { stroke: style.stroke.color }),
-    ...(style.stroke?.scaled && { vector_effect: 'none' }),
-    ...(style.stroke?.pattern && { stroke_dasharray: style.stroke.pattern }),
-    ...(style.stroke?.opacity && { stroke_opacity: style.stroke.opacity }),
-    ...(style.fill?.color && { fill: style.fill.color }),
-    ...(style.fill?.opacity && { fill_opacity: style.fill.opacity }),
-    ...(style.opacity && { opacity: style.opacity }),
-  };
-}
-
 function recurse(sketch, style) {
   let svg = '';
 
@@ -26,12 +6,7 @@ function recurse(sketch, style) {
 
   // draw entities
   for (const entity of sketch.node.entities) {
-    const styles = {
-      ...DEFAULT_ATTRIBUTES,
-      ...style_to_svg_attributes(s),
-    };
-
-    svg += `\n${entity.svg(styles)}`;
+    svg += `\n${entity.svg(s)}`;
   }
 
   // draw children
