@@ -5,32 +5,32 @@ const render = require('./render');
 
 class Draft {
   constructor() {
-    this.sketches = {}; // sketches is a bit confusing, alternate terms might be "draft files" or "features"
+    this.files = {};
   }
 
-  add_sketch(name, filetype, contents) {
-    this.sketches[name] = {
+  add_file(name, filetype, contents) {
+    this.files[name] = {
       filetype, // yaml or js
       contents, // raw string of file contents
     };
   }
 
-  rename_sketch(old_name, new_name) {
-    const { filetype, contents } = this.sketches[old_name];
+  rename_file(old_name, new_name) {
+    const { filetype, contents } = this.files[old_name];
 
-    this.add_sketch(new_name, filetype, contents);
-    this.remove_sketch(old_name);
+    this.add_file(new_name, filetype, contents);
+    this.remove_file(old_name);
   }
 
-  remove_sketch(name) {
-    delete this.sketches[name];
+  remove_file(name) {
+    delete this.files[name];
   }
 
   render(name, params, format, options) {
-    const source = this.sketches[name];
+    const source = this.files[name];
     const root = new Sketch();
-    Object.keys(this.sketches).forEach((key) => {
-      const file = this.sketches[key];
+    Object.keys(this.files).forEach((key) => {
+      const file = this.files[key];
       root.inject(parse(file.filetype, file.contents, key));
     });
     const func = parse(source.filetype, source.contents, source.name);

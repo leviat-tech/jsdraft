@@ -36,7 +36,7 @@ describe('Draft construct', () => {
 
   it('should be able to parse and render a javascript sketch', () => {
     const draft = new Draft();
-    draft.add_sketch('my_point', 'js', `
+    draft.add_file('my_point', 'js', `
       function feature(sketch, a, b) {
         return sketch.point(a, b);
       }
@@ -47,7 +47,7 @@ describe('Draft construct', () => {
 
   it('should be able to parse and render a yaml sketch', () => {
     const draft = new Draft();
-    draft.add_sketch('my_point', 'yaml', `
+    draft.add_file('my_point', 'yaml', `
       parameters:
         - $x: 5
       reference:
@@ -61,7 +61,7 @@ describe('Draft construct', () => {
 
   it('should be able to parse and render the default javascript sketch', () => {
     const draft = new Draft();
-    draft.add_sketch('feature', 'js', `
+    draft.add_file('feature', 'js', `
     function untitled (sketch, args) {
       return sketch;
     }
