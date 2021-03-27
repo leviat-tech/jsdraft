@@ -54,11 +54,11 @@ sketch:
   });
 
   it('can parse a single non-array argument', () => {
-    expect(entities[4]).to.eql({ x: 2, y: 4 });
+    expect(entities[3]).to.eql({ x: 2, y: 4 });
   });
 
   it('can parse a single string key if no arguments are necessary', () => {
-    expect(entities[3].vertices).to.eql([
+    expect(entities[4].vertices).to.eql([
       { x: 0, y: 0 }, { x: 5, y: -5 }, { x: 0, y: -10 },
     ]);
   });

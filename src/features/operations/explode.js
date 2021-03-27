@@ -16,5 +16,5 @@ module.exports = function explode(sketch) {
     }
   }
 
-  return sketch.create({ entities: result });
+  return sketch.new.add_entities(...result);
 };

@@ -10,6 +10,6 @@ module.exports = {
     const f = face.faces.values().next().value;
     polyface.addFace(f);
 
-    return sketch.create({ entities: [polyface] });
+    return sketch.create({ entity: polyface });
   },
 };

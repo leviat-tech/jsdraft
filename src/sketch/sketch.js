@@ -15,7 +15,7 @@ class Sketch {
       feature: '', // feature: the name of the feature function that created this node
       hidden: false, // hidden: if false this node should not be rendered (except console renderer)
       style: {}, // style: stroke, fill, etc that should be applied to paths in decendent nodes
-      entities: [], // entities: all geometry, text, and other elements attached to this node
+      entity: null, // entity: a geometric, text, or other element attached to this node
       children: [], // children: nodes attached as decendents to this node
       attributes: {}, // attributes: a free space for meta data associated with this node
       index: {}, // injected user feature index
@@ -26,9 +26,17 @@ class Sketch {
     this.node.index.binding = () => this;
   }
 
-  // add children to sketch
+  // add child sketches to sketch
   add(...sketches) {
     sketches.forEach((s) => this.node.children.push(s));
+    return this;
+  }
+
+  // add entities as child nodes to sketch
+  add_entities(...entities) {
+    entities.forEach((entity) => {
+      this.add(this.create({ entity }));
+    });
     return this;
   }
 
@@ -55,9 +63,7 @@ class Sketch {
   // create iterator to traverse entities in sketch
   * entities(order) {
     for (const s of this.tree(order)) {
-      for (const e of s.node.entities) {
-        yield e;
-      }
+      if (s.node.entity) yield s.node.entity;
     }
   }
 
@@ -76,9 +82,9 @@ class Sketch {
 
   // query sketch for first availiable geometric entity
   get shape() {
-    const sketch = this.find((s) => s.node.entities.length > 0);
+    const sketch = this.find((s) => s.node.entity);
     if (sketch) {
-      return sketch.node.entities[0];
+      return sketch.node.entity;
     }
     throw Error("Called shape on a sketch that doesn't have a single shape.", this);
 

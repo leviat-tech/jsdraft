@@ -8,8 +8,8 @@ function recurse(sketch, style) {
   const s = { ...sketch.node.style, ...style };
 
   // draw entities
-  for (const entity of sketch.node.entities) {
-    svg += `\n${svg_renderer(entity, s)}`;
+  if (sketch.node.entity) {
+    svg += `\n${svg_renderer(sketch.node.entity, s)}`;
   }
 
   // draw children
