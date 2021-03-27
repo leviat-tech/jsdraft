@@ -2,12 +2,12 @@
   <div class="files">
     <warning-modal
       v-if="showDeleteModal"
-      :title="`Warning: Delete ${sketchToDelete}`"
+      :title="`Warning: Delete ${fileToDelete}`"
       :text="deleteModalText"
       cancel="Cancel"
       proceed="Delete"
       @cancel="showDeleteModal = false"
-      @proceed="deleteSketch(sketchToDelete)"
+      @proceed="deleteFile(fileToDelete)"
     />
     <div class="files-header">
       <h2>Files</h2>
@@ -19,19 +19,19 @@
       />
     </div>
     <div
-      v-for="sketch in sketches"
-      :key="sketch[0]"
+      v-for="file in files"
+      :key="file[0]"
       class="sketch"
-      :class="{ active: currentSketch === sketch[0] }"
-      @click="setCurrentSketch(sketch[0])"
+      :class="{ active: currentFile === file[0] }"
+      @click="setCurrentFile(file[0])"
     >
       <div class="sketch-details">
         <div
-          v-if="fileToRename === sketch[0]"
+          v-if="fileToRename === file[0]"
         >
           <input
             ref="renamed_file_input"
-            v-model="newSketchName"
+            v-model="newFileName"
             class="file-browser-input"
             type="text"
             @keydown.enter="renameFile"
@@ -42,17 +42,17 @@
         <div
           v-else
           class="filename"
-          @click="beginRenamingFile(sketch[0])"
+          @click="beginRenamingFile(file[0])"
         >
-          {{ sketch[0] }}
+          {{ file[0] }}
         </div>
-        <div class="filetype">{{ sketch[1].filetype }}</div>
+        <div class="filetype">{{ file[1].filetype }}</div>
       </div>
       <d-button
         name="Delete File"
         size="xs"
         class="trash-button"
-        @click.stop="askToDeleteSketch(sketch[0])"
+        @click.stop="askToDeleteFile(file[0])"
       >
         <trash-icon class="svg-inline sm" />
       </d-button>
@@ -65,7 +65,7 @@
         <div class="filename">
           <input
             ref="new_file_input"
-            v-model="newSketchName"
+            v-model="newFileName"
             class="file-browser-input"
             type="text"
             @keydown.enter="newFile"
@@ -107,18 +107,18 @@ export default {
   data() {
     return {
       showDeleteModal: false,
-      sketchToDelete: null,
+      fileToDelete: null,
       isAddingFile: false,
       fileToRename: null,
-      newSketchName: null,
+      newFileName: null,
     };
   },
   computed: {
-    ...mapState(['draft', 'currentSketch']),
+    ...mapState(['draft', 'currentFile']),
 
-    // Sketch list in alphabetical order
-    sketches() {
-      return Object.entries(this.draft.sketches)
+    // File list in alphabetical order
+    files() {
+      return Object.entries(this.draft.files)
         .sort((a, b) => {
           if (a[0] < b[0]) return -1;
           if (a[0] > b[0]) return 1;
@@ -127,74 +127,74 @@ export default {
     },
 
     existingFilenames() {
-      return Object.keys(this.draft.sketches);
+      return Object.keys(this.draft.files);
     },
 
     deleteModalText() {
-      return `Are you sure you want to delete the sketch "${this.sketchToDelete}"?`;
+      return `Are you sure you want to delete the sketch "${this.fileToDelete}"?`;
     },
   },
   mounted() {
     // create a new untitled sketch in a blank draft file
-    if (this.sketches.length === 0) {
-      this.updateSketch({
+    if (this.files.length === 0) {
+      this.updateFile({
         name: 'untitled',
         language: 'yaml',
         code: yaml(),
       });
-      this.setCurrentSketch('untitled');
+      this.setCurrentFile('untitled');
     }
   },
   methods: {
-    ...mapMutations(['setCurrentSketch', 'updateSketch', 'removeSketch', 'renameSketch']),
+    ...mapMutations(['setCurrentFile', 'updateFile', 'removeFile', 'renameFile']),
     async beginAddingFile() {
-      this.newSketchName = incrementName('untitled', this.existingFilenames);
+      this.newFileName = incrementName('untitled', this.existingFilenames);
       this.isAddingFile = true;
       await nextTick();
       this.$refs.new_file_input.focus();
       this.$refs.new_file_input.select();
     },
     async beginRenamingFile(name) {
-      if (name !== this.currentSketch) return;
-      this.newSketchName = name;
+      if (name !== this.currentFile) return;
+      this.newFileName = name;
       this.fileToRename = name;
       await nextTick();
       this.$refs.renamed_file_input.focus();
       this.$refs.renamed_file_input.select();
     },
     stopAddingFile() {
-      this.newSketchName = null;
+      this.newFileName = null;
       this.isAddingFile = false;
     },
     stopRenamingFile() {
-      this.newSketchName = null;
+      this.newFileName = null;
       this.fileToRename = null;
     },
     newFile() {
-      if (!this.newSketchName || this.existingFilenames.includes(this.newSketchName)) return;
-      this.updateSketch({
-        name: this.newSketchName,
+      if (!this.newFileName || this.existingFilenames.includes(this.newFileName)) return;
+      this.updateFile({
+        name: this.newFileName,
         language: 'yaml',
         code: yaml(),
       });
-      this.setCurrentSketch(this.newSketchName);
+      this.setCurrentFile(this.newFileName);
       this.stopAddingFile();
     },
     renameFile() {
-      if (this.newSketchName === this.fileToRename) {
+      if (this.newFileName === this.fileToRename) {
         this.stopRenamingFile();
         return;
       }
-      if (!this.newSketchName || this.existingFilenames.includes(this.newSketchName)) return;
-      this.renameSketch({ name: this.fileToRename, newName: this.newSketchName });
+      if (!this.newFileName || this.existingFilenames.includes(this.newFileName)) return;
+      this.renameFile({ name: this.fileToRename, newName: this.newFileName });
       this.stopRenamingFile();
     },
-    askToDeleteSketch(name) {
-      this.sketchToDelete = name;
+    askToDeleteFile(name) {
+      this.fileToDelete = name;
       this.showDeleteModal = true;
     },
-    deleteSketch(name) {
-      this.removeSketch(name);
+    deleteFile(name) {
+      this.removeFile(name);
       this.showDeleteModal = false;
     },
   },

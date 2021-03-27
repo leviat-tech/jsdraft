@@ -17,7 +17,7 @@
             :src="'icons/code.svg'"
           >
           <div class="sketch-name">
-            {{ currentSketch }}
+            {{ currentFile }}
           </div>
           <tool
             name="JS"
@@ -88,22 +88,22 @@ export default {
     };
   },
   computed: {
-    ...mapState(['currentSketch', 'draft']),
+    ...mapState(['currentFile', 'draft']),
     languageModalText() {
       return `Are you sure you want to switch from ${this.language.toUpperCase()} to ${this.newLanguage.toUpperCase()}? Changes will be lost.`;
     },
   },
   watch: {
-    currentSketch: {
+    currentFile: {
       immediate: true,
       handler() {
-        this.localCode = this.draft.sketches[this.currentSketch].contents;
-        this.language = this.draft.sketches[this.currentSketch].filetype;
+        this.localCode = this.draft.files[this.currentFile].contents;
+        this.language = this.draft.files[this.currentFile].filetype;
       },
     },
   },
   methods: {
-    ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'updateSketch']),
+    ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'updateFile']),
     closeCodePanel() {
       this.setShowCodePanel(false);
     },
@@ -114,8 +114,8 @@ export default {
       if (language === this.language) return;
 
       const code = {
-        yaml: yaml(this.currentSketch),
-        js: js(this.currentSketch),
+        yaml: yaml(this.currentFile),
+        js: js(this.currentFile),
       }[this.language];
 
       // If no changes from default, no need to warn
@@ -130,11 +130,11 @@ export default {
     selectLanguage(language) {
       if (language === this.language) return;
       const code = {
-        yaml: yaml(this.currentSketch),
-        js: js(this.currentSketch),
+        yaml: yaml(this.currentFile),
+        js: js(this.currentFile),
       }[language];
       this.localCode = code;
-      this.updateSketch({ name: this.currentSketch, language, code });
+      this.updateFile({ name: this.currentFile, language, code });
       this.language = language;
       this.showLanguageModal = false;
     },
@@ -199,8 +199,8 @@ export default {
       });
     },
     validate: debounce(function validate() {
-      this.updateSketch({
-        name: this.currentSketch,
+      this.updateFile({
+        name: this.currentFile,
         language: this.language,
         code: this.localCode,
       });

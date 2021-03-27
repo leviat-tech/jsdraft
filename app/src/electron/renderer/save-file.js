@@ -2,12 +2,12 @@ const fs = require('fs').promises;
 const path = require('path');
 
 
-async function saveFile(savePath, sketches) {
-  const saveFiles = sketches
-    .map((sketch) => {
-      const filename = `${sketch.name}.sketch.${sketch.filetype}`;
+async function saveFile(savePath, files) {
+  const saveFiles = files
+    .map((file) => {
+      const filename = `${file.name}.sketch.${file.filetype}`;
       const filePath = path.join(savePath, filename);
-      return fs.writeFile(filePath, sketch.contents);
+      return fs.writeFile(filePath, file.contents);
     });
 
   await Promise.all(saveFiles);

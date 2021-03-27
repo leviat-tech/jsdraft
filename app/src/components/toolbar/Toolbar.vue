@@ -71,7 +71,7 @@
       </tool-group>
     </div>
     <d-button
-      v-if="!showCodePanel && sketchesExist"
+      v-if="!showCodePanel && filesExist"
       name="Code"
       icon="code"
       @click="openCodePanel"
@@ -113,8 +113,8 @@ export default {
   },
   computed: {
     ...mapState(['currentTool', 'showCodePanel', 'draft', 'filename', 'path']),
-    sketchesExist() {
-      return Object.keys(this.draft.sketches).length > 0;
+    filesExist() {
+      return Object.keys(this.draft.files).length > 0;
     },
   },
   methods: {
@@ -154,19 +154,19 @@ export default {
       this.fitToExtents();
     },
     save() {
-      const sketches = Object.entries(this.draft.sketches)
-        .map(([name, sketch]) => ({
+      const files = Object.entries(this.draft.files)
+        .map(([name, file]) => ({
           name,
-          filetype: sketch.filetype,
-          contents: sketch.contents,
+          filetype: file.filetype,
+          contents: file.contents,
         }));
 
       if (!this.isElectron) {
         saveFileInBrowser(this.filename, this.draft);
       } else if (this.path) {
-        window.electron.saveFile(this.path, sketches);
+        window.electron.saveFile(this.path, files);
       } else {
-        const path = window.electron.saveAs(this.filename, sketches);
+        const path = window.electron.saveAs(this.filename, files);
         this.setPath(path);
       }
     },

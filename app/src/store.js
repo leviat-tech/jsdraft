@@ -9,7 +9,7 @@ export default createStore({
       currentTool: 'select',
       showCodePanel: false,
       viewBox: { minX: -100, minY: -100, width: 200, height: 200 },
-      currentSketch: null,
+      currentFile: null,
       filename: 'Draft',
       path: undefined,
       draft: new Draft(),
@@ -29,8 +29,8 @@ export default createStore({
     setViewBox(state, value) {
       state.viewBox = value;
     },
-    setCurrentSketch(state, value) {
-      state.currentSketch = value;
+    setCurrentFile(state, value) {
+      state.currentFile = value;
     },
     setFilename(state, value) {
       state.filename = value;
@@ -41,14 +41,14 @@ export default createStore({
     newDraft(state) {
       state.draft = new Draft();
     },
-    updateSketch(state, { name, language, code }) {
-      state.draft.add_sketch(name, language, code);
+    updateFile(state, { name, language, code }) {
+      state.draft.add_file(name, language, code);
     },
-    removeSketch(state, name) {
-      state.draft.remove_sketch(name);
+    removeFile(state, name) {
+      state.draft.remove_file(name);
     },
-    renameSketch(state, { name, newName }) {
-      state.draft.rename_sketch(name, newName);
+    renameFile(state, { name, newName }) {
+      state.draft.rename_file(name, newName);
     },
   },
 
@@ -66,26 +66,26 @@ export default createStore({
 
       // Add files to draft
       files.forEach((file) => {
-        commit('updateSketch', {
+        commit('updateFile', {
           name: file.name,
           language: file.extension,
           code: file.contents,
         });
       });
 
-      // Choose the first as the new active sketch
+      // Choose the first as the new active file
       if (files.length > 0) {
-        commit('setCurrentSketch', files[0].name);
+        commit('setCurrentFile', files[0].name);
       }
     },
   },
 
   getters: {
     svg(state) {
-      if (!state.currentSketch) return [];
+      if (!state.currentFile) return [];
       try {
         return state.draft.render(
-          state.currentSketch,
+          state.currentFile,
           [],
           'svg',
           { viewport: null },
