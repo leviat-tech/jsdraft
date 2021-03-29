@@ -24,6 +24,7 @@ const join = require('./operations/join.js');
 const offset = require('./operations/offset.js');
 const subtract = require('./operations/subtract.js');
 
+const orient = require('./transformations/orient.js');
 const rotate = require('./transformations/rotate.js');
 const scale = require('./transformations/scale.js');
 const transform = require('./transformations/transform.js');
@@ -52,6 +53,7 @@ module.exports = [
   join,
   offset,
   subtract,
+  orient,
   rotate,
   scale,
   transform,
