@@ -1,5 +1,6 @@
 import { createStore } from 'vuex';
 import { Draft } from '../../dist/draft.js';
+import parseFilename from './utility/parse-filename.js';
 
 
 export default createStore({
@@ -12,7 +13,8 @@ export default createStore({
       currentFile: null,
       filename: 'Draft',
       path: undefined,
-      draft: new Draft(),
+      files: {},
+      errors: {},
     };
   },
 
@@ -38,24 +40,27 @@ export default createStore({
     setPath(state, value) {
       state.path = value;
     },
-    newDraft(state) {
-      state.draft = new Draft();
+    removeAllFiles(state) {
+      state.files = {};
     },
-    updateFile(state, { name, language, code }) {
-      state.draft.add_file(name, language, code);
+    updateFile(state, { name, code }) {
+      state.files[name] = code;
     },
     removeFile(state, name) {
-      state.draft.remove_file(name);
+      delete state.files[name];
     },
-    renameFile(state, { name, newName }) {
-      state.draft.rename_file(name, newName);
+    renameFile(state, { name: oldFileName, newName: newFileName }) {
+      const { name } = parseFilename(oldFileName);
+      const { name: newName } = parseFilename(newFileName);
+      state.files[newFileName] = state.files[oldFileName];
+      if (name === state.currentFile) state.currentFile = newName;
+      delete state.files[oldFileName];
     },
   },
 
   actions: {
     loadFiles({ commit }, files) {
-      // Make a new blank draft
-      commit('newDraft');
+      commit('removeAllFiles');
 
       // Sort files alphabetically
       files.sort((a, b) => {
@@ -64,11 +69,10 @@ export default createStore({
         return 0;
       });
 
-      // Add files to draft
+      // Add files to list of files
       files.forEach((file) => {
         commit('updateFile', {
-          name: file.name,
-          language: file.extension,
+          name: `${file.name}.sketch.${file.extension}`,
           code: file.contents,
         });
       });
@@ -81,10 +85,20 @@ export default createStore({
   },
 
   getters: {
-    svg(state) {
+    draft(state) {
+      const draft = new Draft();
+      Object.entries(state.files)
+        .forEach(([filename, contents]) => {
+          const { name, extension } = parseFilename(filename);
+          draft.add_file(name, extension, contents);
+        });
+
+      return draft;
+    },
+    svg(state, getters) {
       if (!state.currentFile) return [];
       try {
-        return state.draft.render(
+        return getters.draft.render(
           state.currentFile,
           [],
           'svg',

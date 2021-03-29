@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex';
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 import isElectron from 'is-electron';
 import ToolGroup from './ToolGroup.vue';
 import Tool from './Tool.vue';
@@ -112,7 +112,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(['currentTool', 'showCodePanel', 'draft', 'filename', 'path']),
+    ...mapState(['currentTool', 'showCodePanel', 'filename', 'path']),
+    ...mapGetters(['draft']),
     filesExist() {
       return Object.keys(this.draft.files).length > 0;
     },

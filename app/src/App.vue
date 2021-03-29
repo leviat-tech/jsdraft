@@ -34,7 +34,7 @@ export default {
           }
 
           if (nv) {
-            this.closeWatcher = window.electron.watchDirectory(nv, this.updateFile);
+            this.closeWatcher = window.electron.watchDirectory(nv, this.updateDraftFile);
           }
         }
       },
@@ -44,18 +44,17 @@ export default {
     if (this.closeWatcher) this.closeWatcher();
   },
   methods: {
-    ...mapMutations(['updateSketch', 'removeSketch']),
-    updateFile(updateType, file) {
+    ...mapMutations(['updateFile', 'removeFile']),
+    updateDraftFile(updateType, file) {
       if (updateType === 'change') {
-        this.updateSketch({
-          name: file.name,
-          language: file.extension,
+        this.updateFile({
+          name: `${file.name}.sketch.${file.extension}`,
           code: file.contents,
         });
       }
 
       if (updateType === 'unlink') {
-        this.removeSketch(file.name);
+        this.removeFile(`${file.name}.sketch.${file.extension}`);
       }
     },
   },

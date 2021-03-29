@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex';
+import { mapMutations, mapState, mapGetters } from 'vuex';
 import { PrismEditor } from 'vue-prism-editor';
 import debounce from 'lodash/debounce';
 import 'vue-prism-editor/dist/prismeditor.min.css';
@@ -88,7 +88,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(['currentFile', 'draft']),
+    ...mapState(['currentFile']),
+    ...mapGetters(['draft']),
     languageModalText() {
       return `Are you sure you want to switch from ${this.language.toUpperCase()} to ${this.newLanguage.toUpperCase()}? Changes will be lost.`;
     },
@@ -134,7 +135,7 @@ export default {
         js: js(this.currentFile),
       }[language];
       this.localCode = code;
-      this.updateFile({ name: this.currentFile, language, code });
+      this.updateFile({ name: `${this.currentFile}.sketch.${language}`, code });
       this.language = language;
       this.showLanguageModal = false;
     },
@@ -200,8 +201,7 @@ export default {
     },
     validate: debounce(function validate() {
       this.updateFile({
-        name: this.currentFile,
-        language: this.language,
+        name: `${this.currentFile}.sketch.${this.language}`,
         code: this.localCode,
       });
     }, 500),

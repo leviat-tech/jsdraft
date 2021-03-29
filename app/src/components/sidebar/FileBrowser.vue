@@ -34,7 +34,7 @@
             v-model="newFileName"
             class="file-browser-input"
             type="text"
-            @keydown.enter="renameFile"
+            @keydown.enter="renameDraftFile"
             @blur="renameFile"
             @keydown.esc="stopRenamingFile"
           >
@@ -89,7 +89,7 @@
 
 <script>
 import { nextTick } from 'vue';
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapGetters, mapMutations } from 'vuex';
 import WarningModal from '../WarningModal.vue';
 import DButton from '../DButton.vue';
 import TrashIcon from '../../assets/icons/trash.svg';
@@ -114,7 +114,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(['draft', 'currentFile']),
+    ...mapState(['currentFile']),
+    ...mapGetters(['draft']),
 
     // File list in alphabetical order
     files() {
@@ -138,8 +139,7 @@ export default {
     // create a new untitled sketch in a blank draft file
     if (this.files.length === 0) {
       this.updateFile({
-        name: 'untitled',
-        language: 'yaml',
+        name: 'untitled.sketch.yaml',
         code: yaml(),
       });
       this.setCurrentFile('untitled');
@@ -173,20 +173,25 @@ export default {
     newFile() {
       if (!this.newFileName || this.existingFilenames.includes(this.newFileName)) return;
       this.updateFile({
-        name: this.newFileName,
-        language: 'yaml',
+        name: `${this.newFileName}.sketch.yaml`,
         code: yaml(),
       });
       this.setCurrentFile(this.newFileName);
       this.stopAddingFile();
     },
-    renameFile() {
+    renameDraftFile() {
       if (this.newFileName === this.fileToRename) {
         this.stopRenamingFile();
         return;
       }
       if (!this.newFileName || this.existingFilenames.includes(this.newFileName)) return;
-      this.renameFile({ name: this.fileToRename, newName: this.newFileName });
+      const file = this.draft.files[this.fileToRename];
+      const language = file.filetype;
+
+      this.renameFile({
+        name: `${this.fileToRename}.sketch.${language}`,
+        newName: `${this.newFileName}.sketch.${language}`,
+      });
       this.stopRenamingFile();
     },
     askToDeleteFile(name) {
@@ -194,7 +199,8 @@ export default {
       this.showDeleteModal = true;
     },
     deleteFile(name) {
-      this.removeFile(name);
+      const file = this.draft.files[name];
+      this.removeFile(`${name}.sketch.${file.filetype}`);
       this.showDeleteModal = false;
     },
   },
