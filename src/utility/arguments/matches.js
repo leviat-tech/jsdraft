@@ -14,6 +14,13 @@ function matches_arc_array(arg) {
   && numeric_array(arg.slice(1, 4));
 }
 
+function matches_fillet_point(arg) {
+  return Array.isArray(arg)
+    && arg.length === 2
+    && numeric_array(arg[0], { ex: 2 })
+    && typeof arg[1] === 'number';
+}
+
 function test(actual, expected) {
   if (expected && expected.indexOf(' or ') > -1) {
     return expected.split(' or ').map((e) => e.trim()).some((e) => test(actual, e));
@@ -32,6 +39,9 @@ function test(actual, expected) {
   }
   if (expected === 'polycurve' || expected === 'multiline') {
     return (actual instanceof flatten.Multiline);
+  }
+  if (expected === 'fillet_pt') {
+    return matches_fillet_point(actual);
   }
   return typeof (actual) === expected;
 }
@@ -55,4 +65,4 @@ function every(args, pattern) {
 }
 
 
-module.exports = { matches, every, matches_segment_array, matches_arc_array };
+module.exports = { matches, every, matches_segment_array, matches_arc_array, matches_fillet_point };
