@@ -5,7 +5,7 @@ const validFiletypes = {
 
 function parseFilename(filename) {
   const segments = filename.split('.');
-  if (segments.length < 2) {
+  if (segments.length < 2 || !segments[0]) {
     return null;
   }
 
