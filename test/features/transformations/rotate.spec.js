@@ -17,7 +17,7 @@ describe('Rotate', () => {
     const result = sketch.rotate(90);
     const vertices = result.shape.vertices;
     expect(vertices[0]).to.be.a.point({ x: 20, y: -20 });
-    expect(vertices[1]).to.be.a.point({ x: -0, y: -10 });
+    expect(vertices[1]).to.be.a.point({ x: 0, y: -10 });
     expect(vertices[2]).to.be.a.point({ x: 0, y: 0 });
   });
 
@@ -25,7 +25,7 @@ describe('Rotate', () => {
     const result = sketch.rotate(Math.PI / 2, 'rad');
     const vertices = result.shape.vertices;
     expect(vertices[0]).to.be.a.point({ x: 20, y: -20 });
-    expect(vertices[1]).to.be.a.point({ x: -0, y: -10 });
+    expect(vertices[1]).to.be.a.point({ x: 0, y: -10 });
     expect(vertices[2]).to.be.a.point({ x: 0, y: 0 });
   });
 
@@ -33,7 +33,7 @@ describe('Rotate', () => {
     const result = sketch.rotate([0, 1]);
     const vertices = result.shape.vertices;
     expect(vertices[0]).to.be.a.point({ x: 20, y: -20 });
-    expect(vertices[1]).to.be.a.point({ x: -0, y: -10 });
+    expect(vertices[1]).to.be.a.point({ x: 0, y: -10 });
     expect(vertices[2]).to.be.a.point({ x: 0, y: 0 });
   });
 });

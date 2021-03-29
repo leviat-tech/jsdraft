@@ -15,8 +15,11 @@ module.exports = function helpers(chai) {
   });
 
   Assertion.addMethod('point', function (entity) {
-    const x = parseFloat(this._obj.x.toFixed(4), 10);
-    const y = parseFloat(this._obj.y.toFixed(4), 10);
+    let x = parseFloat(this._obj.x.toFixed(4), 10);
+    let y = parseFloat(this._obj.y.toFixed(4), 10);
+
+    if (x === 0) x = 0; // handle case where x === -0
+    if (y === 0) y = 0;
 
     expect(this._obj).to.be.instanceof(flatten.Point);
     expect({ x, y }).to.eql(entity);
