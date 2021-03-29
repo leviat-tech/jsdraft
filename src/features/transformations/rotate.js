@@ -10,14 +10,8 @@ module.exports = function rotate(sketch, angle, units = 'deg') {
     }
   } else {
     // angle is vector
-    let vec;
-    if (Array.isArray(angle)) {
-      vec = Vector({ x: angle[0], y: angle[1] });
-    } else {
-      vec = Vector({ x: angle.x, y: angle.y });
-    }
-
-    angle = vec.angle;
+    const vec = Vector(angle);
+    angle = vec.angle();
   }
 
   return sketch.transform(flatten.matrix().rotate(angle));
