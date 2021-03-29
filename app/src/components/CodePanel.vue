@@ -295,7 +295,7 @@ export default {
 }
 
 .my-editor {
-  font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
+  font-family: $font-monospace;
   font-size: 14px;
   line-height: 1.5;
   padding: 5px;
