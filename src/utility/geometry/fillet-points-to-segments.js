@@ -2,6 +2,7 @@ const fillet = require('./fillet.js');
 const sagitta_arc = require('./sagitta-arc.js');
 const Segment = require('../../entities/geometric/segment.js');
 const Arc = require('../../entities/geometric/arc.js');
+const points_are_near = require('./points-are-near.js');
 
 
 function should_fillet(point_array, index) {
@@ -78,8 +79,9 @@ function fillet_points_to_segments(points, closed) {
         ccw,
       } = sagitta_arc(fc.point_a, fc.point_b, fc.bulge);
 
+      if (!points_are_near(pen, fc.point_a)) segs.push(new Segment(pen, fc.point_a));
+
       segs.push(
-        new Segment(pen, fc.point_a),
         new Arc(center, radius, start_angle, end_angle, ccw),
       );
       pen = fc.point_b;
@@ -95,7 +97,7 @@ function fillet_points_to_segments(points, closed) {
       segs.push(new Arc(center, radius, start_angle, end_angle, ccw));
       pen = point.point;
     } else {
-      segs.push(new Segment(pen, point.point));
+      if (!points_are_near(pen, point.point)) segs.push(new Segment(pen, point.point));
       pen = point.point;
     }
   });
