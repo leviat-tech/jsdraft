@@ -4,6 +4,28 @@ const yaml = require('js-yaml');
 const evaluate = require('../utility/misc/evaluate');
 
 
+const DEFAULT_CONTEXT = {
+  PI: Math.PI,
+  abs: Math.abs,
+  acos: Math.acos,
+  asin: Math.asin,
+  atan: Math.atan,
+  atan2: Math.atan2,
+  cbrt: Math.cbrt,
+  ceil: Math.ceil,
+  cos: Math.cos,
+  floor: Math.floor,
+  max: Math.max,
+  min: Math.min,
+  pow: Math.pow,
+  round: Math.round,
+  sign: Math.sign,
+  sin: Math.sin,
+  sqrt: Math.sqrt,
+  tan: Math.tan,
+};
+
+
 // extract the key from a single label yaml object
 function unwind(obj) {
   if (typeof obj === 'string') return obj;
@@ -95,11 +117,11 @@ function reference(definition, sketch, context) {
     // check if reference is a sketch
     const match = id.match(/(.+):sketch/);
     if (match) {
-      refs[match[1]] = chain(sketch.new, exp, { ...context, ...refs });
+      refs[match[1]] = chain(sketch.new, exp, { ...DEFAULT_CONTEXT, ...context, ...refs });
 
       // otherwise evaluate as typical argument
     } else {
-      refs[id] = evaluate_argument(exp, { ...context, ...refs });
+      refs[id] = evaluate_argument(exp, { ...DEFAULT_CONTEXT, ...context, ...refs });
     }
   });
 

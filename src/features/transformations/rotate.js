@@ -1,8 +1,16 @@
 const flatten = require('@flatten-js/core');
+const Vector = require('@crhio/vector').default;
+const { deg_to_rad } = require('../../utility/misc/rad-deg');
 
-module.exports = function rotate(sketch, angle, units) {
-  if (!units) {
-    angle = angle * Math.PI / 180.0
+
+module.exports = function rotate(sketch, angle, units = 'deg') {
+  if (typeof angle !== 'number') {
+    // angle is vector
+    const vec = Vector(angle);
+    angle = vec.angle();
+  } else if (units === 'deg') {
+    angle = deg_to_rad(angle);
   }
+
   return sketch.transform(flatten.matrix().rotate(angle));
-}
+};

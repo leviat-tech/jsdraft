@@ -105,6 +105,7 @@ const renderers = {
 
     const attributes = {
       ...DEFAULT_ATTRIBUTES,
+      fill_rule: 'evenodd',
       ...style_to_svg(styles),
       d,
     };

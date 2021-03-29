@@ -50,4 +50,17 @@ describe('Polycurve', () => {
     );
     expect(c).to.be.a.polycurve(6);
   });
+
+  it('can be constructed from a combination of points, bulges, and fillets', () => {
+    const c = new Polycurve(
+      [0, 0],
+      [3, 3],
+      1,
+      [5, 4],
+      [10, 2],
+      [[15, 8], 1],
+      [10, 8],
+    );
+    expect(c).to.be.a.polycurve(7);
+  });
 });
