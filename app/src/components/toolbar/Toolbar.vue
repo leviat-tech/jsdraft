@@ -77,7 +77,7 @@
       @click="openCodePanel"
     />
     <input
-      v-if="!isElectron"
+      v-if="!electron"
       id="fileReader"
       type="file"
       webkitdirectory
@@ -99,6 +99,8 @@ import loadFileInBrowser from '../../utility/load-file-in-browser.js';
 import saveFileInBrowser from '../../utility/save-file-in-browser.js';
 
 
+const electron = isElectron();
+
 export default {
   name: 'Toolbar',
   components: {
@@ -108,7 +110,7 @@ export default {
   },
   data() {
     return {
-      isElectron: isElectron(),
+      electron,
     };
   },
   computed: {
@@ -128,7 +130,7 @@ export default {
 
     },
     openFolder() {
-      if (!this.isElectron) {
+      if (!electron) {
         const fileReader = document.getElementById('fileReader');
         fileReader.click();
       } else {
@@ -140,7 +142,7 @@ export default {
       let path;
       let filename = 'Draft';
 
-      if (!this.isElectron) {
+      if (!electron) {
         files = await loadFileInBrowser(e);
       } else {
         const loaded = await window.electron.openFile();
@@ -162,7 +164,7 @@ export default {
           contents: file.contents,
         }));
 
-      if (!this.isElectron) {
+      if (!electron) {
         saveFileInBrowser(this.filename, this.draft);
       } else if (this.path) {
         window.electron.saveFile(this.path, files);

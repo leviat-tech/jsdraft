@@ -10,16 +10,12 @@ import isElectron from 'is-electron';
 import Layout from './components/Layout.vue';
 
 
+const electron = isElectron();
+
 export default {
   name: 'App',
   components: {
     Layout,
-  },
-  data() {
-    return {
-      isElectron: isElectron(),
-      closeWatcher: null,
-    };
   },
   computed: {
     ...mapState(['path', 'draft']),
@@ -28,7 +24,7 @@ export default {
     path: {
       immediate: true,
       async handler(nv) {
-        if (this.isElectron) {
+        if (electron) {
           if (this.closeWatcher) {
             await this.closeWatcher();
           }
