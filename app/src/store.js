@@ -1,6 +1,6 @@
 import { createStore } from 'vuex';
-import { Draft } from '../../dist/draft.js';
 import parseFilename from './utility/parse-filename.js';
+import { Draft, parse } from '../../dist/draft.js';
 
 
 export default createStore({
@@ -117,6 +117,24 @@ export default createStore({
         console.debug(e);
         return [];
       }
+    },
+    errors(state, getters) {
+      const errors = {};
+      Object.keys(getters.draft.files).forEach((name) => {
+        const sketch = getters.draft.files[name];
+        try {
+          parse(sketch.extension, sketch.contents, name);
+          getters.draft.render(
+            state.currentFile,
+            [],
+            'svg',
+            { viewport: null },
+          );
+        } catch (error) {
+          errors[name] = error;
+        }
+      });
+      return errors;
     },
   },
 });
