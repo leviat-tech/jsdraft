@@ -265,11 +265,17 @@ h2 {
     cursor: pointer;
 
     &:hover {
+      color: $color-blue-highlight;
       background-color: $color-gray-02;
       border-top-color: $color-gray-03;
       border-bottom-color: $color-gray-03;
     }
   }
+}
+
+.no-content {
+  font-style: italic;
+  color: $color-gray-06;
 }
 
 .input-container {
