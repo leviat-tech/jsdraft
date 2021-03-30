@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { Draft } from '../../dist/draft.js';
+import { Draft, parse } from '../../dist/draft.js';
 
 
 export default createStore({
@@ -43,6 +43,7 @@ export default createStore({
     },
     updateSketch(state, { name, language, code }) {
       state.draft.add_sketch(name, language, code);
+
     },
     removeSketch(state, name) {
       state.draft.remove_sketch(name);
@@ -94,6 +95,24 @@ export default createStore({
         console.debug(e);
         return [];
       }
+    },
+    errors(state) {
+      const errors = {};
+      Object.keys(state.draft.sketches).forEach((name) => {
+        const sketch = state.draft.sketches[name];
+        try {
+          parse(sketch.filetype, sketch.contents, name);
+          state.draft.render(
+            state.currentSketch,
+            [],
+            'svg',
+            { viewport: null },
+          );
+        } catch (error) {
+          errors[name] = error;
+        }
+      });
+      return errors;
     },
   },
 });
