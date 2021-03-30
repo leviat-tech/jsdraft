@@ -13,6 +13,7 @@ export default createStore({
       currentFile: null,
       filename: 'Draft',
       path: undefined,
+      overrides: [],
       files: {},
       errors: {},
     };
@@ -65,6 +66,9 @@ export default createStore({
       if (name === state.currentFile) state.currentFile = newName;
       delete state.files[oldFileName];
     },
+    setOverrides(state, overrides) {
+      state.overrides = overrides;
+    },
   },
 
   actions: {
@@ -109,7 +113,7 @@ export default createStore({
       try {
         return getters.draft.render(
           state.currentFile,
-          [],
+          state.overrides,
           'svg',
           { viewport: null },
         );
@@ -126,7 +130,7 @@ export default createStore({
           parse(sketch.extension, sketch.contents, name);
           getters.draft.render(
             state.currentFile,
-            [],
+            state.overrides,
             'svg',
             { viewport: null },
           );
