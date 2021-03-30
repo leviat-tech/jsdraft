@@ -23,7 +23,7 @@ function normalize_yaml_param(param) {
 
   // get parameter definition
   let def = param[name];
-  if (typeof def !== 'object') {
+  if (typeof def !== 'object' || Array.isArray(def)) {
     def = {
       default: def,
     };
