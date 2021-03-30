@@ -50,6 +50,7 @@
       @keydown="handleKeydown"
       @input="validate"
     />
+    <error-panel :errors="errors" />
   </div>
 </template>
 
@@ -67,6 +68,7 @@ import 'prismjs/themes/prism-tomorrow.css';
 import Tool from './toolbar/Tool.vue';
 import DButton from './DButton.vue';
 import WarningModal from './WarningModal.vue';
+import ErrorPanel from './ErrorPanel.vue';
 import { yaml, js } from '../utility/default-blank-sketches.js';
 
 
@@ -77,6 +79,7 @@ export default {
     Tool,
     DButton,
     PrismEditor,
+    ErrorPanel,
   },
   data() {
     return {
@@ -93,6 +96,15 @@ export default {
     languageModalText() {
       return `Are you sure you want to switch from ${this.language.toUpperCase()} to ${this.newLanguage.toUpperCase()}? Changes will be lost.`;
     },
+    errors() {
+      return this.$store.getters.errors[this.currentFile];
+    },
+    underlines() {
+      if (!this.errors) return {};
+      const underlines = {};
+      underlines[this.errors.mark?.line] = 'error';
+      return underlines;
+    },
   },
   watch: {
     currentFile: {
@@ -108,8 +120,16 @@ export default {
     closeCodePanel() {
       this.setShowCodePanel(false);
     },
+    underline(markup) {
+      const lines = markup.split(/\r?\n/).map((line, i) => {
+        console.log(this.underlines);
+        const hl = this.underlines[i] || '';
+        return `<span data-line="${i}" class="line ${hl}">${line}</span>`;
+      });
+      return lines.join('\n');
+    },
     highlighter(code) {
-      return highlight(code, languages[this.language]);
+      return this.underline(highlight(code, languages[this.language]));
     },
     confirmSelectLanguage(language) {
       if (language === this.language) return;
@@ -299,6 +319,13 @@ export default {
   font-size: 14px;
   line-height: 1.5;
   padding: 5px;
+}
+
+::v-deep(.line.error) {
+  display: block;
+  height: 16px;
+  background: lighten($color-red, 25);
+  border-right: 2px solid $color-red;
 }
 </style>
 
