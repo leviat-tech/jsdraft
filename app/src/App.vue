@@ -270,7 +270,44 @@ h2 {
       border-bottom-color: $color-gray-03;
     }
   }
+}
 
+.input-container {
+  min-width: 0;
+  border: $border-sm solid;
+  border-color: $color-gray-03;
+  border-radius: $radius;
+  background-color: $color-gray-01;
+  flex: 1 1 0%;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  font-size: $text-xs;
+  min-height: 1.75rem;
+
+  &:focus, &.focused {
+    color: $color-black;
+    border: $border-sm solid $color-blue;
+    box-shadow: 0px 0px 0px 1px $color-blue;
+  }
+
+  select, input {
+    outline: none;
+    min-width: 0;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    height: 2rem;
+    font-size: $text-base;
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    flex: 1 1 0%;
+
+    font-size: $text-xs;
+    height: 1.5rem;
+  }
 }
 
 </style>

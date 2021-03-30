@@ -5,6 +5,7 @@
       <parameter-input
         v-for="(parameter, i) in parameters"
         :key="i"
+        v-model="overrides[i]"
         :parameter="parameter"
         @mouseover="hover(i)"
         @mouseout="unhover(i)"
@@ -17,7 +18,8 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters, mapMutations } from 'vuex';
+import cloneDeep from 'lodash/cloneDeep';
 import ParameterInput from './ParameterInput.vue';
 
 
@@ -25,6 +27,11 @@ export default {
   name: 'Parameters',
   components: {
     ParameterInput,
+  },
+  data() {
+    return {
+      overrides: [],
+    };
   },
   computed: {
     ...mapState(['currentFile']),
@@ -38,7 +45,25 @@ export default {
       }
     },
   },
+  watch: {
+    parameters: {
+      immediate: true,
+      handler(nv) {
+        if (!nv) {
+          this.overrides = [];
+        } else {
+          this.overrides = nv.map((p) => cloneDeep(p.default));
+        }
+      },
+    },
+    overrides: {
+      handler(nv) {
+        this.setOverrides(nv);
+      },
+    },
+  },
   methods: {
+    ...mapMutations(['setOverrides']),
     hover(index) {
       // this.hoverEntity(index);
     },
