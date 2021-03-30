@@ -160,7 +160,7 @@ export default {
       const files = Object.entries(this.draft.files)
         .map(([name, file]) => ({
           name,
-          filetype: file.filetype,
+          extension: file.extension,
           contents: file.contents,
         }));
 

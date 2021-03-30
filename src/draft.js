@@ -8,17 +8,18 @@ class Draft {
     this.files = {};
   }
 
-  add_file(name, filetype, contents) {
+  add_file(name, type, extension, contents) {
     this.files[name] = {
-      filetype, // yaml or js
+      type, // sketch or model
+      extension, // yaml or js
       contents, // raw string of file contents
     };
   }
 
   rename_file(old_name, new_name) {
-    const { filetype, contents } = this.files[old_name];
+    const { type, extension, contents } = this.files[old_name];
 
-    this.add_file(new_name, filetype, contents);
+    this.add_file(new_name, type, extension, contents);
     this.remove_file(old_name);
   }
 
@@ -31,9 +32,9 @@ class Draft {
     const root = new Sketch();
     Object.keys(this.files).forEach((key) => {
       const file = this.files[key];
-      root.inject(parse(file.filetype, file.contents, key));
+      root.inject(parse(file.extension, file.contents, key));
     });
-    const func = parse(source.filetype, source.contents, source.name);
+    const func = parse(source.extension, source.contents, source.name);
     const sketch = func(root, ...params);
     return render(sketch, format, options);
   }

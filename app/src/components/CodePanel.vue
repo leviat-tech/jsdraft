@@ -99,7 +99,7 @@ export default {
       immediate: true,
       handler() {
         this.localCode = this.draft.files[this.currentFile].contents;
-        this.language = this.draft.files[this.currentFile].filetype;
+        this.language = this.draft.files[this.currentFile].extension;
       },
     },
   },

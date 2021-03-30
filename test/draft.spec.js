@@ -22,20 +22,20 @@ describe('draft', () => {
 
   it('should render a feature', () => {
     const draft = new Draft();
-    draft.add_file('simple', 'js', simple);
+    draft.add_file('simple', 'sketch', 'js', simple);
     expect(draft).to.render({ name: 'point', x: 0, y: 0 }, { sketch: 'simple' });
   });
 
   it('should inject all files as user features when rendering', () => {
     const draft = new Draft();
-    draft.add_file('simple', 'js', simple);
-    draft.add_file('composed', 'js', composed);
+    draft.add_file('simple', 'sketch', 'js', simple);
+    draft.add_file('composed', 'sketch', 'js', composed);
     expect(draft).to.render({ name: 'point', x: 0, y: 0 }, { sketch: 'composed' });
   });
 
   it('should be able to parse and render a javascript sketch', () => {
     const draft = new Draft();
-    draft.add_file('my_point', 'js', `
+    draft.add_file('my_point', 'js', 'sketch', `
       function feature(sketch, a, b) {
         return sketch.point(a, b);
       }
@@ -46,7 +46,7 @@ describe('draft', () => {
 
   it('should be able to parse and render a yaml sketch', () => {
     const draft = new Draft();
-    draft.add_file('my_point', 'yaml', `
+    draft.add_file('my_point', 'yaml', 'sketch', `
       parameters:
         - $x: 5
       reference:
@@ -60,7 +60,7 @@ describe('draft', () => {
 
   it('should be able to parse and render the default javascript sketch', () => {
     const draft = new Draft();
-    draft.add_file('feature', 'js', `
+    draft.add_file('feature', 'js', 'sketch', `
     function untitled (sketch, args) {
       return sketch;
     }

@@ -46,8 +46,17 @@ export default createStore({
     updateFile(state, { name, code }) {
       state.files[name] = code;
     },
-    removeFile(state, name) {
-      delete state.files[name];
+    removeFile(state, filename) {
+      const { name } = parseFilename(filename);
+      const filenames = Object.keys(state.files);
+      if (name === state.currentFile && filenames.length > 1) {
+        const newCurrent = filenames.find((f) => f !== filename);
+        const { name: newName } = parseFilename(newCurrent);
+        state.currentFile = newName;
+      } else if (name === state.currentFile) {
+        state.currentFile = null;
+      }
+      delete state.files[filename];
     },
     renameFile(state, { name: oldFileName, newName: newFileName }) {
       const { name } = parseFilename(oldFileName);
@@ -90,7 +99,7 @@ export default createStore({
       Object.entries(state.files)
         .forEach(([filename, contents]) => {
           const { name, extension } = parseFilename(filename);
-          draft.add_file(name, extension, contents);
+          draft.add_file(name, 'sketch', extension, contents);
         });
 
       return draft;

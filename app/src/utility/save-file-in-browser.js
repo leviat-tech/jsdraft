@@ -6,7 +6,7 @@ async function saveFileInBrowser(draftFilename, draft) {
   const zip = new JSZip();
 
   Object.entries(draft.files).forEach(([name, file]) => {
-    const filename = `${name}.sketch.${file.filetype}`;
+    const filename = `${name}.sketch.${file.extension}`;
     zip.file(filename, file.contents);
   });
 

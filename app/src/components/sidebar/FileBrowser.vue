@@ -46,7 +46,7 @@
         >
           {{ file[0] }}
         </div>
-        <div class="filetype">{{ file[1].filetype }}</div>
+        <div class="filetype">{{ file[1].extension }}</div>
       </div>
       <d-button
         name="Delete File"
@@ -186,7 +186,7 @@ export default {
       }
       if (!this.newFileName || this.existingFilenames.includes(this.newFileName)) return;
       const file = this.draft.files[this.fileToRename];
-      const language = file.filetype;
+      const language = file.extension;
 
       this.renameFile({
         name: `${this.fileToRename}.sketch.${language}`,
@@ -200,7 +200,7 @@ export default {
     },
     deleteFile(name) {
       const file = this.draft.files[name];
-      this.removeFile(`${name}.sketch.${file.filetype}`);
+      this.removeFile(`${name}.sketch.${file.extension}`);
       this.showDeleteModal = false;
     },
   },
