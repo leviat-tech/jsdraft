@@ -14,6 +14,8 @@ export default createStore({
       filename: 'Draft',
       path: undefined,
       overrides: [],
+      hovered: {},
+      selected: {},
       files: {},
       errors: {},
     };
@@ -69,6 +71,18 @@ export default createStore({
     setOverrides(state, overrides) {
       state.overrides = overrides;
     },
+    setHovered(state, value) {
+      state.hovered = value;
+    },
+    hoverEntity(state, value) {
+      state.hovered[value] = true;
+    },
+    unhoverEntity(state, value) {
+      delete state.hovered[value];
+    },
+    setSelected(state, value) {
+      state.selected = value;
+    },
   },
 
   actions: {
@@ -107,6 +121,17 @@ export default createStore({
         });
 
       return draft;
+    },
+    entities(state, getters) {
+      try {
+        return getters.draft.render(
+          state.currentFile,
+          state.overrides,
+          'entities',
+        );
+      } catch (e) {
+        return [];
+      }
     },
     svg(state, getters) {
       if (!state.currentFile) return [];
