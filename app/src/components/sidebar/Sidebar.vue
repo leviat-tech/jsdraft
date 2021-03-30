@@ -4,7 +4,8 @@
       {{ filename }}
     </div>
     <div class="panels">
-      <parameters />
+      <parameters-list />
+      <entities-list />
     </div>
     <file-browser />
   </div>
@@ -13,14 +14,16 @@
 <script>
 import { mapState } from 'vuex';
 import FileBrowser from './FileBrowser.vue';
-import Parameters from './Parameters.vue';
+import ParametersList from './ParametersList.vue';
+import EntitiesList from './EntitiesList.vue';
 
 
 export default {
   name: 'Sidebar',
   components: {
     FileBrowser,
-    Parameters,
+    ParametersList,
+    EntitiesList,
   },
   data() {
     return {
