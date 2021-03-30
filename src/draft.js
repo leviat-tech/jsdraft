@@ -1,6 +1,7 @@
 const parse = require('./loaders/parse.js');
 const Sketch = require('./sketch/sketch.js');
-const render = require('./render');
+const render = require('./render.js');
+const { parameters } = require('./loaders/parameters.js');
 
 
 class Draft {
@@ -14,6 +15,12 @@ class Draft {
       extension, // yaml or js
       contents, // raw string of file contents
     };
+
+    Object.defineProperty(this.files[name], 'parameters', {
+      get: function get() {
+        return parameters(this.files[name]);
+      }.bind(this),
+    });
   }
 
   rename_file(old_name, new_name) {

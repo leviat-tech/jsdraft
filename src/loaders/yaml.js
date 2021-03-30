@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 const evaluate = require('../utility/misc/evaluate');
+const { normalize_yaml_param } = require('./parameters.js');
 
 
 const DEFAULT_CONTEXT = {
@@ -81,25 +82,13 @@ function parameters(definition, args) {
   const params = {};
 
   definition.forEach((param, i) => {
-    // get parameter name
-    let name = param;
-    if (typeof param === 'object') {
-      name = unwind(param);
-    }
-
-    // get parameter definition
-    let def = param[name];
-    if (typeof def !== 'object') {
-      def = {
-        default: def,
-      };
-    }
+    const def = normalize_yaml_param(param);
 
     // get parameter value
     const val = args[i] ?? def.default;
 
     // store parameter
-    params[name] = val;
+    params[def.name] = val;
   });
 
   return params;

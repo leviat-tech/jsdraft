@@ -35,7 +35,7 @@ describe('draft', () => {
 
   it('should be able to parse and render a javascript sketch', () => {
     const draft = new Draft();
-    draft.add_file('my_point', 'js', 'sketch', `
+    draft.add_file('my_point', 'sketch', 'js', `
       function feature(sketch, a, b) {
         return sketch.point(a, b);
       }
@@ -46,7 +46,7 @@ describe('draft', () => {
 
   it('should be able to parse and render a yaml sketch', () => {
     const draft = new Draft();
-    draft.add_file('my_point', 'yaml', 'sketch', `
+    draft.add_file('my_point', 'sketch', 'yaml', `
       parameters:
         - $x: 5
       reference:
@@ -60,12 +60,41 @@ describe('draft', () => {
 
   it('should be able to parse and render the default javascript sketch', () => {
     const draft = new Draft();
-    draft.add_file('feature', 'js', 'sketch', `
+    draft.add_file('feature', 'sketch', 'js', `
     function untitled (sketch, args) {
       return sketch;
     }
     `);
     const result = draft.render('feature', [], 'svg');
     expect(result).to.contain('svg');
+  });
+
+  it('can share the parameters of a file', () => {
+    const draft = new Draft();
+
+    draft.add_file('my_yaml', 'sketch', 'yaml', `
+      parameters:
+        - $x: 5
+      sketch:
+        - point: [$x, 10]
+    `);
+
+    draft.add_file('my_js', 'sketch', 'js', `
+    {
+      name: 'my_js',
+      parameters: [
+        { name: '$x', default: 5 },
+      ],
+      func: function my_js(sketch, x) {
+        return sketch
+          .point(x, 10);
+      },
+    }
+    `);
+
+    const params_1 = draft.files.my_yaml.parameters;
+    const params_2 = draft.files.my_js.parameters;
+    expect(params_1[0]).to.eql({ name: '$x', default: 5 });
+    expect(params_2[0]).to.eql({ name: '$x', default: 5 });
   });
 });
