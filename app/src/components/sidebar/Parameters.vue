@@ -30,9 +30,12 @@ export default {
     ...mapState(['currentFile']),
     ...mapGetters(['draft']),
     parameters() {
-      const file = this.draft.files[this.currentFile];
-
-      return file && file.parameters;
+      try {
+        const file = this.draft.files[this.currentFile];
+        return file && file.parameters;
+      } catch (e) {
+        return null;
+      }
     },
   },
   methods: {
