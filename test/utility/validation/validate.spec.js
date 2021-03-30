@@ -16,12 +16,14 @@ function expect_type_failure(type, value) {
 
 describe('validate', () => {
 
-  it('raises error when number of arguments does not match parameter definition', () => {
-    expect(() => validate([], [1])).to.throw(RangeError);
-    expect(() => validate([{}], [])).to.throw(RangeError);
-    expect(() => validate([{}, {}], [])).to.throw(RangeError);
-    expect(() => validate([{}, {}], [1, 1, 1])).to.throw(RangeError);
-  });
+  // Reconsider this validation: i.e., if defaults are supplied, then the function
+  // could be called with no arguments.
+  // it('raises error when number of arguments does not match parameter definition', () => {
+  //   expect(() => validate([], [1])).to.throw(RangeError);
+  //   expect(() => validate([{}], [])).to.throw(RangeError);
+  //   expect(() => validate([{}, {}], [])).to.throw(RangeError);
+  //   expect(() => validate([{}, {}], [1, 1, 1])).to.throw(RangeError);
+  // });
 
   it('to be set default when argument is null or undefined', () => {
     expect(validate([{}], [1])).to.eql([1]);

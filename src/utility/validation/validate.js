@@ -6,9 +6,9 @@ function validate(defs, args) {
   const validated = [];
 
   // check that parameter defitions and arguments match in number
-  if (defs.length !== args.length) {
-    throw new RangeError(`Expected number of arguments ${args.length} to match parameter definition ${defs.length}`);
-  }
+  // if (defs.length !== args.length) {
+  //   throw new RangeError(`Expected number of arguments ${args.length} to match parameter definition ${defs.length}`);
+  // }
 
   defs.forEach((def, i) => {
     let arg = args[i];
