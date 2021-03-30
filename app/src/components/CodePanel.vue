@@ -122,7 +122,6 @@ export default {
     },
     underline(markup) {
       const lines = markup.split(/\r?\n/).map((line, i) => {
-        console.log(this.underlines);
         const hl = this.underlines[i] || '';
         return `<span data-line="${i}" class="line ${hl}">${line}</span>`;
       });

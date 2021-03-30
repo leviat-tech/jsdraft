@@ -114,7 +114,7 @@ export default createStore({
           { viewport: null },
         );
       } catch (e) {
-        console.debug(e);
+        // console.debug(e);
         return [];
       }
     },
