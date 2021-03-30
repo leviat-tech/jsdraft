@@ -7,11 +7,9 @@
         :key="i"
         v-model="overrides[i]"
         :parameter="parameter"
-        @mouseover="hover(i)"
-        @mouseout="unhover(i)"
       />
     </div>
-    <div v-else class="sidebar-list-item no-parameters">
+    <div v-else class="sidebar-list-item no-content">
       There are no defined parameters
     </div>
   </div>
@@ -24,7 +22,7 @@ import ParameterInput from './ParameterInput.vue';
 
 
 export default {
-  name: 'Parameters',
+  name: 'ParameterList',
   components: {
     ParameterInput,
   },
@@ -64,21 +62,6 @@ export default {
   },
   methods: {
     ...mapMutations(['setOverrides']),
-    hover(index) {
-      // this.hoverEntity(index);
-    },
-    unhover(index) {
-      // this.unhoverEntity(index);
-    },
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import '../../assets/styles/variables.scss';
-
-.no-parameters {
-  font-style: italic;
-  color: $color-gray-06;
-}
-</style>
