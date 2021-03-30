@@ -247,4 +247,30 @@ h2 {
   }
 }
 
+.sidebar-section {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  h2 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+.sidebar-list-item {
+  font-size: $text-sm;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+
+  &.hoverable {
+    cursor: pointer;
+
+    &:hover {
+      background-color: $color-gray-02;
+      border-top-color: $color-gray-03;
+      border-bottom-color: $color-gray-03;
+    }
+  }
+
+}
+
 </style>

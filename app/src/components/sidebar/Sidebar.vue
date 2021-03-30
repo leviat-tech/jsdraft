@@ -3,8 +3,9 @@
     <div class="header">
       {{ filename }}
     </div>
-    <div class="panels" />
-
+    <div class="panels">
+      <parameters />
+    </div>
     <file-browser />
   </div>
 </template>
@@ -12,12 +13,14 @@
 <script>
 import { mapState } from 'vuex';
 import FileBrowser from './FileBrowser.vue';
+import Parameters from './Parameters.vue';
 
 
 export default {
   name: 'Sidebar',
   components: {
     FileBrowser,
+    Parameters,
   },
   data() {
     return {
@@ -65,6 +68,7 @@ button {
 
 .panels {
   overflow: hidden;
+  flex: 1 1 0%;
 }
 
 </style>
