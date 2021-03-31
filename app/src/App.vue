@@ -262,10 +262,7 @@ h2 {
   border-bottom: 1px solid transparent;
 
   &.hoverable {
-    cursor: pointer;
-
     &:hover, &.hovered {
-      color: $color-blue-highlight;
       background-color: $color-gray-02;
       border-top-color: $color-gray-03;
       border-bottom-color: $color-gray-03;
