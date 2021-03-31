@@ -6,6 +6,7 @@
         v-for="(entity, i) in entityTypes"
         :key="i"
         class="sidebar-list-item hoverable"
+        :class="{ hovered: isHovered(i) }"
         @mouseover="hover(i)"
         @mouseout="unhover(i)"
       >
@@ -23,7 +24,7 @@ import { mapState, mapGetters, mapMutations } from 'vuex';
 export default {
   name: 'EntitiesList',
   computed: {
-    ...mapState(['currentFile']),
+    ...mapState(['currentFile', 'hovered']),
     ...mapGetters(['entities']),
     entityTypes() {
       return this.entities
@@ -40,6 +41,9 @@ export default {
     },
     unhover(index) {
       this.unhoverEntity(index);
+    },
+    isHovered(index) {
+      return this.hovered[index];
     },
   },
 };

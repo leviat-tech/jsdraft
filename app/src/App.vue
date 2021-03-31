@@ -264,7 +264,7 @@ h2 {
   &.hoverable {
     cursor: pointer;
 
-    &:hover {
+    &:hover, &.hovered {
       color: $color-blue-highlight;
       background-color: $color-gray-02;
       border-top-color: $color-gray-03;
