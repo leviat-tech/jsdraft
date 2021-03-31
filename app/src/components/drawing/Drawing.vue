@@ -10,6 +10,7 @@
       :hover-events="true"
       :click-events="true"
       stroke="transparent"
+      stroke-width="10px"
       fill="transparent"
       @hover="hover"
       @unhover="unhover"
