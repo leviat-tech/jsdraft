@@ -26,7 +26,6 @@
 import { mapState, mapGetters, mapMutations } from 'vuex';
 import EntityDetails from './EntityDetails.vue';
 import entityDetails from '../../utility/entity-details.js';
-import { Sketch } from '../../../../dist/draft.js';
 
 
 export default {
@@ -50,11 +49,6 @@ export default {
           }[name] || name;
         });
     },
-  },
-  mounted() {
-    const circle = new Sketch().circle([0, 0], 20).explode();
-    const entities = [...circle.entities()];
-    console.log('entities', entities[0].constructor.name);
   },
   methods: {
     ...mapMutations(['hoverEntity', 'unhoverEntity', 'setSelected']),
