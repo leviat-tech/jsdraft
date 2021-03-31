@@ -2,6 +2,7 @@ const Vector = require('@crhio/vector').default;
 const { base_entity_type } = require('../../utility/misc/entity-type');
 const svg_string = require('../../utility/misc/svg-string');
 const { rad_to_deg } = require('../../utility/misc/rad-deg');
+const almost_equal = require('../../utility/misc/almost-equal.js');
 
 
 const DEFAULT_ATTRIBUTES = {
@@ -69,9 +70,28 @@ const renderers = {
 
 
   arc: function arc(entity, styles) {
-    const laf = entity.sweep <= Math.PI ? '0' : '1';
+    let laf;
+    let d;
     const sf = entity.counterClockwise ? '1' : '0';
-    const d = `M${entity.start.x},${entity.start.y} A${entity.r},${entity.r},0,${laf},${sf},${entity.end.x},${entity.end.y}`;
+
+    // Circles need to be drawn as two semicircles
+    if (almost_equal(entity.sweep, 2 * Math.PI)) {
+      laf = '0';
+
+      const ps = entity.start;
+      const v = Vector(entity.pc).subtract(ps).normalize().scale(entity.r * 2);
+      const pe = Vector(ps).add(v);
+
+      const ha1 = `M${ps.x},${ps.y} A${entity.r},${entity.r},0,${laf},${sf},${pe.x},${pe.y}`;
+      const ha2 = `A${entity.r},${entity.r},0,${laf},${sf},${ps.x},${ps.y}`;
+
+      d = `${ha1} ${ha2}`;
+
+    // Otherwise draw as a typical arc
+    } else {
+      laf = entity.sweep <= Math.PI ? '0' : '1';
+      d = `M${entity.start.x},${entity.start.y} A${entity.r},${entity.r},0,${laf},${sf},${entity.end.x},${entity.end.y}`;
+    }
 
     const attributes = {
       ...DEFAULT_ATTRIBUTES,
