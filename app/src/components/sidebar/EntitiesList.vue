@@ -26,6 +26,7 @@
 import { mapState, mapGetters, mapMutations } from 'vuex';
 import EntityDetails from './EntityDetails.vue';
 import entityDetails from '../../utility/entity-details.js';
+import { Sketch } from '../../../../dist/draft.js';
 
 
 export default {
@@ -38,11 +39,22 @@ export default {
     ...mapGetters(['entities']),
     entityTypes() {
       return this.entities
-        .map((e) => ({
-          Multiline: 'Polycurve',
-          Polygon: 'Polyface',
-        }[e.constructor.name] || e.constructor.name));
+        .map((e) => {
+          // Handle case where Rollup has mangled constructor name
+          // https://github.com/rollup/rollup/issues/1914
+          const name = e.constructor.name.split('$')[0];
+
+          return {
+            Multiline: 'Polycurve',
+            Polygon: 'Polyface',
+          }[name] || name;
+        });
     },
+  },
+  mounted() {
+    const circle = new Sketch().circle([0, 0], 20).explode();
+    const entities = [...circle.entities()];
+    console.log('entities', entities[0].constructor.name);
   },
   methods: {
     ...mapMutations(['hoverEntity', 'unhoverEntity', 'setSelected']),
