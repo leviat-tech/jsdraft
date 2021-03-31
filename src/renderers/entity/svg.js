@@ -71,7 +71,7 @@ const renderers = {
   arc: function arc(entity, styles) {
     const laf = entity.sweep <= Math.PI ? '0' : '1';
     const sf = entity.counterClockwise ? '1' : '0';
-    const d = `M${entity.start.x},${entity.start.y} A${entity.r},${entity.r},${laf},${sf},${entity.end.x},${entity.end.y}`;
+    const d = `M${entity.start.x},${entity.start.y} A${entity.r},${entity.r},0,${laf},${sf},${entity.end.x},${entity.end.y}`;
 
     const attributes = {
       ...DEFAULT_ATTRIBUTES,
