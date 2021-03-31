@@ -6,20 +6,20 @@ const { rad_to_deg } = require('../../utility/misc/rad-deg');
 
 const DEFAULT_ATTRIBUTES = {
   stroke: 'black',
-  stroke_width: '1.5px',
+  'stroke-width': '1.5px',
   fill: 'white',
-  vector_effect: 'non-scaling-stroke',
+  'vector-effect': 'non-scaling-stroke',
 };
 
 function style_to_svg(style) {
   return {
-    ...(style.stroke?.width && { stroke_width: style.stroke.width }),
+    ...(style.stroke?.width && { 'stroke-width': style.stroke.width }),
     ...(style.stroke?.color && { stroke: style.stroke.color }),
-    ...(style.stroke?.scaled && { vector_effect: 'none' }),
-    ...(style.stroke?.pattern && { stroke_dasharray: style.stroke.pattern }),
-    ...(style.stroke?.opacity && { stroke_opacity: style.stroke.opacity }),
+    ...(style.stroke?.scaled && { 'vector-effect': 'none' }),
+    ...(style.stroke?.pattern && { 'stroke-dasharray': style.stroke.pattern }),
+    ...(style.stroke?.opacity && { 'stroke-opacity': style.stroke.opacity }),
     ...(style.fill?.color && { fill: style.fill.color }),
-    ...(style.fill?.opacity && { fill_opacity: style.fill.opacity }),
+    ...(style.fill?.opacity && { 'fill-opacity': style.fill.opacity }),
     ...(style.opacity && { opacity: style.opacity }),
   };
 }
@@ -47,12 +47,12 @@ const renderers = {
       stroke: 'black',
       ...style_to_svg(styles),
       d: `M${entity.x},${entity.y} L${entity.x},${entity.y + 0.0001}`,
-      stroke_linecap: 'round',
-      stroke_width: '10px',
-      vector_effect: 'non-scaling-stroke',
+      'stroke-linecap': 'round',
+      'stroke-width': '10px',
+      'vector-effect': 'non-scaling-stroke',
     };
 
-    return svg_string('path', attributes);
+    return { tag: 'path', attributes };
   },
 
 
@@ -64,7 +64,7 @@ const renderers = {
       d,
     };
 
-    return svg_string('path', attributes);
+    return { tag: 'path', attributes };
   },
 
 
@@ -80,7 +80,7 @@ const renderers = {
       d,
     };
 
-    return svg_string('path', attributes);
+    return { tag: 'path', attributes };
   },
 
 
@@ -95,7 +95,7 @@ const renderers = {
       d,
     };
 
-    return svg_string('path', attributes);
+    return { tag: 'path', attributes };
   },
 
 
@@ -105,12 +105,12 @@ const renderers = {
 
     const attributes = {
       ...DEFAULT_ATTRIBUTES,
-      fill_rule: 'evenodd',
+      'fill-rule': 'evenodd',
       ...style_to_svg(styles),
       d,
     };
 
-    return svg_string('path', attributes);
+    return { tag: 'path', attributes };
   },
 
 
@@ -155,8 +155,8 @@ const renderers = {
 
     const path_attributes = {
       stroke: color,
-      vector_effect: 'non-scaling-stroke',
-      stroke_width: width,
+      'vector-effect': 'non-scaling-stroke',
+      'stroke-width': width,
       d: path,
     };
 
@@ -167,15 +167,19 @@ const renderers = {
       x: cp.x,
       y: -cp.y,
       rotation,
-      dominant_baseline: svg_v_align(v_align),
-      text_anchor: svg_h_align(h_align),
+      'dominant-baseline': svg_v_align(v_align),
+      'text-anchor': svg_h_align(h_align),
       transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
-      font_size: font_size * s,
+      'font-size': font_size * s,
     };
 
-    const str = svg_string('path', path_attributes) + svg_string('text', text_attributes, ltext);
-
-    return `<g>${str}</g>`;
+    return {
+      tag: 'g',
+      nodes: [
+        { tag: 'path', attributes: path_attributes },
+        { tag: 'text', attributes: text_attributes, contents: ltext },
+      ],
+    };
   },
 
 
@@ -188,27 +192,38 @@ const renderers = {
       color = 'black',
     } = {},
   }) {
-    const text_attributes = {
+    const attributes = {
       fill: color,
       x: entity.p.x,
       y: -entity.p.y,
       rotation: entity.rotation,
-      dominant_baseline: svg_v_align(v_align),
-      text_anchor: svg_h_align(h_align),
+      'dominant-baseline': svg_v_align(v_align),
+      'text-anchor': svg_h_align(h_align),
       transform: `scale(1 -1) rotate(${rad_to_deg(entity.rotation)},${entity.p.x},${-entity.p.y})`,
-      font_size: font_size * s,
+      'font-size': font_size * s,
     };
 
-    return svg_string('text', text_attributes, entity.text);
+    return { tag: 'text', attributes, contents: entity.text };
   },
 };
 
 
-function svg(entity, styles = {}) {
+function svg(entity, { output = 'string', style = {} } = {}) {
   const type = base_entity_type(entity);
 
   const renderer = renderers[type];
-  return renderer(entity, styles);
+  const js = renderer(entity, style);
+
+  if (output === 'js') return js;
+
+  if (js.tag === 'g') {
+    const str = js.nodes
+      .map((o) => svg_string(o.tag, o.attributes, o.contents))
+      .join('');
+    return `<g>${str}</g>`;
+  }
+
+  return svg_string(js.tag, js.attributes, js.contents);
 }
 
 module.exports = svg;

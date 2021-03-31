@@ -63,6 +63,12 @@ describe('A sketch rendered to SVG', () => {
     const polycurve = parsed.children[0].children[5];
     expect(polycurve.properties.d).to.eql('M0,0 L1,1 L2,0 L5,5');
   });
+
+  it('Will render to JS', () => {
+    const js = svg(sketch, { viewport: 'js' });
+    expect(js.length).to.eql(7);
+    expect(js[0].attributes.d).to.eql('M1,2 L1,2.0001');
+  });
 });
 
 describe('Raw entities', () => {
@@ -75,8 +81,8 @@ describe('Raw entities', () => {
     .aligned_dim([0, 0], [10, 5]);
 
   const entities = [...sketch.entities()];
-  const point = parse(render(entities[0], 'svg', { stroke: { color: 'red' } }));
-  const segment = parse(render(entities[1], 'svg', { fill: { color: 'blue' } }));
+  const point = parse(render(entities[0], 'svg', { style: { stroke: { color: 'red' } } }));
+  const segment = parse(render(entities[1], 'svg', { style: { fill: { color: 'blue' } } }));
   const arc = parse(render(entities[2], 'svg'));
   const circle = parse(render(entities[3], 'svg'));
   const rect = parse(render(entities[4], 'svg'));
