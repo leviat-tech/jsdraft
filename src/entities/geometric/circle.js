@@ -72,10 +72,14 @@ class Circle extends Polyface {
     return (this.box.xmax - this.box.xmin) / 2;
   }
 
+  get r() { return this.radius; }
+
   get center() {
     const r = this.radius;
     return new Point(this.box.xmin + r, this.box.ymin + r);
   }
+
+  get pc() { return this.center; }
 }
 
 

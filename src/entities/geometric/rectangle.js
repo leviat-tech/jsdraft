@@ -22,8 +22,12 @@ class Rectangle extends Polyface {
         super();
         this.faces = pface.faces;
         this.edges = pface.edges;
+
+        // TODO: changing this radius property does not change the entity
+        this.r = radius;
       } else {
         super(flatten.box(xmin, ymin, xmax, ymax));
+        this.r = 0;
       }
 
       return undefined;
