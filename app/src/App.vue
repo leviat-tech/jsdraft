@@ -268,6 +268,11 @@ h2 {
       border-bottom-color: $color-gray-03;
     }
   }
+
+  &.selected {
+    border-color: $color-gray-03;
+    background-color: $color-gray-01;
+  }
 }
 
 .no-content {

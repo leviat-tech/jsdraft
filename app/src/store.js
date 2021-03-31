@@ -14,7 +14,7 @@ export default createStore({
       filename: 'Draft',
       path: undefined,
       overrides: [],
-      hovered: {},
+      hovered: null,
       selected: {},
       files: {},
       errors: {},
@@ -73,12 +73,6 @@ export default createStore({
     },
     setHovered(state, value) {
       state.hovered = value;
-    },
-    hoverEntity(state, value) {
-      state.hovered[value] = true;
-    },
-    unhoverEntity(state, value) {
-      delete state.hovered[value];
     },
     setSelected(state, value) {
       state.selected = value;

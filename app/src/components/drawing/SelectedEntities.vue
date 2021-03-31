@@ -37,21 +37,25 @@ export default {
   },
   computed: {
     svg() {
-      return this.entities.map((entity) => render(entity, 'svg', {
-        output: 'js',
-        style: {
-          stroke: {
-            color: this.stroke,
-            width: this.strokeWidth,
+      try {
+        return this.entities.map((entity) => render(entity, 'svg', {
+          output: 'js',
+          style: {
+            stroke: {
+              color: this.stroke,
+              width: this.strokeWidth,
+            },
+            fill: {
+              color: this.fill,
+            },
+            annotation: {
+              color: this.stroke,
+            },
           },
-          fill: {
-            color: this.fill,
-          },
-          annotation: {
-            color: this.stroke,
-          },
-        },
-      }));
+        }));
+      } catch (e) {
+        return [];
+      }
     },
   },
   methods: {

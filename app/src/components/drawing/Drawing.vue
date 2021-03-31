@@ -2,8 +2,8 @@
   <g>
     <g v-html="svg" />
     <selected-entities
-      v-if="hoveredEntities.length > 0"
-      :entities="hoveredEntities"
+      v-if="selectedEntities.length > 0"
+      :entities="selectedEntities"
     />
     <selected-entities
       :entities="entities"
@@ -32,21 +32,20 @@ export default {
   computed: {
     ...mapState(['hovered', 'selected']),
     ...mapGetters(['svg', 'entities']),
-    hoveredEntities() {
-      const hoveredOrSelected = {
-        ...this.hovered,
-        ...this.selected,
-      };
-      return Object.keys(hoveredOrSelected).map((index) => this.entities[index]);
+    selectedEntities() {
+      const selected = Object.keys(this.selected);
+      if (this.hovered !== null) selected.push(this.hovered);
+
+      return selected.map((index) => this.entities[index]);
     },
   },
   methods: {
-    ...mapMutations(['hoverEntity', 'unhoverEntity', 'setSelected']),
+    ...mapMutations(['setHovered', 'setSelected']),
     hover(index) {
-      this.hoverEntity(index);
+      this.setHovered(index);
     },
-    unhover(index) {
-      this.unhoverEntity(index);
+    unhover() {
+      this.setHovered(null);
     },
     select(index) {
       this.setSelected({ [index]: true });
