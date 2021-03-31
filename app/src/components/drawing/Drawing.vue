@@ -8,10 +8,12 @@
     <selected-entities
       :entities="entities"
       :hover-events="true"
+      :click-events="true"
       stroke="transparent"
       fill="transparent"
       @hover="hover"
       @unhover="unhover"
+      @click-entity="select"
     />
   </g>
 </template>
@@ -27,19 +29,29 @@ export default {
     SelectedEntities,
   },
   computed: {
-    ...mapState(['hovered']),
+    ...mapState(['hovered', 'selected']),
     ...mapGetters(['svg', 'entities']),
     hoveredEntities() {
-      return Object.keys(this.hovered).map((index) => this.entities[index]);
+      const hoveredOrSelected = {
+        ...this.hovered,
+        ...this.selected,
+      };
+      return Object.keys(hoveredOrSelected).map((index) => this.entities[index]);
     },
   },
   methods: {
-    ...mapMutations(['hoverEntity', 'unhoverEntity']),
+    ...mapMutations(['hoverEntity', 'unhoverEntity', 'setSelected']),
     hover(index) {
       this.hoverEntity(index);
     },
     unhover(index) {
       this.unhoverEntity(index);
+    },
+    select(index) {
+      this.setSelected({ [index]: true });
+    },
+    isSelected(index) {
+      return this.selected[index];
     },
   },
 };

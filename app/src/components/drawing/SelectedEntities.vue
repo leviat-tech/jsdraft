@@ -7,6 +7,7 @@
       v-bind="entity.attributes"
       @mouseover="hover(i)"
       @mouseout="unhover(i)"
+      @click.stop="click(i)"
     >
       <template v-if="entity.tag === 'g'">
         <component
@@ -32,6 +33,7 @@ export default {
     strokeWidth: { type: String, default: '2px' },
     fill: { type: String, default: 'none' },
     hoverEvents: { type: Boolean, default: false },
+    clickEvents: { type: Boolean, default: false },
   },
   computed: {
     svg() {
@@ -54,14 +56,13 @@ export default {
   },
   methods: {
     hover(index) {
-      if (this.hoverEvents) {
-        this.$emit('hover', index);
-      }
+      if (this.hoverEvents) this.$emit('hover', index);
     },
     unhover(index) {
-      if (this.hoverEvents) {
-        this.$emit('unhover', index);
-      }
+      if (this.hoverEvents) this.$emit('unhover', index);
+    },
+    click(index) {
+      if (this.clickEvents) this.$emit('click-entity', index);
     },
   },
 };

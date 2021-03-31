@@ -3,7 +3,7 @@
     <div class="header">
       {{ filename }}
     </div>
-    <div class="panels">
+    <div class="panels" @click="deselectEntities">
       <parameters-list />
       <entities-list />
     </div>
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import FileBrowser from './FileBrowser.vue';
 import ParametersList from './ParametersList.vue';
 import EntitiesList from './EntitiesList.vue';
@@ -32,6 +32,12 @@ export default {
   },
   computed: {
     ...mapState(['filename']),
+  },
+  methods: {
+    ...mapMutations(['setSelected']),
+    deselectEntities() {
+      this.setSelected({});
+    },
   },
 };
 </script>
