@@ -12,6 +12,7 @@
 <script>
 import QuantityInput from '../inputs/QuantityInput.vue';
 import TextInput from '../inputs/TextInput.vue';
+import BooleanInput from '../inputs/BooleanInput.vue';
 
 
 export default {
@@ -37,6 +38,7 @@ export default {
       return {
         string: TextInput,
         number: QuantityInput,
+        boolean: BooleanInput,
       }[this.type];
     },
   },
