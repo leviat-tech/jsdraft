@@ -262,14 +262,22 @@ h2 {
   border-bottom: 1px solid transparent;
 
   &.hoverable {
-    cursor: pointer;
-
-    &:hover {
+    &:hover, &.hovered {
       background-color: $color-gray-02;
       border-top-color: $color-gray-03;
       border-bottom-color: $color-gray-03;
     }
   }
+
+  &.selected {
+    border-color: $color-gray-03;
+    background-color: $color-gray-01;
+  }
+}
+
+.no-content {
+  font-style: italic;
+  color: $color-gray-06;
 }
 
 .input-container {

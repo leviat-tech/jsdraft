@@ -1,6 +1,6 @@
 const svg_renderer = require('../entity/svg');
 
-
+// Return an SVG string
 function recurse(sketch, style) {
   let svg = '';
 
@@ -9,7 +9,7 @@ function recurse(sketch, style) {
 
   // draw entities
   if (sketch.node.entity) {
-    svg += `\n${svg_renderer(sketch.node.entity, s)}`;
+    svg += `\n${svg_renderer(sketch.node.entity, { style: s })}`;
   }
 
   // draw children
@@ -20,12 +20,32 @@ function recurse(sketch, style) {
   return svg;
 }
 
-function render(sketch, options) {
-  options = options || { viewport: 'svg' };
-  if (options.viewport === null) {
-    return recurse(sketch);
+// Return an array of JS objects respresenting SVG nodes
+function recurse_js(sketch, style) {
+  let svg = [];
+  const s = { ...sketch.node.style, ...style };
+
+  if (sketch.node.entity) {
+    svg = [...svg, svg_renderer(sketch.node.entity, { output: 'js', style: s })];
   }
-  return `<${options.viewport}>${recurse(sketch)}</svg>`;
+
+  for (const child of sketch.node.children) {
+    svg = [...svg, ...recurse_js(child, s)];
+  }
+
+  return svg;
+}
+
+function render(sketch, { viewport = 'svg' } = {}) {
+  if (viewport === null) {
+    return recurse(sketch, null);
+  }
+
+  if (viewport === 'js') {
+    return recurse_js(sketch, null);
+  }
+
+  return `<${viewport}>${recurse(sketch)}</${viewport}>`;
 }
 
 

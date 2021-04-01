@@ -3,24 +3,27 @@
     <div class="header">
       {{ filename }}
     </div>
-    <div class="panels">
-      <parameters />
+    <div class="panels" @click="deselectEntities">
+      <parameters-list />
+      <entities-list />
     </div>
     <file-browser />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import FileBrowser from './FileBrowser.vue';
-import Parameters from './Parameters.vue';
+import ParametersList from './ParametersList.vue';
+import EntitiesList from './EntitiesList.vue';
 
 
 export default {
   name: 'Sidebar',
   components: {
     FileBrowser,
-    Parameters,
+    ParametersList,
+    EntitiesList,
   },
   data() {
     return {
@@ -29,6 +32,12 @@ export default {
   },
   computed: {
     ...mapState(['filename']),
+  },
+  methods: {
+    ...mapMutations(['setSelected']),
+    deselectEntities() {
+      this.setSelected({});
+    },
   },
 };
 </script>
@@ -67,7 +76,7 @@ button {
 }
 
 .panels {
-  overflow: hidden;
+  overflow-y: auto;
   flex: 1 1 0%;
 }
 

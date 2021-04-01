@@ -47,6 +47,7 @@
       class="my-editor"
       :highlight="highlighter"
       :line-numbers="true"
+      @click="selectEditor"
       @keydown="handleKeydown"
       @input="validate"
     />
@@ -224,6 +225,15 @@ export default {
         code: this.localCode,
       });
     }, 500),
+    selectEditor(e) {
+      if (e.target.type !== 'textarea') {
+        const textarea = this.$refs.prism.$refs.textarea;
+        textarea.focus();
+        const end = textarea.textLength;
+        textarea.selectionStart = end;
+        textarea.selectionEnd = end;
+      }
+    },
   },
 };
 </script>

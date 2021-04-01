@@ -13,6 +13,7 @@
       @pointerdown="handleMousedown"
       @pointermove="handleMousemove"
       @pointerup="handleMouseup"
+      @click="deselectEntities"
     >
       <g
         ref="contents"
@@ -100,7 +101,7 @@ export default {
 
 
   methods: {
-    ...mapMutations(['setZoomScale', 'setCurrentTool', 'setViewBox']),
+    ...mapMutations(['setZoomScale', 'setCurrentTool', 'setViewBox', 'setSelected']),
 
     isEmpty,
 
@@ -212,6 +213,10 @@ export default {
 
       this.setZoomScale(zoomScale);
       this.setViewBox(viewBox);
+    },
+
+    deselectEntities() {
+      this.setSelected({});
     },
   },
 };

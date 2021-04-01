@@ -10,6 +10,7 @@ const sketch_renderers = {
   svg,
   yaml,
   json,
+  entities: function e(sketch) { return [...sketch.entities()]; },
 };
 
 const entity_renderers = {

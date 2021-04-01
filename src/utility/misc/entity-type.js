@@ -14,19 +14,10 @@ function base_entity_type(entity) {
 function entity_type(entity) {
   const constructor_name = entity.constructor.name;
 
-  if ([
-    'Arc',
-    'Circle',
-    'Point',
-    'Polycurve',
-    'Polyface',
-    'Rectangle',
-    'Segment',
-    'AlignedDim',
-    'Text',
-  ].includes(constructor_name)) return snakeCase(constructor_name);
-
-  return base_entity_type(entity);
+  return {
+    Multiline: 'polycurve',
+    Polygon: 'polyface',
+  }[constructor_name] || snakeCase(entity.constructor.name);
 }
 
 module.exports = { base_entity_type, entity_type };
