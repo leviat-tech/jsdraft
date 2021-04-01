@@ -3,10 +3,10 @@
     <h2>Parameters</h2>
     <div v-if="parameters">
       <parameter-input
-        v-for="(parameter, i) in parameters"
-        :key="i"
+        v-for="(p, i) in parameters"
+        :key="p.id"
         v-model="overrides[i]"
-        :parameter="parameter"
+        :parameter="p.parameter"
       />
     </div>
     <div v-else class="sidebar-list-item no-content">
@@ -17,6 +17,7 @@
 
 <script>
 import { mapState, mapGetters, mapMutations } from 'vuex';
+import { nanoid } from 'nanoid';
 import cloneDeep from 'lodash/cloneDeep';
 import ParameterInput from './ParameterInput.vue';
 
@@ -37,7 +38,10 @@ export default {
     parameters() {
       try {
         const file = this.draft.files[this.currentFile];
-        return file && file.parameters;
+        return file && file.parameters.map((p) => ({
+          parameter: p,
+          id: nanoid(5), // force refresh of parameter input
+        }));
       } catch (e) {
         return null;
       }
@@ -50,7 +54,7 @@ export default {
         if (!nv) {
           this.overrides = [];
         } else {
-          this.overrides = nv.map((p) => cloneDeep(p.default));
+          this.overrides = nv.map((p) => cloneDeep(p.parameter.default));
         }
       },
     },
