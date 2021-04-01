@@ -56,6 +56,10 @@ describe('evaluate', () => {
     expect(evaluate('new Array(1, 2, )')).to.be.eql([1, 2]);
   });
 
+  it('will allow an explicit return statement', () => {
+    expect(evaluate('return new Array(1, 2, )')).to.be.eql([1, 2]);
+  });
+
   it('can not evaluate statements', () => {
     expect(() => evaluate('console.log(1);')).to.throw();
   });
