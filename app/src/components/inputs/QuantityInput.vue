@@ -30,17 +30,17 @@ export default {
     };
   },
   computed: {
-    minimum() {
-      return this.parameter.minimum;
+    min() {
+      return this.parameter.min;
     },
-    maximum() {
-      return this.parameter.maximum;
+    max() {
+      return this.parameter.max;
     },
     coercedValue() {
       if (parseFloat(this.value) !== parseFloat(this.modelValue)) {
         const value = this.value * 1;
-        if (this.maximum != null && this.maximum < value) return this.maximum;
-        if (this.minimum != null && this.minimum > value) return this.minimum;
+        if (this.max != null && this.max < value) return this.max;
+        if (this.min != null && this.min > value) return this.min;
 
         return value;
       }
