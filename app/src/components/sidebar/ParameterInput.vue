@@ -13,6 +13,7 @@
 import QuantityInput from '../inputs/QuantityInput.vue';
 import TextInput from '../inputs/TextInput.vue';
 import BooleanInput from '../inputs/BooleanInput.vue';
+import ArrayInput from '../inputs/ArrayInput.vue';
 
 
 export default {
@@ -39,6 +40,8 @@ export default {
         string: TextInput,
         number: QuantityInput,
         boolean: BooleanInput,
+        array: ArrayInput,
+        undefined: QuantityInput,
       }[this.type];
     },
   },
@@ -57,7 +60,7 @@ export default {
 
 .param-container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   padding: 0.25rem 1rem 0.25rem 1rem;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
@@ -67,6 +70,8 @@ export default {
 .param-label {
   flex: none;
   width: 35%;
+  line-height: 1.75rem;
+  min-height: 1.75rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
