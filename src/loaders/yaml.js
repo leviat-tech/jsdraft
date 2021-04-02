@@ -106,11 +106,11 @@ function reference(definition, sketch, context) {
     // check if reference is a sketch
     const match = id.match(/(.+):sketch/);
     if (match) {
-      refs[match[1]] = chain(sketch.new, exp, { ...DEFAULT_CONTEXT, ...context, ...refs });
+      refs[match[1]] = chain(sketch.new, exp, { ...context, ...refs });
 
       // otherwise evaluate as typical argument
     } else {
-      refs[id] = evaluate_argument(exp, { ...DEFAULT_CONTEXT, ...context, ...refs });
+      refs[id] = evaluate_argument(exp, { ...context, ...refs });
     }
   });
 
@@ -122,7 +122,7 @@ function parse(draft, identifier) {
   draft = yaml.load(draft);
   const func = function feature(sketch, ...args) {
     // define context
-    let context = {};
+    let context = { ...DEFAULT_CONTEXT };
 
     // load parameters
     context = { ...context, ...parameters(draft.parameters ?? [], args) };
