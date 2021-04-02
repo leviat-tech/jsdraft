@@ -114,7 +114,7 @@ export default {
 
     handleMousedown(e) {
       this.setMousePt(e);
-      this.$refs.svg.setPointerCapture(e.pointerId);
+      (e.target || this.$refs.svg).setPointerCapture(e.pointerId);
       if (this.currentTool === 'draw' && e.which === 1) {
         this.drawPt();
       }
