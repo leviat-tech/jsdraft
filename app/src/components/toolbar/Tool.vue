@@ -1,7 +1,7 @@
 <template>
   <div
     class="tool"
-    :class="{ active: isActive }"
+    :class="{ active: isActive, dark }"
   >
     <img
       v-if="icon"
@@ -21,6 +21,7 @@ export default {
     icon: { type: String, default: null },
     text: { type: String, default: null },
     selected: { type: String, default: null },
+    dark: { type: Boolean, default: false },
   },
   computed: {
     isActive() {
@@ -59,6 +60,18 @@ export default {
   .svg {
     height: 1.25rem;
     flex-grow: 1;
+  }
+
+  &.dark {
+    &:hover {
+      background-color: $color-gray-08;
+      border-color: $color-gray-07;
+    }
+
+    &.active, &:active {
+      background-color: $color-gray-08;
+      border-color: $color-gray-07;
+    }
   }
 }
 
