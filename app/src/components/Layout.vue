@@ -114,7 +114,7 @@ export default {
 
 .drawing-container {
   flex: 1 1 0%;
-  min-width: 0;
+  min-width: 18rem;
 }
 
 .svg-button {
