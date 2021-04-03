@@ -18,7 +18,7 @@ function format(o) {
     return u(obj);
   }
 
-  if (!Number.isNaN(o)) return parseFloat(o.toFixed(3), 10);
+  if (typeof o === 'number' && !Number.isNaN(o)) return parseFloat(o.toFixed(3), 10);
 
   return o;
 }
