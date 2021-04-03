@@ -73,9 +73,11 @@
     <d-button
       v-if="!showCodePanel && filesExist"
       name="Code"
-      icon="code"
+      class="code-button"
       @click="openCodePanel"
-    />
+    >
+      <code-icon class="lg" />
+    </d-button>
     <input
       v-if="!electron"
       id="fileReader"
@@ -97,6 +99,7 @@ import Tool from './Tool.vue';
 import DButton from '../DButton.vue';
 import loadFileInBrowser from '../../utility/load-file-in-browser.js';
 import saveFileInBrowser from '../../utility/save-file-in-browser.js';
+import CodeIcon from '../../assets/icons/code.svg';
 
 
 const electron = isElectron();
@@ -107,6 +110,7 @@ export default {
     ToolGroup,
     Tool,
     DButton,
+    CodeIcon,
   },
   data() {
     return {

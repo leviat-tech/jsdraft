@@ -12,10 +12,12 @@
     <div class="header-container">
       <div class="header">
         <div class="code-icon">
-          <img
+          <d-button
+            name="Code Symbol"
             class="code-symbol"
-            :src="'icons/code.svg'"
           >
+            <code-icon class="lg" />
+          </d-button>
           <div class="sketch-name">
             {{ currentFile }}
           </div>
@@ -36,9 +38,10 @@
         </div>
         <d-button
           name="Close Editor"
-          icon="chevron-right"
           @click="closeCodePanel"
-        />
+        >
+          <chevron-right-icon class="lg" />
+        </d-button>
       </div>
     </div>
     <div class="codemirror-container">
@@ -61,6 +64,8 @@ import DButton from './DButton.vue';
 import WarningModal from './WarningModal.vue';
 import ErrorPanel from './ErrorPanel.vue';
 import { yaml, js } from '../utility/default-blank-sketches.js';
+import ChevronRightIcon from '../assets/icons/chevron-right.svg';
+import CodeIcon from '../assets/icons/code.svg';
 
 
 export default {
@@ -70,6 +75,8 @@ export default {
     Tool,
     DButton,
     ErrorPanel,
+    ChevronRightIcon,
+    CodeIcon,
   },
   data() {
     return {
@@ -120,9 +127,11 @@ export default {
         });
 
         Object.keys(nv).forEach((line) => {
-          this.highlights.push(
-            this.editor.addLineClass(parseInt(line, 10), 'wrap', 'line-error'),
-          );
+          if (line !== 'undefined') {
+            this.highlights.push(
+              this.editor.addLineClass(parseInt(line, 10), 'wrap', 'line-error'),
+            );
+          }
         });
       },
     },
@@ -150,7 +159,6 @@ export default {
         cm.execCommand('indentLess');
       },
       'Cmd-/': function comment(cm) {
-        console.log('hi');
         cm.execCommand('toggleComment');
       },
     });
@@ -338,9 +346,14 @@ export default {
 
 .CodeMirror {
   height: 100%;
-  font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
+  font-family: $font-monospace;
   font-size: 0.875rem;
   line-height: 1.25rem;
+}
+
+.CodeMirror-gutters {
+  background-color: $color-white;
+  border-right: 1px solid transparent;
 }
 
 .line-error {
