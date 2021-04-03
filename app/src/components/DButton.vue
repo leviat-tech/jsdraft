@@ -5,7 +5,6 @@
     <slot />
     <img
       v-if="icon"
-      class="svg"
       :class="size"
       :src="`icons/${icon}.svg`"
     >
@@ -38,27 +37,31 @@ export default {
   display: flex;
   align-items: center;
   cursor: pointer;
-
-  .svg {
-    height: 1.25rem;
-    flex-grow: 1;
-
-    &.xs {
-      height: $text-xs;
-    }
-
-    &.sm {
-      height: $text-sm;
-    }
-
-    &.md {
-      height: $text-base;
-    }
-
-    &.lg {
-      height: $text-lg;
-    }
-  }
 }
 
+</style>
+
+<style lang="scss">
+@import '../assets/styles/variables.scss';
+
+.svg-inline {
+  height: 1.25rem;
+  flex-grow: 1;
+
+  &.xs {
+    height: $text-xs;
+  }
+
+  &.sm {
+    height: $text-sm;
+  }
+
+  &.md {
+    height: $text-base;
+  }
+
+  &.lg {
+    height: $text-lg;
+  }
+}
 </style>
