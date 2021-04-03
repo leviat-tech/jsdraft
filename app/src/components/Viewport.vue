@@ -32,6 +32,7 @@
 import isEmpty from 'lodash/isEmpty';
 import Mousetrap from 'mousetrap';
 import { mapState, mapMutations } from 'vuex';
+import { nextTick } from 'vue';
 import Grid from './drawing/Grid.vue';
 import Drawing from './drawing/Drawing.vue';
 
@@ -80,18 +81,18 @@ export default {
   },
 
 
-  mounted() {
-    this.$nextTick(() => {
-      // Disable right-click context menu
-      this.$refs.svg.addEventListener('contextmenu', (e) => e.preventDefault());
-      this.hoverPt = this.$refs.svg.createSVGPoint();
+  async mounted() {
+    await nextTick();
 
-      document.addEventListener('pointerleave', this.documentMouseleave);
+    // Disable right-click context menu
+    this.$refs.svg.addEventListener('contextmenu', (e) => e.preventDefault());
+    this.hoverPt = this.$refs.svg.createSVGPoint();
 
-      // Add event handlers for constraining vertical/horizontal
-      Mousetrap.bind('shift', () => { this.constrained = true; }, 'keypress');
-      Mousetrap.bind('shift', () => { this.constrained = false; }, 'keyup');
-    });
+    document.addEventListener('pointerleave', this.documentMouseleave);
+
+    // Add event handlers for constraining vertical/horizontal
+    Mousetrap.bind('shift', () => { this.constrained = true; }, 'keypress');
+    Mousetrap.bind('shift', () => { this.constrained = false; }, 'keyup');
   },
 
 

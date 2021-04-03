@@ -41,31 +41,21 @@
         />
       </div>
     </div>
-    <prism-editor
-      ref="prism"
-      v-model="localCode"
-      class="my-editor"
-      :highlight="highlighter"
-      :line-numbers="true"
-      @click="selectEditor"
-      @keydown="handleKeydown"
-      @input="validate"
-    />
+    <div class="codemirror-container">
+      <div ref="codemirror" class="codemirror-div" />
+    </div>
     <error-panel :errors="errors" />
   </div>
 </template>
 
 <script>
 import { mapMutations, mapState, mapGetters } from 'vuex';
-import { PrismEditor } from 'vue-prism-editor';
 import debounce from 'lodash/debounce';
-import 'vue-prism-editor/dist/prismeditor.min.css';
-import { highlight, languages } from 'prismjs/components/prism-core';
-import { indentText, dedentText, comment } from '../utility/text-edits.js';
-import 'prismjs/components/prism-yaml';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/themes/prism-tomorrow.css';
+import CodeMirror from 'codemirror/lib/codemirror.js';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/javascript/javascript.js';
+import 'codemirror/mode/yaml/yaml.js';
+import 'codemirror/addon/comment/comment.js';
 import Tool from './toolbar/Tool.vue';
 import DButton from './DButton.vue';
 import WarningModal from './WarningModal.vue';
@@ -79,16 +69,16 @@ export default {
     WarningModal,
     Tool,
     DButton,
-    PrismEditor,
     ErrorPanel,
   },
   data() {
     return {
       localCode: '',
-      language: 'js',
-      newLanguage: null,
+      language: 'yaml',
+      newLanguage: '',
       path: null,
       showLanguageModal: false,
+      highlights: [],
     };
   },
   computed: {
@@ -111,25 +101,69 @@ export default {
     currentFile: {
       immediate: true,
       handler() {
-        this.localCode = this.draft.files[this.currentFile].contents;
-        this.language = this.draft.files[this.currentFile].extension;
+        const code = this.draft.files[this.currentFile].contents;
+        const language = this.draft.files[this.currentFile].extension;
+
+        if (this.editor) {
+          this.updateEditor(code, language);
+        } else {
+          this.localCode = code;
+          this.language = language;
+        }
+      },
+    },
+    underlines: {
+      deep: true,
+      handler(nv) {
+        this.highlights.forEach((highlight) => {
+          this.editor.removeLineClass(highlight, 'wrap', 'line-error');
+        });
+
+        Object.keys(nv).forEach((line) => {
+          this.highlights.push(
+            this.editor.addLineClass(parseInt(line, 10), 'wrap', 'line-error'),
+          );
+        });
       },
     },
   },
+  mounted() {
+    const mode = { js: 'javascript', yaml: 'yaml' }[this.language];
+
+    this.editor = new CodeMirror(this.$refs.codemirror, {
+      lineNumbers: true,
+      tabSize: 2,
+      value: this.localCode,
+      mode,
+      viewportMargin: Infinity,
+    });
+
+    this.editor.setOption('extraKeys', {
+      Tab(cm) {
+        const spaces = Array(cm.getOption('indentUnit') + 1).join(' ');
+        cm.replaceSelection(spaces);
+      },
+      'Cmd-]': function indent(cm) {
+        cm.execCommand('indentMore');
+      },
+      'Cmd-[': function dedent(cm) {
+        cm.execCommand('indentLess');
+      },
+      'Cmd-/': function comment(cm) {
+        console.log('hi');
+        cm.execCommand('toggleComment');
+      },
+    });
+
+    this.editor.on('changes', () => {
+      this.localCode = this.editor.getValue();
+      this.validate();
+    });
+  },
   methods: {
-    ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'updateFile']),
+    ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'updateFile', 'removeFile']),
     closeCodePanel() {
       this.setShowCodePanel(false);
-    },
-    underline(markup) {
-      const lines = markup.split(/\r?\n/).map((line, i) => {
-        const hl = this.underlines[i] || '';
-        return `<span data-line="${i}" class="line ${hl}">${line}</span>`;
-      });
-      return lines.join('\n');
-    },
-    highlighter(code) {
-      return this.underline(highlight(code, languages[this.language]));
     },
     confirmSelectLanguage(language) {
       if (language === this.language) return;
@@ -148,76 +182,23 @@ export default {
       this.newLanguage = language;
       this.showLanguageModal = true;
     },
+    updateEditor(code, language) {
+      this.language = language;
+      const mode = { js: 'javascript', yaml: 'yaml' }[this.language];
+      this.editor.setOption('mode', mode);
+      this.editor.setValue(code);
+    },
     selectLanguage(language) {
       if (language === this.language) return;
       const code = {
         yaml: yaml(this.currentFile),
         js: js(this.currentFile),
       }[language];
-      this.localCode = code;
+
       this.updateFile({ name: `${this.currentFile}.sketch.${language}`, code });
-      this.language = language;
+      this.removeFile(`${this.currentFile}.sketch.${language}`);
+      this.updateEditor(code, language);
       this.showLanguageModal = false;
-    },
-    handleKeydown(e) {
-      if (e.metaKey) {
-        const metaKeys = {
-          '[': 'dedentSelection',
-          ']': 'indentSelection',
-          '/': 'comment',
-        };
-
-        if (metaKeys[e.key]) {
-          e.preventDefault();
-          e.stopPropagation();
-          this[metaKeys[e.key]](e);
-        }
-      }
-    },
-    indentSelection(e) {
-      const ss = e.target.selectionStart;
-      const se = e.target.selectionEnd;
-
-      const {
-        indented,
-        selectionStart,
-        selectionEnd,
-      } = indentText(this.localCode, ss, se);
-
-      this.localCode = indented;
-      this.$nextTick(() => {
-        e.target.setSelectionRange(selectionStart, selectionEnd);
-      });
-    },
-    dedentSelection(e) {
-      const ss = e.target.selectionStart;
-      const se = e.target.selectionEnd;
-
-      const {
-        dedented,
-        selectionStart,
-        selectionEnd,
-      } = dedentText(this.localCode, ss, se);
-
-      this.localCode = dedented;
-      this.$nextTick(() => {
-        e.target.setSelectionRange(selectionStart, selectionEnd);
-      });
-    },
-    comment(e) {
-      const ss = e.target.selectionStart;
-      const se = e.target.selectionEnd;
-
-      const {
-        commented,
-        selectionStart,
-        selectionEnd,
-      } = comment(this.localCode, ss, se);
-
-      this.localCode = commented;
-      this.$nextTick(() => {
-        e.target.setSelectionRange(selectionStart, selectionEnd);
-      });
     },
     validate: debounce(function validate() {
       this.updateFile({
@@ -330,16 +311,41 @@ export default {
   padding: 5px;
 }
 
-::v-deep(.line.error) {
-  display: block;
-  height: 16px;
-  background: lighten($color-red, 25);
-  border-right: 2px solid $color-red;
+.codemirror-container {
+  flex: 1 1 auto;
+  margin-top: 0;
+  height: 100%;
+  position: relative;
 }
+
+.codemirror-div {
+  height: 100%;
+}
+
+.CodeMirror {
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  height:100%;
+}
+
 </style>
 
 <style lang="scss">
-textarea.prism-editor__textarea {
-  outline: none;
+@import '../assets/styles/variables.scss';
+
+.CodeMirror {
+  height: 100%;
+  font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
+
+.line-error {
+  background: lighten($color-red, 25);
+  border-right: 2px solid $color-red;
+}
+
 </style>
