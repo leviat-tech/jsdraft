@@ -31,7 +31,7 @@ $text-4xl: 2.25rem;
 $text-5xl: 3rem;
 $text-6xl: 4rem;
 
-$font-monospace: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
+$font-monospace: Menlo, Consolas, Monaco, "Liberation Mono", "Lucida Console", monospace; 
 
 @mixin shadow {
   box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
