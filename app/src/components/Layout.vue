@@ -74,6 +74,7 @@ export default {
 }
 
 .horizontal-container {
+  position: relative;
   display: flex;
   flex-direction: row;
   flex-grow: 1;
@@ -126,7 +127,10 @@ export default {
 }
 
 .code-panel {
+  position: absolute;
+  right: 16rem;
   width: 40rem;
   flex: none;
+  height: 100%;
 }
 </style>
