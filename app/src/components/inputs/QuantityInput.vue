@@ -21,7 +21,7 @@ export default {
   name: 'QuantityInput',
   props: {
     parameter: { type: Object, required: true },
-    modelValue: { type: Number, required: true },
+    modelValue: { type: Number, default: 0 },
   },
   data() {
     return {
