@@ -5,6 +5,7 @@
       :is="dynamicInput"
       v-model="value"
       :parameter="parameter"
+      :type="type"
     />
   </div>
 </template>
@@ -14,13 +15,14 @@ import QuantityInput from '../inputs/QuantityInput.vue';
 import TextInput from '../inputs/TextInput.vue';
 import BooleanInput from '../inputs/BooleanInput.vue';
 import ArrayInput from '../inputs/ArrayInput.vue';
+import GenericParameter from '../inputs/GenericParameter.vue';
 
 
 export default {
   name: 'ParameterInput',
   props: {
     parameter: { type: Object, required: true },
-    modelValue: { type: [Number, String, Boolean, Array, Object], required: true },
+    modelValue: { type: [Number, String, Boolean, Array, Object], default: undefined },
   },
   data() {
     return {
@@ -42,7 +44,7 @@ export default {
         boolean: BooleanInput,
         array: ArrayInput,
         undefined: QuantityInput,
-      }[this.type];
+      }[this.type] || GenericParameter;
     },
   },
   watch: {
