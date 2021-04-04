@@ -14,6 +14,7 @@ Possible shapes for yaml parameters:
   'thing',
   { thing: 1 },
   { thing: { default: 1 } },
+  { "thing:point": [1, 2] },
 ];
 */
 
@@ -29,7 +30,14 @@ function normalize_yaml_param(param) {
     };
   }
 
-  def.name = name;
+  // check whether name includes cast property
+  const match = name.match(/(.+):(.+)/);
+  if (match) {
+    def.name = match[1];
+    def.cast = match[2];
+  } else {
+    def.name = name;
+  }
 
   return def;
 }

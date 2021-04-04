@@ -3,6 +3,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 const evaluate = require('../utility/misc/evaluate');
 const { normalize_yaml_param } = require('./parameters.js');
+const validate = require('../utility/validation/validate.js');
 
 
 const DEFAULT_CONTEXT = {
@@ -81,14 +82,17 @@ function chain(sketch, exp, context) {
 function parameters(definition, args) {
   const params = {};
 
-  definition.forEach((param, i) => {
-    const def = normalize_yaml_param(param);
+  const normalized = definition
+    .map((param) => normalize_yaml_param(param));
 
+  const validated = validate(normalized, args);
+
+  normalized.forEach((param, i) => {
     // get parameter value
-    const val = args[i] ?? def.default;
+    const val = validated[i];
 
     // store parameter
-    params[def.name] = val;
+    params[param.name] = val;
   });
 
   return params;
