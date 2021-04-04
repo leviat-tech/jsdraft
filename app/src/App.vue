@@ -295,6 +295,15 @@ h2 {
   font-size: $text-xs;
   min-height: 1.75rem;
 
+  .label {
+    height: 1.5rem;
+    line-height: 1.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border-right: 1px solid $color-gray-03;
+    color: $color-gray-08;
+  }
+
   &:focus, &.focused {
     color: $color-black;
     border: $border-sm solid $color-blue;
@@ -306,7 +315,6 @@ h2 {
     min-width: 0;
     padding-left: 0.25rem;
     padding-right: 0.25rem;
-    height: 2rem;
     font-size: $text-base;
     appearance: none;
     background-color: transparent;

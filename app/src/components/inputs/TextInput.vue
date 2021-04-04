@@ -3,6 +3,9 @@
     class="input-container"
     :class="{ focused }"
   >
+    <div v-if="label" class="label">
+      {{ label }}
+    </div>
     <input
       v-model="value"
       class="input"
@@ -20,6 +23,7 @@ export default {
   name: 'TextInput',
   props: {
     parameter: { type: Object, required: true },
+    label: { type: String, default: null },
     modelValue: { type: String, required: true },
   },
   data() {

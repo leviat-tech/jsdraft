@@ -3,6 +3,9 @@
     class="input-container"
     :class="{ focused }"
   >
+    <div v-if="label" class="label">
+      {{ label }}
+    </div>
     <input
       v-model="value"
       class="input"
@@ -21,6 +24,7 @@ export default {
   name: 'QuantityInput',
   props: {
     parameter: { type: Object, required: true },
+    label: { type: String, default: null },
     modelValue: { type: Number, default: 0 },
   },
   data() {
