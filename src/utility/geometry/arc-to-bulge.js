@@ -5,8 +5,9 @@ function pos_angle(angle) {
 }
 
 
-function arc_to_bulge(start_angle, end_angle, ccw) {
-  const a = pos_angle(end_angle - start_angle);
+function arc_to_bulge(start_angle, end_angle, ccw, divide) {
+  let a = pos_angle(end_angle - start_angle);
+  if (divide) a /= divide;
   const bulge = Math.abs(Math.tan(a / 4));
   const sign = ccw ? 1 : -1;
 
