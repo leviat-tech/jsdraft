@@ -15,6 +15,7 @@ import QuantityInput from '../inputs/QuantityInput.vue';
 import TextInput from '../inputs/TextInput.vue';
 import BooleanInput from '../inputs/BooleanInput.vue';
 import ArrayInput from '../inputs/ArrayInput.vue';
+import PointInput from '../inputs/PointInput.vue';
 import GenericParameter from '../inputs/GenericParameter.vue';
 
 
@@ -43,6 +44,7 @@ export default {
         number: QuantityInput,
         boolean: BooleanInput,
         array: ArrayInput,
+        point: PointInput,
         undefined: QuantityInput,
       }[this.type] || GenericParameter;
     },
