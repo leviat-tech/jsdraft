@@ -1,52 +1,28 @@
 <template>
   <div class="container">
-    <warning-modal
-      v-if="showLanguageModal"
-      :title="`Warning: Switch from ${language.toUpperCase()}`"
-      :text="languageModalText"
-      cancel="Cancel"
-      :proceed="`Switch to ${newLanguage.toUpperCase()}`"
-      @cancel="showLanguageModal = false"
-      @proceed="selectLanguage(newLanguage)"
-    />
+    <!-- tool bar -->
     <div class="header-container">
       <div class="header">
         <div class="code-icon">
-          <d-button
-            name="Code Symbol"
-            class="code-symbol"
-          >
+          <d-button name="Code Symbol" class="code-symbol" @click="closeCodePanel">
             <code-icon class="lg" />
           </d-button>
           <div class="sketch-name">
             {{ currentFile }}
           </div>
-          <tool
-            name="JS"
-            tool-id="js"
-            text="JS"
-            :selected="language"
-            @click="confirmSelectLanguage('js')"
-          />
-          <tool
-            name="YAML"
-            tool-id="yaml"
-            text="YAML"
-            :selected="language"
-            @click="confirmSelectLanguage('yaml')"
-          />
         </div>
-        <d-button
-          name="Close Editor"
-          @click="closeCodePanel"
-        >
+        <d-button name="Close Editor" @click="closeCodePanel">
           <chevron-right-icon class="lg" />
         </d-button>
       </div>
     </div>
+
+    <!-- code -->
     <div class="codemirror-container">
       <div ref="codemirror" class="codemirror-div" />
     </div>
+
+    <!-- error panel -->
     <error-panel :errors="errors" />
   </div>
 </template>
@@ -59,11 +35,8 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript.js';
 import 'codemirror/mode/yaml/yaml.js';
 import 'codemirror/addon/comment/comment.js';
-import Tool from './toolbar/Tool.vue';
 import DButton from './DButton.vue';
-import WarningModal from './WarningModal.vue';
 import ErrorPanel from './ErrorPanel.vue';
-import { yaml, js } from '../utility/default-blank-sketches.js';
 import ChevronRightIcon from '../assets/icons/chevron-right.svg';
 import CodeIcon from '../assets/icons/code.svg';
 
@@ -71,8 +44,6 @@ import CodeIcon from '../assets/icons/code.svg';
 export default {
   name: 'CodePanel',
   components: {
-    WarningModal,
-    Tool,
     DButton,
     ErrorPanel,
     ChevronRightIcon,
@@ -84,7 +55,6 @@ export default {
       language: 'yaml',
       newLanguage: '',
       path: null,
-      showLanguageModal: false,
       highlights: [],
     };
   },
@@ -175,41 +145,11 @@ export default {
     closeCodePanel() {
       this.setShowCodePanel(false);
     },
-    confirmSelectLanguage(language) {
-      if (language === this.language) return;
-
-      const code = {
-        yaml: yaml(this.currentFileName),
-        js: js(this.currentFileName),
-      }[this.language];
-
-      // If no changes from default, no need to warn
-      if (this.localCode === code) {
-        this.selectLanguage(language);
-        return;
-      }
-
-      this.newLanguage = language;
-      this.showLanguageModal = true;
-    },
     updateEditor(code, language) {
       this.language = language;
       const mode = { js: 'javascript', yaml: 'yaml' }[this.language];
       this.editor.setOption('mode', mode);
       this.editor.setValue(code);
-    },
-    selectLanguage(language) {
-      if (language === this.language) return;
-
-      const code = {
-        yaml: yaml(this.currentFileName),
-        js: js(this.currentFileName),
-      }[language];
-
-      this.updateFile({ name: `${this.currentFileName}.sketch.${language}`, code });
-      this.removeFile(`${this.currentFileName}.sketch.${language}`);
-      this.updateEditor(code, language);
-      this.showLanguageModal = false;
     },
     validate: debounce(function validate() {
       this.updateFile({
@@ -217,15 +157,6 @@ export default {
         code: this.localCode,
       });
     }, 500),
-    selectEditor(e) {
-      if (e.target.type !== 'textarea') {
-        const textarea = this.$refs.prism.$refs.textarea;
-        textarea.focus();
-        const end = textarea.textLength;
-        textarea.selectionStart = end;
-        textarea.selectionEnd = end;
-      }
-    },
   },
 };
 </script>
@@ -307,12 +238,6 @@ export default {
 .error .warning {
   margin-left: 1rem;
   margin-right: 1rem;
-}
-
-.toolbar-button {
-  cursor: pointer;
-  margin-right: 1rem;
-  margin-left: 1rem;
 }
 
 .my-editor {
