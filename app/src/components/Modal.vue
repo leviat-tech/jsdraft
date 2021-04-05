@@ -1,7 +1,7 @@
 <template>
   <div
     class="background"
-    @click.self="$emit('close')"
+    @mousedown.self="$emit('close')"
   >
     <div class="modal">
       <div
