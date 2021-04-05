@@ -1,9 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
-const evaluate = require('../utility/misc/evaluate');
+const evaluate = require('../utility/misc/evaluate.js');
 const { normalize_yaml_param } = require('./parameters.js');
 const validate = require('../utility/validation/validate.js');
+const convert = require('../utility/validation/convert.js');
 
 
 const DEFAULT_CONTEXT = {
@@ -107,10 +108,17 @@ function reference(definition, sketch, context) {
     const id = unwind(constant);
     const exp = constant[id];
 
-    // check if reference is a sketch
-    const match = id.match(/(.+):sketch/);
-    if (match) {
+    // check if reference should cast to a type
+    const match = id.match(/(.+):(.+)/);
+    if (match && match[2] === 'sketch') {
+      // Sketch types should evaluate as a chain
       refs[match[1]] = chain(sketch.new, exp, { ...context, ...refs });
+
+    } else if (match) {
+      const type = match[2];
+
+      const evaluated = evaluate_argument(exp, { ...context, ...refs });
+      refs[match[1]] = convert(evaluated, type);
 
       // otherwise evaluate as typical argument
     } else {

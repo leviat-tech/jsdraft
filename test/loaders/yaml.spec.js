@@ -1,14 +1,11 @@
 /* global describe, it */
 
-const chai = require('chai');
+const { expect, use } = require('chai');
+use(require('../helpers.js'));
 const { parse } = require('../../src/loaders/yaml.js');
 const Sketch = require('../../src/sketch/sketch.js');
 const Circle = require('../../src/entities/geometric/circle.js');
 
-
-chai.expect();
-
-const { expect } = chai;
 
 describe('YAML', () => {
   const yaml = `
@@ -31,6 +28,7 @@ reference:
       - segment: [[0, 0], [5, -5]]
       - segment: [[5, -5], [0, -10]]
       - join
+  - $circ:circle: [[5, 5], 20]
 sketch:
   - point: [$num, $str]
   - point: ["$arr[0]", "$arr[2]"]
@@ -38,6 +36,7 @@ sketch:
   - add: $my_point
   - add: $my_pline
   - circle: [$c, 30]
+  - point: [$circ.pc.x, $circ.pc.y]
   `;
 
   const func = parse(yaml, 'test');
@@ -57,16 +56,20 @@ sketch:
   });
 
   it('can parse a single non-array argument', () => {
-    expect(entities[4]).to.eql({ x: 2, y: 4 });
+    expect(entities[5]).to.eql({ x: 2, y: 4 });
   });
 
   it('can parse a single string key if no arguments are necessary', () => {
-    expect(entities[5].vertices).to.eql([
+    expect(entities[6].vertices).to.eql([
       { x: 0, y: 0 }, { x: 5, y: -5 }, { x: 0, y: -10 },
     ]);
   });
 
   it('can cast a parameter to a type', () => {
     expect(entities[3]).to.be.instanceof(Circle);
+  });
+
+  it('can cast a reference to a type', () => {
+    expect(entities[4]).to.be.a.point({ x: 5, y: 5 });
   });
 });
