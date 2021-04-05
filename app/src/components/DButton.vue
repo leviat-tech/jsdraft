@@ -5,6 +5,7 @@
     <slot />
     <img
       v-if="icon"
+      class="svg-inline"
       :class="size"
       :src="`icons/${icon}.svg`"
     >
