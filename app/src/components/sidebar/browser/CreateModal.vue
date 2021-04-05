@@ -22,11 +22,20 @@ export default {
   data() {
     return {
       showing: false,
-      file: '',
+      file: this.default(),
       error: '',
     };
   },
   methods: {
+    default() {
+      let i = 0;
+      let name = 'example.sketch.js';
+      while (this.$store.state.files[name]) {
+        i += 1;
+        name = `example${i}.sketch.js`;
+      }
+      return name;
+    },
     open() {
       this.showing = true;
       this.$nextTick(() => {
@@ -35,7 +44,7 @@ export default {
     },
     close() {
       this.showing = false;
-      this.file = '';
+      this.file = this.default();
       this.error = '';
     },
     create() {
