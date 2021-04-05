@@ -59,20 +59,26 @@ function chain(sketch, exp, context) {
   let s = sketch.new;
 
   exp.forEach((x) => {
-    const func = unwind(x);
+    const func_name = unwind(x);
+    const is_user_sketch = func_name.match(/^user\.(.+)$/);
 
     // 'sketch' keyword becomes a new chain
-    if (func === 'sketch') {
-      s = chain(s, x[func], context);
+    if (func_name === 'sketch') {
+      s = chain(s, x.sketch, context);
 
     // A sole feature name is executed with no arguments
     } else if (typeof x === 'string') {
-      s = s[func]();
+      s = is_user_sketch
+        ? s = s.user[is_user_sketch[1]]()
+        : s = s[func_name]();
 
     // otherwise we have a standard sketch function
     } else {
-      const args = evaluate_argument(x[func], context);
-      s = s[func](...(Array.isArray(args) ? args : [args]));
+      const args = evaluate_argument(x[func_name], context);
+
+      s = is_user_sketch
+        ? s.user[is_user_sketch[1]](...(Array.isArray(args) ? args : [args]))
+        : s[func_name](...(Array.isArray(args) ? args : [args]));
     }
   });
 
