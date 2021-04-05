@@ -90,12 +90,13 @@ export default {
   },
   computed: {
     ...mapState(['currentFile']),
-    ...mapGetters(['draft']),
+    ...mapGetters(['draft', 'currentFileName']),
     languageModalText() {
       return `Are you sure you want to switch from ${this.language.toUpperCase()} to ${this.newLanguage.toUpperCase()}? Changes will be lost.`;
     },
     errors() {
-      return this.$store.getters.errors[this.currentFile];
+      if (!this.currentFileName) return null;
+      return this.$store.getters.errors[this.currentFileName];
     },
     underlines() {
       if (!this.errors) return {};
@@ -108,8 +109,8 @@ export default {
     currentFile: {
       immediate: true,
       handler() {
-        const code = this.draft.files[this.currentFile].contents;
-        const language = this.draft.files[this.currentFile].extension;
+        const code = this.draft.files[this.currentFileName].contents;
+        const language = this.draft.files[this.currentFileName].extension;
 
         if (this.editor) {
           this.updateEditor(code, language);
@@ -177,8 +178,8 @@ export default {
       if (language === this.language) return;
 
       const code = {
-        yaml: yaml(this.currentFile),
-        js: js(this.currentFile),
+        yaml: yaml(this.currentFileName),
+        js: js(this.currentFileName),
       }[this.language];
 
       // If no changes from default, no need to warn
@@ -198,19 +199,20 @@ export default {
     },
     selectLanguage(language) {
       if (language === this.language) return;
+
       const code = {
-        yaml: yaml(this.currentFile),
-        js: js(this.currentFile),
+        yaml: yaml(this.currentFileName),
+        js: js(this.currentFileName),
       }[language];
 
-      this.updateFile({ name: `${this.currentFile}.sketch.${language}`, code });
-      this.removeFile(`${this.currentFile}.sketch.${language}`);
+      this.updateFile({ name: `${this.currentFileName}.sketch.${language}`, code });
+      this.removeFile(`${this.currentFileName}.sketch.${language}`);
       this.updateEditor(code, language);
       this.showLanguageModal = false;
     },
     validate: debounce(function validate() {
       this.updateFile({
-        name: `${this.currentFile}.sketch.${this.language}`,
+        name: `${this.currentFileName}.sketch.${this.language}`,
         code: this.localCode,
       });
     }, 500),
