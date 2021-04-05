@@ -5,6 +5,7 @@
   >
     <div class="modal">
       <div
+        v-show="header"
         class="modal-header"
         :class="{ title }"
       >
@@ -43,6 +44,10 @@ export default {
       default: null,
     },
     closeable: {
+      type: Boolean,
+      default: true,
+    },
+    header: {
       type: Boolean,
       default: true,
     },
