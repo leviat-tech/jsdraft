@@ -42,6 +42,6 @@ module.exports = {
 
     const new_pcurve = new Polycurve(...segs);
 
-    return sketch.add_entities(new_pcurve);
+    return sketch.add(new_pcurve);
   },
 };

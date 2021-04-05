@@ -143,5 +143,5 @@ module.exports = function join(sketch) {
     result.push(c);
   }
 
-  return sketch.new.add_entities(...result);
+  return sketch.new.add(...result);
 };

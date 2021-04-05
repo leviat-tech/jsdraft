@@ -83,5 +83,5 @@ module.exports = function offset(sketch, entity, distance) {
     result = new Polyface(...pcurve_args);
   }
 
-  return sketch.add_entities(result);
+  return sketch.add(result);
 };
