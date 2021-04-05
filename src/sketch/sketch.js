@@ -70,7 +70,7 @@ class Sketch {
 
   // create iterator to traverse the sketch
   tree(order) {
-    return iterators[order || 'level'](this);
+    return iterators[order || 'depth'](this);
   }
 
   // find first node where condition returns true (searched in level order)

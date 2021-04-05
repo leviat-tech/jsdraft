@@ -56,20 +56,20 @@ sketch:
   });
 
   it('can parse a single non-array argument', () => {
-    expect(entities[5]).to.eql({ x: 2, y: 4 });
+    expect(entities[3]).to.eql({ x: 2, y: 4 });
   });
 
   it('can parse a single string key if no arguments are necessary', () => {
-    expect(entities[6].vertices).to.eql([
+    expect(entities[4].vertices).to.eql([
       { x: 0, y: 0 }, { x: 5, y: -5 }, { x: 0, y: -10 },
     ]);
   });
 
   it('can cast a parameter to a type', () => {
-    expect(entities[3]).to.be.instanceof(Circle);
+    expect(entities[5]).to.be.instanceof(Circle);
   });
 
   it('can cast a reference to a type', () => {
-    expect(entities[4]).to.be.a.point({ x: 5, y: 5 });
+    expect(entities[6]).to.be.a.point({ x: 5, y: 5 });
   });
 });
