@@ -169,6 +169,7 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   border-left: $border-sm solid $color-gray-03;
+  background: white;
 }
 
 .header-container {
