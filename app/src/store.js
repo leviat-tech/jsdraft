@@ -49,13 +49,11 @@ export default createStore({
       state.files[name] = code;
     },
     removeFile(state, filename) {
-      const { name } = parseFilename(filename);
       const filenames = Object.keys(state.files);
-      if (name === state.currentFile && filenames.length > 1) {
+      if (filename === state.currentFile && filenames.length > 1) {
         const newCurrent = filenames.find((f) => f !== filename);
-        const { name: newName } = parseFilename(newCurrent);
-        state.currentFile = newName;
-      } else if (name === state.currentFile) {
+        state.currentFile = newCurrent;
+      } else if (filename === state.currentFile) {
         state.currentFile = null;
       }
       delete state.files[filename];
@@ -99,12 +97,17 @@ export default createStore({
 
       // Choose the first as the new active file
       if (files.length > 0) {
-        commit('setCurrentFile', files[0].name);
+        commit('setCurrentFile', files[0].filename);
       }
     },
   },
 
   getters: {
+    currentFileName(state) {
+      if (!state.currentFile) return null;
+      const { name } = parseFilename(state.currentFile);
+      return name;
+    },
     draft(state) {
       const draft = new Draft();
       Object.entries(state.files)
@@ -118,7 +121,7 @@ export default createStore({
     entities(state, getters) {
       try {
         return getters.draft.render(
-          state.currentFile,
+          getters.currentFileName,
           state.overrides,
           'entities',
         );
@@ -130,7 +133,7 @@ export default createStore({
       if (!state.currentFile) return [];
       try {
         return getters.draft.render(
-          state.currentFile,
+          getters.currentFileName,
           state.overrides,
           'svg',
           { viewport: null },
@@ -147,7 +150,7 @@ export default createStore({
         try {
           parse(sketch.extension, sketch.contents, name);
           getters.draft.render(
-            state.currentFile,
+            name,
             state.overrides,
             'svg',
             { viewport: null },

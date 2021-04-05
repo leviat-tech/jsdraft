@@ -33,11 +33,11 @@ export default {
     };
   },
   computed: {
-    ...mapState(['currentFile']),
+    ...mapState(['currentFileName']),
     ...mapGetters(['draft']),
     parameters() {
       try {
-        const file = this.draft.files[this.currentFile];
+        const file = this.draft.files[this.currentFileName];
         return file && file.parameters.map((p) => ({
           parameter: p,
           id: nanoid(5), // force refresh of parameter input
