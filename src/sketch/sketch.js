@@ -27,15 +27,16 @@ class Sketch {
   }
 
   // add child sketches to sketch
-  add(...sketches) {
-    sketches.forEach((s) => this.node.children.push(s));
-    return this;
-  }
+  add(...args) {
+    args.forEach((arg) => {
+      // A sketch is added as a child node
+      if (arg instanceof Sketch) {
+        this.node.children.push(arg);
 
-  // add entities as child nodes to sketch
-  add_entities(...entities) {
-    entities.forEach((entity) => {
-      this.add(this.create({ entity }));
+      // Entities can also be added as child nodes
+      } else {
+        this.node.children.push(this.create({ entity: arg }));
+      }
     });
     return this;
   }

@@ -39,6 +39,6 @@ module.exports = {
     const seg_b = new Segment(point_b, b0);
     const joined_pline = new Polycurve(...a, seg_a, arc, seg_b, ...b);
 
-    return sketch.add_entities(joined_pline);
+    return sketch.add(joined_pline);
   },
 };
