@@ -1,10 +1,14 @@
 <template>
   <modal
     :title="title"
+    :header="header"
     @close="$emit('cancel')"
   >
-    <div class="modal-text">
+    <div v-if="text" class="modal-text">
       {{ text }}
+    </div>
+    <div>
+      <slot />
     </div>
     <div v-if="cancel || proceed" class="modal-buttons">
       <button v-if="cancel" class="btn cancel-button" @click="$emit('cancel')">
@@ -31,6 +35,7 @@ export default {
     text: { type: String, default: 'Are you sure you want to proceed?' },
     cancel: { type: String, default: null },
     proceed: { type: String, default: 'Continue' },
+    header: { type: Boolean, default: true },
   },
 };
 </script>
