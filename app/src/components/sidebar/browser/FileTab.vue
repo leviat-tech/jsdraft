@@ -1,24 +1,29 @@
 <template>
   <div class="file-tab">
-    <div class="tab" :class="{active}" @click="menu('Open')" @mouseup.right="open" @contextmenu.prevent>
+    <div class="tab" :class="{active}"
+         @dblclick.native="open"
+         @click="select('Open')"
+         @mouseup.right="$refs.menu.open($event)"
+         @contextmenu.prevent
+    >
       {{ file }}
     </div>
-    <context-menu ref="menu" :items="['Open', 'Rename', 'Delete']" @select="menu" />
+    <file-context-menu ref="menu" />
     <rename-modal ref="rename" :initial="file" />
     <delete-modal ref="delete" :file="file" />
   </div>
 </template>
 
 <script>
-import ContextMenu from '../../ui/ContextMenu.vue';
 import RenameModal from './RenameModal.vue';
 import DeleteModal from './DeleteModal.vue';
+import FileContextMenu from './FileContextMenu.vue';
 
 
 export default {
   name: 'FileTab',
   components: {
-    ContextMenu,
+    FileContextMenu,
     RenameModal,
     DeleteModal,
   },
@@ -29,17 +34,12 @@ export default {
     },
   },
   methods: {
-    open(event) {
-      this.$refs.menu.open(event);
+    select() {
+      this.$store.commit('setCurrentFile', this.file);
     },
-    menu(item) {
-      if (item === 'Open') {
-        this.$store.commit('setCurrentFile', this.file);
-      } else if (item === 'Rename') {
-        this.$refs.rename.open();
-      } else if (item === 'Delete') {
-        this.$refs.delete.open();
-      }
+    open() {
+      this.$store.commit('setCurrentFile', this.file);
+      this.$store.commit('setShowCodePanel', true);
     },
   },
 };
