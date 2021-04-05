@@ -13,10 +13,10 @@
       <h2>Files</h2>
       <d-button
         name="New File"
-        size="sm"
-        icon="plus"
         @click="beginAddingFile"
-      />
+      >
+        <plus-icon class="md" />
+      </d-button>
     </div>
     <div
       v-for="file in files"
@@ -92,6 +92,7 @@ import { nextTick } from 'vue';
 import { mapState, mapGetters, mapMutations } from 'vuex';
 import WarningModal from '../WarningModal.vue';
 import DButton from '../DButton.vue';
+import PlusIcon from '../../assets/icons/plus.svg';
 import TrashIcon from '../../assets/icons/trash.svg';
 import incrementName from '../../utility/increment-name.js';
 import { yaml } from '../../utility/default-blank-sketches.js';
@@ -102,6 +103,7 @@ export default {
   components: {
     WarningModal,
     DButton,
+    PlusIcon,
     TrashIcon,
   },
   data() {
@@ -277,6 +279,7 @@ export default {
   padding-right: 1rem;
   display: flex;
   justify-content: space-between;
+  color: $color-black;
 
   .button {
     margin-top: -0.25rem;
