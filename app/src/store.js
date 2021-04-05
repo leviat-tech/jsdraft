@@ -55,6 +55,7 @@ export default createStore({
         state.currentFile = newCurrent;
       } else if (filename === state.currentFile) {
         state.currentFile = null;
+        state.showCodePanel = false;
       }
       delete state.files[filename];
     },
