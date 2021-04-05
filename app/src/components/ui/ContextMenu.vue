@@ -1,6 +1,6 @@
 <template>
-  <click-off ref="menu" class="context-menu" :style="{top: `${y}px`, left: `${x}px`, visible}">
-    <div class="menu" @contextmenu.prevent>
+  <click-off ref="menu" class="context-menu" :style="{top: `${y}px`, left: `${x}px`, visible}" @contextmenu.prevent>
+    <div class="menu">
       <div v-for="item in items" :key="item" class="item" @click.prevent.stop="select(item)">
         {{ item }}
       </div>
