@@ -31,7 +31,7 @@ export default {
       this.showing = true;
       this.file = this.initial;
       this.$nextTick(() => {
-        this.$refs.input.focus();
+        this.$refs.input.focus({ select: true });
       });
     },
     close() {

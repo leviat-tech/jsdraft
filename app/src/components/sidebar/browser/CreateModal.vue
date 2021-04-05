@@ -30,7 +30,7 @@ export default {
     open() {
       this.showing = true;
       this.$nextTick(() => {
-        this.$refs.input.focus();
+        this.$refs.input.focus({ select: true });
       });
     },
     close() {
