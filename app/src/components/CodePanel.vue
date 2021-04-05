@@ -109,9 +109,10 @@ export default {
     currentFile: {
       immediate: true,
       handler() {
-        const code = this.draft.files[this.currentFileName].contents;
-        const language = this.draft.files[this.currentFileName].extension;
+        const code = this.draft.files[this.currentFileName]?.contents;
+        const language = this.draft.files[this.currentFileName]?.extension;
 
+        if (!code || !language) return;
         if (this.editor) {
           this.updateEditor(code, language);
         } else {
