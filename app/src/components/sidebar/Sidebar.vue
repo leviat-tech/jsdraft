@@ -13,7 +13,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex';
-import FileBrowser from './FileBrowser.vue';
+import FileBrowser from './browser/FileBrowser.vue';
 import ParametersList from './ParametersList.vue';
 import EntitiesList from './EntitiesList.vue';
 
