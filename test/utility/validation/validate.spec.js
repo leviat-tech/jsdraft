@@ -1,6 +1,7 @@
 /* global describe, it */
 /* eslint-disable no-unused-expressions */
-const { expect } = require('chai');
+const { expect, use } = require('chai');
+use(require('../../helpers.js'));
 const flatten = require('@flatten-js/core');
 const validate = require('../../../src/utility/validation/validate.js');
 const entities = require('../../../src/entities');
@@ -68,5 +69,8 @@ describe('validate', () => {
       x: 0,
       y: 1,
     }]);
+
+    expect(validate([{ cast: 'circle' }], [[[0, 10], 20]])[0].pc)
+      .to.be.a.point({ x: 0, y: 10 });
   });
 });

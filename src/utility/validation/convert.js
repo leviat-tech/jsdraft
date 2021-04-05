@@ -10,7 +10,7 @@ function convert(value, type) {
   if (type === 'string') return String(value);
   if (type === 'array') return JSON.parse(String(value));
   if (type === 'object') return JSON.parse(String(value));
-  if (types.entity.includes(type)) return entities[type](value);
+  if (types.entity.includes(type)) return entities[type](...value);
   throw new TypeError(`Unrecognized validation type: ${type}`);
 }
 
