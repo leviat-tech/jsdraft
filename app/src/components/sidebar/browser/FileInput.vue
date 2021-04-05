@@ -24,7 +24,14 @@ export default {
     },
   },
   methods: {
-    focus() {
+    focus(options) {
+      options = options || {};
+      if (options.select) {
+        const dot = this.$refs.input.value.indexOf('.');
+        if (dot) {
+          this.$refs.input.setSelectionRange(0, dot);
+        }
+      }
       this.$refs.input.focus();
     },
   },
