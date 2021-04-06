@@ -148,16 +148,15 @@ export default {
 
       if (!electron) {
         files = await loadFileInBrowser(e);
+        this.loadFiles(files);
       } else {
         const loaded = await window.electron.openFile();
-        files = loaded.files;
         path = loaded.path;
         filename = loaded.filename;
       }
 
       this.setFilename(filename);
       this.setPath(path);
-      this.loadFiles(files);
       this.fitToExtents();
     },
     save() {
