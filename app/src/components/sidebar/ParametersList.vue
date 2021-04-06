@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 import { nanoid } from 'nanoid';
 import cloneDeep from 'lodash/cloneDeep';
 import ParameterInput from './ParameterInput.vue';
