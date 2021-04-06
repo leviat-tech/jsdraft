@@ -30,7 +30,7 @@ export default {
           }
 
           if (nv) {
-            this.closeWatcher = window.electron.watchDirectory(nv, this.updateDraftFile);
+            this.closeWatcher = window.electron.watchDirectory(nv, this.$store.commit);
           }
         }
       },
