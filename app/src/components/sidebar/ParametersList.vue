@@ -33,8 +33,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['currentFileName']),
-    ...mapGetters(['draft']),
+    ...mapGetters(['draft', 'currentFileName']),
     parameters() {
       try {
         const file = this.draft.files[this.currentFileName];
