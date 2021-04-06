@@ -8,15 +8,12 @@
     >
       {{ file }}
     </div>
-    <file-context-menu ref="menu" />
-    <rename-modal ref="rename" :initial="file" />
-    <delete-modal ref="delete" :file="file" />
+    <file-context-menu ref="menu" :file="file" />
   </div>
 </template>
 
 <script>
-import RenameModal from './RenameModal.vue';
-import DeleteModal from './DeleteModal.vue';
+
 import FileContextMenu from './FileContextMenu.vue';
 
 
@@ -24,8 +21,6 @@ export default {
   name: 'FileTab',
   components: {
     FileContextMenu,
-    RenameModal,
-    DeleteModal,
   },
   props: ['file'],
   computed: {
