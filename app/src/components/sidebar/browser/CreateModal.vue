@@ -11,6 +11,7 @@
 import Modal from '../../Modal.vue';
 import FileInput from './FileInput.vue';
 import { yaml, js } from '../../../utility/default-blank-sketches.js';
+import parseFilename from '../../../utility/parse-filename.js';
 
 
 export default {
@@ -53,10 +54,11 @@ export default {
       } else if (this.$store.state.files[this.file] !== undefined) {
         this.error = 'A file with this name already exists';
       } else {
+        const { name } = parseFilename(this.file);
         if (this.file.endsWith('.sketch.yaml')) {
-          this.$store.commit('updateFile', { name: this.file, code: yaml() });
+          this.$store.commit('updateFile', { name: this.file, code: yaml(name) });
         } else {
-          this.$store.commit('updateFile', { name: this.file, code: js() });
+          this.$store.commit('updateFile', { name: this.file, code: js(name) });
         }
         this.$store.commit('setCurrentFile', this.file);
         this.close();
