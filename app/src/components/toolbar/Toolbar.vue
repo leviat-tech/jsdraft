@@ -92,13 +92,13 @@
 </template>
 
 <script>
+import Mousetrap from 'mousetrap';
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 import isElectron from 'is-electron';
 import ToolGroup from './ToolGroup.vue';
 import Tool from './Tool.vue';
 import DButton from '../DButton.vue';
 import loadFileInBrowser from '../../utility/load-file-in-browser.js';
-import saveFileInBrowser from '../../utility/save-file-in-browser.js';
 import CodeIcon from '../../assets/icons/code.svg';
 
 
@@ -124,9 +124,19 @@ export default {
       return Object.keys(this.draft.files).length > 0;
     },
   },
+  mounted() {
+    Mousetrap.bind('mod+s', () => {
+      this.save();
+      return false;
+    });
+    Mousetrap.bind('mod+o', () => {
+      this.openFolder();
+      return false;
+    });
+  },
   methods: {
     ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'setFilename', 'setPath']),
-    ...mapActions(['loadFiles']),
+    ...mapActions(['loadFiles', 'save']),
     chooseTool(id) {
       this.setCurrentTool(id);
     },
@@ -159,23 +169,6 @@ export default {
       this.setPath(path);
       this.loadFiles(files);
       this.fitToExtents();
-    },
-    save() {
-      const files = Object.entries(this.draft.files)
-        .map(([name, file]) => ({
-          name,
-          extension: file.extension,
-          contents: file.contents,
-        }));
-
-      if (!electron) {
-        saveFileInBrowser(this.filename, this.draft);
-      } else if (this.path) {
-        window.electron.saveFile(this.path, files);
-      } else {
-        const path = window.electron.saveAs(this.filename, files);
-        this.setPath(path);
-      }
     },
     exportFile() {
 

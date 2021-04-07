@@ -22,6 +22,7 @@
       v-model="localCode"
       :language="language"
       :underlines="underlines"
+      @save="save"
     />
 
     <!-- error panel -->
@@ -30,7 +31,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState, mapGetters } from 'vuex';
+import { mapMutations, mapState, mapGetters, mapActions } from 'vuex';
 import debounce from 'lodash/debounce';
 import CodeEditor from './CodeEditor.vue';
 import DButton from './DButton.vue';
@@ -95,6 +96,7 @@ export default {
   },
   methods: {
     ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'updateFile', 'removeFile']),
+    ...mapActions(['save']),
     closeCodePanel() {
       this.setShowCodePanel(false);
     },

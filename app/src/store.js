@@ -1,7 +1,11 @@
 import { createStore } from 'vuex';
+import isElectron from 'is-electron';
 import parseFilename from './utility/parse-filename.js';
 import { Draft, parse } from '../../dist/draft.js';
+import saveFileInBrowser from './utility/save-file-in-browser.js';
 
+
+const electron = isElectron();
 
 export default createStore({
   state() {
@@ -17,6 +21,7 @@ export default createStore({
       hovered: null,
       selected: {},
       files: {},
+      electron,
     };
   },
 
@@ -99,6 +104,24 @@ export default createStore({
       // Choose the first as the new active file
       if (files.length > 0) {
         commit('setCurrentFile', files[0].filename);
+      }
+    },
+
+    save({ state, getters, commit }) {
+      const files = Object.entries(getters.draft.files)
+        .map(([name, file]) => ({
+          name,
+          extension: file.extension,
+          contents: file.contents,
+        }));
+
+      if (!electron) {
+        saveFileInBrowser(state.filename, getters.draft);
+      } else if (state.path) {
+        window.electron.saveFile(state.path, files);
+      } else {
+        const path = window.electron.saveAs(state.filename, files);
+        commit('setPath', path);
       }
     },
   },

@@ -80,6 +80,9 @@ export default {
       'Cmd-/': function comment(cm) {
         cm.execCommand('toggleComment');
       },
+      'Cmd-S': function save() {
+        this.$emit('save');
+      }.bind(this),
     });
 
     this.editor.on('changes', () => {
