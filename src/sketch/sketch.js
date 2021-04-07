@@ -99,13 +99,18 @@ class Sketch {
   // create feature from a vanilla function
   static featurize(func) {
     const cls = this;
+    const id = func.identifier || func.name;
     function feature(...args) {
-      const input = cls.clone(this);
-      const output = func.bind(this.binding ? this.binding() : this)(input, ...args);
-      output.node.feature = output.node.feature || func.identifier || func.name;
-      return output;
+      try {
+        const input = cls.clone(this);
+        const output = func.bind(this.binding ? this.binding() : this)(input, ...args);
+        output.node.feature = output.node.feature || func.identifier || func.name;
+        return output;
+      } catch (error) {
+        throw new Error(`Error executing ${id}: ${error}`);
+      }
     }
-    feature.identifier = func.identifier || func.name;
+    feature.identifier = id;
     return feature;
   }
 
