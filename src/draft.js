@@ -39,7 +39,12 @@ class Draft {
     const root = new Sketch();
     Object.keys(this.files).forEach((key) => {
       const file = this.files[key];
-      root.inject(parse(file.extension, file.contents, key));
+      try {
+        const feature = parse(file.extension, file.contents, key);
+        root.inject(feature);
+      } catch (error) {
+        console.warn(`Failed to parse and inject ${key}: ${error}`);
+      }
     });
     const func = parse(source.extension, source.contents, source.name);
     const sketch = func(root, ...params);
