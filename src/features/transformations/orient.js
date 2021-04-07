@@ -14,7 +14,9 @@ module.exports = {
     const translation = Vector(target_origin).subtract(origin);
     const vec_initial = Vector(point).subtract(origin);
     const vec_target = Vector(target_point).subtract(target_origin);
-    const angle = vec_initial.angleBetween(vec_target);
+    const angle_initial = vec_initial.angle();
+    const angle_target = vec_target.angle();
+    const angle = angle_target - angle_initial;
 
     return sketch
       .transform(flatten.matrix().rotate(angle))
