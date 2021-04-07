@@ -18,9 +18,11 @@
     </div>
 
     <!-- code -->
-    <div class="codemirror-container">
-      <div ref="codemirror" class="codemirror-div" />
-    </div>
+    <code-editor
+      v-model="localCode"
+      :language="language"
+      :underlines="underlines"
+    />
 
     <!-- error panel -->
     <error-panel :errors="errors" />
@@ -30,11 +32,7 @@
 <script>
 import { mapMutations, mapState, mapGetters } from 'vuex';
 import debounce from 'lodash/debounce';
-import CodeMirror from 'codemirror/lib/codemirror.js';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/mode/javascript/javascript.js';
-import 'codemirror/mode/yaml/yaml.js';
-import 'codemirror/addon/comment/comment.js';
+import CodeEditor from './CodeEditor.vue';
 import DButton from './DButton.vue';
 import ErrorPanel from './ErrorPanel.vue';
 import ChevronRightIcon from '../assets/icons/chevron-right.svg';
@@ -44,6 +42,7 @@ import CodeIcon from '../assets/icons/code.svg';
 export default {
   name: 'CodePanel',
   components: {
+    CodeEditor,
     DButton,
     ErrorPanel,
     ChevronRightIcon,
@@ -52,17 +51,15 @@ export default {
   data() {
     return {
       localCode: '',
-      language: 'yaml',
       newLanguage: '',
       path: null,
-      highlights: [],
     };
   },
   computed: {
     ...mapState(['currentFile']),
     ...mapGetters(['draft', 'currentFileName']),
-    languageModalText() {
-      return `Are you sure you want to switch from ${this.language.toUpperCase()} to ${this.newLanguage.toUpperCase()}? Changes will be lost.`;
+    language() {
+      return this.draft.files[this.currentFileName]?.extension;
     },
     errors() {
       if (!this.currentFileName) return null;
@@ -74,82 +71,32 @@ export default {
       underlines[this.errors.mark?.line] = 'error';
       return underlines;
     },
+    currentCode() {
+      return this.draft.files[this.currentFileName]?.contents;
+    },
   },
   watch: {
     currentFile: {
       immediate: true,
       handler() {
-        const code = this.draft.files[this.currentFileName]?.contents;
-        const language = this.draft.files[this.currentFileName]?.extension;
-
-        if (!code || !language) return;
-        if (this.editor) {
-          this.updateEditor(code, language);
-        } else {
-          this.localCode = code;
-          this.language = language;
-        }
+        this.localCode = this.currentCode;
       },
     },
-    underlines: {
-      deep: true,
-      handler(nv) {
-        this.highlights.forEach((highlight) => {
-          this.editor.removeLineClass(highlight, 'wrap', 'line-error');
-        });
-
-        Object.keys(nv).forEach((line) => {
-          if (line !== 'undefined') {
-            this.highlights.push(
-              this.editor.addLineClass(parseInt(line, 10), 'wrap', 'line-error'),
-            );
-          }
-        });
+    localCode: {
+      handler() {
+        this.validate();
       },
     },
-  },
-  mounted() {
-    const mode = { js: 'javascript', yaml: 'yaml' }[this.language];
-
-    this.editor = new CodeMirror(this.$refs.codemirror, {
-      lineNumbers: true,
-      tabSize: 2,
-      value: this.localCode,
-      mode,
-      viewportMargin: Infinity,
-    });
-
-    this.editor.setOption('extraKeys', {
-      Tab(cm) {
-        const spaces = Array(cm.getOption('indentUnit') + 1).join(' ');
-        cm.replaceSelection(spaces);
+    currentCode: {
+      handler() {
+        this.localCode = this.currentCode;
       },
-      'Cmd-]': function indent(cm) {
-        cm.execCommand('indentMore');
-      },
-      'Cmd-[': function dedent(cm) {
-        cm.execCommand('indentLess');
-      },
-      'Cmd-/': function comment(cm) {
-        cm.execCommand('toggleComment');
-      },
-    });
-
-    this.editor.on('changes', () => {
-      this.localCode = this.editor.getValue();
-      this.validate();
-    });
+    },
   },
   methods: {
     ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'updateFile', 'removeFile']),
     closeCodePanel() {
       this.setShowCodePanel(false);
-    },
-    updateEditor(code, language) {
-      this.language = language;
-      const mode = { js: 'javascript', yaml: 'yaml' }[this.language];
-      this.editor.setOption('mode', mode);
-      this.editor.setValue(code);
     },
     validate: debounce(function validate() {
       this.updateFile({
@@ -239,55 +186,6 @@ export default {
 .error .warning {
   margin-left: 1rem;
   margin-right: 1rem;
-}
-
-.my-editor {
-  font-family: $font-monospace;
-  font-size: 14px;
-  line-height: 1.5;
-  padding: 5px;
-}
-
-.codemirror-container {
-  flex: 1 1 auto;
-  margin-top: 0;
-  height: 100%;
-  position: relative;
-}
-
-.codemirror-div {
-  height: 100%;
-}
-
-.CodeMirror {
-  position:absolute;
-  top:0;
-  bottom:0;
-  left:0;
-  right:0;
-  height:100%;
-}
-
-</style>
-
-<style lang="scss">
-@import '../assets/styles/variables.scss';
-
-.CodeMirror {
-  height: 100%;
-  font-family: $font-monospace;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-
-.CodeMirror-gutters {
-  background-color: $color-white;
-  border-right: 1px solid transparent;
-}
-
-.line-error {
-  background: lighten($color-red, 25);
-  border-right: 2px solid $color-red;
 }
 
 </style>
