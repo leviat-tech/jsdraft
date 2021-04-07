@@ -5,6 +5,7 @@ const arc_to_bulge = require('../../utility/geometry/arc-to-bulge.js');
 const Polycurve = require('../../entities/geometric/polycurve.js');
 const Polyface = require('../../entities/geometric/polyface.js');
 const almost_equal = require('../../utility/misc/almost-equal.js');
+const assert = require('../../utility/validation/assert.js');
 
 
 function can_offset(entity) {
@@ -21,10 +22,10 @@ module.exports = function offset(sketch, ...args) {
 
   if (typeof args[0] === 'number') {
     entity = sketch.shape;
-    distance = args[0];
+    distance = assert(args[0], 'number');
   } else {
     entity = args[0];
-    distance = args[1];
+    distance = assert(args[1], 'number');
   }
 
   const type = base_entity_type(entity);
