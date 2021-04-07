@@ -62,7 +62,7 @@ class Sketch {
   }
 
   // create iterator to traverse entities in sketch
-  * entities(order) {
+  * entities(order = 'depth') {
     for (const s of this.tree(order)) {
       if (s.node.entity) yield s.node.entity;
     }
@@ -70,7 +70,7 @@ class Sketch {
 
   // create iterator to traverse the sketch
   tree(order) {
-    return iterators[order || 'depth'](this);
+    return iterators[order || 'post'](this);
   }
 
   // find first node where condition returns true (searched in level order)
