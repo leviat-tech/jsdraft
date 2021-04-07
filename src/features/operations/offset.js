@@ -12,7 +12,21 @@ function can_offset(entity) {
     || entity instanceof flatten.Polygon;
 }
 
-module.exports = function offset(sketch, entity, distance) {
+// Possible arguments:
+// sketch.offset(distance)
+// sketch.offset(entity, distance)
+module.exports = function offset(sketch, ...args) {
+  let entity;
+  let distance;
+
+  if (typeof args[0] === 'number') {
+    entity = sketch.shape;
+    distance = args[0];
+  } else {
+    entity = args[0];
+    distance = args[1];
+  }
+
   const type = base_entity_type(entity);
   const vertexes = [];
   const pc_vertices = entity.vertices;
