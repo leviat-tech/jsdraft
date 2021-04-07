@@ -65,10 +65,8 @@ export default createStore({
       delete state.files[filename];
     },
     renameFile(state, { name: oldFileName, newName: newFileName }) {
-      const { name } = parseFilename(oldFileName);
-      const { name: newName } = parseFilename(newFileName);
       state.files[newFileName] = state.files[oldFileName];
-      if (name === state.currentFile) state.currentFile = newName;
+      if (oldFileName === state.currentFile) state.currentFile = newFileName;
       delete state.files[oldFileName];
     },
     setOverrides(state, overrides) {
