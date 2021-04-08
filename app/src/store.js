@@ -95,6 +95,12 @@ export default createStore({
   },
 
   actions: {
+    watchPath({ state, commit }) {
+      console.log('watch path', state.path);
+      if (electron) {
+        window.electron.watchDirectory(state.path, commit);
+      }
+    },
     loadFiles({ commit }, files) {
       commit('removeAllFiles');
 
