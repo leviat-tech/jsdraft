@@ -1,10 +1,14 @@
 import { createStore } from 'vuex';
 import isElectron from 'is-electron';
+import VuexPersistence from 'vuex-persist';
 import parseFilename from './utility/parse-filename.js';
 import { Draft, parse } from '../../dist/draft.js';
 import saveFileInBrowser from './utility/save-file-in-browser.js';
 
 
+const persistence = new VuexPersistence({
+  storage: window.localStorage,
+});
 const electron = isElectron();
 
 export default createStore({
@@ -25,6 +29,7 @@ export default createStore({
     };
   },
 
+  plugins: [persistence.plugin],
   mutations: {
     setZoomScale(state, value) {
       state.zoomScale = value;
