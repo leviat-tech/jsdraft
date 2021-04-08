@@ -135,7 +135,7 @@ export default {
     });
   },
   methods: {
-    ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'setFilename', 'setPath']),
+    ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'setFilename', 'setPath', 'reset']),
     ...mapActions(['loadFiles', 'save']),
     chooseTool(id) {
       this.setCurrentTool(id);
@@ -158,9 +158,11 @@ export default {
 
       if (!electron) {
         files = await loadFileInBrowser(e);
+        this.reset();
         this.loadFiles(files);
       } else {
         const loaded = await window.electron.openFile();
+        this.reset();
         path = loaded.path;
         filename = loaded.filename;
       }
@@ -168,6 +170,7 @@ export default {
       this.setFilename(filename);
       this.setPath(path);
       this.fitToExtents();
+      this.$store.dispatch('watchPath');
     },
     exportFile() {
 
