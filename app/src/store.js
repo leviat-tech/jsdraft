@@ -9,28 +9,37 @@ import saveFileInBrowser from './utility/save-file-in-browser.js';
 const persistence = new VuexPersistence({
   storage: window.localStorage,
 });
+
 const electron = isElectron();
 
-export default createStore({
-  state() {
-    return {
-      zoomScale: 1,
-      currentTool: 'select',
-      showCodePanel: false,
-      viewBox: { minX: -100, minY: -100, width: 200, height: 200 },
-      currentFile: null,
-      filename: 'Draft',
-      path: undefined,
-      overrides: [],
-      hovered: null,
-      selected: {},
-      files: {},
-      electron,
-    };
-  },
+function reset() {
+  return {
+    zoomScale: 1,
+    currentTool: 'select',
+    showCodePanel: false,
+    viewBox: { minX: -100, minY: -100, width: 200, height: 200 },
+    currentFile: null,
+    filename: 'Draft',
+    path: undefined,
+    overrides: [],
+    hovered: null,
+    selected: {},
+    files: {},
+    electron,
+  };
+}
 
+export default createStore({
+  state: reset,
   plugins: [persistence.plugin],
   mutations: {
+    reset(state) {
+      console.log('reset');
+      const fresh = reset();
+      Object.keys(fresh).forEach((key) => {
+        state[key] = fresh[key];
+      });
+    },
     setZoomScale(state, value) {
       state.zoomScale = value;
     },
