@@ -6,11 +6,8 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex';
-import isElectron from 'is-electron';
 import Layout from './components/Layout.vue';
 
-
-const electron = isElectron();
 
 export default {
   name: 'App',
@@ -20,24 +17,8 @@ export default {
   computed: {
     ...mapState(['path', 'draft']),
   },
-  watch: {
-    path: {
-      immediate: true,
-      async handler(nv) {
-        if (electron) {
-          if (this.closeWatcher) {
-            await this.closeWatcher();
-          }
-
-          if (nv) {
-            this.closeWatcher = window.electron.watchDirectory(nv, this.$store.commit);
-          }
-        }
-      },
-    },
-  },
-  unmounted() {
-    if (this.closeWatcher) this.closeWatcher();
+  mounted() {
+    this.$store.dispatch('watchPath');
   },
   methods: {
     ...mapMutations(['updateFile', 'removeFile']),
