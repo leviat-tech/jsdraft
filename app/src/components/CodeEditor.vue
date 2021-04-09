@@ -71,16 +71,16 @@ export default {
         const spaces = Array(cm.getOption('indentUnit') + 1).join(' ');
         cm.replaceSelection(spaces);
       },
-      'Cmd-]': function indent(cm) {
-        cm.execCommand('indentMore');
-      },
-      'Cmd-[': function dedent(cm) {
-        cm.execCommand('indentLess');
-      },
       'Cmd-/': function comment(cm) {
         cm.execCommand('toggleComment');
       },
+      'Ctrl-/': function comment(cm) {
+        cm.execCommand('toggleComment');
+      },
       'Cmd-S': function save() {
+        this.$emit('save');
+      }.bind(this),
+      'Ctrl-S': function save() {
         this.$emit('save');
       }.bind(this),
     });
