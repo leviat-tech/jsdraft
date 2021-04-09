@@ -3,5 +3,5 @@ module.exports = function render(sketch, options) {
   if (options.nodes) {
     return JSON.stringify(sketch, null, 2);
   }
-  return JSON.stringify(Array.from(sketch.entities()));
+  return JSON.stringify(Array.from(sketch.shapes()));
 };

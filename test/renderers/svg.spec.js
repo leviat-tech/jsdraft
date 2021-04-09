@@ -80,7 +80,7 @@ describe('Raw entities', () => {
     .rectangle([0, 0], 20, 20)
     .aligned_dim([0, 0], [10, 5]);
 
-  const entities = [...sketch.entities()];
+  const entities = [...sketch.shapes()];
   const point = parse(render(entities[0], 'svg', { style: { stroke: { color: 'red' } } }));
   const segment = parse(render(entities[1], 'svg', { style: { fill: { color: 'blue' } } }));
   const arc = parse(render(entities[2], 'svg'));

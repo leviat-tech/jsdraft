@@ -51,7 +51,7 @@ module.exports = function join(sketch) {
   // initialize spatial index
   const result = [];
   const tree = new RBush();
-  for (const entity of sketch.entities()) {
+  for (const entity of sketch.shapes()) {
     const type = base_entity_type(entity);
     if (['segment', 'arc', 'polycurve'].includes(type)) {
       const end = entity.vertices[entity.vertices.length - 1];

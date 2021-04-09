@@ -17,7 +17,7 @@ describe('Sketch', () => {
     .add(pt2);
 
   it('can iterate its entities in order of insertion', () => {
-    const e = [...sketch.entities()];
+    const e = [...sketch.shapes()];
     expect(e[0]).to.be.a.point({ x: 1, y: 1 });
     expect(e[1]).to.be.a.point({ x: 2, y: 2 });
     expect(e[2]).to.be.a.point({ x: 3, y: 3 });
@@ -26,7 +26,7 @@ describe('Sketch', () => {
   });
 
   it('can iterate its entities in level order', () => {
-    const e = [...sketch.entities('level')];
+    const e = [...sketch.shapes('level')];
     expect(e[0]).to.be.a.point({ x: 1, y: 1 });
     expect(e[1]).to.be.a.point({ x: 2, y: 2 });
     expect(e[2]).to.be.a.point({ x: 4, y: 4 });
