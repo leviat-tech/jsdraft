@@ -75,7 +75,7 @@ class Sketch {
   }
 
   edge(i) {
-    return pick(this.entities, i);
+    return pick(this.edges, i);
   }
 
   get edges() {
