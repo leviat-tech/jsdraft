@@ -68,9 +68,13 @@ export default {
 
     this.editor.setOption('extraKeys', {
       Tab(cm) {
-        const spaces = Array(cm.getOption('indentUnit') + 1).join(' ');
-        cm.replaceSelection(spaces);
+        if (cm.somethingSelected()) {
+          cm.execCommand('indentMore');
+        } else {
+          cm.execCommand('insertSoftTab');
+        }
       },
+      'Shift-Tab': (cm) => cm.execCommand('indentLess'),
       'Cmd-/': function comment(cm) {
         cm.execCommand('toggleComment');
       },
