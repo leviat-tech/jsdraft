@@ -3,7 +3,7 @@ const cloneDeep = require('lodash/cloneDeep');
 const iterators = require('./iterators');
 const features = require('../features');
 const { decorate } = require('../loaders/javascript');
-const { pick } = require('../utility/misc/pick');
+const pick = require('../utility/misc/pick');
 const { base_entity_type } = require('../utility/misc/entity-type.js');
 
 
@@ -66,12 +66,12 @@ class Sketch {
     return new Sketch(cloneDeep(sketch.node));
   }
 
-  point(i) {
-    return pick(this.points, i);
+  vertex(i) {
+    return pick(this.vertices, i);
   }
 
-  get points() {
-    return this.edges.map((e) => e.points());
+  get vertices() {
+    return [].concat(...this.entities.map((e) => e.vertices));
   }
 
   edge(i) {
