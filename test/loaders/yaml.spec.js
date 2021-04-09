@@ -41,7 +41,7 @@ sketch:
 
   const func = parse(yaml, 'test');
   const sketch = func(new Sketch());
-  const entities = [...sketch.entities()];
+  const entities = [...sketch.shapes()];
 
   it('can parse a string reference', () => {
     expect(entities[0]).to.eql({ x: 1, y: 4 });

@@ -23,7 +23,7 @@ describe('Join', () => {
 
   it('can join a collection of segments', () => {
     const result = sketch.join();
-    const e = Array.from(result.entities());
+    const e = Array.from(result.shapes());
     expect(e.length).to.eql(2);
     expect(base_entity_type(e[0])).to.eql('polyface');
     expect(e[0].vertices).to.eql([

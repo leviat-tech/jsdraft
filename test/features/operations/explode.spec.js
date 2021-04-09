@@ -24,7 +24,7 @@ describe('Explode', () => {
 
   it('can explode polycurves into segments', () => {
     const result = sketch.explode();
-    const e = [...result.entities()];
+    const e = [...result.shapes()];
     expect(e.length).to.eql(5);
     expect(e[0].ps).to.eql({ x: -20, y: -20 });
     expect(e[0].pe).to.eql({ x: -10, y: 0 });

@@ -6,7 +6,7 @@ module.exports = function helpers(chai) {
   const Assertion = chai.Assertion;
 
   Assertion.addMethod('entity', function (entity) {
-    expect(Array.from(this._obj.entities())).to.deep.include(entity);
+    expect(Array.from(this._obj.shapes())).to.deep.include(entity);
   });
 
   Assertion.addMethod('render', function (entity, options) {

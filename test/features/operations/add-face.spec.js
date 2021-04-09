@@ -25,7 +25,7 @@ describe('Add Face', () => {
   const result = sketch.add_face(face.shape);
 
   it('should add a face to a polyface', () => {
-    const entities = [...result.entities()];
+    const entities = [...result.shapes()];
     expect(entities.length).to.eql(1);
     expect(base_entity_type(entities[0])).to.eql('polyface');
     expect(entities[0].faces.size).to.eql(2);

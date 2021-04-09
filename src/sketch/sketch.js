@@ -3,6 +3,8 @@ const cloneDeep = require('lodash/cloneDeep');
 const iterators = require('./iterators');
 const features = require('../features');
 const { decorate } = require('../loaders/javascript');
+const { pick } = require('../utility/misc/pick');
+const { base_entity_type } = require('../utility/misc/entity-type.js');
 
 
 class Sketch {
@@ -20,6 +22,9 @@ class Sketch {
       attributes: {}, // attributes: a free space for meta data associated with this node
       index: {}, // injected user feature index
     };
+    if (Array.isArray(options)) {
+      options = { entities: options };
+    }
     options = options || {};
     delete options.uuidv4;
     this.node = { ...this.node, ...options };
@@ -61,8 +66,46 @@ class Sketch {
     return new Sketch(cloneDeep(sketch.node));
   }
 
+  point(i) {
+    return pick(this.points, i);
+  }
+
+  get points() {
+    return this.edges.map((e) => e.points());
+  }
+
+  edge(i) {
+    return pick(this.entities, i);
+  }
+
+  get edges() {
+    const result = [];
+
+    for (const entity of this.entities) {
+      const type = base_entity_type(entity);
+      if (type === 'polycurve') {
+        result.push(...entity.toShapes());
+      } else if (type === 'polyface') {
+        const edges = [...entity.edges].map((e) => e.shape);
+        result.push(...edges);
+      } else {
+        result.push(entity);
+      }
+    }
+
+    return result;
+  }
+
+  entity(i) {
+    return pick(this.entities, i);
+  }
+
+  get entities() {
+    return [...this.shapes()];
+  }
+
   // create iterator to traverse entities in sketch
-  * entities(order = 'depth') {
+  * shapes(order = 'depth') {
     for (const s of this.tree(order)) {
       if (s.node.entity) yield s.node.entity;
     }
@@ -107,6 +150,7 @@ class Sketch {
         output.node.feature = output.node.feature || func.identifier || func.name;
         return output;
       } catch (error) {
+        console.debug(error);
         throw new Error(`Error executing ${id}: ${error}`);
       }
     }
