@@ -26,6 +26,7 @@ const subtract = require('./operations/subtract.js');
 const union = require('./operations/union.js');
 
 const orient = require('./transformations/orient.js');
+const snap = require('./transformations/snap.js');
 const rotate = require('./transformations/rotate.js');
 const scale = require('./transformations/scale.js');
 const transform = require('./transformations/transform.js');
@@ -56,6 +57,7 @@ module.exports = [
   subtract,
   union,
   orient,
+  snap,
   rotate,
   scale,
   transform,
