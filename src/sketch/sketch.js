@@ -18,7 +18,7 @@ class Sketch {
       hidden: false, // hidden: if false this node should not be rendered (except console renderer)
       style: {}, // style: stroke, fill, etc that should be applied to paths in decendent nodes
       entity: null, // entity: a geometric, text, or other element attached to this node
-      children: [], // children: nodes attached as decendents to this node
+      children: [], // children: nodes attached as descendents to this node
       attributes: {}, // attributes: a free space for meta data associated with this node
       index: {}, // injected user feature index
     };
