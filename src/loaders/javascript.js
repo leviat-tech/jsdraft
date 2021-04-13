@@ -13,7 +13,7 @@ function decorate(def, identifier) {
   if (result.parameters) {
     const original = result.func;
     result.func = function feature(sketch, ...args) {
-      return original(sketch, ...validate(def.parameters, args));
+      return original(sketch, ...validate(def.parameters, args, sketch));
     };
   }
 

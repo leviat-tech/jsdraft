@@ -2,7 +2,7 @@ const confirm = require('./confirm');
 const convert = require('./convert');
 
 
-function validate(defs, args) {
+function validate(defs, args, sketch) {
   const validated = [];
 
   // check that parameter defitions and arguments match in number
@@ -17,13 +17,13 @@ function validate(defs, args) {
     arg = arg ?? def.default;
 
     // check type
-    if (def.type !== undefined && !confirm(arg, def.type)) {
+    if (def.type !== undefined && !confirm(arg, def.type, sketch)) {
       throw new TypeError(`Expected argument type ${typeof arg}/${arg.constructor.name} to be of type ${def.type}`);
     }
 
     // coerce type
     if (def.cast !== undefined) {
-      arg = convert(arg, def.cast);
+      arg = convert(arg, def.cast, sketch);
     }
 
     // save validated argument
