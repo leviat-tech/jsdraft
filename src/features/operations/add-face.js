@@ -1,15 +1,28 @@
-// Add a face to a polygon
+const { base_entity_type } = require('../../utility/misc/entity-type.js');
+
+
+// Add faces to other polyfaces
 module.exports = {
   name: 'add_face',
   parameters: [
-    { name: 'face', cast: 'polyface' },
+    { name: 'faces', cast: 'sketch' },
   ],
-  func: function add_face(sketch, face) {
-    const polyface = sketch.shape;
+  func: function add_face(sketch, adding_sketch) {
+    const faces = adding_sketch.polyfaces
+      .map((pf) => pf.faces.values().next().value);
 
-    const f = face.faces.values().next().value;
-    polyface.addFace(f);
+    const result = [];
 
-    return sketch.create({ entity: polyface });
+    for (const entity of sketch.entities) {
+      const type = base_entity_type(entity);
+      if (type === 'polyface') {
+        faces.forEach((face) => entity.addFace(face));
+        result.push(entity);
+      } else {
+        result.push(entity);
+      }
+    }
+
+    return sketch.new.add(...result);
   },
 };
