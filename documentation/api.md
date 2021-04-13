@@ -205,11 +205,11 @@ const dimSketch = sketch.aligned_dim([0, 0], [4, 3], "right");
 Combines the faces from the supplied sketch with the polyfaces in the original sketch. Useful for creating polyfaces with voids.
 
 ```js
-const sketchB = sketch.new
+const circles = sketch.new
   .circle([0, 15], 5)
   .circle([-5, -5], 5);
 
-const pfaceSketch = sketch.add_faces(sketchB)
+const pfaceSketch = sketch.add_faces(circles)
 ```
 
 
@@ -294,11 +294,9 @@ const result = sketch
 Performs a boolean subtraction: any polyfaces in the provided sketch will be subtracted from any polyfaces in the original sketch.
 
 ```js
-const polyfaceB = sketch.new.rectangle([8, 2], 5, 3);
-
 const result = sketch
   .rectangle([0, 0], 10, 5)
-  .subtract(polyfaceB);
+  .subtract(sketch.new.rectangle([8, 2], 5, 3));
 ```
 
 
@@ -307,11 +305,9 @@ const result = sketch
 Performs a boolean union of the provided polyfaces, and adds the resulting polyface to the sketch.
 
 ```js
-const polyfaceB = sketch.new.rectangle([8, 2], 5, 3);
-
 const result = sketch
   .polyface([0, 0], 10, 5)
-  .union(polyfaceB);
+  .union(sketch.new.rectangle([8, 2], 5, 3));
 ```
 
 
