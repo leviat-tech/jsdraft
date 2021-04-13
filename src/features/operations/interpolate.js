@@ -48,6 +48,6 @@ module.exports = {
 
     const new_pcurve = new Polycurve(...segs);
 
-    return sketch.add(new_pcurve);
+    return sketch.new.add(new_pcurve);
   },
 };
