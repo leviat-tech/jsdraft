@@ -27,7 +27,7 @@ describe('Add Face', () => {
     .circle([-5, -5], 5);
 
   it('should add a face to a polyface', () => {
-    const result = sketch.add_face(face.shape);
+    const result = sketch.add_faces(face.shape);
     const entities = result.entities;
     expect(entities.length).to.eql(1);
     expect(base_entity_type(entities[0])).to.eql('polyface');
@@ -35,7 +35,7 @@ describe('Add Face', () => {
   });
 
   it('should be able to add faces between two sketches', () => {
-    const result = sketch.add_face(face);
+    const result = sketch.add_faces(face);
     const entities = result.entities;
     expect(entities.length).to.eql(1);
     expect(base_entity_type(entities[0])).to.eql('polyface');
@@ -43,7 +43,7 @@ describe('Add Face', () => {
   });
 
   it('should be able to add multiple faces', () => {
-    const result = sketch.add_face(multiface);
+    const result = sketch.add_faces(multiface);
     const entities = result.entities;
     expect(entities.length).to.eql(1);
     expect(base_entity_type(entities[0])).to.eql('polyface');

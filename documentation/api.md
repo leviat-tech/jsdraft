@@ -200,12 +200,16 @@ const dimSketch = sketch.aligned_dim([0, 0], [4, 3], "right");
 
 ## Operations
 
-### _add_face( polyface, polyface )_
+### _add_faces( sketch )_
 
-Adds a new polyface to the sketch, created by adding one polyface to another. Useful for creating polyfaces with voids.
+Combines the faces from the supplied sketch with the polyfaces in the original sketch. Useful for creating polyfaces with voids.
 
 ```js
-const pfaceSketch = sketch.add_face(polyface, face)
+const sketchB = sketch.new
+  .circle([0, 15], 5)
+  .circle([-5, -5], 5);
+
+const pfaceSketch = sketch.add_faces(sketchB)
 ```
 
 
