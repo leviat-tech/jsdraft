@@ -209,7 +209,15 @@ const circles = sketch.new
   .circle([0, 15], 5)
   .circle([-5, -5], 5);
 
-const pfaceSketch = sketch.add_faces(circles)
+const pfaceSketch = sketch
+  .polyface(
+    [-25, 0],
+    [-25, 25],
+    -1,
+    [25, 25],
+    [25, 0],
+  )
+  .add_faces(circles)
 ```
 
 
@@ -243,11 +251,11 @@ const interpolatedSketch = sketch
   .polycurve(
     [-5, 0],
     [-5, 5],
-    1,
+    -1,
     [5, 5],
     [5, 0],
   )
-  .interpolate([0, 0], [10, 10], [2, 5, 8]);
+  .interpolate([0, 0], [100, 100], [20, 50, 80]);
 ```
 
 
