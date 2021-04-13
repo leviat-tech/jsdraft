@@ -22,12 +22,31 @@ describe('Add Face', () => {
   const face = new Sketch()
     .circle([0, 15], 5);
 
-  const result = sketch.add_face(face.shape);
+  const multiface = new Sketch()
+    .circle([0, 15], 5)
+    .circle([-5, -5], 5);
 
   it('should add a face to a polyface', () => {
-    const entities = [...result.shapes()];
+    const result = sketch.add_face(face.shape);
+    const entities = result.entities;
     expect(entities.length).to.eql(1);
     expect(base_entity_type(entities[0])).to.eql('polyface');
     expect(entities[0].faces.size).to.eql(2);
+  });
+
+  it('should be able to add faces between two sketches', () => {
+    const result = sketch.add_face(face);
+    const entities = result.entities;
+    expect(entities.length).to.eql(1);
+    expect(base_entity_type(entities[0])).to.eql('polyface');
+    expect(entities[0].faces.size).to.eql(2);
+  });
+
+  it('should be able to add multiple faces', () => {
+    const result = sketch.add_face(multiface);
+    const entities = result.entities;
+    expect(entities.length).to.eql(1);
+    expect(base_entity_type(entities[0])).to.eql('polyface');
+    expect(entities[0].faces.size).to.eql(3);
   });
 });
