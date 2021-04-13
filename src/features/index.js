@@ -16,7 +16,7 @@ const hide = require('./meta/hide.js');
 const name = require('./meta/name.js');
 const tag = require('./meta/tag.js');
 
-const add_face = require('./operations/add-face.js');
+const add_faces = require('./operations/add-faces.js');
 const explode = require('./operations/explode.js');
 const fillet = require('./operations/fillet.js');
 const interpolate = require('./operations/interpolate.js');
@@ -48,7 +48,7 @@ module.exports = [
   hide,
   name,
   tag,
-  add_face,
+  add_faces,
   explode,
   fillet,
   interpolate,
