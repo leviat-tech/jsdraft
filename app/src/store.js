@@ -34,7 +34,6 @@ export default createStore({
   plugins: [persistence.plugin],
   mutations: {
     reset(state) {
-      console.log('reset');
       const fresh = reset();
       Object.keys(fresh).forEach((key) => {
         state[key] = fresh[key];
