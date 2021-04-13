@@ -88,7 +88,7 @@ class Sketch {
       } else if (type === 'polyface') {
         const edges = [...entity.edges].map((e) => e.shape);
         result.push(...edges);
-      } else {
+      } else if (['arc', 'segment'].includes(type)) {
         result.push(entity);
       }
     }
