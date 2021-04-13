@@ -11,18 +11,12 @@ module.exports = {
     const faces = adding_sketch.polyfaces
       .map((pf) => pf.faces.values().next().value);
 
-    const result = [];
-
-    for (const entity of sketch.entities) {
-      const type = base_entity_type(entity);
-      if (type === 'polyface') {
-        faces.forEach((face) => entity.addFace(face));
-        result.push(entity);
-      } else {
-        result.push(entity);
+    for (const s of sketch.tree('level')) {
+      if (s.node.entity && base_entity_type(s.node.entity) === 'polyface') {
+        faces.forEach((face) => { s.node.entity.addFace(face); });
       }
     }
 
-    return sketch.new.add(...result);
+    return sketch;
   },
 };
