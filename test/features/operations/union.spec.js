@@ -10,8 +10,7 @@ describe('Union', () => {
     .rectangle([0, 0], 10, 5);
 
   const b = new Sketch()
-    .rectangle([8, 2], 5, 3)
-    .shape;
+    .rectangle([8, 2], 5, 3);
 
   it('Should allow a polyface to be added to another polyface', () => {
     const result = a.union(b);

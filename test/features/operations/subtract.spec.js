@@ -10,8 +10,7 @@ describe('Subtract', () => {
     .rectangle([0, 0], 10, 5);
 
   const b = new Sketch()
-    .rectangle([8, 2], 5, 3)
-    .shape;
+    .rectangle([8, 2], 5, 3);
 
   it('Should allow a polyface to be subtracted from another polyface', () => {
     const result = a.subtract(b);
