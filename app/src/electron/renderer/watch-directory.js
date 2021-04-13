@@ -5,10 +5,13 @@ const { basename } = require('path');
 
 let watcher = {};
 
-async function watchDirectory(directory, commit) {
+async function watchDirectory(directory, commit, ignoreInitial) {
   if (watcher.close) await watcher.close();
 
-  watcher = chokidar.watch(`${directory}/*.(sketch.js|sketch.yaml)`, { persistent: true });
+  watcher = chokidar.watch(`${directory}/*.(sketch.js|sketch.yaml)`, {
+    persistent: true,
+    ignoreInitial: ignoreInitial || false,
+  });
 
   watcher.on('add', async (path) => {
     commit('updateFile', { name: basename(path), code: await fs.readFile(path, 'utf-8') });

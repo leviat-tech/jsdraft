@@ -95,10 +95,9 @@ export default createStore({
   },
 
   actions: {
-    watchPath({ state, commit }) {
-      console.log('watch path', state.path);
+    watchPath({ state, commit }, ignoreInitial) {
       if (electron) {
-        window.electron.watchDirectory(state.path, commit);
+        window.electron.watchDirectory(state.path, commit, ignoreInitial);
       }
     },
     loadFiles({ commit }, files) {

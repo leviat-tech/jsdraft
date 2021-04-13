@@ -18,7 +18,7 @@ export default {
     ...mapState(['path', 'draft']),
   },
   mounted() {
-    this.$store.dispatch('watchPath');
+    this.$store.dispatch('watchPath', true);
   },
   methods: {
     ...mapMutations(['updateFile', 'removeFile']),
