@@ -222,15 +222,15 @@ const exploded = sketch.explode();
 ```
 
 
-### _fillet( number, polycurve, polycurve )_
+### _fillet( number )_
 
-Adds a new polycurve to a sketch; the polycurve is created by taking two other polycurves and joining them with an arc of the defined radius.
+Any polycurves or polyfaces in the sketch will have their straight edges filleted by the provided radius.
 
 ```js
-const pcurveA = new Polycurve([0, 0], [10, 10]);
-const pcurveB = new Polycurve([10, 10], [20, 20]);
-
-const filletedSketch = sketch.fillet(2, pcurveA, pcurveB);
+const filleted = sketch
+  .polycurve([0, 0], [16, 16], [25, 0], [50, 0])
+  .polyface([0, 0], [16, 16], [-10, 20], [-12, 2])
+  .fillet(2);
 ```
 
 
