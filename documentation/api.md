@@ -234,14 +234,20 @@ const filleted = sketch
 ```
 
 
-### _interpolate( polycurve, point, point, array )_
+### _interpolate( point, point, array )_
 
-Adds a new polycurve to a sketch; the polycurve is created by taking a polycurve, orienting it along the axis between two points, and connecting the endpoints of each polycurve into a single new polycurve.
+Interpolates a polycurve between two points. The polycurve is created by taking a polycurve, orienting it along the axis between two points, and connecting the endpoints of each polycurve into a single new polycurve.
 
 ```js
-const pcurve = new Polycurve([-1, 0], [-1, 1], 1, [1, 1], [1, 0]);
-
-const interpolatedSketch = sketch.interpolate(pcurve, [0, 0], [10, 10], [2, 5, 8]);
+const interpolatedSketch = sketch
+  .polycurve(
+    [-5, 0],
+    [-5, 5],
+    1,
+    [5, 5],
+    [5, 0],
+  )
+  .interpolate([0, 0], [10, 10], [2, 5, 8]);
 ```
 
 
