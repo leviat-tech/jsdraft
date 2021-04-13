@@ -3,6 +3,8 @@
 const { expect, use } = require('chai');
 use(require('../../helpers.js'));
 const flatten = require('@flatten-js/core');
+const Sketch = require('../../../src/sketch/sketch.js');
+const Point = require('../../../src/entities/geometric/point.js');
 const validate = require('../../../src/utility/validation/validate.js');
 const entities = require('../../../src/entities');
 
@@ -72,5 +74,35 @@ describe('validate', () => {
 
     expect(validate([{ cast: 'circle' }], [[[0, 10], 20]])[0].pc)
       .to.be.a.point({ x: 0, y: 10 });
+  });
+
+  it('to be able to validate a sketch', () => {
+    const sketch = new Sketch();
+    const pt_sketch = sketch.point(1, 1);
+
+    expect(validate(
+      [{ cast: 'sketch' }],
+      [pt_sketch],
+      sketch,
+    )[0]).to.be.instanceof(Sketch);
+
+    expect(() => validate(
+      [{ cast: 'sketch' }],
+      [{}],
+      sketch,
+    )).to.throw(TypeError);
+  });
+
+  it('to be able to cast an entity to a sketch', () => {
+    const sketch = new Sketch().point(0, 5);
+    const pt = new Point(2, 4);
+    const validated = validate(
+      [{ cast: 'sketch' }],
+      [pt],
+      sketch,
+    )[0];
+
+    expect(validated).to.be.instanceof(Sketch);
+    expect(validated.shape).to.be.a.point({ x: 2, y: 4 });
   });
 });

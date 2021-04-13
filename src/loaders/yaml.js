@@ -86,13 +86,13 @@ function chain(sketch, exp, context) {
 }
 
 // parse draft yaml parameter definition
-function parameters(definition, args) {
+function parameters(definition, sketch, args) {
   const params = {};
 
   const normalized = definition
     .map((param) => normalize_yaml_param(param));
 
-  const validated = validate(normalized, args);
+  const validated = validate(normalized, args, sketch);
 
   normalized.forEach((param, i) => {
     // get parameter value
@@ -124,7 +124,7 @@ function reference(definition, sketch, context) {
       const type = match[2];
 
       const evaluated = evaluate_argument(exp, { ...context, ...refs });
-      refs[match[1]] = convert(evaluated, type);
+      refs[match[1]] = convert(evaluated, type, sketch);
 
       // otherwise evaluate as typical argument
     } else {
@@ -143,7 +143,7 @@ function parse(draft, identifier) {
     let context = { ...DEFAULT_CONTEXT };
 
     // load parameters
-    context = { ...context, ...parameters(draft.parameters ?? [], args) };
+    context = { ...context, ...parameters(draft.parameters ?? [], sketch, args) };
 
     // evaluate reference
     context = { ...context, ...reference(draft.reference ?? [], sketch, context) };
