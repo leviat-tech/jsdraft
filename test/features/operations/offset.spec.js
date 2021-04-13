@@ -37,8 +37,7 @@ describe('Offset', () => {
     );
 
   it('can offset a polycurve', () => {
-    const offset = new Sketch()
-      .offset(pcurve.shape, 0.25);
+    const offset = pcurve.offset(0.25);
     const v = offset.shape.vertices;
     expect(v[0]).to.be.a.point({ x: 0.1768, y: 0.1768 });
     expect(v[1]).to.be.a.point({ x: 0.8232, y: 0.8232 });
@@ -46,8 +45,7 @@ describe('Offset', () => {
   });
 
   it('can offset a polyface', () => {
-    const offset = new Sketch()
-      .offset(pface.shape, 0.5);
+    const offset = pface.offset(0.5);
     const v = offset.shape.vertices;
     expect(v[0]).to.be.a.point({ x: 0.5, y: 1 });
     expect(v[1]).to.be.a.point({ x: 1, y: 0.5 });
@@ -60,8 +58,7 @@ describe('Offset', () => {
   });
 
   it('can offset an arc that is greater than PI radians in arc length', () => {
-    const offset = new Sketch()
-      .offset(arc.shape, 1);
+    const offset = arc.offset(1);
     const v = offset.shape.vertices;
     expect(v[0]).to.be.a.point({ x: 0.9231, y: -0.3846 });
     expect(v[1]).to.be.a.point({ x: 5, y: -6.5 });
@@ -69,8 +66,7 @@ describe('Offset', () => {
   });
 
   it('can offset a circle', () => {
-    const offset = new Sketch()
-      .offset(circle.shape, 1);
+    const offset = circle.offset(1);
 
     const v = offset.shape.vertices;
     expect(v[0]).to.be.a.point({ x: -9, y: 0 });
@@ -78,8 +74,7 @@ describe('Offset', () => {
   });
 
   it('An offset can reduce the number of vertices', () => {
-    const offset = new Sketch()
-      .offset(pface.shape, 1);
+    const offset = pface.offset(1);
     const v = offset.shape.vertices;
     expect(v[0]).to.be.a.point({ x: 1, y: 1 });
     expect(v[1]).to.be.a.point({ x: 9, y: 1 });

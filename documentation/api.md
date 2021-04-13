@@ -271,22 +271,20 @@ const result = sketch
 ```
 
 
-### _offset( entity, distance )_
+### _offset( distance )_
 
-Adds a new polycurve or polyface entity to the sketch (depending on the type of entity being offset), offset by the "distance" provided. Can also offset arcs and segments.
+Offsets any arc, segment, polycurve, or polyface entity in the sketch by the "distance" provided.
 
 ```js
-const pcurve = new Sketch()
+const result = sketch
   .polycurve(
     [0, 0],
     1,
     [1, 1],
     -1,
     [3, 3],
-  );
-
-const result = sketch
-  .offset(pcurve, 0.25);
+  )
+  .offset(0.25);
 // Results in a new sketch with the offset polycurve.
 ```
 
