@@ -11,9 +11,10 @@ Sketch instances have a number of built-in feature functions that can be used to
 * [Style features](#style-features)
 * [Meta features](#meta-features)
 
+
 ## Geometric features
 
-### point ( x, y )
+### _point( x, y )_
 
 Adds a point entity.
 
@@ -21,8 +22,9 @@ Adds a point entity.
 const ptSketch = sketch.point(1, 2);
 ```
 
-### segment ( point, point )
-### segment ( segment, point )
+
+### _segment( point, point )_
+### _segment( segment, point )_
 
 Adds a segment to a sketch.
 
@@ -34,11 +36,12 @@ const ptSketch = sketch.segment(ptA, ptB);
 const ptSketch = sketch.segment(segment, pt);
 ```
 
-### arc ( point, number, number, number[, boolean] )
-### arc ( point, number, number[, boolean] )
-### arc ( point, point, point )
-### arc ( point, number, point )
-### arc ( segment, segment, number[, boolean] )
+
+### _arc( point, number, number, number[, boolean] )_
+### _arc( point, number, number[, boolean] )_
+### _arc( point, point, point )_
+### _arc( point, number, point )_
+### _arc( segment, segment, number[, boolean] )_
 
 Adds an arc to a sketch.
 
@@ -59,8 +62,9 @@ const arcSketch = sketch.arc([0, 0], 1, [10, 10]);
 const arcSketch = sketch.arc([[5, 0], [0, 0]], [[0, 5], [0, 0]], 2, false)
 ```
 
-### polycurve ( value, value[, value[, ...[, value]]] )
-### polycurve ( [seg[, seg[, ...[, seg]]]])
+
+### _polycurve( value, value[, value[, ...[, value]]] )_
+### _polycurve( [seg[, seg[, ...[, seg]]]] )_
 
 Adds a polycurve (an open chain of segments and arcs) to a sketch.
 
@@ -84,9 +88,10 @@ const polycurveSketch = sketch.polycurve(
 );
 ```
 
-### polyface ( value, value, value[, value[, ...[, value]]] )
-### polyface ( [seg[, seg[, ...[, seg]]]] )
-### polyface ( polycurve[, bulge] )
+
+### _polyface( value, value, value[, value[, ...[, value]]] )_
+### _polyface( [seg[, seg[, ...[, seg]]]] )_
+### _polyface( polycurve[, bulge] )_
 
 Adds a polyface (a closed chain of segments and arcs) to a sketch. A polyface can consist of multiple chains, which allows for the definition of void faces.
 
@@ -116,10 +121,11 @@ const polyfaceSketch = sketch.polyface(
 );
 ```
 
-### rectangle ( number, number, number, number[, number] )
-### rectangle ( point, number, number[, number] )
-### rectangle ( point, point[, number] )
-### rectangle ( segment, number[, number] )
+
+### _rectangle( number, number, number, number[, number] )_
+### _rectangle( point, number, number[, number] )_
+### _rectangle( point, point[, number] )_
+### _rectangle( segment, number[, number] )_
 
 Adds a rectangle to a sketch. A rectangle is a "polyface"--a closed chain of segments and arcs.
 
@@ -137,10 +143,11 @@ const rectSketch = sketch.rectangle([1, 1], [11, 6], 1);
 const rectSketch = sketch.rectangle([[1, 1], [11, 1]], 5, 1);
 ```
 
-### circle ( point, number )
-### circle ( point, point )
-### circle ( point, point, point )
-### circle ( segment, segment, number )
+
+### _circle( point, number )_
+### _circle( point, point )_
+### _circle( point, point, point )_
+### _circle( segment, segment, number )_
 
 Adds a circle to a sketch. A circle is a "polyface"--a closed chain of segments and arcs.
 
@@ -162,9 +169,10 @@ const circSketch = sketch.circle(
 );
 ```
 
+
 ## Annotations
 
-### text ( string, point[, number] )
+### _text( string, point[, number] )_
 
 Adds a text annotation to a sketch.
 
@@ -174,7 +182,8 @@ const textSketch = sketch.text("Hello, world!", [0, 0], 25);
 // Places the text "Hello, world!" at the sketch's origin.
 ```
 
-### aligned_dim ( point, point[, string] )
+
+### _aligned_dim( point, point[, string] )_
 
 Places an aligned dimension between two points.
 
@@ -188,9 +197,10 @@ const dimSketch = sketch.aligned_dim([0, 0], [4, 3], "right");
 // as in the previous example.
 ```
 
+
 ## Operations
 
-### add_face ( polyface, polyface )
+### _add_face( polyface, polyface )_
 
 Adds a new polyface to the sketch, created by adding one polyface to another. Useful for creating polyfaces with voids.
 
@@ -198,7 +208,8 @@ Adds a new polyface to the sketch, created by adding one polyface to another. Us
 const pfaceSketch = sketch.add_face(polyface, face)
 ```
 
-### explode ()
+
+### _explode()_
 
 Returns a new sketch with all polycurves and polyfaces converted to arcs and segments.
 
@@ -206,7 +217,8 @@ Returns a new sketch with all polycurves and polyfaces converted to arcs and seg
 const exploded = sketch.explode();
 ```
 
-### fillet ( number, polycurve, polycurve )
+
+### _fillet( number, polycurve, polycurve )_
 
 Adds a new polycurve to a sketch; the polycurve is created by taking two other polycurves and joining them with an arc of the defined radius.
 
@@ -217,7 +229,8 @@ const pcurveB = new Polycurve([10, 10], [20, 20]);
 const filletedSketch = sketch.fillet(2, pcurveA, pcurveB);
 ```
 
-### interpolate ( polycurve, point, point, array )
+
+### _interpolate( polycurve, point, point, array )_
 
 Adds a new polycurve to a sketch; the polycurve is created by taking a polycurve, orienting it along the axis between two points, and connecting the endpoints of each polycurve into a single new polycurve.
 
@@ -227,7 +240,8 @@ const pcurve = new Polycurve([-1, 0], [-1, 1], 1, [1, 1], [1, 0]);
 const interpolatedSketch = sketch.interpolate(pcurve, [0, 0], [10, 10], [2, 5, 8]);
 ```
 
-### join ()
+
+### _join()_
 
 Returns a new sketch that joins the coincident endpoints of any segments, arcs, or polycurves.
 
@@ -246,7 +260,8 @@ const result = sketch
 // Results in a sketch with two entities: a polyface and a segment
 ```
 
-### offset ( entity, distance )
+
+### _offset( entity, distance )_
 
 Adds a new polycurve or polyface entity to the sketch (depending on the type of entity being offset), offset by the "distance" provided. Can also offset arcs and segments.
 
@@ -265,7 +280,8 @@ const result = sketch
 // Results in a new sketch with the offset polycurve.
 ```
 
-### subtract ( polyface, polyface )
+
+### _subtract( polyface, polyface )_
 
 Performs a boolean subtraction: subtracts the second polyface from the first, and adds the resulting polyface to the sketch.
 
@@ -276,7 +292,8 @@ const polyfaceB = new Rectangle([8, 2], 5, 3);
 const result = sketch.subtract(polyfaceA, polyfaceB);
 ```
 
-### union ( polyface, polyface )
+
+### _union( polyface, polyface )_
 
 Performs a boolean union of the provided polyfaces, and adds the resulting polyface to the sketch.
 
@@ -287,9 +304,10 @@ const polyfaceB = new Rectangle([8, 2], 5, 3);
 const result = sketch.union(polyfaceA, polyfaceB);
 ```
 
+
 ## Transformations
 
-### orient ( point, point, point, point )
+### _orient( point, point, point, point )_
 
 Orients all of the entities in a sketch by picking an origin and a direction point, and then aligning with a target origin and direction point.
 
@@ -298,7 +316,8 @@ Orients all of the entities in a sketch by picking an origin and a direction poi
 const result = sketch.orient([0, 0], [1, 0], [5, 5], [5, 10]);
 ```
 
-### rotate ( number[, string] )
+
+### _rotate( number[, string] )_
 
 Rotates all of the entities in a sketch by a provided angle. The default units are degrees, pass "rad" to the optional second argument to use radians.
 
@@ -308,7 +327,8 @@ const a = sketch.rotate(45);
 const b = sketch.rotate(Math.PI / 4, "rad");
 ```
 
-### scale ( number, number )
+
+### _scale( number, number )_
 
 Scales all of the entities in a sketch by the provided x- and y- values. NOTE: this will not correctly perform non-uniform scaling of arcs (i.e., by turning them into ellipses).
 
@@ -316,7 +336,8 @@ Scales all of the entities in a sketch by the provided x- and y- values. NOTE: t
 const result = sketch.scale(4, 4);
 ```
 
-### translate ( number, number )
+
+### _translate( number, number )_
 
 Translates all of the entities in a sketch by the provided x- and y- values.
 
@@ -324,9 +345,10 @@ Translates all of the entities in a sketch by the provided x- and y- values.
 const result = sketch.translate(25, -5);
 ```
 
+
 ## Style features
 
-### fill ( string )
+### _fill( string )_
 
 Applies the given fill color to all entities in a sketch.
 
@@ -334,7 +356,8 @@ Applies the given fill color to all entities in a sketch.
 const result = sketch.fill("green");
 ```
 
-### stroke ( string, number )
+
+### _stroke( string, number )_
 
 Applies the given color and line thickness property to all entities in a sketch.
 
@@ -343,11 +366,12 @@ const result = sketch.stroke("red", 3);
 // Results in a red stroke of thickness 3.
 ```
 
+
 ## Meta features
 
 ## Sketch utility functions
 
-### add( ...args )
+### _add( ...args )_
 
 Returns a new sketch with child sketches or entities added.
 
@@ -355,7 +379,8 @@ Returns a new sketch with child sketches or entities added.
 const sketchC = sketch.add(sketchA, sketchB, entityA, entityB);
 ```
 
-### new
+
+### _new_
 
 Returns a new blank sketch with no entities or child nodes.
 
@@ -363,7 +388,8 @@ Returns a new blank sketch with no entities or child nodes.
 const blank = sketch.new;
 ```
 
-### create( options )
+
+### _create( options )_
 
 Creates a new blank sketch with optional properties
 
@@ -374,7 +400,8 @@ const mySketch = sketch.create({
 });
 ```
 
-### clone()
+
+### _clone()_
 
 Returns a clone of a sketch
 
@@ -382,13 +409,15 @@ Returns a clone of a sketch
 const clone = sketch.clone();
 ```
 
-### shape
+
+### _shape_
 
 Returns the first available geometric entity in a sketch
 
 ```js
 const shape = sketch.shape;
 ```
+
 
 ## Entities
 
