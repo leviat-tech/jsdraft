@@ -100,6 +100,16 @@ class Sketch {
     return pick(this.entities, i);
   }
 
+  get polycurves() {
+    return this.entities
+      .filter((e) => base_entity_type(e) === 'polycurve');
+  }
+
+  get polyfaces() {
+    return this.entities
+      .filter((e) => base_entity_type(e) === 'polyface');
+  }
+
   get entities() {
     return [...this.shapes()];
   }
