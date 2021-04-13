@@ -64,6 +64,10 @@ export default createStore({
       state.files = {};
     },
     updateFile(state, { name, code }) {
+      if (!name) {
+        console.warn('Warning! Tried to write an undefined fill to draft: ${name}!');
+        return;
+      }
       state.files[name] = code;
     },
     removeFile(state, filename) {
