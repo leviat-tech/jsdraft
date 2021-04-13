@@ -15,9 +15,12 @@ function translation(a, b) {
 // free is the element that will move and snap to the anchor
 // anchor and free can be points, segments, or entitys
 // snap will snap the free element to the anchor at their closest points
-// if anchor and free are both edges/segments snap will snap them together by the closest point
-//    then then rotate the opposite points so the edges overlap
-module.exports = function snap(sketch, anchor, free) {
+// if anchor and free are both edges/segments snap will:
+//  1) snap them together at their start point
+//  2) rotate them into alignment
+//  3) offset along the anchor edge by the amount specified in the slide parameter
+module.exports = function snap(sketch, anchor, free, slide, flip) {
+
   // for segments snap them together then align, for points or entities only snap them together
   if (anchor instanceof flatten.Segment && free instanceof flatten.Segment) {
     const as = anchor.start;
@@ -25,30 +28,43 @@ module.exports = function snap(sketch, anchor, free) {
     const fs = free.start;
     const fe = free.end;
 
-    // find the closest points between the two segments
-    const pairs = [
-      { snapped: [as, fs], gapped: [ae, fe], distance: distance(as, fs) },
-      { snapped: [as, fe], gapped: [ae, fs], distance: distance(as, fe) },
-      { snapped: [ae, fs], gapped: [as, fe], distance: distance(ae, fs) },
-      { snapped: [ae, fe], gapped: [as, fs], distance: distance(ae, fe) }];
-    pairs.sort((a, b) => a.distance - b.distance);
-    const closest = pairs[0];
-
     // compute transformation to move snapped points together
-    const t = translation(closest.snapped[0], closest.snapped[1]);
+    const translate = translation(as, fs);
 
-    // determine the angle between the points that won't be snapped together
-    const va = flatten.vector(closest.snapped[0], closest.gapped[0]);
-    const vf = flatten.vector(closest.snapped[1], closest.gapped[1]);
+    // compute the rotation matrix to align edges
+    const va = flatten.vector(as, ae);
+    const vf = flatten.vector(fs, fe);
     const angle = vf.angleTo(va);
+    const rotate = flatten.matrix()
+      .translate(fs.x, fs.y)
+      .rotate(angle, 'rad')
+      .translate(-fs.x, -fs.y);
+
+    // compute the slide offset
+    let offset = flatten.matrix();
+    if (slide) {
+      const s = anchor.tangentInStart().multiply(slide);
+      offset = offset.translate(s.x, s.y);
+    }
+
+    // compute flip if specified by moving into world frame, aligning with x axis, flipping, then back to obj frame
+    let reflect = flatten.matrix();
+    if (flip) {
+      const theta = free.tangentInStart().angleTo(flatten.vector(1, 0));
+      reflect = flatten.matrix()
+        .translate(fs.x, fs.y)
+        .rotate(-theta)
+        .scale(1, -1)
+        .rotate(theta)
+        .translate(-fs.x, -fs.y);
+    }
 
     // rotate around snapping point and then translate to snap
-    const origin = closest.snapped[1];
     return sketch
-      .translate(-origin.x, -origin.y)
-      .rotate(angle, 'rad')
-      .translate(origin.x, origin.y)
-      .transform(t);
+      .transform(reflect)
+      .transform(rotate)
+      .transform(translate)
+      .transform(offset);
   }
   return sketch.transform(translation(anchor, free));
 };
