@@ -289,27 +289,29 @@ const result = sketch
 ```
 
 
-### _subtract( polyface, polyface )_
+### _subtract( sketch )_
 
-Performs a boolean subtraction: subtracts the second polyface from the first, and adds the resulting polyface to the sketch.
+Performs a boolean subtraction: any polyfaces in the provided sketch will be subtracted from any polyfaces in the original sketch.
 
 ```js
-const polyfaceA = new Rectangle([0, 0], 10, 5);
-const polyfaceB = new Rectangle([8, 2], 5, 3);
+const polyfaceB = sketch.new.rectangle([8, 2], 5, 3);
 
-const result = sketch.subtract(polyfaceA, polyfaceB);
+const result = sketch
+  .rectangle([0, 0], 10, 5)
+  .subtract(polyfaceB);
 ```
 
 
-### _union( polyface, polyface )_
+### _union( sketch )_
 
 Performs a boolean union of the provided polyfaces, and adds the resulting polyface to the sketch.
 
 ```js
-const polyfaceA = new Rectangle([0, 0], 10, 5);
-const polyfaceB = new Rectangle([8, 2], 5, 3);
+const polyfaceB = sketch.new.rectangle([8, 2], 5, 3);
 
-const result = sketch.union(polyfaceA, polyfaceB);
+const result = sketch
+  .polyface([0, 0], 10, 5)
+  .union(polyfaceB);
 ```
 
 
