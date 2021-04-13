@@ -39,8 +39,8 @@ npm run electron-dev
 
 For node-based projects:
 ```js
-const { load } = require('@crhio/jsdraft');
-const draft = load('path/to/file.draft');
+const { Draft } = require('@crhio/jsdraft');
+const draft = Draft.load('path/to/file.draft');
 
 // Render an svg of a sketch
 const svg = draft.render(
