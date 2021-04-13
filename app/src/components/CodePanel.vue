@@ -19,6 +19,7 @@
 
     <!-- code -->
     <code-editor
+      v-if="localCode"
       v-model="localCode"
       :language="language"
       :underlines="underlines"
