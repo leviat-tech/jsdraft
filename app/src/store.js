@@ -156,8 +156,13 @@ export default createStore({
       const draft = new Draft();
       Object.entries(state.files)
         .forEach(([filename, contents]) => {
-          const { name, extension } = parseFilename(filename);
-          draft.add_file(name, 'sketch', extension, contents);
+          const parsed = parseFilename(filename);
+          if (parsed) {
+            const { name, extension } = parsed;
+            draft.add_file(name, 'sketch', extension, contents);
+          } else {
+            console.warn(`Warning: failed to parse file name ${filename}`);
+          }
         });
 
       return draft;
