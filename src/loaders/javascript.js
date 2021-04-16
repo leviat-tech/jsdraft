@@ -1,5 +1,4 @@
-const fs = require('fs');
-const path = require('path');
+const load_file = require('./load-file.js');
 const evaluate = require('../utility/misc/evaluate');
 const validate = require('../utility/validation/validate');
 
@@ -31,8 +30,7 @@ function parse(contents, identifier) {
 
 function load(file) {
   try {
-    const identifier = path.basename(file, path.extname(file));
-    const doc = fs.readFileSync(file, 'utf8');
+    const { doc, identifier } = load_file(file);
     return parse(doc, identifier);
   } catch (e) {
     throw new Error(`Invalid js sketch: ${file} ${e}`);

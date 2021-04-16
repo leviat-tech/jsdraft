@@ -1,6 +1,5 @@
-const fs = require('fs');
-const path = require('path');
 const yaml = require('js-yaml');
+const load_file = require('./load-file.js');
 const evaluate = require('../utility/misc/evaluate.js');
 const { normalize_yaml_param } = require('./parameters.js');
 const validate = require('../utility/validation/validate.js');
@@ -158,8 +157,7 @@ function parse(draft, identifier) {
 // load draft yaml function from file
 function load(file) {
   try {
-    const identifier = path.basename(file, path.extname(file));
-    const doc = fs.readFileSync(file, 'utf8');
+    const { doc, identifier } = load_file(file);
     return parse(doc, identifier);
   } catch (e) {
     throw new Error(`Invalid yaml sketch: ${file} ${e}`);

@@ -1,16 +1,9 @@
-const fs = require('fs');
-const path = require('path');
 const parse = require('./loaders/parse.js');
 const Sketch = require('./sketch/sketch.js');
 const render = require('./render.js');
 const { parameters } = require('./loaders/parameters.js');
-const parse_filename = require('./utility/misc/parse-filename.js');
+const load_draft_file = require('./loaders/load-draft.js');
 
-
-function isFile(p) {
-  const stat = fs.lstatSync(p);
-  return stat.isFile();
-}
 
 class Draft {
   constructor() {
@@ -44,23 +37,7 @@ class Draft {
 
   // Note: this load function is Node-only
   static load(d) {
-    const directoryFiles = fs.readdirSync(path.join(process.cwd(), d));
-
-    const files = directoryFiles
-      .filter((file) => isFile(path.join(d, file)))
-      .map((filename) => parse_filename(filename))
-      .filter((file) => file)
-      .map((file) => ({
-        ...file,
-        contents: fs.readFileSync(path.join(process.cwd(), d, file.filename), 'utf-8'),
-      }));
-
-    const draft = new Draft();
-    files.forEach((file) => {
-      draft.add_file(file.name, file.type, file.extension, file.contents);
-    });
-
-    return draft;
+    return load_draft_file(d, Draft);
   }
 
   render(name, params, format, options) {
