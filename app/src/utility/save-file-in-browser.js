@@ -10,6 +10,9 @@ async function saveFileInBrowser(draftFilename, draft) {
     zip.file(filename, file.contents);
   });
 
+  // Adding a blank index file allows for simplified importing
+  zip.file('index.js', '');
+
   const content = await zip.generateAsync({ type: 'blob' });
   downloadFile(content, `${draftFilename}.draft.zip`);
 }
