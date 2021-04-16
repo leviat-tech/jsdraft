@@ -7,10 +7,10 @@ return {
   func: function (sketch, height, base_width, top_width) {
     return sketch.polyface(
       [0, 0],
-      [0, height],
+      [base_width, 0],
       [top_width, height],
-      [base_width, 0],
-      [base_width, 0],
+      [0, height],
+      [0, 0],
     )
   }
 }
