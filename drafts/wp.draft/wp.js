@@ -36,15 +36,18 @@ return {
   const Neck = sketch.user.extrusion(Main.edge(-1).length - neck.gap, neck.h,neck.r);
   const NeckSnapped = Neck.snap(Main.edge(-1), Neck.edge(0), 0)
 
- 
-  let WebPlate = Main
-  if (side_lip)
-   WebPlate = Main.union(SideLipSnapped)
+   const WebPlate = Main.union(BottomLipSnapped)
+   .union(LegSnapped)
+   .union(ToeSnapped)
+   .subtract(Hole)
+   .subtract(PillVoid)
+//    .union(SideLipSnapped)
+//    .union(NeckSnapped)
+//    .subtract(HalfPillSnapped)
 
-//   .union(BottomLipSnapped).subtract(HalfPillSnapped).subtract(PillVoid)
 
-  return sketch.add(Main, SideLipSnapped, BottomLipSnapped, LegSnapped, ToeSnapped, HalfPillSnapped, PillVoid, Hole, NeckSnapped);
-//   return sketch.add(WebPlate)
+//   return sketch.add(Main, SideLipSnapped, BottomLipSnapped, LegSnapped, ToeSnapped, HalfPillSnapped, PillVoid, Hole, NeckSnapped);
+  return sketch.add(WebPlate)
 }
 }
 
