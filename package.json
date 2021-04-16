@@ -1,6 +1,6 @@
 {
-  "name": "jsdraft",
-  "version": "1.0.0",
+  "name": "@crhio/jsdraft",
+  "version": "0.0.1",
   "description": "",
   "bin": "src/render.js",
   "scripts": {
@@ -11,6 +11,8 @@
     "test:watch": "mocha --recursive --reporter min --colors -w"
   },
   "author": "",
+  "main": "dist/jsdraft.js",
+  "module": "dist/jsdraft.esm.js",
   "dependencies": {
     "@crhio/offset": "^0.0.5",
     "@crhio/vector": "0.0.3",
@@ -36,5 +38,8 @@
     "mocha": "^8.3.0",
     "rollup": "^2.40.0",
     "svg-parser": "^2.0.4"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }

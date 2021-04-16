@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { render } from '../../../../dist/draft.js';
+import { render } from '@crhio/jsdraft';
 
 
 export default {

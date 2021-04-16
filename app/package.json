@@ -13,6 +13,7 @@
     "electron-build:electron": "electron-builder build"
   },
   "dependencies": {
+    "@crhio/jsdraft": "../",
     "chokidar": "^3.5.1",
     "codemirror": "^5.60.0",
     "electron-context-menu": "^2.5.0",
