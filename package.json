@@ -11,8 +11,12 @@
     "test:watch": "mocha --recursive --reporter min --colors -w"
   },
   "author": "",
-  "main": "dist/jsdraft.js",
+  "main": "dist/jsdraft.cjs.js",
   "module": "dist/jsdraft.esm.js",
+  "browser": {
+    "./src/loaders/load-draft.js": "./src/loaders/load-draft.browser.js",
+    "./src/loaders/load-file.js": "./src/loaders/load-file.browser.js"
+  },
   "dependencies": {
     "@crhio/offset": "^0.0.5",
     "@crhio/vector": "0.0.3",
