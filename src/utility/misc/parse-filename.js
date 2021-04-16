@@ -1,6 +1,6 @@
 function parse_filename(filename) {
   const segments = filename.split('.');
-  if (segments.length < 2 || !segments[0]) {
+  if (segments.length < 3 || !segments[0]) {
     return null;
   }
 
