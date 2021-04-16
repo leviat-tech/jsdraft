@@ -1,9 +1,5 @@
 <template>
   <div class="viewport">
-    <div class="current-point">
-      x: <span class="coordinate">{{ pointDisplay.x }}</span>
-      y: <span class="coordinate">{{ pointDisplay.y }}</span>
-    </div>
     <svg
       ref="svg"
       class="drawing"
@@ -56,7 +52,6 @@ export default {
       selection: null,
       hoverPt: null,
       svgP: { x: 0, y: 0 },
-      dwgP: { x: 0, y: 0 },
       dragFrom: null,
       constrained: false,
       dragOffset: { x: 0, y: 0 },
@@ -67,16 +62,10 @@ export default {
 
 
   computed: {
-    ...mapState(['zoomScale', 'currentTool', 'viewBox']),
+    ...mapState(['zoomScale', 'currentTool', 'viewBox', 'currentPoint']),
     vbString() {
       const { minX, minY, width, height } = this.viewBox;
       return `${minX} ${minY} ${width} ${height}`;
-    },
-    pointDisplay() {
-      return {
-        x: Math.round(this.dwgP.x),
-        y: Math.round(this.dwgP.y),
-      };
     },
   },
 
@@ -102,7 +91,7 @@ export default {
 
 
   methods: {
-    ...mapMutations(['setZoomScale', 'setCurrentTool', 'setViewBox', 'setSelected']),
+    ...mapMutations(['setZoomScale', 'setCurrentTool', 'setViewBox', 'setSelected', 'setCurrentPoint']),
 
     isEmpty,
 
@@ -110,7 +99,7 @@ export default {
       this.hoverPt.x = e.clientX;
       this.hoverPt.y = e.clientY;
       this.svgP = domToSVGCoords(this.$refs.svg, this.hoverPt);
-      this.dwgP = domToSVGCoords(this.$refs.contents, this.hoverPt);
+      this.setCurrentPoint(domToSVGCoords(this.$refs.contents, this.hoverPt));
     },
 
     handleMousedown(e) {
@@ -130,7 +119,7 @@ export default {
       if (this.currentTool === 'draw') {
         this.currentSegment = {
           pt0: this.draft.lastPt() || { x: 0, y: 0 },
-          pt1: { x: Math.round(this.dwgP.x), y: Math.round(this.dwgP.y) },
+          pt1: { x: Math.round(this.currentPoint.x), y: Math.round(this.currentPoint.y) },
         };
       }
 
@@ -187,8 +176,8 @@ export default {
       };
 
       const mouseOffset = {
-        x: this.dwgP.x - viewOffset.x,
-        y: this.dwgP.y - viewOffset.y,
+        x: this.currentPoint.x - viewOffset.x,
+        y: this.currentPoint.y - viewOffset.y,
       };
 
       const zoomScale = e.deltaY > 0
@@ -201,8 +190,8 @@ export default {
       };
 
       const newViewOffset = {
-        x: this.dwgP.x - newMouseOffset.x,
-        y: this.dwgP.y - newMouseOffset.y,
+        x: this.currentPoint.x - newMouseOffset.x,
+        y: this.currentPoint.y - newMouseOffset.y,
       };
 
       const viewBox = {
@@ -251,23 +240,10 @@ export default {
   }
 }
 
-.current-point {
-  position: absolute;
-  bottom: 0.25rem;
-  right: 0;
-  padding: 0.5rem;
-  user-select: none;
-}
-
 .current-line {
   vector-effect: non-scaling-stroke;
   stroke-width: 1.5px;
   stroke: #000;
-}
-
-.coordinate {
-  display: inline-block;
-  width: 2rem;
 }
 
 .view-switcher {

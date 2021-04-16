@@ -26,6 +26,7 @@ function reset() {
     selected: {},
     files: {},
     electron,
+    currentPoint: { x: 0, y: 0 },
   };
 }
 
@@ -62,6 +63,9 @@ export default createStore({
     },
     removeAllFiles(state) {
       state.files = {};
+    },
+    setCurrentPoint(state, value) {
+      state.currentPoint = value;
     },
     updateFile(state, { name, code }) {
       if (!name) {
