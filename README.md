@@ -16,7 +16,7 @@ JSDraft documentation can be found below:
 * [YAML feature syntax](documentation/yaml-syntax.md)
 * [JS feature syntax](documentation/js-syntax.md)
 * [Draft api](documentation/api.md)
-* [Importing draft files](documentation/importing.md)
+* [Draft files](documentation/files.md)
 
 ## Running the app
 
@@ -51,7 +51,7 @@ const svg = draft.render(
 );
 ```
 
-For webkit-based projects (having installed [webpack-jsdraft-loader](documentation/importing.md)):
+For webkit-based projects (having installed [webpack-jsdraft-loader](documentation/files.md#importing-jsdraft-files)):
 ```js
 import draft from 'path/to/file.draft';
 
