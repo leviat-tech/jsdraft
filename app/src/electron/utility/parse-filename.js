@@ -1,11 +1,6 @@
-const validFiletypes = {
-  js: 'application/x-javascript',
-  yaml: 'application/x-yaml',
-};
-
 function parseFilename(filename) {
   const segments = filename.split('.');
-  if (segments.length < 2 || !segments[0]) {
+  if (segments.length < 3 || !segments[0]) {
     return null;
   }
 
