@@ -17,5 +17,6 @@ const output = (file, format) => ({
 
 export default [
   output('dist/jsdraft.js', 'umd'),
+  output('dist/jsdraft.cjs.js', 'cjs'),
   output('dist/jsdraft.esm.js', 'esm'),
 ];
