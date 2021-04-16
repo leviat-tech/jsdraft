@@ -10,5 +10,3 @@ export {
   render,
   parse,
 };
-
-export default Sketch;

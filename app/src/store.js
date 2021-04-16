@@ -1,8 +1,8 @@
+import { Draft, parse } from '@crhio/jsdraft';
 import { createStore } from 'vuex';
 import isElectron from 'is-electron';
 import VuexPersistence from 'vuex-persist';
 import parseFilename from './utility/parse-filename.js';
-import { Draft, parse } from '../../dist/draft.js';
 import saveFileInBrowser from './utility/save-file-in-browser.js';
 
 
@@ -188,7 +188,7 @@ export default createStore({
           { viewport: null },
         );
       } catch (e) {
-        // console.debug(e);
+        console.debug(e);
         return [];
       }
     },
