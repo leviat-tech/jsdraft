@@ -7,7 +7,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.draft\/index\.js$/,
+        test: /\.draft\/index\.json$/,
         use: [
           {
             loader: path.resolve('loader.js'),
