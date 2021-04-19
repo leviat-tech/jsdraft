@@ -176,7 +176,7 @@ export default createStore({
           const parsed = parseFilename(filename);
           if (parsed) {
             const { name, extension } = parsed;
-            draft.add_feature(name, 'sketch', extension, contents);
+            draft.add_feature(name, extension, contents);
           } else {
             console.warn(`Warning: failed to parse file name ${filename}`);
           }

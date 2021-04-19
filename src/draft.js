@@ -17,7 +17,7 @@ class Draft {
     };
   }
 
-  add_feature(name, type, extension, contents) {
+  add_feature(name, extension, contents, type = 'sketch') {
     this.features[type][name] = {
       extension, // yaml or js
       contents, // raw string of file contents
@@ -33,7 +33,7 @@ class Draft {
   rename_feature(old_name, new_name, type = 'sketch') {
     const { extension, contents } = this.features[type][old_name];
 
-    this.add_feature(new_name, type, extension, contents);
+    this.add_feature(new_name, extension, contents, type);
     this.remove_feature(old_name, type);
   }
 
