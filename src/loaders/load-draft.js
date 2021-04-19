@@ -9,20 +9,25 @@ function isFile(p) {
 }
 
 function load_draft_file(d, Draft) {
-  const directoryFiles = fs.readdirSync(path.join(process.cwd(), d));
+  const draft_dir = path.join(process.cwd(), d);
+  const sketch_dir = path.join(draft_dir, 'sketch-features');
 
-  const files = directoryFiles
-    .filter((file) => isFile(path.join(d, file)))
+  const sketch_feature_files = fs.existsSync(sketch_dir)
+    ? fs.readdirSync(sketch_dir)
+    : [];
+
+  const files = sketch_feature_files
+    .filter((file) => isFile(path.join(sketch_dir, file)))
     .map((filename) => parse_filename(filename))
     .filter((file) => file)
     .map((file) => ({
       ...file,
-      contents: fs.readFileSync(path.join(process.cwd(), d, file.filename), 'utf-8'),
+      contents: fs.readFileSync(path.join(sketch_dir, file.filename), 'utf-8'),
     }));
 
   const draft = new Draft();
   files.forEach((file) => {
-    draft.add_file(file.name, file.type, file.extension, file.contents);
+    draft.add_feature(file.name, 'sketch', file.extension, file.contents);
   });
 
   return draft;

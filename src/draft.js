@@ -7,32 +7,38 @@ const load_draft_file = require('./loaders/load-draft.js');
 
 class Draft {
   constructor() {
-    this.files = {};
+    this.features = {
+      sketch: {},
+    };
+
+    this.meta = {
+      filetype: 'JSDraft',
+      version: '0.0.1',
+    };
   }
 
-  add_file(name, type, extension, contents) {
-    this.files[name] = {
-      type, // sketch or model
+  add_feature(name, type, extension, contents) {
+    this.features[type][name] = {
       extension, // yaml or js
       contents, // raw string of file contents
     };
 
-    Object.defineProperty(this.files[name], 'parameters', {
+    Object.defineProperty(this.features[type][name], 'parameters', {
       get: function get() {
-        return parameters(this.files[name]);
+        return parameters(this.features[type][name]);
       }.bind(this),
     });
   }
 
-  rename_file(old_name, new_name) {
-    const { type, extension, contents } = this.files[old_name];
+  rename_feature(old_name, new_name, type = 'sketch') {
+    const { extension, contents } = this.features[type][old_name];
 
-    this.add_file(new_name, type, extension, contents);
-    this.remove_file(old_name);
+    this.add_feature(new_name, type, extension, contents);
+    this.remove_feature(old_name, type);
   }
 
-  remove_file(name) {
-    delete this.files[name];
+  remove_feature(name, type = 'sketch') {
+    delete this.features[type][name];
   }
 
   // Note: this load function is Node-only
@@ -40,11 +46,20 @@ class Draft {
     return load_draft_file(d, Draft);
   }
 
-  render(name, params, format, options) {
-    const source = this.files[name];
+  render(name, params, format, options = {}) {
+    let type;
+    if (options.type) {
+      type = options.type;
+    } else {
+      type = this.features.sketch[name]
+        ? 'sketch'
+        : 'model';
+    }
+
+    const source = this.features[type][name];
     const root = new Sketch();
-    Object.keys(this.files).forEach((key) => {
-      const file = this.files[key];
+    Object.keys(this.features.sketch).forEach((key) => {
+      const file = this.features.sketch[key];
       try {
         const feature = parse(file.extension, file.contents, key);
         root.inject(feature);
