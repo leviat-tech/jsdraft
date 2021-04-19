@@ -6,6 +6,7 @@
   "scripts": {
     "render": "./src/render.js",
     "build": "rollup --config",
+    "build:watch": "chokidar \"src/**/*.js\" --initial -c \"rollup --config\"",
     "test": "mocha --recursive",
     "test:watch": "mocha --recursive --reporter min --colors -w"
   },
@@ -27,6 +28,7 @@
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
     "chai": "^4.3.0",
+    "chokidar-cli": "^2.1.0",
     "eslint": "^7.20.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
