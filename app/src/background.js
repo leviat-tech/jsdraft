@@ -55,5 +55,8 @@ app.on('activate', () => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
+  } else {
+    ipcMain.removeHandler('open-file');
+    ipcMain.removeHandler('save-as');
   }
 });
