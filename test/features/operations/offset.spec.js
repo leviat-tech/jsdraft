@@ -36,6 +36,15 @@ describe('Offset', () => {
       10,
     );
 
+  const pface2 = new Sketch()
+    .polyface(
+      [0, 0],
+      [0, -100],
+      [-100, -100],
+      [[-100, -40], 20],
+      [-50, 0],
+    );
+
   it('can offset a polycurve', () => {
     const offset = pcurve.offset(0.25);
     const v = offset.shape.vertices;
@@ -80,5 +89,20 @@ describe('Offset', () => {
     expect(v[1]).to.be.a.point({ x: 9, y: 1 });
     expect(v[2]).to.be.a.point({ x: 9, y: 9 });
     expect(v[3]).to.be.a.point({ x: 1, y: 9 });
+  });
+
+  it('can offset a shape with bulge defined in the negative direction', () => {
+    const offset = pface2.offset(1);
+    const v = offset.shape.vertices;
+    expect(v[0]).to.be.a.point({ x: 1, y: 0 });
+    expect(v[1]).to.be.a.point({ x: 1, y: -100 });
+    expect(v[2]).to.be.a.point({ x: 0, y: -101 });
+    expect(v[3]).to.be.a.point({ x: -100, y: -101 });
+    expect(v[4]).to.be.a.point({ x: -101, y: -100 });
+    expect(v[5]).to.be.a.point({ x: -101, y: -49.6125 });
+    expect(v[6]).to.be.a.point({ x: -93.1186, y: -33.2143 });
+    expect(v[7]).to.be.a.point({ x: -50.6247, y: 0.7809 });
+    expect(v[8]).to.be.a.point({ x: -50, y: 1 });
+    expect(v[9]).to.be.a.point({ x: 0, y: 1 });
   });
 });
