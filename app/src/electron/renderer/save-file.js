@@ -2,16 +2,16 @@ const fs = require('fs').promises;
 const path = require('path');
 
 
-async function saveFile(savePath, files) {
-  const saveFiles = files
-    .map((file) => {
-      const filename = `${file.name}.sketch.${file.extension}`;
-      const filePath = path.join(savePath, filename);
+async function saveFile(savePath, draft) {
+  const saveFiles = Object.entries(draft.features.sketch)
+    .map(([name, file]) => {
+      const filePath = path.join(savePath, 'sketch-features', `${name}.${file.extension}`);
       return fs.writeFile(filePath, file.contents);
     })
-
-    // Adding a blank index file allows for simplified importing
-    .concat(fs.writeFile(path.join(savePath, 'index.js'), ''));
+    .concat(fs.writeFile(
+      path.join(savePath, 'index.json'),
+      JSON.stringify(draft.meta, null, 2),
+    ));
 
   await Promise.all(saveFiles);
   return true;

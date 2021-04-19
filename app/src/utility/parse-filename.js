@@ -1,22 +1,15 @@
-const validFiletypes = {
-  js: 'application/x-javascript',
-  yaml: 'application/x-yaml',
-};
-
 function parseFilename(filename) {
+  if (!filename) return null;
+
   const segments = filename.split('.');
-  if (segments.length !== 3
-    || segments[1] !== 'sketch'
-    || !validFiletypes[segments[2]]
-  ) {
+  if (segments.length < 2 || !segments[0]) {
     return null;
   }
 
   return {
     filename,
-    name: segments[0],
-    type: segments[1],
-    extension: segments[2],
+    name: segments.slice(0, -1).join('.'),
+    extension: segments[segments.length - 1],
   };
 }
 

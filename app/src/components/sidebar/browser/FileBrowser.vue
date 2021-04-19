@@ -3,7 +3,7 @@
     <file-header />
     <file-tab v-for="file in files" :key="file" :file="file" />
     <div v-if="files.length === 0" class="empty">
-      Click the plus to add a new sketch.
+      Click the plus to add a new feature.
     </div>
   </div>
 </template>
@@ -21,7 +21,7 @@ export default {
     FileTab,
   },
   computed: {
-    files() { return Object.keys(this.$store.state.files).sort(); },
+    files() { return Object.keys(this.$store.state.features.sketch).sort(); },
   },
 };
 </script>

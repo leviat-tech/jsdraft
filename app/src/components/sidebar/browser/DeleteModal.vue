@@ -39,7 +39,7 @@ export default {
       this.showing = false;
     },
     remove() {
-      this.$store.commit('removeFile', this.file);
+      this.$store.commit('removeFile', { name: this.file, type: 'sketch' });
     },
   },
 };

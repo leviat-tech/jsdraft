@@ -27,7 +27,7 @@ export default {
     },
     select(item) {
       if (item === 'Open') {
-        this.$store.commit('setCurrentFile', this.file);
+        this.$store.commit('setCurrentFile', { filename: this.file, type: 'sketch' });
       } else if (item === 'Rename') {
         this.$refs.rename.open();
       } else if (item === 'Delete') {

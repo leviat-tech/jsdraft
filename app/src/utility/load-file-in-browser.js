@@ -1,8 +1,13 @@
 import parseFilename from './parse-filename.js';
 
 
+// WARNING: this import function relies on experimental browser features.
+
 async function loadFileInBrowser(e) {
   const files = Array.from(e.target.files);
+  const filename = files[0] && files[0].webkitRelativePath
+    ? files[0].webkitRelativePath.split('/').shift()
+    : 'File.draft';
 
   const filePromises = files
     .map((file) => ({
@@ -11,6 +16,9 @@ async function loadFileInBrowser(e) {
     }))
     .filter((file) => file.name)
     .map((file) => new Promise((resolve) => {
+      const path = file.file.webkitRelativePath.split('/');
+      path.shift();
+
       const reader = new FileReader();
 
       reader.onload = (evt) => {
@@ -19,6 +27,7 @@ async function loadFileInBrowser(e) {
 
         resolve({
           ...file.name,
+          path,
           contents: evt.target.result,
         });
       };
@@ -27,7 +36,15 @@ async function loadFileInBrowser(e) {
     }));
 
   const results = await Promise.all(filePromises);
-  return results;
+
+  const sketchFeatures = results.filter((file) => file.path[0] === 'sketch-features');
+  const index = results.find((file) => file.path.length === 1 && file.filename === 'index.json');
+
+  return {
+    sketch: sketchFeatures,
+    index,
+    filename,
+  };
 }
 
 export default loadFileInBrowser;

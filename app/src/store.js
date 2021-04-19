@@ -24,7 +24,9 @@ function reset() {
     overrides: [],
     hovered: null,
     selected: {},
-    files: {},
+    features: {
+      sketch: {},
+    },
     electron,
     currentPoint: { x: 0, y: 0 },
   };
@@ -62,33 +64,49 @@ export default createStore({
       state.path = value;
     },
     removeAllFiles(state) {
-      state.files = {};
+      state.features = {
+        sketch: {},
+      };
     },
     setCurrentPoint(state, value) {
       state.currentPoint = value;
     },
-    updateFile(state, { name, code }) {
+    updateFile(state, { name, type, code }) {
       if (!name) {
         console.warn('Warning! Tried to write an undefined fill to draft: ${name}!');
         return;
       }
-      state.files[name] = code;
+      state.features[type][name] = code;
     },
-    removeFile(state, filename) {
-      const filenames = Object.keys(state.files);
-      if (filename === state.currentFile && filenames.length > 1) {
-        const newCurrent = filenames.find((f) => f !== filename);
-        state.currentFile = newCurrent;
-      } else if (filename === state.currentFile) {
+    removeFile(state, { name, type }) {
+      const filenames = Object.keys(state.features[type]);
+
+      // Check whether currently selected file is being removed
+      if (state.currentFile
+        && name === state.currentFile.filename
+        && type === state.currentFile.type
+        && filenames.length > 1) {
+        const newCurrent = filenames.find((f) => f !== name);
+        state.currentFile = { filename: newCurrent, type };
+
+      // Check whether we are removing the last file
+      } else if (state.currentFile
+        && name === state.currentFile.filename
+        && type === state.currentFile.type) {
         state.currentFile = null;
         state.showCodePanel = false;
       }
-      delete state.files[filename];
+
+      delete state.features[type][name];
     },
-    renameFile(state, { name: oldFileName, newName: newFileName }) {
-      state.files[newFileName] = state.files[oldFileName];
-      if (oldFileName === state.currentFile) state.currentFile = newFileName;
-      delete state.files[oldFileName];
+    renameFile(state, { name: oldFileName, newName: newFileName, type }) {
+      state.features[type][newFileName] = state.features[type][oldFileName];
+      if (oldFileName === state.currentFile.filename
+        && type === state.currentFile.type) {
+        state.currentFile = { filename: newFileName, type };
+      }
+
+      delete state.features[type][oldFileName];
     },
     setOverrides(state, overrides) {
       state.overrides = overrides;
@@ -111,40 +129,35 @@ export default createStore({
       commit('removeAllFiles');
 
       // Sort files alphabetically
-      files.sort((a, b) => {
+      files.sketch.sort((a, b) => {
         if (a.name < b.name) return -1;
         if (a.name > b.name) return 1;
         return 0;
       });
 
       // Add files to list of files
-      files.forEach((file) => {
+      files.sketch.forEach((file) => {
         commit('updateFile', {
-          name: `${file.name}.sketch.${file.extension}`,
+          name: `${file.name}.${file.extension}`,
+          type: 'sketch',
           code: file.contents,
         });
       });
 
       // Choose the first as the new active file
-      if (files.length > 0) {
-        commit('setCurrentFile', files[0].filename);
+      if (files.sketch.length > 0) {
+        commit('setCurrentFile', { filename: files.sketch[0].filename, type: 'sketch' });
       }
     },
 
     save({ state, getters, commit }) {
-      const files = Object.entries(getters.draft.files)
-        .map(([name, file]) => ({
-          name,
-          extension: file.extension,
-          contents: file.contents,
-        }));
-
+      console.log('hello', state.filename, 'path', state.path);
       if (!electron) {
         saveFileInBrowser(state.filename, getters.draft);
       } else if (state.path) {
-        window.electron.saveFile(state.path, files);
+        window.electron.saveFile(state.path, getters.draft);
       } else {
-        const path = window.electron.saveAs(state.filename, files);
+        const path = window.electron.saveAs(state.filename, getters.draft);
         commit('setPath', path);
       }
     },
@@ -152,18 +165,18 @@ export default createStore({
 
   getters: {
     currentFileName(state) {
-      if (!state.currentFile) return null;
-      const { name } = parseFilename(state.currentFile);
+      if (!state.currentFile || !state.currentFile.filename) return null;
+      const { name } = parseFilename(state.currentFile.filename);
       return name;
     },
     draft(state) {
       const draft = new Draft();
-      Object.entries(state.files)
+      Object.entries(state.features.sketch)
         .forEach(([filename, contents]) => {
           const parsed = parseFilename(filename);
           if (parsed) {
             const { name, extension } = parsed;
-            draft.add_file(name, 'sketch', extension, contents);
+            draft.add_feature(name, 'sketch', extension, contents);
           } else {
             console.warn(`Warning: failed to parse file name ${filename}`);
           }
@@ -198,8 +211,8 @@ export default createStore({
     },
     errors(state, getters) {
       const errors = {};
-      Object.keys(getters.draft.files).forEach((name) => {
-        const sketch = getters.draft.files[name];
+      Object.keys(getters.draft.features.sketch).forEach((name) => {
+        const sketch = getters.draft.features.sketch[name];
         try {
           parse(sketch.extension, sketch.contents, name);
           getters.draft.render(
