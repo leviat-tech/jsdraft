@@ -151,7 +151,6 @@ export default createStore({
     },
 
     save({ state, getters, commit }) {
-      console.log('hello', state.filename, 'path', state.path);
       if (!electron) {
         saveFileInBrowser(state.filename, getters.draft);
       } else if (state.path) {
