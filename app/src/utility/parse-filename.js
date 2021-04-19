@@ -10,7 +10,7 @@ function parseFilename(filename) {
 
   return {
     filename,
-    name: segments.slice(0, -1).join('.'),
+    name: segments[0],
     extension: segments[segments.length - 1],
   };
 }
