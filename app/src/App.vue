@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
 import Layout from './components/Layout.vue';
 
 
@@ -14,26 +13,8 @@ export default {
   components: {
     Layout,
   },
-  computed: {
-    ...mapState(['path', 'draft']),
-  },
   mounted() {
     this.$store.dispatch('watchPath', true);
-  },
-  methods: {
-    ...mapMutations(['updateFile', 'removeFile']),
-    updateDraftFile(updateType, file) {
-      if (updateType === 'change') {
-        this.updateFile({
-          name: `${file.name}.sketch.${file.extension}`,
-          code: file.contents,
-        });
-      }
-
-      if (updateType === 'unlink') {
-        this.removeFile(`${file.name}.sketch.${file.extension}`);
-      }
-    },
   },
 };
 </script>
