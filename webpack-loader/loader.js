@@ -9,7 +9,9 @@ function isFile(p) {
 
 function parse_filename(filename) {
   const segments = filename.split('.');
-  if (segments.length < 2 || !segments[0]) {
+  if (segments.length < 2
+    || !segments[0]
+    || !['js', 'yaml'].includes(segments[segments.length - 1])) {
     return null;
   }
 
@@ -21,11 +23,11 @@ function parse_filename(filename) {
 }
 
 function loader() {
-  const sketchDir = path.join(this.context, 'sketch-features');
+  const sketchDir = fs.existsSync(path.join(this.context, 'sketch-features'))
+    ? path.join(this.context, 'sketch-features')
+    : this.context;
 
-  const sketchFeatureFiles = fs.existsSync(sketchDir)
-    ? fs.readdirSync(sketchDir)
-    : [];
+  const sketchFeatureFiles = fs.readdirSync(sketchDir);
 
   sketchFeatureFiles.forEach((file) => {
     this.addDependency(path.join(sketchDir + file));
