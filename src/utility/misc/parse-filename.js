@@ -1,6 +1,8 @@
 function parse_filename(filename) {
   const segments = filename.split('.');
-  if (segments.length < 2 || !segments[0]) {
+  if (segments.length < 2
+    || !segments[0]
+    || !['js', 'yaml'].includes(segments[segments.length - 1])) {
     return null;
   }
 
