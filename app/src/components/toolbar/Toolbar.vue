@@ -1,5 +1,15 @@
 <template>
   <div class="toolbar">
+    <warning-modal
+      v-if="creatingNewFile"
+      :text="null"
+      cancel="Cancel"
+      proceed="Create New File"
+      @cancel="creatingNewFile = false"
+      @proceed="newFile"
+    >
+      Are you sure you want to create a new file? Any unsaved changes will be lost.
+    </warning-modal>
     <div class="tools">
       <tool-group>
         <tool
@@ -47,13 +57,18 @@
 
       <tool-group>
         <tool
+          tool-id="new"
+          name="New File"
+          icon="file"
+          @click="askToCreateNewFile"
+        />
+
+        <tool
           tool-id="open"
           name="Open"
           icon="folder-open"
           @click="openFolder"
         />
-
-        <!-- new file -->
 
         <tool
           tool-id="save"
@@ -97,6 +112,7 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 import isElectron from 'is-electron';
 import ToolGroup from './ToolGroup.vue';
 import Tool from './Tool.vue';
+import WarningModal from '../WarningModal.vue';
 import DButton from '../DButton.vue';
 import loadFileInBrowser from '../../utility/load-file-in-browser.js';
 import CodeIcon from '../../assets/icons/code.svg';
@@ -111,10 +127,12 @@ export default {
     Tool,
     DButton,
     CodeIcon,
+    WarningModal,
   },
   data() {
     return {
       electron,
+      creatingNewFile: false,
     };
   },
   computed: {
@@ -150,6 +168,17 @@ export default {
       } else {
         this.loadFile();
       }
+    },
+    askToCreateNewFile() {
+      if (this.filesExist) {
+        this.creatingNewFile = true;
+      } else {
+        this.reset();
+      }
+    },
+    newFile() {
+      this.creatingNewFile = false;
+      this.reset();
     },
     async loadFile(e) {
       if (!electron) {

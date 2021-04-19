@@ -7,7 +7,7 @@
     <div v-if="text" class="modal-text">
       {{ text }}
     </div>
-    <div>
+    <div class="modal-text">
       <slot />
     </div>
     <div v-if="cancel || proceed" class="modal-buttons">
