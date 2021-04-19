@@ -40,14 +40,14 @@ export default {
       this.error = '';
     },
     rename() {
-      if (!this.file.endsWith('.sketch.js') && !this.file.endsWith('.sketch.yaml')) {
-        this.error = 'The file path must end with .sketch.js or .sketch.yaml';
+      if (!this.file.endsWith('.js') && !this.file.endsWith('.yaml')) {
+        this.error = 'The file path must end with .js or .yaml';
       } else if (this.initial === this.file) {
         this.close();
-      } else if (this.$store.state.files[this.file] !== undefined) {
+      } else if (this.$store.state.features.sketch[this.file] !== undefined) {
         this.error = 'A file with this name already exists';
       } else {
-        this.$store.commit('renameFile', { name: this.initial, newName: this.file });
+        this.$store.commit('renameFile', { name: this.initial, newName: this.file, type: 'sketch' });
         this.close();
       }
     },

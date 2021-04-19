@@ -1,6 +1,6 @@
 <template>
   <div class="file-input">
-    <input ref="input" v-model="file" type="text" placeholder="example.sketch.js">
+    <input ref="input" v-model="file" type="text" placeholder="example.js">
   </div>
 </template>
 

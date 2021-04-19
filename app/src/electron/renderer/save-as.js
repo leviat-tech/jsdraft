@@ -4,14 +4,14 @@ const path = require('path');
 const saveFile = require('./save-file.js');
 
 
-async function saveFileDialog(name, files) {
+async function saveFileDialog(name, draft) {
   const directory = await ipcRenderer.invoke('save-as', name);
   const d = directory.filePath;
   const extension = path.extname(d);
   const filename = extension === '.draft' ? d : `${d}.draft`;
 
   await fs.mkdir(filename);
-  await saveFile(filename, files);
+  await saveFile(filename, draft);
   return d;
 }
 

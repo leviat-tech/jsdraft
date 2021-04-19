@@ -1,6 +1,6 @@
 <template>
   <div class="file-header">
-    <h2>Files</h2>
+    <h2>Sketch Features</h2>
     <d-button name="New File" size="sm" icon="plus" @click="create" />
     <create-modal ref="modal" />
   </div>

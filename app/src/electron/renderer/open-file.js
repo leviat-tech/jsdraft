@@ -11,8 +11,12 @@ function isFile(p) {
 
 async function openFile() {
   const directory = await ipcRenderer.invoke('open-file');
-  const d = directory.filePaths[0];
-  const directoryFiles = await fs.promises.readdir(d);
+  const d = path.join(directory.filePaths[0], 'sketch-features');
+
+  const directoryFiles = fs.existsSync(d)
+    ? await fs.promises.readdir(d)
+    : [];
+
   const files = directoryFiles
     .filter((file) => isFile(path.join(d, file)))
     .map((filename) => parseFilename(filename))
@@ -23,9 +27,11 @@ async function openFile() {
     }));
 
   return {
-    filename: path.basename(d),
-    path: d,
-    files: await Promise.all(files),
+    filename: path.basename(directory.filePaths[0]),
+    path: directory.filePaths[0],
+    files: {
+      sketch: await Promise.all(files),
+    },
   };
 }
 

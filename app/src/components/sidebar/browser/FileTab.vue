@@ -25,15 +25,16 @@ export default {
   props: ['file'],
   computed: {
     active() {
-      return this.file === this.$store.state.currentFile;
+      return this.file === (this.$store.state.currentFile
+        && this.$store.state.currentFile.filename);
     },
   },
   methods: {
     select() {
-      this.$store.commit('setCurrentFile', this.file);
+      this.$store.commit('setCurrentFile', { filename: this.file, type: 'sketch' });
     },
     open() {
-      this.$store.commit('setCurrentFile', this.file);
+      this.$store.commit('setCurrentFile', { filename: this.file, type: 'sketch' });
       this.$store.commit('setShowCodePanel', true);
     },
   },

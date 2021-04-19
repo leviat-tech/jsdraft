@@ -121,7 +121,7 @@ export default {
     ...mapState(['currentTool', 'showCodePanel', 'filename', 'path']),
     ...mapGetters(['draft']),
     filesExist() {
-      return Object.keys(this.draft.files).length > 0;
+      return Object.keys(this.draft.features.sketch).length > 0;
     },
   },
   mounted() {
@@ -152,25 +152,20 @@ export default {
       }
     },
     async loadFile(e) {
-      let files;
-      let path;
-      let filename = 'Draft';
-
       if (!electron) {
-        files = await loadFileInBrowser(e);
+        const files = await loadFileInBrowser(e);
         this.reset();
         this.loadFiles(files);
+        this.setFilename(files.filename);
       } else {
         const loaded = await window.electron.openFile();
         this.reset();
-        path = loaded.path;
-        filename = loaded.filename;
+        this.setFilename(loaded.filename);
+        this.setPath(loaded.path);
+        this.$store.dispatch('watchPath');
       }
 
-      this.setFilename(filename);
-      this.setPath(path);
       this.fitToExtents();
-      this.$store.dispatch('watchPath');
     },
     exportFile() {
 

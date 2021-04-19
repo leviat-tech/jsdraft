@@ -8,7 +8,7 @@
             <code-icon class="lg" />
           </d-button>
           <div class="sketch-name">
-            {{ currentFile }}
+            {{ currentFile.filename }}
           </div>
         </div>
         <d-button name="Close Editor" @click="closeCodePanel">
@@ -61,7 +61,7 @@ export default {
     ...mapState(['currentFile']),
     ...mapGetters(['draft', 'currentFileName']),
     language() {
-      return this.draft.files[this.currentFileName]?.extension;
+      return this.draft.features.sketch[this.currentFileName]?.extension;
     },
     errors() {
       if (!this.currentFileName) return null;
@@ -74,7 +74,7 @@ export default {
       return underlines;
     },
     currentCode() {
-      return this.draft.files[this.currentFileName]?.contents;
+      return this.draft.features.sketch[this.currentFileName]?.contents;
     },
   },
   watch: {
@@ -103,7 +103,8 @@ export default {
     },
     validate: debounce(function validate() {
       this.updateFile({
-        name: `${this.currentFileName}.sketch.${this.language}`,
+        name: `${this.currentFileName}.${this.language}`,
+        type: 'sketch',
         code: this.localCode,
       });
     }, 500),
