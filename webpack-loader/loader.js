@@ -48,7 +48,7 @@ function loader() {
     const draft = new Draft();
 
     files.forEach((file) => {
-      draft.add_file(file.name, 'sketch', file.extension, file.contents);
+      draft.add_feature(file.name, file.extension, file.contents);
     });
 
     export default draft;
