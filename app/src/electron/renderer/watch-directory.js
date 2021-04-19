@@ -5,7 +5,7 @@ const { basename } = require('path');
 
 
 function featureType(base, filePath) {
-  const p = filePath.relative(base, path).split('/');
+  const p = path.relative(base, filePath).split('/');
   if (p.length > 1 && p[0] === 'sketch-features') return 'sketch';
   return null;
 }
