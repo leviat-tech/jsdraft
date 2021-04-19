@@ -3,8 +3,12 @@ const fillet_pts = require('./fillet.js');
 const Arc = require('../../entities/geometric/arc.js');
 
 
-function fillet_edges(entity, radius) {
+function fillet_edges(entity, radius, index) {
+  let i = -1;
   for (const edge of entity) {
+    i += 1;
+    if (index !== undefined && index !== i) continue;
+
     const should_fillet = edge.isSegment()
       && !!edge.next
       && edge.next.isSegment();

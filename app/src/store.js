@@ -205,7 +205,7 @@ export default createStore({
         );
       } catch (e) {
         // console.debug(e);
-        return [];
+        return '';
       }
     },
     errors(state, getters) {
