@@ -98,10 +98,24 @@ describe('draft', () => {
     expect(params_2[0]).to.eql({ name: '$x', default: 5 });
   });
 
-  it('should be able to load a file from disk', () => {
+  it('should be able to load a file from disk, test 1', () => {
     const draft = Draft.load('./test/test-draft-files/test.draft');
 
     const result = draft.render('circle', [], 'svg');
+    expect(result).to.contain('path');
+  });
+
+  it('should be able to load a file from disk, test 2', () => {
+    const draft = Draft.load('./test/test-draft-files/test2.draft');
+
+    const result = draft.render('circle', [], 'svg');
+    expect(result).to.contain('path');
+  });
+
+  it('should be able to load a file from disk, test 3', () => {
+    const draft = Draft.load('./test/test-draft-files/test3.js');
+
+    const result = draft.render('test3', [], 'svg');
     expect(result).to.contain('path');
   });
 });
