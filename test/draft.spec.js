@@ -22,20 +22,20 @@ describe('draft', () => {
 
   it('should render a feature', () => {
     const draft = new Draft();
-    draft.add_file('simple', 'sketch', 'js', simple);
+    draft.add_feature('simple', 'sketch', 'js', simple);
     expect(draft).to.render({ name: 'point', x: 0, y: 0 }, { sketch: 'simple' });
   });
 
   it('should inject all files as user features when rendering', () => {
     const draft = new Draft();
-    draft.add_file('simple', 'sketch', 'js', simple);
-    draft.add_file('composed', 'sketch', 'js', composed);
+    draft.add_feature('simple', 'sketch', 'js', simple);
+    draft.add_feature('composed', 'sketch', 'js', composed);
     expect(draft).to.render({ name: 'point', x: 0, y: 0 }, { sketch: 'composed' });
   });
 
   it('should be able to parse and render a javascript sketch', () => {
     const draft = new Draft();
-    draft.add_file('my_point', 'sketch', 'js', `
+    draft.add_feature('my_point', 'sketch', 'js', `
       function feature(sketch, a, b) {
         return sketch.point(a, b);
       }
@@ -46,7 +46,7 @@ describe('draft', () => {
 
   it('should be able to parse and render a yaml sketch', () => {
     const draft = new Draft();
-    draft.add_file('my_point', 'sketch', 'yaml', `
+    draft.add_feature('my_point', 'sketch', 'yaml', `
       parameters:
         - $x: 5
       reference:
@@ -60,7 +60,7 @@ describe('draft', () => {
 
   it('should be able to parse and render the default javascript sketch', () => {
     const draft = new Draft();
-    draft.add_file('feature', 'sketch', 'js', `
+    draft.add_feature('feature', 'sketch', 'js', `
     function untitled (sketch, args) {
       return sketch;
     }
@@ -72,14 +72,14 @@ describe('draft', () => {
   it('can share the parameters of a file', () => {
     const draft = new Draft();
 
-    draft.add_file('my_yaml', 'sketch', 'yaml', `
+    draft.add_feature('my_yaml', 'sketch', 'yaml', `
       parameters:
         - $x: 5
       sketch:
         - point: [$x, 10]
     `);
 
-    draft.add_file('my_js', 'sketch', 'js', `
+    draft.add_feature('my_js', 'sketch', 'js', `
     {
       name: 'my_js',
       parameters: [
@@ -92,8 +92,8 @@ describe('draft', () => {
     }
     `);
 
-    const params_1 = draft.files.my_yaml.parameters;
-    const params_2 = draft.files.my_js.parameters;
+    const params_1 = draft.features.sketch.my_yaml.parameters;
+    const params_2 = draft.features.sketch.my_js.parameters;
     expect(params_1[0]).to.eql({ name: '$x', default: 5 });
     expect(params_2[0]).to.eql({ name: '$x', default: 5 });
   });

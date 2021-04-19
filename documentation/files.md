@@ -4,15 +4,16 @@ JSDraft "files" are just folders containing any number of feature functions, wri
 
 ```
 my_drawing.draft
-├── foo.sketch.yaml
-├── bar.sketch.js
-├── baz.sketch.yaml
-└── index.js
+├── index.json
+└── sketch-features/
+    ├── foo.yaml
+    ├── bar.js
+    └── baz.yaml
 ```
 
-All `.sketch.yaml|js` files are sketch feature functions. All of these functions are automatically registered as user features, and can be used by any of the other features within the `.draft` container.
+All features in the `sketch-features` directory are automatically registered as user features, and can be used by any of the other features within the `.draft` container.
 
-The `index.js` file is blank, and should remain so--its only purpose is to aid in resolving the webpack import.
+The `index.json` file stores metadata about the project.
 
 ## Importing JSDraft Files
 
@@ -29,7 +30,27 @@ const draft = Draft.load('path/to/file.draft');
 
 ### Webpack
 
-Install the separate package, `@crhio/webpack-jsdraft-loader`, and import a `.draft` file from a path:
+Install the separate package, `@crhio/webpack-jsdraft-loader`. The webpack config should contain a rule to define importing of `.draft` files:
+
+```js
+// webpack.config.js
+import draftLoader from '@crhio/webpack-jsdraft-loader';
+
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.draft\/index\.json$/,
+        use: [
+          { loader: draftLoader },
+        ],
+      }
+    ]
+  }
+}
+```
+
+Then the standard import syntax can be used to import a draft file:
 
 ```js
 import draft from 'path/to/file.draft';
