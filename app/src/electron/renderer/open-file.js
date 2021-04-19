@@ -9,21 +9,35 @@ function isFile(p) {
   return stat.isFile();
 }
 
+/*
+The imported file could be:
+
+- a single sketch function file
+- a directory containing sketch feature functions
+- a directory containing a subfolder named "sketch-features"
+- an "index.json" file within a .draft folder
+*/
+
 async function openFile() {
   const directory = await ipcRenderer.invoke('open-file');
-  const d = path.join(directory.filePaths[0], 'sketch-features');
 
-  const directoryFiles = fs.existsSync(d)
-    ? await fs.promises.readdir(d)
-    : [];
+  const d = directory.filePaths[0];
 
-  const files = directoryFiles
-    .filter((file) => isFile(path.join(d, file)))
+  const p = path.basename(d) === 'index.json' ? path.dirname(d) : d;
+
+  const sketchDir = fs.existsSync(path.join(p, 'sketch-features'))
+    ? path.join(p, 'sketch-features')
+    : p;
+
+  const sketchFeatureFiles = await fs.promises.readdir(sketchDir);
+
+  const files = sketchFeatureFiles
+    .filter((file) => isFile(path.join(sketchDir, file)))
     .map((filename) => parseFilename(filename))
     .filter((file) => file)
     .map(async (file) => ({
       ...file,
-      contents: await fs.promises.readFile(path.join(d, file.filename), 'utf-8'),
+      contents: await fs.promises.readFile(path.join(sketchDir, file.filename), 'utf-8'),
     }));
 
   return {

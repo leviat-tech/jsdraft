@@ -37,7 +37,10 @@ async function loadFileInBrowser(e) {
 
   const results = await Promise.all(filePromises);
 
-  const sketchFeatures = results.filter((file) => file.path[0] === 'sketch-features');
+  const sketchFeatures = results.some((file) => file.path[0] === 'sketch-features')
+    ? results.filter((file) => file.path[0] === 'sketch-features')
+    : results;
+
   const index = results.find((file) => file.path.length === 1 && file.filename === 'index.json');
 
   return {
