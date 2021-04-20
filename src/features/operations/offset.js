@@ -13,7 +13,7 @@ function can_offset(entity) {
     || entity instanceof flatten.Polygon;
 }
 
-module.exports = function offset(sketch, distance) {
+module.exports = function offset(sketch, distance, sharp_corners = true) {
   distance = assert(distance, 'number');
 
   for (const s of sketch.tree('level')) {
@@ -76,7 +76,7 @@ module.exports = function offset(sketch, distance) {
       isClosed: type === 'polyface',
     };
 
-    const offset_pline = offset_polyline(pline, distance);
+    const offset_pline = offset_polyline(pline, distance, sharp_corners);
 
     const pcurve_args = [];
     offset_pline[0].vertexes.forEach((vertex) => {

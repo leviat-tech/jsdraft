@@ -45,8 +45,11 @@ describe('Offset', () => {
       [-50, 0],
     );
 
+  const rect = new Sketch()
+    .rectangle([0, 0], 10, 5);
+
   it('can offset a polycurve', () => {
-    const offset = pcurve.offset(0.25);
+    const offset = pcurve.offset(0.25, false);
     const v = offset.shape.vertices;
     expect(v[0]).to.be.a.point({ x: 0.1768, y: 0.1768 });
     expect(v[1]).to.be.a.point({ x: 0.8232, y: 0.8232 });
@@ -54,7 +57,7 @@ describe('Offset', () => {
   });
 
   it('can offset a polyface', () => {
-    const offset = pface.offset(0.5);
+    const offset = pface.offset(0.5, false);
     const v = offset.shape.vertices;
     expect(v[0]).to.be.a.point({ x: 0.5, y: 1 });
     expect(v[1]).to.be.a.point({ x: 1, y: 0.5 });
@@ -67,7 +70,7 @@ describe('Offset', () => {
   });
 
   it('can offset an arc that is greater than PI radians in arc length', () => {
-    const offset = arc.offset(1);
+    const offset = arc.offset(1, false);
     const v = offset.shape.vertices;
     expect(v[0]).to.be.a.point({ x: 0.9231, y: -0.3846 });
     expect(v[1]).to.be.a.point({ x: 5, y: -6.5 });
@@ -75,7 +78,7 @@ describe('Offset', () => {
   });
 
   it('can offset a circle', () => {
-    const offset = circle.offset(1);
+    const offset = circle.offset(1, false);
 
     const v = offset.shape.vertices;
     expect(v[0]).to.be.a.point({ x: -9, y: 0 });
@@ -83,7 +86,7 @@ describe('Offset', () => {
   });
 
   it('An offset can reduce the number of vertices', () => {
-    const offset = pface.offset(1);
+    const offset = pface.offset(1, false);
     const v = offset.shape.vertices;
     expect(v[0]).to.be.a.point({ x: 1, y: 1 });
     expect(v[1]).to.be.a.point({ x: 9, y: 1 });
@@ -92,7 +95,7 @@ describe('Offset', () => {
   });
 
   it('can offset a shape with bulge defined in the negative direction', () => {
-    const offset = pface2.offset(1);
+    const offset = pface2.offset(1, false);
     const v = offset.shape.vertices;
     expect(v[0]).to.be.a.point({ x: 1, y: 0 });
     expect(v[1]).to.be.a.point({ x: 1, y: -100 });
@@ -104,5 +107,17 @@ describe('Offset', () => {
     expect(v[7]).to.be.a.point({ x: -50.6247, y: 0.7809 });
     expect(v[8]).to.be.a.point({ x: -50, y: 1 });
     expect(v[9]).to.be.a.point({ x: 0, y: 1 });
+  });
+
+  it('can offset a rectangle with sharp corners', () => {
+    const offset = rect.offset(-1);
+    const v = offset.shape.vertices;
+    expect(v.length).to.eql(4);
+  });
+
+  it('can offset a rectangle with rounded corners', () => {
+    const offset = rect.offset(-1, false);
+    const v = offset.shape.vertices;
+    expect(v.length).to.eql(8);
   });
 });
