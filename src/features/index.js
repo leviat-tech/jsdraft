@@ -32,6 +32,8 @@ const scale = require('./transformations/scale.js');
 const transform = require('./transformations/transform.js');
 const translate = require('./transformations/translate.js');
 
+const rainbow = require('./debugging/rainbow.js');
+
 
 module.exports = [
   fill,
@@ -62,4 +64,5 @@ module.exports = [
   scale,
   transform,
   translate,
+  rainbow,
 ];
