@@ -230,7 +230,7 @@ const exploded = sketch.explode();
 ```
 
 
-### _fillet( number )_
+### _fillet( number[, number] )_
 
 Any polycurves or polyfaces in the sketch will have their straight edges filleted by the provided radius.
 
@@ -241,6 +241,14 @@ const filleted = sketch
   .fillet(2);
 ```
 
+Providing an index for the optional second argument will cause a single vertex to be filleted:
+
+```js
+const filleted = sketch
+  .polycurve([0, 0], [16, 16], [25, 0], [50, 0])
+  .fillet(2, 0);
+// only the first inner vertex will be filleted.
+```
 
 ### _interpolate( point, point, array )_
 
@@ -279,9 +287,11 @@ const result = sketch
 ```
 
 
-### _offset( distance )_
+### _offset( number[, boolean] )_
 
 Offsets any arc, segment, polycurve, or polyface entity in the sketch by the "distance" provided.
+
+The optional second argument determines whether the resulting offset curve will have sharp corners.
 
 ```js
 const result = sketch
