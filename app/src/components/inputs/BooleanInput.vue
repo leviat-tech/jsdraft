@@ -7,7 +7,6 @@
       v-model="value"
       class="input"
       type="checkbox"
-      @input="handleUpdate"
       @focus="focused = true"
     >
   </div>
@@ -26,9 +25,11 @@ export default {
       focused: false,
     };
   },
-  methods: {
-    handleUpdate() {
-      this.$emit('update:modelValue', this.value);
+  watch: {
+    value: {
+      handler(nv) {
+        this.$emit('update:modelValue', nv);
+      },
     },
   },
 };
