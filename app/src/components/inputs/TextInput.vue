@@ -11,8 +11,8 @@
       class="input"
       type="text"
       placeholder="Enter a value"
-      @keydown.enter="handleUpdate"
-      @blur="handleBlur"
+      @input="handleUpdate"
+      @blur="focused = false"
       @focus="focused = true"
     >
   </div>
@@ -35,10 +35,6 @@ export default {
   methods: {
     handleUpdate() {
       this.$emit('update:modelValue', this.value);
-    },
-    handleBlur() {
-      this.focused = false;
-      this.handleUpdate();
     },
   },
 };

@@ -12,8 +12,8 @@
       type="number"
       placeholder="Enter a value"
       :step="parameter.precision || 1"
-      @keydown.enter="handleUpdate"
-      @blur="handleBlur"
+      @input="handleUpdate"
+      @blur="focused = false"
       @focus="focused = true"
     >
   </div>
@@ -59,10 +59,6 @@ export default {
       } else {
         this.value = this.modelValue;
       }
-    },
-    handleBlur() {
-      this.focused = false;
-      this.handleUpdate();
     },
   },
 };

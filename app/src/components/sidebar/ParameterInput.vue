@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import debounce from 'lodash/debounce';
 import QuantityInput from '../inputs/QuantityInput.vue';
 import TextInput from '../inputs/TextInput.vue';
 import BooleanInput from '../inputs/BooleanInput.vue';
@@ -51,9 +52,9 @@ export default {
   },
   watch: {
     value: {
-      handler(nv) {
+      handler: debounce(function update(nv) {
         this.$emit('update:modelValue', nv);
-      },
+      }, 500),
     },
   },
 };
