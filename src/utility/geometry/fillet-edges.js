@@ -4,12 +4,11 @@ const Arc = require('../../entities/geometric/arc.js');
 
 
 function fillet_edges(entity, radius, index) {
-  let i = -1;
+  let i = 0;
   for (const edge of entity) {
-    i += 1;
-    if (index !== undefined && index !== i) continue;
-
-    const should_fillet = edge.isSegment()
+    const should_fillet = (index === undefined || index === i)
+      && radius > 0
+      && edge.isSegment()
       && !!edge.next
       && edge.next.isSegment();
 
@@ -30,6 +29,8 @@ function fillet_edges(entity, radius, index) {
 
       entity.insert(new flatten.Edge(arc), edge);
     }
+
+    i += 1;
   }
 
   return entity;
