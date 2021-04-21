@@ -5,7 +5,7 @@ JSDraft is a functional toolkit for drawing and flexing 2D parametric drawings.
 It includes:
 - A javascript library (@crhio/jsdraft) for manipulating 2D parametric drawings
 - A simple editor app to assist in creating new drawings
-- TODO: A webkit loader (@crhio/webpack-jsdraft-loader) for importing drawings into webkit projects
+- A webkit loader (@crhio/webpack-jsdraft-loader) for importing drawings into webkit projects
 - TODO: A vite loader (@crhio/vite-jsdraft-loader) for importing drawings into vite projects
 
 
