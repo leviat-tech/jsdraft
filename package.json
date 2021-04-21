@@ -1,16 +1,16 @@
 {
   "name": "@crhio/jsdraft",
   "version": "0.0.1",
-  "description": "",
-  "bin": "src/render.js",
+  "description": "A functional toolkit for drawing and flexing 2D parametric drawings",
+  "bin": "src/cli.js",
   "scripts": {
-    "render": "./src/render.js",
+    "render": "./src/cli.js",
     "build": "rollup --config",
     "build:watch": "chokidar \"src/**/*.js\" --initial -c \"rollup --config\"",
     "test": "mocha --recursive",
     "test:watch": "mocha --recursive --reporter min --colors -w"
   },
-  "author": "",
+  "author": "CRH Technology Studio",
   "main": "src/index.js",
   "module": "dist/jsdraft.esm.js",
   "browser": {
@@ -45,5 +45,14 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/leviat-tech/jsdraft/issues"
+  },
+  "homepage": "https://github.com/leviat-tech/jsdraft#readme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leviat-tech/jsdraft.git"
+  }
 }

@@ -6,7 +6,7 @@
     "test-build": "webpack"
   },
   "dependencies": {
-    "@crhio/jsdraft": "../"
+    "@crhio/jsdraft": "@crhio/jsdraft"
   },
   "main": "loader.js",
   "keywords": [],
