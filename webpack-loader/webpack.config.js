@@ -8,6 +8,7 @@ module.exports = {
     rules: [
       {
         test: /\.draft\/index\.json$/,
+        type: 'javascript/auto',
         use: [
           {
             loader: path.resolve('loader.js'),

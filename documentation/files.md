@@ -41,6 +41,7 @@ module.exports = {
     rules: [
       {
         test: /\.draft\/index\.json$/,
+        type: 'javascript/auto',
         use: [
           { loader: draftLoader },
         ],

@@ -3,7 +3,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 
 const output = (file, format) => ({
-  input: 'src/index.js',
+  input: 'src/bundle.js',
   output: {
     name: 'JSDraft',
     format,

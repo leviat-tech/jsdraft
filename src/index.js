@@ -1,10 +1,10 @@
-import Draft from './draft.js';
-import Sketch from './sketch/sketch.js';
-import render from './render.js';
-import parse from './loaders/parse.js';
+const Draft = require('./draft.js');
+const Sketch = require('./sketch/sketch.js');
+const render = require('./render.js');
+const parse = require('./loaders/parse.js');
 
 
-export {
+module.exports = {
   Draft,
   Sketch,
   render,
