@@ -5,13 +5,12 @@ JSDraft "files" are just folders containing any number of feature functions, wri
 ```
 my_drawing.draft
 ├── index.json
-└── sketch-features/
-    ├── foo.yaml
-    ├── bar.js
-    └── baz.yaml
+├── foo.yaml
+├── bar.js
+└── baz.yaml
 ```
 
-All features in the `sketch-features` directory are automatically registered as user features, and can be used by any of the other features within the `.draft` container.
+All yaml and js features in the are automatically registered as user features, and can be used by any of the other features within the `.draft` container.
 
 The `index.json` file stores metadata about the project.
 
