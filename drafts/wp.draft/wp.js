@@ -4,13 +4,14 @@ return {
     { name: "i1", default: 100 },
     { name: "k2", default: 50 },
     { name: "i2", default: 60 },
+    { name: "radius", default: 10 },
     { name: "side_lip", default: {h: 10, bw:50, tw:30} },
     { name: "bottom_lip", default: {h: 10, bw:70, tw:50} },
     { name: "leg", default: {h: 30, gap: 10, r: 5} },
     { name: "toe", default: {h: 30, gap: 20, r: 5} },
     { name: "neck", default: {h: 30, gap: 20, r: 10} },
   ],
-  func: function wp(sketch, k1, i1, k2, i2, side_lip, bottom_lip, leg, toe, neck) {
+  func: function wp(sketch, k1, i1, k2, i2, radius, side_lip, bottom_lip, leg, toe, neck) {
   const Main = sketch.user.main(k1,i1,k2,i2,0);
   
   const Hole = sketch.circle(Main.offset(-10).vertices[3], 5);
@@ -36,7 +37,7 @@ return {
   const Neck = sketch.user.extrusion(Main.edge(-1).length - neck.gap, neck.h,neck.r);
   const NeckSnapped = Neck.snap(Main.edge(-1), Neck.edge(0), 0)
 
-   const WebPlate = Main.union(BottomLipSnapped)
+   const WebPlate = Main.fillet(radius, 2).union(BottomLipSnapped)
    .union(LegSnapped)
    .union(ToeSnapped)
    .subtract(Hole)
