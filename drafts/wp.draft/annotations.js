@@ -1,13 +1,20 @@
 return {
   parameters: [
-    { name: "segments", default: [] },
+    { name: "items", default: [] },
   ],
-  func: function (sketch, segments) {
-    segments.forEach(segment =>{
-      const dim = sketch.aligned_dim(segment.vertices[0], segment.vertices[1]);
-      sketch.add(dim);
+  func: function (sketch, items) {
+    items.forEach(item =>{
+      if(item.flip)
+      {
+        const dim = sketch.aligned_dim(item.segment.vertices[1], item.segment.vertices[0], "right");
+        sketch.add(dim);
+      }
+      else
+      {
+        const dim = sketch.aligned_dim(item.segment.vertices[0], item.segment.vertices[1]);
+        sketch.add(dim)
+      }
     })
     return sketch;
-    
   }
 }
