@@ -37,7 +37,12 @@ return {
   const Neck = sketch.user.extrusion(Main.edge(-1).length - neck.gap, neck.h,neck.r);
   const NeckSnapped = Neck.snap(Main.edge(-1), Neck.edge(0), 0)
   
-  const annotations = sketch.user.annotations([Main.edge(-1), Main.edge(0), PillVoid.edge(1), ToeSnapped.edge(3)]);
+  const annotations = sketch.user.annotations([
+    {segment: Main.edge(-1), flip: false}, 
+    {segment: Main.edge(0), flip: false}, 
+    {segment: PillVoid.edge(1), flip: false}, 
+    {segment: ToeSnapped.edge(3), flip: true}
+  ]);
 
    const WebPlate = Main.fillet(radius, 2).union(BottomLipSnapped)
    .union(LegSnapped)
