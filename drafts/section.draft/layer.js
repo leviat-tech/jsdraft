@@ -7,13 +7,13 @@ return {
     { name: "material", default: "wood" },
   ],
   func: function (sketch, height, width, cavity, datum, material) {
-    const Colormap={wood: "yellow", steel:"blue", concrete:"grey"}
+    const Colormap={wood: "yellow", steel:"blue", concrete:"grey", air: "transparent"}
     const Layer = sketch.polycurve(
       [cavity+width, 0],
       [cavity, 0],
       [cavity, -height],
       [cavity+width, -height],
-    ).fill(Colormap[material])
+    ).fill(Colormap[material]).stroke("transparent", 0)
     
     sketch.add(Layer);
     
