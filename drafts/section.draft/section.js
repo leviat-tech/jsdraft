@@ -2,10 +2,11 @@ return {
   parameters: [
     {name: "width", default: 200},
     { name: "layers", default: [
-      {height: 10,  cavity:30, material:"wood"},
-      {height: 5,  cavity:30, material:"air"},
+      {height: 10,  cavity:40, material:"concrete", width: 20, padding_bottom: -15},
+      {height: 10,  cavity:60, material:"wood"},
+      {height: 5,  cavity:40, material:"air"},
       {height: 30,  cavity:40, datum: {side:"top", offset:5}, material:"concrete"},
-      {height: 10,  cavity:20, material:"steel"}
+      {height: 20,  cavity:50, width: 40, material:"steel", padding_top: -5}
     ] },
   ],
   func: function (sketch, width, layers) {
@@ -13,10 +14,14 @@ return {
     layers.forEach(layer =>{
       const Layer = sketch.user.layer(
         layer.height, 
-        width-layer.cavity, 
+        layer.width ? layer.width : width-layer.cavity, 
         layer.cavity, 
         layer.datum, 
-        layer.material).translate(0,-Stackheight)
+        layer.material,
+        layer.width && false,
+        layer.padding_bottom,
+        layer.padding_top
+      ).translate(0,-Stackheight)
       Stackheight+=layer.height;
       sketch.add(Layer);
     })
