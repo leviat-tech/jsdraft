@@ -1,8 +1,17 @@
-import parseFilename from './parse-filename.js';
+import set from 'lodash/set';
+
+
+function isValidFilename(filename) {
+  if (!filename) return false;
+
+  const split = filename.split('.');
+  return split.length > 1
+    && split[0]
+    && ['json', 'js', 'yaml'].includes(split[split.length - 1]);
+}
 
 
 // WARNING: this import function relies on experimental browser features.
-
 async function loadFileInBrowser(e) {
   const files = Array.from(e.target.files);
   const filename = files[0] && files[0].webkitRelativePath
@@ -10,13 +19,9 @@ async function loadFileInBrowser(e) {
     : 'File.draft';
 
   const filePromises = files
-    .map((file) => ({
-      name: parseFilename(file.name),
-      file,
-    }))
-    .filter((file) => file.name)
+    .filter((file) => isValidFilename(file.name))
     .map((file) => new Promise((resolve) => {
-      const path = file.file.webkitRelativePath.split('/');
+      const path = file.webkitRelativePath.split('/');
       path.shift();
 
       const reader = new FileReader();
@@ -26,27 +31,24 @@ async function loadFileInBrowser(e) {
         fileReader.value = '';
 
         resolve({
-          ...file.name,
           path,
           contents: evt.target.result,
         });
       };
 
-      reader.readAsText(file.file);
+      reader.readAsText(file);
     }));
 
   const results = await Promise.all(filePromises);
 
-  const sketchFeatures = results.some((file) => file.path[0] === 'sketch-features')
-    ? results.filter((file) => file.path[0] === 'sketch-features')
-    : results;
-
-  const index = results.find((file) => file.path.length === 1 && file.filename === 'index.json');
+  const f = results.reduce((fileObj, file) => {
+    set(fileObj, file.path, file.contents);
+    return fileObj;
+  }, {});
 
   return {
-    sketch: sketchFeatures,
-    index,
     filename,
+    files: f,
   };
 }
 
