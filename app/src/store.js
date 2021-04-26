@@ -152,9 +152,9 @@ export default createStore({
       if (!electron) {
         saveFileInBrowser(state.filename, state.files);
       } else if (state.path) {
-        window.electron.saveFile(state.path, state.files);
+        window.electron.saveFile(state.path, JSON.parse(JSON.stringify(state.files)));
       } else {
-        const path = window.electron.saveAs(state.filename, state.files);
+        const path = window.electron.saveAs(state.filename, JSON.parse(JSON.stringify(state.files)));
         commit('setPath', path);
       }
     },
