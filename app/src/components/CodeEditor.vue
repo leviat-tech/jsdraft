@@ -34,7 +34,7 @@ export default {
     },
     language: {
       handler(nv) {
-        const mode = { js: 'javascript', yaml: 'yaml' }[nv];
+        const mode = { js: 'javascript', json: 'javascript', yaml: 'yaml' }[nv];
         this.editor.setOption('mode', mode);
       },
     },
@@ -56,7 +56,7 @@ export default {
     },
   },
   mounted() {
-    const mode = { js: 'javascript', yaml: 'yaml' }[this.language];
+    const mode = { js: 'javascript', yaml: 'yaml', json: 'javascript' }[this.language];
 
     this.editor = new CodeMirror(this.$refs.codemirror, {
       lineNumbers: true,
