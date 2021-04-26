@@ -19,7 +19,7 @@
 
     <!-- code -->
     <code-editor
-      v-if="localCode"
+      v-if="localCode !== null"
       v-model="localCode"
       :language="language"
       :underlines="underlines"
@@ -33,6 +33,7 @@
 
 <script>
 import { mapMutations, mapState, mapGetters, mapActions } from 'vuex';
+import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import CodeEditor from './CodeEditor.vue';
 import DButton from './DButton.vue';
@@ -58,10 +59,11 @@ export default {
     };
   },
   computed: {
-    ...mapState(['currentFile']),
+    ...mapState(['files', 'currentFile']),
     ...mapGetters(['draft', 'currentFeatureName']),
     language() {
-      return this.draft.features.sketch[this.currentFeatureName]?.extension;
+      if (!this.currentFile) return null;
+      return this.currentFile.split('.').pop();
     },
     errors() {
       if (!this.currentFeatureName) return null;
@@ -73,8 +75,14 @@ export default {
       underlines[this.errors.mark?.line] = 'error';
       return underlines;
     },
+    currentContents() {
+      if (!this.currentFile) return null;
+      const p = this.currentFile.split('/');
+      return get(this.files, p);
+    },
     currentCode() {
-      return this.draft.features.sketch[this.currentFeatureName]?.contents;
+      if (typeof this.currentContents === 'object') return null;
+      return this.currentContents;
     },
   },
   watch: {
@@ -102,9 +110,9 @@ export default {
       this.setShowCodePanel(false);
     },
     validate: debounce(function validate() {
-      if (this.currentFeatureName && this.language) {
+      if (this.currentFile && typeof this.currentContents !== 'object') {
         this.updateFile({
-          path: `${this.currentFeatureName}.${this.language}`,
+          path: this.currentFile,
           code: this.localCode,
         });
       }

@@ -15,6 +15,25 @@ const persistence = new VuexPersistence({
 
 const electron = isElectron();
 
+function traverseFiles(files, condition, path = '') {
+  const arr = Object.entries(files);
+  for (let i = 0; i < arr.length - 1; i += 1) {
+    const file = arr[i];
+
+    if (typeof file[1] === 'object') {
+      const result = traverseFiles(file[1], condition, file[0]);
+      if (result) return result;
+    } else if (condition(file)) {
+      return {
+        path: path ? `${path}/${file[0]}` : file[0],
+        contents: file[1],
+      };
+    }
+  }
+
+  return null;
+}
+
 function reset() {
   return {
     zoomScale: 1,
@@ -64,8 +83,8 @@ export default createStore({
     setPath(state, value) {
       state.path = value;
     },
-    removeAllFiles(state) {
-      state.files = {};
+    setFiles(state, value) {
+      state.files = value;
     },
     setCurrentPoint(state, value) {
       state.currentPoint = value;
@@ -92,16 +111,16 @@ export default createStore({
       unset(state.files, p);
     },
     renameFile(state, { path: oldPath, newPath }) {
-      const contents = get(state.files, oldPath);
+      const p = oldPath.split('/');
+      const q = newPath.split('/');
+      const contents = get(state.files, p);
 
-      const p = newPath.split('/');
-      set(state.files, p, contents);
+      set(state.files, q, contents);
       if (oldPath === state.currentFile) {
         state.currentFile = newPath;
       }
 
-      const q = oldPath.split('/');
-      unset(state.files, q);
+      unset(state.files, p);
     },
     setOverrides(state, overrides) {
       state.overrides = overrides;
@@ -120,37 +139,22 @@ export default createStore({
         window.electron.watchDirectory(state.path, commit, ignoreInitial);
       }
     },
+
     loadFiles({ commit }, files) {
-      commit('removeAllFiles');
-
-      // Sort files alphabetically
-      files.sketch.sort((a, b) => {
-        if (a.name < b.name) return -1;
-        if (a.name > b.name) return 1;
-        return 0;
-      });
-
-      // Add files to list of files
-      files.sketch.forEach((file) => {
-        commit('updateFile', {
-          path: `${file.name}.${file.extension}`,
-          code: file.contents,
-        });
-      });
+      commit('setFiles', files);
 
       // Choose the first as the new active file
-      if (files.sketch.length > 0) {
-        commit('setCurrentFile', files.sketch[0].filename);
-      }
+      const first = traverseFiles(files, (file) => ['js', 'yaml'].includes(file[0].split('.').pop()));
+      if (first) commit('setCurrentFile', first.path);
     },
 
-    save({ state, getters, commit }) {
+    save({ state, commit }) {
       if (!electron) {
-        saveFileInBrowser(state.filename, getters.draft);
+        saveFileInBrowser(state.filename, state.files);
       } else if (state.path) {
-        window.electron.saveFile(state.path, getters.draft);
+        window.electron.saveFile(state.path, state.files);
       } else {
-        const path = window.electron.saveAs(state.filename, getters.draft);
+        const path = window.electron.saveAs(state.filename, state.files);
         commit('setPath', path);
       }
     },
@@ -163,8 +167,9 @@ export default createStore({
     },
     currentFeatureName(state, getters) {
       if (!getters.currentFileName) return null;
-      const { name } = parseFilename(getters.currentFileName);
-      return name;
+      const file = parseFilename(getters.currentFileName);
+      if (file) return file.name;
+      return null;
     },
     draft(state) {
       return Draft.load(state.files);
