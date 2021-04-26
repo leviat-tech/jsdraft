@@ -11,6 +11,12 @@
       @pointerup="handleMouseup"
       @click="deselectEntities"
     >
+      <defs>
+        <pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+          <line style="stroke:red;stroke-width:.3" x1="3" y1="0" x2="3" y2="6" />
+          <line style="stroke:red;stroke-width:.3" x1="0" y1="3" x2="6" y2="3" />
+        </pattern>
+      </defs>
       <g
         ref="contents"
         class="drawing-contents"
