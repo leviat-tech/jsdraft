@@ -8,9 +8,11 @@
 
 
 <script>
+import { mapState } from 'vuex';
+import get from 'lodash/get';
 import Modal from '../../Modal.vue';
 import FileInput from './FileInput.vue';
-import { yaml, js } from '../../../utility/default-blank-sketches.js';
+import { yaml, js, json } from '../../../utility/default-blank-sketches.js';
 import parseFilename from '../../../utility/parse-filename.js';
 
 
@@ -26,6 +28,29 @@ export default {
       file: this.default(),
       error: '',
     };
+  },
+  computed: {
+    ...(mapState(['currentFile'])),
+    folder() {
+      if (!this.currentFile) return '';
+
+      // A file is selected
+      if (this.currentFile.match(/.+\.(yaml|js|json)$/)) {
+        return this.currentFile.split('/').slice(0, -1).join('/');
+      }
+
+      // A folder is selected
+      return this.currentFile;
+    },
+    path() {
+      return this.folder ? this.folder.concat(`/${this.file}`) : this.file;
+    },
+    alreadyExists() {
+      const files = this.$store.state.files;
+      const p = this.path.split('/');
+      const c = get(files, p);
+      return c !== undefined;
+    },
   },
   methods: {
     default() {
@@ -49,18 +74,20 @@ export default {
       this.error = '';
     },
     create() {
-      if (!this.file.endsWith('.js') && !this.file.endsWith('.yaml')) {
+      if (!this.file.endsWith('.js') && !this.file.endsWith('.yaml') && this.path !== 'index.json') {
         this.error = 'The file path must end with .js or .yaml';
-      } else if (this.$store.state.files[this.file] !== undefined) {
+      } else if (this.alreadyExists) {
         this.error = 'A file with this name already exists';
       } else {
-        const { name } = parseFilename(this.file);
-        if (this.file.endsWith('.yaml')) {
-          this.$store.commit('updateFile', { path: this.file, code: yaml(name) });
+        const file = parseFilename(this.file);
+        if (this.path === 'index.json') {
+          this.$store.commit('updateFile', { path: 'index.json', code: json() });
+        } else if (this.file.endsWith('.yaml')) {
+          this.$store.commit('updateFile', { path: this.path, code: yaml(file.name) });
         } else {
-          this.$store.commit('updateFile', { path: this.file, code: js(name) });
+          this.$store.commit('updateFile', { path: this.path, code: js(file.name) });
         }
-        this.$store.commit('setCurrentFile', this.file);
+        this.$store.commit('setCurrentFile', this.path);
         this.close();
       }
     },

@@ -20,14 +20,16 @@ export default {
     RenameModal,
     DeleteModal,
   },
-  props: ['file'],
+  props: {
+    file: { type: Object, required: true },
+  },
   methods: {
     open(event) {
       this.$refs.menu.open(event);
     },
     select(item) {
       if (item === 'Open') {
-        this.$store.commit('setCurrentFile', this.file);
+        this.$store.commit('setCurrentFile', this.file.path);
       } else if (item === 'Rename') {
         this.$refs.rename.open();
       } else if (item === 'Delete') {
@@ -37,11 +39,3 @@ export default {
   },
 };
 </script>
-
-
-<style lang="scss" scoped>
-  @import '../../../assets/styles/variables.scss';
-
-  .file-context-menu {
-  }
-</style>

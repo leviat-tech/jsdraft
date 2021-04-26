@@ -10,7 +10,7 @@
     @proceed="remove"
   >
     <div class="instructions">
-      Are you sure you wish to delete <span class="highlight">{{ file }}</span> ?
+      Are you sure you wish to delete <span class="highlight">{{ file.name }}</span> ?
     </div>
   </warning-modal>
 </template>
@@ -25,7 +25,9 @@ export default {
   components: {
     WarningModal,
   },
-  props: ['file'],
+  props: {
+    file: { type: Object, required: true },
+  },
   data() {
     return {
       showing: false,
@@ -39,7 +41,7 @@ export default {
       this.showing = false;
     },
     remove() {
-      this.$store.commit('removeFile', this.file);
+      this.$store.commit('removeFile', this.file.path);
     },
   },
 };
