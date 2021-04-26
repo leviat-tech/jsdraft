@@ -31,7 +31,7 @@ export default {
     default() {
       let i = 0;
       let name = 'example.js';
-      while (this.$store.state.features.sketch[name]) {
+      while (this.$store.state.files[name]) {
         i += 1;
         name = `example${i}.js`;
       }
@@ -51,16 +51,16 @@ export default {
     create() {
       if (!this.file.endsWith('.js') && !this.file.endsWith('.yaml')) {
         this.error = 'The file path must end with .js or .yaml';
-      } else if (this.$store.state.features.sketch[this.file] !== undefined) {
+      } else if (this.$store.state.files[this.file] !== undefined) {
         this.error = 'A file with this name already exists';
       } else {
         const { name } = parseFilename(this.file);
         if (this.file.endsWith('.yaml')) {
-          this.$store.commit('updateFile', { name: this.file, code: yaml(name), type: 'sketch' });
+          this.$store.commit('updateFile', { path: this.file, code: yaml(name) });
         } else {
-          this.$store.commit('updateFile', { name: this.file, code: js(name), type: 'sketch' });
+          this.$store.commit('updateFile', { path: this.file, code: js(name) });
         }
-        this.$store.commit('setCurrentFile', { filename: this.file, type: 'sketch' });
+        this.$store.commit('setCurrentFile', this.file);
         this.close();
       }
     },

@@ -33,10 +33,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['draft', 'currentFileName']),
+    ...mapGetters(['draft', 'currentFeatureName']),
     parameters() {
       try {
-        const file = this.draft.features.sketch[this.currentFileName];
+        const file = this.draft.features.sketch[this.currentFeatureName];
         return file && file.parameters.map((p) => ({
           parameter: p,
           id: nanoid(5), // force refresh of parameter input

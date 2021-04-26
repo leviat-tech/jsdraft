@@ -27,8 +27,7 @@ async function watchDirectory(directory, commit, ignoreInitial) {
     const type = featureType(directory, p);
     if (type) {
       commit('updateFile', {
-        name: basename(p),
-        type,
+        path: basename(p),
         code: await fs.promises.readFile(p, 'utf-8'),
       });
     }
@@ -37,16 +36,15 @@ async function watchDirectory(directory, commit, ignoreInitial) {
     const type = featureType(directory, p);
     if (type) {
       commit('updateFile', {
-        name: basename(p),
+        path: basename(p),
         code: await fs.promises.readFile(p, 'utf-8'),
-        type,
       });
     }
   });
   watcher.on('unlink', async (p) => {
     const type = featureType(directory, p);
     if (type) {
-      commit('removeFile', { name: basename(p), type });
+      commit('removeFile', basename(p));
     }
   });
 }
