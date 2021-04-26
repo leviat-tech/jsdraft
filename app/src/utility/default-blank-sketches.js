@@ -11,4 +11,10 @@ const js = (name) => `function ${snakeCase(name)} (sketch) {
 }
 `;
 
-export { yaml, js };
+const json = () => `{
+  "filetype": "JSDraft",
+  "version": "0.0.1",
+}
+`;
+
+export { yaml, js, json };
