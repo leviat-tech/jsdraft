@@ -182,10 +182,10 @@ export default {
     },
     async loadFile(e) {
       if (!electron) {
-        const files = await loadFileInBrowser(e);
+        const loaded = await loadFileInBrowser(e);
         this.reset();
-        this.loadFiles(files);
-        this.setFilename(files.filename);
+        this.loadFiles(loaded.files);
+        this.setFilename(loaded.filename);
       } else {
         const loaded = await window.electron.openFile();
         this.reset();
