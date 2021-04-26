@@ -21,7 +21,7 @@ export default {
     FileTab,
   },
   computed: {
-    files() { return Object.keys(this.$store.state.features.sketch).sort(); },
+    files() { return Object.keys(this.$store.state.files).sort(); },
   },
 };
 </script>

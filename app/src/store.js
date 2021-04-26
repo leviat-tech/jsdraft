@@ -1,4 +1,7 @@
 import { Draft, parse } from '@crhio/jsdraft';
+import set from 'lodash/set';
+import get from 'lodash/get';
+import unset from 'lodash/unset';
 import { createStore } from 'vuex';
 import isElectron from 'is-electron';
 import VuexPersistence from 'vuex-persist';
@@ -24,9 +27,7 @@ function reset() {
     overrides: [],
     hovered: null,
     selected: {},
-    features: {
-      sketch: {},
-    },
+    files: {},
     electron,
     currentPoint: { x: 0, y: 0 },
   };
@@ -64,49 +65,43 @@ export default createStore({
       state.path = value;
     },
     removeAllFiles(state) {
-      state.features = {
-        sketch: {},
-      };
+      state.files = {};
     },
     setCurrentPoint(state, value) {
       state.currentPoint = value;
     },
-    updateFile(state, { name, type, code }) {
-      if (!name) {
-        console.warn('Warning! Tried to write an undefined fill to draft: ${name}!');
+    updateFile(state, { path, code }) {
+      if (!path) {
+        console.warn(`Warning! Tried to write an undefined file to draft: ${path}!`);
         return;
       }
-      state.features[type][name] = code;
-    },
-    removeFile(state, { name, type }) {
-      const filenames = Object.keys(state.features[type]);
 
+      // Can't use string notation for set/get because of file extensions
+      const p = path.split('/');
+      set(state.files, p, code);
+    },
+    removeFile(state, path) {
       // Check whether currently selected file is being removed
       if (state.currentFile
-        && name === state.currentFile.filename
-        && type === state.currentFile.type
-        && filenames.length > 1) {
-        const newCurrent = filenames.find((f) => f !== name);
-        state.currentFile = { filename: newCurrent, type };
-
-      // Check whether we are removing the last file
-      } else if (state.currentFile
-        && name === state.currentFile.filename
-        && type === state.currentFile.type) {
+        && path === state.currentFile) {
         state.currentFile = null;
         state.showCodePanel = false;
       }
 
-      delete state.features[type][name];
+      const p = path.split('/');
+      unset(state.files, p);
     },
-    renameFile(state, { name: oldFileName, newName: newFileName, type }) {
-      state.features[type][newFileName] = state.features[type][oldFileName];
-      if (oldFileName === state.currentFile.filename
-        && type === state.currentFile.type) {
-        state.currentFile = { filename: newFileName, type };
+    renameFile(state, { path: oldPath, newPath }) {
+      const contents = get(state.files, oldPath);
+
+      const p = newPath.split('/');
+      set(state.files, p, contents);
+      if (oldPath === state.currentFile) {
+        state.currentFile = newPath;
       }
 
-      delete state.features[type][oldFileName];
+      const q = oldPath.split('/');
+      unset(state.files, q);
     },
     setOverrides(state, overrides) {
       state.overrides = overrides;
@@ -138,15 +133,14 @@ export default createStore({
       // Add files to list of files
       files.sketch.forEach((file) => {
         commit('updateFile', {
-          name: `${file.name}.${file.extension}`,
-          type: 'sketch',
+          path: `${file.name}.${file.extension}`,
           code: file.contents,
         });
       });
 
       // Choose the first as the new active file
       if (files.sketch.length > 0) {
-        commit('setCurrentFile', { filename: files.sketch[0].filename, type: 'sketch' });
+        commit('setCurrentFile', files.sketch[0].filename);
       }
     },
 
@@ -164,29 +158,21 @@ export default createStore({
 
   getters: {
     currentFileName(state) {
-      if (!state.currentFile || !state.currentFile.filename) return null;
-      const { name } = parseFilename(state.currentFile.filename);
+      if (!state.currentFile) return null;
+      return state.currentFile.split('/').pop();
+    },
+    currentFeatureName(state, getters) {
+      if (!getters.currentFileName) return null;
+      const { name } = parseFilename(getters.currentFileName);
       return name;
     },
     draft(state) {
-      const draft = new Draft();
-      Object.entries(state.features.sketch)
-        .forEach(([filename, contents]) => {
-          const parsed = parseFilename(filename);
-          if (parsed) {
-            const { name, extension } = parsed;
-            draft.add_feature(name, extension, contents);
-          } else {
-            console.warn(`Warning: failed to parse file name ${filename}`);
-          }
-        });
-
-      return draft;
+      return Draft.load(state.files);
     },
     entities(state, getters) {
       try {
         return getters.draft.render(
-          getters.currentFileName,
+          getters.currentFeatureName,
           state.overrides,
           'entities',
         );
@@ -198,7 +184,7 @@ export default createStore({
       if (!state.currentFile) return [];
       try {
         return getters.draft.render(
-          getters.currentFileName,
+          getters.currentFeatureName,
           state.overrides,
           'svg',
           { viewport: null },

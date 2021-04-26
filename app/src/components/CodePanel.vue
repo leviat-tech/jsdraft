@@ -8,7 +8,7 @@
             <code-icon class="lg" />
           </d-button>
           <div class="sketch-name">
-            {{ currentFile.filename }}
+            {{ currentFile }}
           </div>
         </div>
         <d-button name="Close Editor" @click="closeCodePanel">
@@ -59,13 +59,13 @@ export default {
   },
   computed: {
     ...mapState(['currentFile']),
-    ...mapGetters(['draft', 'currentFileName']),
+    ...mapGetters(['draft', 'currentFeatureName']),
     language() {
-      return this.draft.features.sketch[this.currentFileName]?.extension;
+      return this.draft.features.sketch[this.currentFeatureName]?.extension;
     },
     errors() {
-      if (!this.currentFileName) return null;
-      return this.$store.getters.errors[this.currentFileName];
+      if (!this.currentFeatureName) return null;
+      return this.$store.getters.errors[this.currentFeatureName];
     },
     underlines() {
       if (!this.errors) return {};
@@ -74,7 +74,7 @@ export default {
       return underlines;
     },
     currentCode() {
-      return this.draft.features.sketch[this.currentFileName]?.contents;
+      return this.draft.features.sketch[this.currentFeatureName]?.contents;
     },
   },
   watch: {
@@ -96,17 +96,18 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'updateFile', 'removeFile']),
+    ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'updateFile']),
     ...mapActions(['save']),
     closeCodePanel() {
       this.setShowCodePanel(false);
     },
     validate: debounce(function validate() {
-      this.updateFile({
-        name: `${this.currentFileName}.${this.language}`,
-        type: 'sketch',
-        code: this.localCode,
-      });
+      if (this.currentFeatureName && this.language) {
+        this.updateFile({
+          path: `${this.currentFeatureName}.${this.language}`,
+          code: this.localCode,
+        });
+      }
     }, 500),
   },
 };
