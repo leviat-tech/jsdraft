@@ -8,7 +8,7 @@
     "build": "rollup --config",
     "build:watch": "chokidar \"src/**/*.js\" --initial -c \"rollup --config\"",
     "test": "mocha --recursive",
-    "test:watch": "mocha --recursive --reporter min --colors -w"
+    "test:watch": "mocha --recursive --reporter min --colors -w --watch-ignore node_modules,.git,app"
   },
   "author": "CRH Technology Studio",
   "main": "src/index.js",
