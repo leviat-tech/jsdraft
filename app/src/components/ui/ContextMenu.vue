@@ -73,7 +73,7 @@ export default {
     background: $color-gray-02;
 
     cursor: pointer;
-    font-family: $font-monospace;
+    // font-family: $font-monospace;
     font-size: .75rem;
 
     .item {
