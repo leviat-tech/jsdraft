@@ -57,11 +57,20 @@ export default createStore({
   state: reset,
   plugins: [persistence.plugin],
   mutations: {
-    reset(state) {
+    reset(state, { files = {}, currentFile = null } = {}) {
       const fresh = reset();
       Object.keys(fresh).forEach((key) => {
         state[key] = fresh[key];
       });
+
+      Object.entries(files).forEach(([path, contents]) => {
+        const p = path.split('/');
+        set(state.files, p, contents);
+      });
+
+      if (currentFile) {
+        state.currentFile = currentFile;
+      }
     },
     setZoomScale(state, value) {
       state.zoomScale = value;
@@ -165,6 +174,17 @@ export default createStore({
     currentFileName(state) {
       if (!state.currentFile) return null;
       return state.currentFile.split('/').pop();
+    },
+    currentFolder(state) {
+      if (!state.currentFile) return '';
+
+      // A file is selected
+      if (state.currentFile.match(/.+\.(yaml|js|json)$/)) {
+        return state.currentFile.split('/').slice(0, -1).join('/');
+      }
+
+      // A folder is selected
+      return state.currentFile;
     },
     currentFeatureName(state, getters) {
       if (!getters.currentFileName) return null;
