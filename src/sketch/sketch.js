@@ -33,17 +33,18 @@ class Sketch {
 
   // add child sketches to sketch
   add(...args) {
+    const clone = this.clone();
     args.forEach((arg) => {
       // A sketch is added as a child node
       if (arg instanceof Sketch) {
-        this.node.children.push(arg);
+        clone.node.children.push(arg);
 
       // Entities can also be added as child nodes
       } else {
-        this.node.children.push(this.create({ entity: arg }));
+        clone.node.children.push(clone.create({ entity: arg }));
       }
     });
-    return this;
+    return clone;
   }
 
   // convenience getter for new blank sketch
