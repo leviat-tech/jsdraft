@@ -5,30 +5,35 @@ const path = require('path');
 
 let watcher = {};
 
-async function watchDirectory(directory, commit, ignoreInitial) {
+async function watchDirectory(directory, commit) {
   if (watcher.close) await watcher.close();
 
   watcher = chokidar.watch(`${directory}/**/*.(js|yaml|json)`, {
     persistent: true,
-    ignoreInitial: ignoreInitial || false,
+    ignoreInitial: true,
   });
 
   watcher.on('add', async (p) => {
-    commit('updateFile', {
-      path: path.relative(directory, p),
-      code: await fs.readFile(p, 'utf-8'),
-    });
+    const filepath = path.relative(directory, p);
+    const code = await fs.readFile(p, 'utf-8');
+
+    commit('updateFile', { path: filepath, code });
+    commit('updateDiskFile', { path: filepath, code });
   });
 
   watcher.on('change', async (p) => {
-    commit('updateFile', {
-      path: path.relative(directory, p),
-      code: await fs.readFile(p, 'utf-8'),
-    });
+    const filepath = path.relative(directory, p);
+    const code = await fs.readFile(p, 'utf-8');
+
+    commit('updateFile', { path: filepath, code });
+    commit('updateDiskFile', { path: filepath, code });
   });
 
   watcher.on('unlink', async (p) => {
-    commit('removeFile', path.relative(directory, p));
+    const filepath = path.relative(directory, p);
+
+    commit('removeFile', filepath);
+    commit('removeDiskFile', filepath);
   });
 }
 
