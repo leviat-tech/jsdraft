@@ -14,7 +14,10 @@ export default {
     Layout,
   },
   mounted() {
-    this.$store.dispatch('watchPath', true);
+    if (this.$store.state.electron && this.$store.state.path) {
+      this.$store.dispatch('getDiskState');
+      this.$store.dispatch('watchPath');
+    }
   },
 };
 </script>

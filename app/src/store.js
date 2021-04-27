@@ -47,7 +47,8 @@ function reset() {
     overrides: [],
     hovered: null,
     selected: {},
-    files: {},
+    files: {}, // In-memory state of files
+    disk: {}, // State of files on disk (only relevant for electron)
     electron,
     currentPoint: { x: 0, y: 0 },
   };
@@ -132,6 +133,17 @@ export default createStore({
 
       unset(state.files, p);
     },
+    setDiskFiles(state, value) {
+      state.disk = value;
+    },
+    updateDiskFile(state, { path, code }) {
+      const p = path.split('/');
+      set(state.disk, p, code);
+    },
+    removeDiskFile(state, path) {
+      const p = path.split('/');
+      unset(state.disk, p);
+    },
     setOverrides(state, overrides) {
       state.overrides = overrides;
     },
@@ -144,10 +156,13 @@ export default createStore({
   },
 
   actions: {
-    watchPath({ state, commit }, ignoreInitial) {
-      if (electron) {
-        window.electron.watchDirectory(state.path, commit, ignoreInitial);
-      }
+    watchPath({ state, commit }) {
+      window.electron.watchDirectory(state.path, commit);
+    },
+
+    async getDiskState({ state, commit }) {
+      const files = await window.electron.getFile(state.path);
+      commit('setDiskFiles', files);
     },
 
     loadFiles({ commit }, files) {

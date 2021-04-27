@@ -110,7 +110,6 @@
 import Mousetrap from 'mousetrap';
 import { mapState, mapMutations, mapActions } from 'vuex';
 import isEqual from 'lodash/isEqual';
-import isElectron from 'is-electron';
 import ToolGroup from './ToolGroup.vue';
 import Tool from './Tool.vue';
 import WarningModal from '../WarningModal.vue';
@@ -119,8 +118,6 @@ import loadFileInBrowser from '../../utility/load-file-in-browser.js';
 import CodeIcon from '../../assets/icons/code.svg';
 import { js, json } from '../../utility/default-blank-sketches.js';
 
-
-const electron = isElectron();
 
 export default {
   name: 'Toolbar',
@@ -133,12 +130,11 @@ export default {
   },
   data() {
     return {
-      electron,
       creatingNewFile: false,
     };
   },
   computed: {
-    ...mapState(['currentTool', 'showCodePanel', 'filename', 'path', 'files']),
+    ...mapState(['currentTool', 'showCodePanel', 'filename', 'path', 'files', 'electron']),
     filesHaveChanged() {
       return !isEqual(this.files, {
         'index.json': json(),
@@ -157,7 +153,7 @@ export default {
     });
   },
   methods: {
-    ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'setFilename', 'setPath', 'reset']),
+    ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'setFilename', 'setPath', 'reset', 'setDiskFiles']),
     ...mapActions(['loadFiles', 'save']),
     chooseTool(id) {
       this.setCurrentTool(id);
@@ -166,7 +162,7 @@ export default {
 
     },
     openFolder() {
-      if (!electron) {
+      if (!this.electron) {
         const fileReader = document.getElementById('fileReader');
         fileReader.click();
       } else {
@@ -197,7 +193,7 @@ export default {
       });
     },
     async loadFile(e) {
-      if (!electron) {
+      if (!this.electron) {
         const loaded = await loadFileInBrowser(e);
         this.reset();
         this.loadFiles(loaded.files);
@@ -205,6 +201,8 @@ export default {
       } else {
         const loaded = await window.electron.openFile();
         this.reset();
+        this.loadFiles(loaded.files);
+        this.setDiskFiles(loaded.files);
         this.setFilename(loaded.filename);
         this.setPath(loaded.path);
         this.$store.dispatch('watchPath');
