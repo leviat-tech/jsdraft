@@ -10,6 +10,7 @@ return {
     { name: "padding_top", default: 0 },
   ],
   func: function (sketch, height, width, cavity, datum, material, infinite, padding_bottom, padding_top) {
+    const sketches =[];
     const Style={
       wood: {fill:"yellow", stroke:["black",.5]}, 
       steel:{fill:"blue", stroke:["black",1]}, 
@@ -25,7 +26,7 @@ return {
       [cavity+width, -height+padding_bottom],
     ).fill(Style[material].fill)
      .stroke(...Style[material].stroke)
-    sketch.add(Layer);
+    sketches.push(Layer);
     }
     else
     {
@@ -37,7 +38,7 @@ return {
       [cavity+width, -padding_top],
     ).fill(Style[material].fill)
      .stroke(...Style[material].stroke)
-    sketch.add(Layer);
+    sketches.push(Layer);
     }
     
     
@@ -52,8 +53,8 @@ return {
       [cavity+width, 0],
     ).offset(-Offset[datum.side]).stroke("red", 2)
       const Text = sketch.new.text("0.00", Datumline.vertices[0]).translate(12,8)
-      sketch.add(Datumline, Text)
+      sketches.push(Datumline, Text)
     }
-    return sketch;
+    return sketch.add(...sketches);
   }
 }
