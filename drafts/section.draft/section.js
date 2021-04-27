@@ -1,12 +1,12 @@
 return {
   parameters: [
-    {name: "width", default: 200},
+    {name: "width", default: 1000},
     { name: "layers", default: [
-      {height: 10,  cavity:40, material:"concrete", width: 20, padding_bottom: -15},
-      {height: 10,  cavity:60, material:"wood"},
-      {height: 5,  cavity:40, material:"air"},
-      {height: 30,  cavity:40, datum: {side:"top", offset:5}, material:"concrete"},
-      {height: 20,  cavity:50, width: 40, material:"steel", padding_top: -5}
+      {height: 50,  cavity:200, material:"concrete", width: 100, padding_bottom: -75},
+      {height: 50,  cavity:300, material:"wood"},
+      {height: 25,  cavity:200, material:"air"},
+      {height: 150,  cavity:200, datum: {side:"top", offset:10}, material:"concrete"},
+      {height: 100,  cavity:250, width: 200, material:"steel", padding_top: -50}
     ] },
   ],
   func: function (sketch, width, layers) {
