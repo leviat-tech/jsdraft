@@ -10,6 +10,7 @@ return {
     ] },
   ],
   func: function (sketch, width, layers) {
+    const sketches =[];
     let Stackheight = 0;
     layers.forEach(layer =>{
       const Layer = sketch.user.layer(
@@ -23,9 +24,9 @@ return {
         layer.padding_top
       ).translate(0,-Stackheight)
       Stackheight+=layer.height;
-      sketch.add(Layer);
+      sketches.push(Layer);
     })
 //     const Masonry = sketch.user.masonry();
-    return sketch;
+    return sketch.add(...sketches);
   }
 }
