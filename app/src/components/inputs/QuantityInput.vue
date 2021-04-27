@@ -41,6 +41,7 @@ export default {
       return this.parameter.max;
     },
     coercedValue() {
+      if (this.value === '') return NaN;
       if (parseFloat(this.value) !== parseFloat(this.modelValue)) {
         const value = this.value * 1;
         if (this.max != null && this.max < value) return this.max;
@@ -53,11 +54,9 @@ export default {
   },
   methods: {
     handleUpdate() {
-      if (typeof this.coercedValue === 'number') {
+      if (typeof this.coercedValue === 'number' && !Number.isNaN(this.coercedValue)) {
         this.value = this.coercedValue;
         this.$emit('update:modelValue', this.coercedValue);
-      } else {
-        this.value = this.modelValue;
       }
     },
   },
