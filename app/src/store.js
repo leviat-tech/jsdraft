@@ -3,6 +3,7 @@ import set from 'lodash/set';
 import get from 'lodash/get';
 import unset from 'lodash/unset';
 import { createStore } from 'vuex';
+import { toRaw } from 'vue';
 import isElectron from 'is-electron';
 import VuexPersistence from 'vuex-persist';
 import parseFilename from './utility/parse-filename.js';
@@ -152,9 +153,9 @@ export default createStore({
       if (!electron) {
         saveFileInBrowser(state.filename, state.files);
       } else if (state.path) {
-        window.electron.saveFile(state.path, JSON.parse(JSON.stringify(state.files)));
+        window.electron.saveFile(state.path, toRaw(state.files));
       } else {
-        const path = window.electron.saveAs(state.filename, JSON.parse(JSON.stringify(state.files)));
+        const path = window.electron.saveAs(state.filename, toRaw(state.files));
         commit('setPath', path);
       }
     },
