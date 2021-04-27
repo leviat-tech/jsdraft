@@ -37,4 +37,23 @@ describe('Sketch', () => {
   it('can return its most recent entity', () => {
     expect(sketch.shape).to.be.a.point({ x: 5, y: 5 });
   });
+
+  it('can call injected custom functions from sketches resulting from custom functions', () => {
+    function feature(s) { return s; }
+    const root = new Sketch();
+    root.inject(feature);
+    const intermediate = root.new.user.feature();
+    expect(intermediate.user.feature).to.not.equal(undefined);
+  });
+
+  it('index owner should refer to the sketch that owns the index', () => {
+    const root = new Sketch();
+    expect(root.node.index.owner()).to.equal(root);
+    const derivative = root.new;
+    expect(derivative.node.index.owner()).to.equal(derivative);
+    const clone = Sketch.clone(root);
+    expect(clone.node.index.owner()).to.equal(clone);
+    const grandchild = derivative.create();
+    expect(grandchild.node.index.owner()).to.equal(grandchild);
+  });
 });
