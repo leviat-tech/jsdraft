@@ -16,6 +16,8 @@ function can_offset(entity) {
 module.exports = function offset(sketch, distance, sharp_corners = true) {
   distance = assert(distance, 'number');
 
+  if (distance === 0) return sketch;
+
   for (const s of sketch.tree('level')) {
     let entity = s.node.entity;
     if (!entity) continue;
