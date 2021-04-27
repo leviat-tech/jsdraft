@@ -8,7 +8,7 @@
 
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import get from 'lodash/get';
 import Modal from '../../Modal.vue';
 import FileInput from './FileInput.vue';
@@ -25,44 +25,36 @@ export default {
   data() {
     return {
       showing: false,
-      file: this.default(),
+      file: '',
       error: '',
     };
   },
   computed: {
-    ...(mapState(['currentFile'])),
-    folder() {
-      if (!this.currentFile) return '';
-
-      // A file is selected
-      if (this.currentFile.match(/.+\.(yaml|js|json)$/)) {
-        return this.currentFile.split('/').slice(0, -1).join('/');
-      }
-
-      // A folder is selected
-      return this.currentFile;
-    },
+    ...(mapState(['currentFile', 'files'])),
+    ...(mapGetters(['currentFolder'])),
     path() {
-      return this.folder ? this.folder.concat(`/${this.file}`) : this.file;
+      return this.currentFolder ? this.currentFolder.concat(`/${this.file}`) : this.file;
     },
     alreadyExists() {
-      const files = this.$store.state.files;
       const p = this.path.split('/');
-      const c = get(files, p);
+      const c = get(this.files, p);
       return c !== undefined;
     },
   },
   methods: {
     default() {
       let i = 0;
-      let name = 'example.js';
-      while (this.$store.state.files[name]) {
+      let name = 'untitled.js';
+      let path = this.currentFolder.split('/').concat(name);
+      while (get(this.$store.state.files, path)) {
         i += 1;
-        name = `example${i}.js`;
+        name = `untitled${i}.js`;
+        path = this.currentFolder.split('/').concat(name);
       }
       return name;
     },
     open() {
+      this.file = this.default();
       this.showing = true;
       this.$nextTick(() => {
         this.$refs.input.focus({ select: true });

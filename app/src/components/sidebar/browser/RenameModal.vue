@@ -57,7 +57,7 @@ export default {
       this.error = '';
     },
     rename() {
-      if (!this.file.endsWith('.js') && !this.file.endsWith('.yaml')) {
+      if (this.initial.type === 'file' && !this.file.endsWith('.js') && !this.file.endsWith('.yaml')) {
         this.error = 'The file path must end with .js or .yaml';
       } else if (this.initial.name === this.file) {
         this.close();

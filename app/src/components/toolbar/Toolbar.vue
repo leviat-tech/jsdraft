@@ -86,7 +86,7 @@
       </tool-group>
     </div>
     <d-button
-      v-if="!showCodePanel && filesExist"
+      v-if="!showCodePanel"
       name="Code"
       class="code-button"
       @click="openCodePanel"
@@ -108,7 +108,8 @@
 
 <script>
 import Mousetrap from 'mousetrap';
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
+import isEqual from 'lodash/isEqual';
 import isElectron from 'is-electron';
 import ToolGroup from './ToolGroup.vue';
 import Tool from './Tool.vue';
@@ -116,6 +117,7 @@ import WarningModal from '../WarningModal.vue';
 import DButton from '../DButton.vue';
 import loadFileInBrowser from '../../utility/load-file-in-browser.js';
 import CodeIcon from '../../assets/icons/code.svg';
+import { js, json } from '../../utility/default-blank-sketches.js';
 
 
 const electron = isElectron();
@@ -136,10 +138,12 @@ export default {
     };
   },
   computed: {
-    ...mapState(['currentTool', 'showCodePanel', 'filename', 'path']),
-    ...mapGetters(['draft']),
-    filesExist() {
-      return Object.keys(this.draft.features.sketch).length > 0;
+    ...mapState(['currentTool', 'showCodePanel', 'filename', 'path', 'files']),
+    filesHaveChanged() {
+      return !isEqual(this.files, {
+        'index.json': json(),
+        'main.js': js('main'),
+      });
     },
   },
   mounted() {
@@ -170,15 +174,27 @@ export default {
       }
     },
     askToCreateNewFile() {
-      if (this.filesExist) {
+      if (this.filesHaveChanged) {
         this.creatingNewFile = true;
       } else {
-        this.reset();
+        this.reset({
+          files: {
+            'index.json': json(),
+            'main.js': js('main'),
+          },
+          currentFile: 'main.js',
+        });
       }
     },
     newFile() {
       this.creatingNewFile = false;
-      this.reset();
+      this.reset({
+        files: {
+          'index.json': json(),
+          'main.js': js('main'),
+        },
+        currentFile: 'main.js',
+      });
     },
     async loadFile(e) {
       if (!electron) {
