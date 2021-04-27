@@ -8,7 +8,11 @@
             <code-icon class="lg" />
           </d-button>
           <div class="sketch-name">
-            {{ currentFile }}
+            <dot-icon
+              v-if="fileIsChanged"
+              class="sm dot-icon"
+            />
+            <div class="filename">{{ currentFile }}</div>
           </div>
         </div>
         <d-button name="Close Editor" @click="closeCodePanel">
@@ -40,6 +44,7 @@ import DButton from './DButton.vue';
 import ErrorPanel from './ErrorPanel.vue';
 import ChevronRightIcon from '../assets/icons/chevron-right.svg';
 import CodeIcon from '../assets/icons/code.svg';
+import DotIcon from '../assets/icons/dot.svg';
 
 
 export default {
@@ -50,6 +55,7 @@ export default {
     ErrorPanel,
     ChevronRightIcon,
     CodeIcon,
+    DotIcon,
   },
   data() {
     return {
@@ -59,7 +65,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['files', 'currentFile']),
+    ...mapState(['files', 'currentFile', 'electron', 'disk']),
     ...mapGetters(['draft', 'currentFeatureName']),
     language() {
       if (!this.currentFile) return null;
@@ -83,6 +89,11 @@ export default {
     currentCode() {
       if (typeof this.currentContents === 'object') return null;
       return this.currentContents;
+    },
+    fileIsChanged() {
+      if (!this.electron || !this.$store.state.path) return false;
+      const p = this.currentFile.split('/');
+      return this.localCode !== get(this.disk, p);
     },
   },
   watch: {
@@ -189,6 +200,18 @@ export default {
 
 .sketch-name {
   flex-grow: 1;
+  display: flex;
+  align-items: center;
+
+  .dot-icon {
+    flex: none;
+    margin-right: 0.25rem;
+  }
+
+  .file-name {
+    flex: none;
+  }
+
 }
 
 .errors {

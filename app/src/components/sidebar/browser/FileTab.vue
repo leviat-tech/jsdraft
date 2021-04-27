@@ -8,7 +8,11 @@
       @mouseup.right="$refs.menu.open($event)"
       @contextmenu.prevent
     >
-      {{ file.name }}{{ file.type === 'folder' ? '/' : '' }}
+      <dot-icon
+        v-if="fileIsChanged"
+        class="sm dot-icon"
+      />
+      <span>{{ file.name }}{{ file.type === 'folder' ? '/' : '' }}</span>
     </div>
     <div
       v-if="file.type === 'folder'"
@@ -26,19 +30,24 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import get from 'lodash/get';
 import FileContextMenu from './FileContextMenu.vue';
+import DotIcon from '../../../assets/icons/dot.svg';
 
 
 export default {
   name: 'FileTab',
   components: {
     FileContextMenu,
+    DotIcon,
   },
   props: {
     file: { type: Object, required: true },
     depth: { type: Number, default: 0 },
   },
   computed: {
+    ...(mapState(['disk', 'electron', 'path'])),
     active() {
       return this.file.path === this.$store.state.currentFile;
     },
@@ -46,6 +55,11 @@ export default {
       return this.depth
         ? `indent-${this.depth}`
         : '';
+    },
+    fileIsChanged() {
+      if (!this.electron || !this.path || !(this.file.type === 'file')) return false;
+      const p = this.file.path.split('/');
+      return this.file.contents !== get(this.disk, p);
     },
   },
   methods: {
@@ -68,10 +82,17 @@ export default {
       padding: .5rem 1rem;
       display: flex;
       justify-content: space-between;
-      font-family: $font-monospace;
+      // font-family: $font-monospace;
       font-size: .85rem;
       cursor: pointer;
       color: $color-gray-10;
+      position: relative;
+
+      .dot-icon {
+        position: absolute;
+        margin-left: -0.75rem;
+        margin-top: 0.0625rem;
+      }
 
       &:hover {
         background-color: $color-gray-03;
