@@ -20,7 +20,7 @@ class Sketch {
       entity: null, // entity: a geometric, text, or other element attached to this node
       children: [], // children: nodes attached as descendents to this node
       attributes: {}, // attributes: a free space for meta data associated with this node
-      index: {}, // injected user feature index
+      index: {}, // injected user feature index (owner attribute allows reference sketch that owns the index)
     };
     if (Array.isArray(options)) {
       options = { entities: options };
@@ -28,7 +28,7 @@ class Sketch {
     options = options || {};
     delete options.uuidv4;
     this.node = { ...this.node, ...options };
-    this.node.index.binding = () => this;
+    this.node.index.owner = () => this;
   }
 
   // add child sketches to sketch
@@ -155,12 +155,24 @@ class Sketch {
     const id = func.identifier || func.name;
     function feature(...args) {
       try {
-        const input = cls.clone(this);
-        const output = func.bind(this.binding ? this.binding() : this)(input, ...args);
+        // When we call a feature function we normally call sketch.feature() and "this" refers to sketch.
+        // However, when we call a user defined feature things work a little bit differently, we call
+        // sketch.user.custom_feature().  When we call a feature function this way, "this" refers to
+        // sketch.user (sketch.node.index) the index of custom user feature functions.  This is a problem because
+        // we want the scoped user feature index, but we need "this" to point to the sketch.  So inside every
+        // index we added a reference to the sketch that own it called "owner".  And when we call the feature
+        // function we bind this to the sketch not sketch.user (the index).  So calling sketch.user.custom_feature
+        // works like calling sketch.custom_feature(), but the custom_feature is stored in a seperate index name space
+        // so user defined functions don't clash with built in feature functions.
+        // Note: Any clone of this sketch or derivative of this sketch via new create or clone should also share
+        // the index of the sketch it was derived from, which is why there is that extra code to preserve the
+        // index in the new, create and clone functions.
+        const sketch = this.owner ? this.owner() : this;
+        const input = cls.clone(sketch);
+        const output = func.bind(sketch)(input, ...args);
         output.node.feature = output.node.feature || func.identifier || func.name;
         return output;
       } catch (error) {
-        console.debug(error);
         throw new Error(`Error executing ${id}: ${error}`);
       }
     }
