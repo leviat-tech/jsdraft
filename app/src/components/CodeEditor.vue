@@ -29,6 +29,7 @@ export default {
       handler(nv) {
         if (nv !== this.editor.getValue()) {
           this.editor.setValue(nv);
+          this.editor.clearHistory();
         }
       },
     },
