@@ -38,18 +38,22 @@ const rainbow = require('./debugging/rainbow.js');
 module.exports = [
   fill,
   stroke,
+
   aligned_dim,
   text,
+
   arc,
   circle,
   point,
   polycurve,
-  polyface,
   rectangle,
   segment,
+  polyface,
+
   hide,
   name,
   tag,
+
   add_faces,
   explode,
   fillet,
@@ -58,11 +62,13 @@ module.exports = [
   offset,
   subtract,
   union,
+
   orient,
   snap,
   rotate,
   scale,
   transform,
   translate,
+
   rainbow,
 ];
