@@ -84,6 +84,20 @@
           @click="exportFile"
         />
       </tool-group>
+
+      <tool-group>
+        <toggle
+          v-model="showHidden"
+          name="Show hidden elements"
+        >
+          <template #on>
+            <eye-icon class="lg" />
+          </template>
+          <template #off>
+            <eye-slash-icon class="lg" />
+          </template>
+        </toggle>
+      </tool-group>
     </div>
     <d-button
       v-if="!showCodePanel"
@@ -112,10 +126,13 @@ import { mapState, mapMutations, mapActions } from 'vuex';
 import isEqual from 'lodash/isEqual';
 import ToolGroup from './ToolGroup.vue';
 import Tool from './Tool.vue';
+import Toggle from './Toggle.vue';
 import WarningModal from '../WarningModal.vue';
 import DButton from '../DButton.vue';
 import loadFileInBrowser from '../../utility/load-file-in-browser.js';
 import CodeIcon from '../../assets/icons/code.svg';
+import EyeIcon from '../../assets/icons/eye.svg';
+import EyeSlashIcon from '../../assets/icons/eye-slash.svg';
 import { js, json } from '../../utility/default-blank-sketches.js';
 
 
@@ -124,8 +141,11 @@ export default {
   components: {
     ToolGroup,
     Tool,
+    Toggle,
     DButton,
     CodeIcon,
+    EyeIcon,
+    EyeSlashIcon,
     WarningModal,
   },
   data() {
@@ -140,6 +160,14 @@ export default {
         'index.json': json(),
         'main.js': js('main'),
       });
+    },
+    showHidden: {
+      get() {
+        return this.$store.state.showHidden;
+      },
+      set(value) {
+        this.$store.commit('setShowHidden', value);
+      },
     },
   },
   mounted() {

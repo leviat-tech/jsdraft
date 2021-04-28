@@ -40,6 +40,7 @@ function reset() {
     zoomScale: 1,
     currentTool: 'select',
     showCodePanel: false,
+    showHidden: false,
     viewBox: { minX: -100, minY: -100, width: 200, height: 200 },
     currentFile: null,
     filename: 'Draft',
@@ -81,6 +82,9 @@ export default createStore({
     },
     setShowCodePanel(state, value) {
       state.showCodePanel = value;
+    },
+    setShowHidden(state, value) {
+      state.showHidden = value;
     },
     setViewBox(state, value) {
       state.viewBox = value;
@@ -216,6 +220,7 @@ export default createStore({
           getters.currentFeatureName,
           state.overrides,
           'entities',
+          { show: state.showHidden ? 'all' : 'visible' },
         );
       } catch (e) {
         return [];
@@ -228,7 +233,7 @@ export default createStore({
           getters.currentFeatureName,
           state.overrides,
           'svg',
-          { viewport: null },
+          { viewport: null, show: state.showHidden ? 'all' : 'visible' },
         );
       } catch (e) {
         // console.debug(e);
