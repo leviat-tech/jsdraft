@@ -1,11 +1,11 @@
-function traverse(queue, sketch, show) {
+function traverse(queue, sketch, show, showoverride = false) {
   if (sketch.node.hidden && show === 'visible') return;
-  if (!sketch.node.hidden && show === 'hidden') return;
+  if (sketch.node.hidden && show === 'hidden') showoverride = true;
 
-  queue.push(sketch);
+  if (show !== 'hidden' || showoverride) queue.push(sketch);
 
   sketch.node.children.forEach((child) => {
-    traverse(queue, child);
+    traverse(queue, child, show, showoverride);
   });
 }
 
