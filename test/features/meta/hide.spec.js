@@ -1,6 +1,7 @@
 /* global describe, it */
 
 const { expect, use } = require('chai');
+const flatten = require('@flatten-js/core');
 use(require('../../helpers.js'));
 const Sketch = require('../../../src/sketch/sketch.js');
 const render = require('../../../src/render.js');
@@ -8,7 +9,7 @@ const render = require('../../../src/render.js');
 
 describe('Hide', () => {
   const sketch = new Sketch()
-    .circle([0, 0], 50)
+    .polycurve([0, 0], 1, [5, 5])
     .hide();
 
   const mixed = new Sketch()
@@ -33,5 +34,17 @@ describe('Hide', () => {
   it('should include hidden entities if indicated', () => {
     const entities = render(mixed, 'entities', { show: 'all' });
     expect(entities.length).to.eql(2);
+  });
+
+  it('should provide getters for hidden entities', () => {
+    const e = mixed.hidden.entities;
+    expect(e.length).to.eql(1);
+    expect(e[0]).to.be.an.instanceof(flatten.Multiline);
+  });
+
+  it('should exclude hidden entities from standard getters', () => {
+    const e = mixed.entities;
+    expect(e.length).to.eql(1);
+    expect(e[0]).to.be.an.instanceof(flatten.Polygon);
   });
 });
