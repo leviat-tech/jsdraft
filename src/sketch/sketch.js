@@ -115,6 +115,27 @@ class Sketch {
     return [...this.shapes()];
   }
 
+  get hidden() {
+    const entities = [...this.shapes('depth', 'hidden')];
+
+    const hidden = {
+      get entities() {
+        return entities;
+      },
+      get polyfaces() {
+        return entities.filter((e) => base_entity_type(e) === 'polyface');
+      },
+      get polycurves() {
+        return entities.filter((e) => base_entity_type(e) === 'polycurve');
+      },
+      get vertices() {
+        return [].concat(...entities.map((e) => e.vertices));
+      },
+    };
+
+    return hidden;
+  }
+
   // create iterator to traverse entities in sketch
   * shapes(order = 'depth', show = 'visible') {
     for (const s of this.tree(order, show)) {
