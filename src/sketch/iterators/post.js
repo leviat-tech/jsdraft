@@ -1,4 +1,7 @@
-function traverse(queue, sketch) {
+function traverse(queue, sketch, show) {
+  if (sketch.node.hidden && show === 'visible') return;
+  if (!sketch.node.hidden && show === 'hidden') return;
+
   queue.push(sketch);
 
   sketch.node.children.forEach((child) => {
@@ -6,9 +9,9 @@ function traverse(queue, sketch) {
   });
 }
 
-module.exports = function* post(root) {
+module.exports = function* post(root, show = 'visible') {
   const queue = [];
-  traverse(queue, root);
+  traverse(queue, root, show);
 
   while (queue.length > 0) {
     const sketch = queue.pop();
