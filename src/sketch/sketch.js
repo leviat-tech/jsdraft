@@ -116,20 +116,20 @@ class Sketch {
   }
 
   // create iterator to traverse entities in sketch
-  * shapes(order = 'depth') {
-    for (const s of this.tree(order)) {
+  * shapes(order = 'depth', show = 'visible') {
+    for (const s of this.tree(order, show)) {
       if (s.node.entity) yield s.node.entity;
     }
   }
 
   // create iterator to traverse the sketch
-  tree(order) {
-    return iterators[order || 'post'](this);
+  tree(order = 'post', show = 'visible') {
+    return iterators[order](this, show);
   }
 
   // find first node where condition returns true (searched in level order)
-  find(condition, order) {
-    for (const sketch of this.tree(order)) {
+  find(condition, order, show) {
+    for (const sketch of this.tree(order, show)) {
       if (condition(sketch)) return sketch;
     }
     return null;
