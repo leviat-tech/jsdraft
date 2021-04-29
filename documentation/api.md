@@ -1,16 +1,38 @@
 # JSDraft API
 
+Table of Contents:
+
+* [Sketch features](#sketch-features)
+  * [Geometric features](#geometric-features)
+  * [Annotations](#annotations)
+  * [Operations](#operations)
+  * [Transformations](#transformations)
+  * [Style features](#style-features)
+  * [Meta features](#meta-features)
+* [Sketch utility functions](#sketch-utility-functions)
+* [Sketch getters](#sketch-getters)
+* [Entities](#entities)
+* [Draft](#draft)
+* [render](#render)
+
+
 ## Sketch features
 
-Sketch instances have a number of built-in feature functions that can be used to add or modify entities. These are categorized according to their function:
+Sketch instances have a number of built-in feature functions that can be used to add or modify entities. These can either be called on the "sketch" argument of a feature function:
 
-* [Geometric features](#geometric-features)
-* [Annotations](#annotations)
-* [Operations](#operations)
-* [Transformations](#transformations)
-* [Style features](#style-features)
-* [Meta features](#meta-features)
+```js
+function my_feature(sketch) {
+  return sketch.point(0, 0);
+}
+```
 
+...or on an instance of the Sketch object:
+
+```js
+import { Sketch } from '@crhio/jsdraft';
+
+const sketch = new Sketch().point(0, 0);
+```
 
 ## Geometric features
 

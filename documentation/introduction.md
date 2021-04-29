@@ -32,7 +32,7 @@ function square(sketch, width) {
 }
 ```
 
-Parametric drawings in JSDraft are simply feature functions. Drawings can be created by composing any of the [built-in feature functions](api.md#sketch-features). User-defined features can also be registered with a Sketch and used by other features; this allows drawings to be constructed in a modular fashion:
+Parametric drawings in JSDraft are simply feature functions. Drawings can be created by composing any of the [built-in feature functions](api.md). User-defined features can also be registered with a Sketch and used by other features; this allows drawings to be constructed in a modular fashion:
 
 ```js
 // Create a new base sketch
@@ -60,7 +60,7 @@ A feature can add "entities" to a sketch. Entities are the geometric and annotat
 * Text
 * AlignedDim
 
-There are [built-in features](api.md#sketch-features) for all of these primitive entities, which can be combined in user-defined features to create more complex drawings.
+There are [built-in features](api.md) for all of these primitive entities, which can be combined in user-defined features to create more complex drawings.
 
 The last entity added to a sketch can be retrieved with the `.shape` getter:
 ```js
