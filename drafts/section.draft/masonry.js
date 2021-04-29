@@ -1,6 +1,6 @@
 return {
   parameters: [
-    { name: "drop", default: 300 },
+    { name: "height", default: 300 },
     { name: "thickness", default: 112.5 },
     { name: "material", default: "brick" },
     { name: "mortar", default: 10}
