@@ -41,7 +41,6 @@ return {
     sketches.push(Layer);
     }
     
-    
     if(datum){
       const Offset ={
         top:-datum.offset, 
@@ -51,7 +50,7 @@ return {
       const Datumline =sketch.new.polycurve(
       [0, 0],
       [cavity+width, 0],
-    ).offset(-Offset[datum.side]).stroke("red", 2)
+    ).offset(-Offset[datum.side]).stroke("red", 2).name("datum")
       const Text = sketch.new.text("0.00", Datumline.vertices[0]).translate(12,8)
       sketches.push(Datumline, Text)
     }
