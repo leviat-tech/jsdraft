@@ -1,6 +1,6 @@
 return {
   parameters: [
-    {name: "segments", default: [{length:100, angle:0}, {length:50, angle:20}, {length:50, angle:-20}]},
+    {name: "segments", default: [{length:100, angle:0}, {length:75, angle:-20}, {length:50, angle:20}]},
   ],
   func: function (sketch, segments) {
     const sketches = [];
