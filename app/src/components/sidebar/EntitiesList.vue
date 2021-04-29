@@ -3,10 +3,11 @@
     <h2>Entities</h2>
     <div v-if="entities">
       <entity-details
-        v-for="(entity, i) in entityTypes"
+        v-for="(entityType, i) in entityTypes"
         :key="i"
         :index="i"
-        :entity="entity"
+        :entity-type="entityType"
+        :entity="entities[i]"
         :details="details(i)"
       />
     </div>

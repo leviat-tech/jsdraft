@@ -216,12 +216,23 @@ export default createStore({
     },
     entities(state, getters) {
       try {
-        return getters.draft.render(
+        let hidden = [];
+        if (state.showHidden) {
+          hidden = getters.draft.render(
+            getters.currentFeatureName,
+            state.overrides,
+            'entities',
+            { show: 'hidden' },
+          ).map((e) => {
+            e.hidden = true;
+            return e;
+          });
+        }
+        return hidden.concat(getters.draft.render(
           getters.currentFeatureName,
           state.overrides,
           'entities',
-          { show: state.showHidden ? 'all' : 'visible' },
-        );
+        ));
       } catch (e) {
         return [];
       }

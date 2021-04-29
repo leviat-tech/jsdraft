@@ -1,12 +1,12 @@
 <template>
   <div
     class="sidebar-list-item hoverable"
-    :class="{ hovered: isHovered, selected: isSelected, expanded }"
+    :class="{ hovered: isHovered, selected: isSelected, expanded, hidden:isHidden }"
     @click.stop="expand"
     @mouseover="hover"
     @mouseout="unhover"
   >
-    <div>{{ entity }}</div>
+    <div class="entity-type">{{ entityType }}</div>
     <div v-if="expanded" class="entity-details">
       <div v-for="(detail, name) in details" :key="name" class="detail">
         <template v-if="Array.isArray(detail)">
@@ -36,7 +36,8 @@ export default {
   name: 'EntityDetails',
   props: {
     details: { type: Object, required: true },
-    entity: { type: String, required: true },
+    entityType: { type: String, required: true },
+    entity: { type: Object, required: true },
     index: { type: Number, required: true },
   },
   data() {
@@ -51,6 +52,9 @@ export default {
     },
     isSelected() {
       return this.selected[this.index];
+    },
+    isHidden() {
+      return this.entity.hidden;
     },
   },
   watch: {
@@ -83,9 +87,13 @@ export default {
 @import '../../assets/styles/variables.scss';
 
 .entity-details {
-  color: $color-gray-08;
+  color: $color-gray-07;
   font-size: $text-xs;
   margin-top: 0.5rem;
+}
+
+.hidden .entity-type {
+  color: $color-gray-07;
 }
 
 .detail, .detail-line {
