@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const parse_filename = require('../utility/misc/parse-filename.js');
+const load_draft_browser = require('./load-draft.browser.js');
 
 
 function isFile(p) {
@@ -18,6 +19,8 @@ The provided string, "d", can either be:
 */
 
 function load_draft_file(d, Draft) {
+  if (typeof d === 'object') return load_draft_browser(d, Draft);
+
   const draft = new Draft();
 
   d = path.join(process.cwd(), d);
