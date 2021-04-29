@@ -341,6 +341,32 @@ const result = sketch.orient([0, 0], [1, 0], [5, 5], [5, 10]);
 ```
 
 
+### _snap( segment, segment, number, boolean )_
+### _snap( point, point )_
+
+Transforms a sketch to align with the provided geometry.
+
+```js
+const geometry = sketch.rectangle([0, 0], 10, 5, 1);
+
+const anchor = sketch.segment([0, 0], [10, -10]).edge('first');
+const free = sketch.segment([0, 0], [10, 0]).edge('first');
+
+// anchor, free, slide, flip
+const snapped = sketch.snap(anchor, free, 10, false);
+// snap will:
+//  1) snap them together at their start point
+//  2) rotate them into alignment
+//  3) offset along the anchor edge by the amount specified in the slide parameter
+
+
+// anchor, free
+const translated = sketch.snap([10, 5], [0, 0]);
+// snap will translate the sketch so that the 'free' point is aligned with the 'anchor' point
+
+```
+
+
 ### _rotate( number[, string] )_
 
 Rotates all of the entities in a sketch by a provided angle. The default units are degrees, pass "rad" to the optional second argument to use radians.
@@ -393,6 +419,55 @@ const result = sketch.stroke("red", 3);
 
 ## Meta features
 
+### _hide()_
+
+Hides a given sketch node. When hidden, the sketch (and all of its children) will be invisible in any plotted output. Hidden nodes will not be returned by any of the standard [getters](#sketch-getters) or [queries](#sketch-queries). To find hidden entities, add the prefix "hidden" to any of the getters or queries.
+
+```js
+// polycurve will not be visible if h1 is rendered
+const h1 = sketch.polycurve([0, 0], 1, [5, 5]).hide();
+
+// hidden entities can still be queried by using the "hidden" getter
+const entities = sketch.hidden.entities;
+```
+
+### _name( string )_
+
+Gives a name to a sketch node. This name can be used to label a particular sketch so that it can easily be "found" subsequently.
+
+```js
+// A sketch node is given a name
+const rect = sketch.rectangle([0, 0], 10, 5, 1).name('my_rect');
+
+// It can then be combined with other geometry
+const combined = rect.circle([-10, -10], 3).point(15, -10);
+
+// The named sketch node can then be found
+const original = combined.find('my_rect');
+```
+
+### _show()_
+
+Converts a hidden sketch to a visible sketch.
+
+```js
+const hidden = sketch.rectangle([0, 0], 10, 5, 1).hide();
+// "hidden" will be invisible in rendered output
+
+const shown = hidden.show();
+// "shown" will be visible.
+```
+
+### _tag()_
+
+Adds a tag to a node. This tag can be used in subsequent queries.
+
+```js
+const rect = sketch.rectangle([0, 0], 10, 5, 1).tag('rectangles');
+
+const node = rect.find((s) => s.node.tags.includes('rectangles'));
+```
+
 ## Sketch utility functions
 
 ### _add( ...args )_
@@ -442,6 +517,36 @@ Returns the first available geometric entity in a sketch
 const shape = sketch.shape;
 ```
 
+## Sketch getters
+
+A variety of getters are provided to retrieve entities from a sketch:
+
+  - `sketch.entities` - returns all visible entities in a sketch
+  - `sketch.entity(i)` - picks the indicated entity. Can use a numerical index, "first" or "last", or a negative index.
+  - `sketch.edges` - returns all segments and arcs in a sketch
+  - `sketch.edge(i)` - picks the indicated edge
+  - `sketch.polyfaces` - returns all polyfaces in a sketch
+  - `sketch.polycurves` - returns all polycurves in a sketch
+  - `sketch.points` - returns all points in a sketch
+  - `sketch.vertices` - returns all vertices in a sketch
+  - `sketch.vertex(i)` - picks the indicated vertex
+
+These getters will only return _visible_ entities--to retrieve hidden entities, the same getters can be used under the "hidden" property, i.e: `sketch.hidden.entities`.
+
+## Sketch queries
+
+The `sketch.find(condition)` function can be used to find a particular node in a sketch.
+
+```js
+// Finds a sketch node that has the uuid "foo", or has been given the name "foo"
+const foo = sketch.find('foo')
+
+// Finds a sketch node that has been given the name "bar"
+const bar = sketch.find((s) => s.node.name === "bar")
+
+// Finds a sketch node that was created by the "offset" feature
+const baz = sketch.find((s) => s.node.feature === 'offset');
+```
 
 ## Entities
 
