@@ -116,20 +116,54 @@ class Sketch {
   }
 
   get hidden() {
-    const entities = [...this.shapes('depth', 'hidden')];
+    const sketch = this;
 
     const hidden = {
       get entities() {
-        return entities;
+        return [...sketch.shapes('depth', 'hidden')];
+      },
+      entity(i) {
+        return pick(this.entities, i);
+      },
+      get edges() {
+        const result = [];
+
+        for (const entity of this.entities) {
+          const type = base_entity_type(entity);
+          if (type === 'polycurve') {
+            result.push(...entity.toShapes());
+          } else if (type === 'polyface') {
+            const edges = [...entity.edges].map((e) => e.shape);
+            result.push(...edges);
+          } else if (['arc', 'segment'].includes(type)) {
+            result.push(entity);
+          }
+        }
+
+        return result;
+      },
+      edge(i) {
+        return pick(this.edges, i);
       },
       get polyfaces() {
-        return entities.filter((e) => base_entity_type(e) === 'polyface');
+        return this.entities.filter((e) => base_entity_type(e) === 'polyface');
       },
       get polycurves() {
-        return entities.filter((e) => base_entity_type(e) === 'polycurve');
+        return this.entities.filter((e) => base_entity_type(e) === 'polycurve');
       },
       get vertices() {
-        return [].concat(...entities.map((e) => e.vertices));
+        return [].concat(...this.entities.map((e) => e.vertices));
+      },
+      vertex(i) {
+        return pick(this.vertices, i);
+      },
+      find(condition) {
+        const s = sketch.find(condition, 'post', 'hidden').clone();
+        if (s) {
+          // If a sketch is found, it is no longer "hidden"
+          s.node.hidden = false;
+        }
+        return s;
       },
     };
 
