@@ -68,6 +68,15 @@ class Sketch {
     return new Sketch(cloneDeep(sketch.node));
   }
 
+  get extents() {
+    const boxes = this.entities.map((d) => d.box);
+    const xmin = Math.min(...boxes.map((b) => b.xmin));
+    const xmax = Math.max(...boxes.map((b) => b.xmax));
+    const ymin = Math.min(...boxes.map((b) => b.ymin));
+    const ymax = Math.max(...boxes.map((b) => b.ymax));
+    return { xmin, ymin, xmax, ymax };
+  }
+
   vertex(i) {
     return pick(this.vertices, i);
   }
