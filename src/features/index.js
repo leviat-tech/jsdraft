@@ -14,6 +14,7 @@ const polyface = require('./geometric/polyface.js');
 
 const hide = require('./meta/hide.js');
 const name = require('./meta/name.js');
+const show = require('./meta/show.js');
 const tag = require('./meta/tag.js');
 
 const add_faces = require('./operations/add-faces.js');
@@ -52,6 +53,7 @@ module.exports = [
 
   hide,
   name,
+  show,
   tag,
 
   add_faces,
