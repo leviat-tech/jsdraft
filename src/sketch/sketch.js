@@ -14,6 +14,7 @@ class Sketch {
     this.node = {
       id: uuidv4(), // id: the uuid of node
       name: '', // name: the name of this node
+      tags: [], // tags: any 'tags' that have been added to this node
       feature: '', // feature: the name of the feature function that created this node
       hidden: false, // hidden: if false this node should not be rendered (except console renderer)
       style: {}, // style: stroke, fill, etc that should be applied to paths in decendent nodes
@@ -111,6 +112,10 @@ class Sketch {
       .filter((e) => base_entity_type(e) === 'polyface');
   }
 
+  get points() {
+    return this.entities.filter((e) => base_entity_type(e) === 'point');
+  }
+
   get entities() {
     return [...this.shapes()];
   }
@@ -151,6 +156,9 @@ class Sketch {
       get polycurves() {
         return this.entities.filter((e) => base_entity_type(e) === 'polycurve');
       },
+      get points() {
+        return this.entities.filter((e) => base_entity_type(e) === 'point');
+      },
       get vertices() {
         return [].concat(...this.entities.map((e) => e.vertices));
       },
@@ -186,7 +194,7 @@ class Sketch {
   // find first node where condition returns true (searched in level order)
   find(condition, order, show) {
     const c = typeof condition === 'string'
-      ? (s) => s.node.name === condition
+      ? (s) => (s.node.id === condition) || (s.node.name === condition)
       : condition;
 
     for (const sketch of this.tree(order, show)) {

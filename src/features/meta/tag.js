@@ -1,4 +1,4 @@
-module.exports = function tag(c, str) {
-  c.node.tags.add(str);
-  return c;
-}
+module.exports = function tag(sketch, str) {
+  sketch.node.tags.push(str);
+  return sketch;
+};
