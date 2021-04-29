@@ -158,8 +158,9 @@ class Sketch {
         return pick(this.vertices, i);
       },
       find(condition) {
-        const s = sketch.find(condition, 'post', 'hidden').clone();
+        let s = sketch.find(condition, 'post', 'hidden');
         if (s) {
+          s = s.clone();
           // If a sketch is found, it is no longer "hidden"
           s.node.hidden = false;
         }
@@ -184,8 +185,12 @@ class Sketch {
 
   // find first node where condition returns true (searched in level order)
   find(condition, order, show) {
+    const c = typeof condition === 'string'
+      ? (s) => s.node.name === condition
+      : condition;
+
     for (const sketch of this.tree(order, show)) {
-      if (condition(sketch)) return sketch;
+      if (c(sketch)) return sketch;
     }
     return null;
   }
