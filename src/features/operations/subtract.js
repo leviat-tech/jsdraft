@@ -8,7 +8,7 @@ module.exports = function subtract(sketch, to_subtract) {
 
   const faces = to_subtract.polyfaces;
 
-  for (const s of sketch.tree('level')) {
+  for (const s of sketch.tree('level', 'all')) {
     const type = s.node.entity && base_entity_type(s.node.entity);
     if (type === 'polyface') {
       let shape = s.node.entity;

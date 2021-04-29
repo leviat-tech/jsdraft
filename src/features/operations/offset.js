@@ -18,7 +18,7 @@ module.exports = function offset(sketch, distance, sharp_corners = true) {
 
   if (distance === 0) return sketch;
 
-  for (const s of sketch.tree('level')) {
+  for (const s of sketch.tree('level', 'all')) {
     let entity = s.node.entity;
     if (!entity) continue;
     const type = base_entity_type(entity);
