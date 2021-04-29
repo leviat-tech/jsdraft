@@ -531,7 +531,7 @@ A variety of getters are provided to retrieve entities from a sketch:
   - `sketch.vertices` - returns all vertices in a sketch
   - `sketch.vertex(i)` - picks the indicated vertex
 
-These getters will only return _visible_ entities--to retrieve hidden entities, the same getters can be used under the "hidden" property, i.e: `sketch.hidden.entities`.
+These getters will only return _visible_ entities--to retrieve hidden entities, the same getters can be used under the "hidden" property, i.e: `sketch.hidden.entities`, `sketch.hidden.edges`, etc.
 
 ## Sketch queries
 
@@ -547,6 +547,8 @@ const bar = sketch.find((s) => s.node.name === "bar")
 // Finds a sketch node that was created by the "offset" feature
 const baz = sketch.find((s) => s.node.feature === 'offset');
 ```
+
+To find hidden nodes, use `sketch.hidden.find(condition)`.
 
 ## Entities
 
@@ -564,4 +566,107 @@ A sketch may contain entities of any of the following types and properties:
 
 ## Draft
 
+The `Draft` is a construct for organizing multiple interconnected features. On disk, it is saved as a collection of `.yaml` or `.js` feature files, as well as an `index.json` which contains metadata about the entire collection. All features within a draft can make use of other features defined within that draft. To create a new Draft object:
+
+```js
+import { Draft } from '@crhio/jsdraft';
+
+const draft = new Draft();
+```
+
+### _Draft.load( string )_ (Node only)
+### _Draft.load( object )_
+
+In Node, a draft "file" (really a collection of files) can be imported from the file system by pointing to the containing folder.
+
+```js
+const draft = Draft.load('./path/to/folder.draft');
+```
+
+Alternatively, the `Draft.load()` function can accept an object representing the file structure, with keys as filenames and values as the contents of those files:
+
+```js
+const files = {
+  'index.json': '{ "filetype": "JSDraft", "version": "0.0.1 }',
+  'main.js': 'function f(s) { return s.point(0, 0) }',
+};
+
+const draft = Draft.load(files);
+```
+
+### _add_feature( string, string, string, string )_
+
+Add a new feature to a draft collection.
+
+```js
+const file = `
+parameters:
+  - x: 5
+sketch:
+  - point: [x, 10]
+`;
+
+// name, extension, contents, type = 'sketch'
+draft.add_feature('my_feature', 'yaml', file);
+```
+
+### _remove_feature( string, string )_
+
+Removes a feature from a draft collection.
+
+```js
+// name, type = 'sketch'
+draft.remove_feature('my_feature');
+```
+
+### _render( string, array, string, object )_
+
+Renders a feature in the desired format.
+
+```js
+// name, parameters, format, options = {}
+const svg = draft.render('my_feature', [2], 'svg');
+```
+
+Valid "format" options for rendering a feature: `svg`, `dxf`, `yaml`, `json`, `entities`.
+
+See documentation for the standalone [render function](#render) for supported options.
+
 ## Render
+
+A standalone `render` function is provided for situations where you are working directly with [Sketch](introduction.md) objects or entities and wish to render them without relying on the `Draft` construct. This function can render either Sketch objects or individual entities.
+
+
+### _render( sketch, string, object )_
+### _render( entity, string, object )_
+
+```js
+import { Sketch, render } from '@crhio/jsdraft';
+
+const sketch = new Sketch()
+  .polycurve([0, 0], [10, 10], [20, 0])
+  .circle([20, 0], 2);
+
+// sketch, format, options = {}
+const sketchSvg = render(sketch, 'svg');
+// Will result in a string of an svg file, including both the polycurve and circle defined above.
+
+const entity = sketch.entity('first');
+
+// entity, format, options = {}
+const entitySvg = render(entity, 'svg');
+// Will result in an svg string for just the polycurve.
+```
+
+Valid options for sketch svg output:
+
+- `viewport`:
+  - `"svg"` (default): svg string is enclosed in an `<svg>` tag.
+  - `"g"`: svg string is enclosed in a `<g>` tag.
+  - `null`: svg string is not enclosed in any tag.
+  - `"js"`: a JS structure of the document is returned instead of a string
+
+- `show`:
+  - `"visible"` (default): include only elements that are not marked as "hidden"
+  - `"all"`: include all elements, both hidden and visible
+  - `"hidden"`: include only hidden elements

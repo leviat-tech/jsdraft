@@ -15,7 +15,7 @@ JSDraft documentation can be found below:
 * [Using the JSDraft app](documentation/app.md)
 * [YAML feature syntax](documentation/yaml-syntax.md)
 * [JS feature syntax](documentation/js-syntax.md)
-* [Draft api](documentation/api.md)
+* [JSDraft API](documentation/api.md)
 * [Draft files](documentation/files.md)
 
 ## Running the app
