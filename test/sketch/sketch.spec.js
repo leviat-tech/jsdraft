@@ -38,6 +38,11 @@ describe('Sketch', () => {
     expect(sketch.shape).to.be.a.point({ x: 5, y: 5 });
   });
 
+  it('can return its extents', () => {
+    const extents = sketch.extents;
+    expect(extents).to.eql({ xmin: 1, ymin: 1, xmax: 5, ymax: 5 });
+  });
+
   it('can call injected custom functions from sketches resulting from custom functions', () => {
     function feature(s) { return s; }
     const root = new Sketch();
