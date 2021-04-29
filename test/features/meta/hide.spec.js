@@ -60,7 +60,7 @@ describe('Hide', () => {
   it('should allow queries of hidden elements', () => {
     const none = mixed.find((s) => s.node.name === 'curve2');
     expect(none).to.eql(null);
-    const h = mixed.hidden.find((s) => s.node.name === 'curve2');
+    const h = mixed.hidden.find('curve2');
     const v = h.vertices;
     expect(v[0]).to.be.a.point({ x: -5, y: 5 });
     expect(v[1]).to.be.a.point({ x: -9.2929, y: 9.2929 });
