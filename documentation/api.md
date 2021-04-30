@@ -369,21 +369,21 @@ const result = sketch
 Removes any number of nodes from a sketch and returns the modified sketch.
 
 ```js
-const foo = new Sketch()
+const foo = sketch
   .polycurve([0, 0], [16, 16], [25, 0], [50, 0])
   .name('foo');
 
-const bar = new Sketch()
+const bar = sketch
   .polyface([0, 0], [16, 16], [-10, 20], [-12, 2])
   .name('bar');
 
-const baz = new Sketch()
+const baz = sketch
   .circle([10, 10], 3)
   .name('baz');
 
-const sketch = new Sketch().add(foo, bar, baz);
+const result = sketch.add(foo, bar, baz);
 
-const pruned = sketch.prune('bar', 'baz');
+const pruned = result.prune('bar', 'baz');
 // Result will contain only the "foo" node.
 ```
 
