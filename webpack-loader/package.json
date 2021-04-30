@@ -1,6 +1,6 @@
 {
   "name": "@crhio/webpack-jsdraft-loader",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "JSDraft loader for Webpack",
   "scripts": {
     "test-build": "webpack"

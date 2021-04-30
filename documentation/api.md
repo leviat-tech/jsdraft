@@ -643,7 +643,7 @@ Alternatively, the `Draft.load()` function can accept an object representing the
 
 ```js
 const files = {
-  'index.json': '{ "filetype": "JSDraft", "version": "0.0.1 }',
+  'index.json': '{ "filetype": "JSDraft", "version": "0.0.1" }',
   'main.js': 'function f(s) { return s.point(0, 0) }',
 };
 
