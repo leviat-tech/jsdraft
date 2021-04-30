@@ -17,6 +17,15 @@ class Text {
     this.rotation = args[2] || 0;
   }
 
+  get box() {
+    return {
+      xmin: this.p.x,
+      xmax: this.p.x,
+      ymin: this.p.y,
+      ymax: this.p.y,
+    };
+  }
+
   transform(matrix = new flatten.Matrix()) {
     return new Text(this.text, this.p.transform(matrix), this.rotation);
   }
