@@ -69,6 +69,7 @@ class Draft {
     });
     const func = parse(source.extension, source.contents, source.name);
     const sketch = func(root, ...params);
+    if (format === 'sketch') return sketch;
     return render(sketch, format, options);
   }
 }
