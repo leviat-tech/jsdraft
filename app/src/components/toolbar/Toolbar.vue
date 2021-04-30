@@ -124,6 +124,7 @@
 import Mousetrap from 'mousetrap';
 import { mapState, mapMutations, mapActions } from 'vuex';
 import isEqual from 'lodash/isEqual';
+import cloneDeep from 'lodash/cloneDeep';
 import ToolGroup from './ToolGroup.vue';
 import Tool from './Tool.vue';
 import Toggle from './Toggle.vue';
@@ -230,7 +231,7 @@ export default {
         const loaded = await window.electron.openFile();
         this.reset();
         this.loadFiles(loaded.files);
-        this.setDiskFiles(loaded.files);
+        this.setDiskFiles(cloneDeep(loaded.files));
         this.setFilename(loaded.filename);
         this.setPath(loaded.path);
         this.$store.dispatch('watchPath');
