@@ -17,6 +17,15 @@ class AlignedDim {
     this.side = args[2] ? args[2] : 'left';
   }
 
+  get box() {
+    return {
+      xmin: Math.min(this.ps.x, this.pe.x),
+      xmax: Math.max(this.ps.x, this.pe.x),
+      ymin: Math.min(this.ps.y, this.pe.y),
+      ymax: Math.max(this.ps.y, this.pe.y),
+    };
+  }
+
   transform(matrix = new flatten.Matrix()) {
     return new AlignedDim(this.ps.transform(matrix), this.pe.transform(matrix));
   }
