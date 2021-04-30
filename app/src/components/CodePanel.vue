@@ -27,7 +27,7 @@
       v-model="localCode"
       :language="language"
       :underlines="underlines"
-      @save="save"
+      @save="saveFile"
     />
 
     <!-- error panel -->
@@ -117,11 +117,20 @@ export default {
   methods: {
     ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'updateFile']),
     ...mapActions(['save']),
+    saveFile() {
+      this.updateFile({
+        path: this.currentFile,
+        code: this.localCode,
+      });
+      this.save();
+    },
     closeCodePanel() {
       this.setShowCodePanel(false);
     },
     validate: debounce(function validate() {
-      if (this.currentFile && typeof this.currentContents !== 'object') {
+      if (this.currentFile
+      && typeof this.currentContents !== 'object'
+      && this.currentCode !== this.localCode) {
         this.updateFile({
           path: this.currentFile,
           code: this.localCode,
