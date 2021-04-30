@@ -1,5 +1,5 @@
 function calculate_viewbox(
-  extents, fit, padding, aspect_ratio, scale, center, size,
+  extents, fit, padding, aspect_ratio, center, size,
 ) {
   const xmin = extents.xmin - padding.left;
   const xmax = extents.xmax + padding.right;
@@ -21,10 +21,9 @@ function calculate_viewbox(
 
   const scalefactor = fit ? viewboxscale : (size / 1000);
 
-  const midpoint = {
-    x: center.x !== undefined ? center.x : xmin + width / 2,
-    y: center.y !== undefined ? center.y : ymin + height / 2,
-  };
+  const midpoint = center
+    ? { x: center[0], y: center[1] }
+    : { x: xmin + width / 2, y: ymin + height / 2 };
 
   let vbwidth;
   let vbheight;

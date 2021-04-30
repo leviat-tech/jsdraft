@@ -76,8 +76,9 @@ function render(sketch, {
   padding_right = 0,
   padding_bottom = 0,
   padding_left = 0,
-  center = {},
+  center,
   size = 1000,
+  scale = 1,
   style = {},
 } = {}) {
   if (viewport === null) {
@@ -98,14 +99,14 @@ function render(sketch, {
 
     const extents = sketch.extents;
 
-    const scale = get(style, 'annotation.scale') || 1;
+    const anno_scale = get(style, 'annotation.scale') || 1;
 
     const { viewbox, scalefactor } = calculate_viewbox(
-      extents, fit, pad, aspect_ratio, scale, center, size,
+      extents, fit, pad, aspect_ratio, center, size / scale,
     );
 
 
-    set(style, 'annotation.scale', scale * scalefactor);
+    set(style, 'annotation.scale', anno_scale * scalefactor);
 
     return `<${viewport} viewBox="${viewbox}" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" display="block">
   <g transform="scale(1 -1)">${recurse(sketch, style, show)}

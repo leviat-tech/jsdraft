@@ -41,6 +41,20 @@ describe('Render', () => {
     expect(textnode.properties['font-size'].toFixed(3)).to.eql('0.672');
   });
 
+  it('should allow the drawing to be scaled', () => {
+    const svg = render(sketch, 'svg', { fit: false, size: 100, scale: 2 });
+    const parsed = parse(svg);
+    const svgnode = parsed.children[0];
+    expect(svgnode.properties.viewBox).to.eql('-23 -35 50 50');
+  });
+
+  it('should allow the drawing to be centered about a dfferent point', () => {
+    const svg = render(sketch, 'svg', { fit: false, size: 100, center: [16, 16] });
+    const parsed = parse(svg);
+    const svgnode = parsed.children[0];
+    expect(svgnode.properties.viewBox).to.eql('-34 -66 100 100');
+  });
+
   it('can use an aspect ratio box', () => {
     const svg = render(sketch, 'svg', { aspect_ratio: 2 });
     const parsed = parse(svg);
