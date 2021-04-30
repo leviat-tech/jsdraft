@@ -21,7 +21,7 @@ Table of Contents:
     * [interpolate](#interpolate-point-point-array-)
     * [join](#join)
     * [offset](#offset-number-boolean-)
-    * [prune](#prune)
+    * [prune](#prune-condition-condition-)
     * [subtract](#subtract-sketch-)
     * [union](#union-sketch-)
   * [Transformations](#transformations)
