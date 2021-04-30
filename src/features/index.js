@@ -24,6 +24,7 @@ const fillet = require('./operations/fillet.js');
 const interpolate = require('./operations/interpolate.js');
 const join = require('./operations/join.js');
 const offset = require('./operations/offset.js');
+const prune = require('./operations/prune.js');
 const subtract = require('./operations/subtract.js');
 const union = require('./operations/union.js');
 
@@ -64,6 +65,7 @@ module.exports = [
   interpolate,
   join,
   offset,
+  prune,
   subtract,
   union,
 

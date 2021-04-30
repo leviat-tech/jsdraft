@@ -21,6 +21,7 @@ Table of Contents:
     * [interpolate](#interpolate-point-point-array-)
     * [join](#join)
     * [offset](#offset-number-boolean-)
+    * [prune](#prune)
     * [subtract](#subtract-sketch-)
     * [union](#union-sketch-)
   * [Transformations](#transformations)
@@ -362,6 +363,29 @@ const result = sketch
 // Results in a new sketch with the offset polycurve.
 ```
 
+
+### _prune( condition[, condition] )_
+
+Removes any number of nodes from a sketch and returns the modified sketch.
+
+```js
+const foo = new Sketch()
+  .polycurve([0, 0], [16, 16], [25, 0], [50, 0])
+  .name('foo');
+
+const bar = new Sketch()
+  .polyface([0, 0], [16, 16], [-10, 20], [-12, 2])
+  .name('bar');
+
+const baz = new Sketch()
+  .circle([10, 10], 3)
+  .name('baz');
+
+const sketch = new Sketch().add(foo, bar, baz);
+
+const pruned = sketch.prune('bar', 'baz');
+// Result will contain only the "foo" node.
+```
 
 ### _subtract( sketch )_
 
