@@ -175,13 +175,7 @@ class Sketch {
         return pick(this.vertices, i);
       },
       find(condition) {
-        let s = sketch.find(condition, 'post', 'hidden');
-        if (s) {
-          s = s.clone();
-          // If a sketch is found, it is no longer "hidden"
-          s.node.hidden = false;
-        }
-        return s;
+        return sketch.find(condition, 'post', 'hidden');
       },
     };
 
