@@ -2,6 +2,9 @@
   <div
     class="input-container"
   >
+    <div v-if="label" class="label">
+      {{ label }}
+    </div>
     <div class="param">
       {{ upperFirst(type) }}
     </div>
@@ -16,6 +19,7 @@ export default {
   name: 'GenericParameter',
   props: {
     parameter: { type: Object, required: true },
+    label: { type: String, default: null },
     type: { type: String, required: true },
   },
   methods: {
