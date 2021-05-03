@@ -1,4 +1,9 @@
+const set = require('lodash/set');
+
+
 module.exports = function stroke(sketch, color, width, opacity) {
-  sketch.node.style.stroke = { width, color, opacity };
+  set(sketch.node.style, 'stroke.color', color);
+  if (width) set(sketch.node.style, 'stroke.width', width);
+  if (opacity) set(sketch.node.style, 'stroke.opacity', opacity);
   return sketch;
 };
