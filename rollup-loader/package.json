@@ -1,0 +1,17 @@
+{
+  "name": "@crhio/rollup-plugin-jsdraft",
+  "version": "0.0.1",
+  "description": "JSDraft loader for Rollup",
+  "scripts": {
+    "test-build": "rollup --config"
+  },
+  "dependencies": {
+    "@crhio/jsdraft": "^0.0.2",
+    "@rollup/pluginutils": "^4.1.0",
+    "lodash": "^4.17.21",
+    "tosource": "^2.0.0-alpha.2"
+  },
+  "main": "loader.js",
+  "keywords": [],
+  "author": ""
+}
