@@ -57,3 +57,30 @@ import draft from 'path/to/file.draft';
 
 const svg = draft.render('my_sketch', [1, 2, 3], 'svg');
 ```
+
+
+### Rollup
+
+Install the separate package, `@crhio/rollup-plugin-jsdraft`. The rollup config shouuld include the jsdraft rollup plugin:
+
+```js
+// rollup.config.js
+import JSDraftLoader from './loader.js';
+
+
+export default ({
+  input: 'src/index.js',
+  plugins: [JSDraftLoader()],
+  output: {
+    format: 'esm',
+  },
+});
+```
+
+Then the standard import syntax can be used to import a draft file:
+
+```js
+import draft from 'path/to/file.draft';
+
+const svg = draft.render('my_sketch', [1, 2, 3], 'svg');
+```
