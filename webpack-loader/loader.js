@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const set = require('lodash/set');
+const toSource = require('tosource');
 
 
 function isFile(p) {
@@ -7,51 +9,54 @@ function isFile(p) {
   return stat.isFile();
 }
 
-function parse_filename(filename) {
-  const segments = filename.split('.');
-  if (segments.length < 2
-    || !segments[0]
-    || !['js', 'yaml'].includes(segments[segments.length - 1])) {
-    return null;
-  }
+function isValidFilename(filename) {
+  if (!filename) return false;
 
-  return {
-    filename,
-    name: segments.slice(0, -1).join('.'),
-    extension: segments[segments.length - 1],
-  };
+  const split = filename.split('.');
+  return split.length > 1
+    && split[0]
+    && ['json', 'js', 'yaml'].includes(split[split.length - 1]);
+}
+
+function fileContents(files, root, dir = '') {
+  return files
+    .filter((file) => isFile(path.join(root, dir, file)))
+    .filter((file) => isValidFilename(file))
+    .map((file) => ({
+      path: dir ? `${dir}/${file}` : file,
+      contents: fs.readFileSync(path.join(root, dir, file), 'utf-8'),
+    }));
+}
+
+function getFile(p) {
+  const rootFiles = fs.readdirSync(p);
+  const sketchFeatures = fs.existsSync(path.join(p, 'sketch-features'))
+    ? fs.readdirSync(path.join(p, 'sketch-features'))
+    : [];
+
+  const f = [
+    ...fileContents(rootFiles, p),
+    ...fileContents(sketchFeatures, p, 'sketch-features'),
+  ];
+
+  const files = f.reduce((obj, file) => {
+    const p = file.path.split('/');
+    set(obj, p, file.contents);
+    return obj;
+  }, {});
+
+  return files;
 }
 
 function loader() {
-  const sketchDir = fs.existsSync(path.join(this.context, 'sketch-features'))
-    ? path.join(this.context, 'sketch-features')
-    : this.context;
-
-  const sketchFeatureFiles = fs.readdirSync(sketchDir);
-
-  sketchFeatureFiles.forEach((file) => {
-    this.addDependency(path.join(sketchDir + file));
-  });
-
-  const files = sketchFeatureFiles
-    .filter((file) => isFile(path.join(sketchDir, file)))
-    .map((filename) => parse_filename(filename))
-    .filter((file) => file)
-    .map((file) => ({
-      ...file,
-      contents: fs.readFileSync(path.join(sketchDir, file.filename), 'utf-8'),
-    }));
+  const files = getFile(this.context);
 
   return `
     import { Draft } from '@crhio/jsdraft';
 
-    const files = ${JSON.stringify(files)};
+    const files = ${toSource(files)};
 
-    const draft = new Draft();
-
-    files.forEach((file) => {
-      draft.add_feature(file.name, file.extension, file.contents);
-    });
+    const draft = Draft.load(files);
 
     export default draft;
   `;
