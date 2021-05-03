@@ -1,6 +1,6 @@
 {
   "name": "@crhio/rollup-plugin-jsdraft",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "JSDraft loader for Rollup",
   "scripts": {
     "test-build": "rollup --config"

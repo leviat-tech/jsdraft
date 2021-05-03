@@ -56,7 +56,7 @@ export default function loader() {
 
     resolveId(source, importer) {
       if (ext.test(source)) {
-        const p = path.resolve(path.dirname(importer), source);
+        const p = path.resolve(path.dirname(importer || '.'), source);
         return p;
       }
 
