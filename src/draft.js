@@ -1,3 +1,4 @@
+const merge = require('lodash/merge');
 const parse = require('./loaders/parse.js');
 const Sketch = require('./sketch/sketch.js');
 const render = require('./render.js');
@@ -11,9 +12,11 @@ class Draft {
       sketch: {},
     };
 
+    this.settings = {};
+
     this.meta = {
       filetype: 'JSDraft',
-      version: '0.0.1',
+      version: '0.0.3',
     };
   }
 
@@ -48,6 +51,8 @@ class Draft {
 
   render(name, params, format, options = {}) {
     let type;
+    options = merge({}, this.settings, options);
+
     if (options.type) {
       type = options.type;
     } else {

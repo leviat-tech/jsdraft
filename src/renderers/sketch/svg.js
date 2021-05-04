@@ -1,3 +1,4 @@
+const merge = require('lodash/merge');
 const get = require('lodash/get');
 const set = require('lodash/set');
 const svg_renderer = require('../entity/svg');
@@ -20,7 +21,7 @@ function recurse(sketch, style, show) {
       annotation: { color: '#fff' },
     };
   } else {
-    s = { ...sketch.node.style, ...style };
+    s = merge({}, style, sketch.node.style);
   }
 
   // draw entities
@@ -51,7 +52,7 @@ function recurse_js(sketch, style, show) {
       annotation: { color: '#fff' },
     };
   } else {
-    s = { ...sketch.node.style, ...style };
+    s = merge({}, style, sketch.node.style);
   }
 
 

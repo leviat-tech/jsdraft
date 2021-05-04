@@ -44,6 +44,12 @@ function load_draft_file(d, Draft) {
 
   const sketch_feature_files = fs.readdirSync(sketch_dir);
 
+  const index = fs.existsSync(path.join(p, 'index.json'))
+    ? JSON.parse(fs.readFileSync(path.join(p, 'index.json'), 'utf-8'))
+    : {};
+
+  const settings = index.settings || {};
+
   const files = sketch_feature_files
     .filter((file) => isFile(path.join(sketch_dir, file)))
     .map((filename) => parse_filename(filename))
@@ -56,6 +62,8 @@ function load_draft_file(d, Draft) {
   files.forEach((file) => {
     draft.add_feature(file.name, file.extension, file.contents);
   });
+
+  draft.settings = settings;
 
   return draft;
 }

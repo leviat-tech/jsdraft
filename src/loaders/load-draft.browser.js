@@ -21,6 +21,14 @@ function load_draft_file(d, Draft) {
       contents,
     }));
 
+  const index = d['index.json']
+    ? JSON.parse(d['index.json'])
+    : {};
+
+  const settings = index.settings || {};
+
+  draft.settings = settings;
+
   files.forEach((file) => {
     draft.add_feature(file.name, file.extension, file.contents);
   });
