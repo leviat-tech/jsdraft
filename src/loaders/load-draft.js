@@ -44,9 +44,14 @@ function load_draft_file(d, Draft) {
 
   const sketch_feature_files = fs.readdirSync(sketch_dir);
 
-  const index = fs.existsSync(path.join(p, 'index.json'))
-    ? JSON.parse(fs.readFileSync(path.join(p, 'index.json'), 'utf-8'))
-    : {};
+  let index;
+  try {
+    index = fs.existsSync(path.join(p, 'index.json'))
+      ? JSON.parse(fs.readFileSync(path.join(p, 'index.json'), 'utf-8'))
+      : {};
+  } catch (e) {
+    index = {};
+  }
 
   const settings = index.settings || {};
 

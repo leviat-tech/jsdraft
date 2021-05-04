@@ -21,9 +21,14 @@ function load_draft_file(d, Draft) {
       contents,
     }));
 
-  const index = d['index.json']
-    ? JSON.parse(d['index.json'])
-    : {};
+  let index;
+  try {
+    index = d['index.json']
+      ? JSON.parse(d['index.json'])
+      : {};
+  } catch (e) {
+    index = {};
+  }
 
   const settings = index.settings || {};
 
