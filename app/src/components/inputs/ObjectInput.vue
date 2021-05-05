@@ -53,7 +53,7 @@ export default {
             return p;
           }, {});
       } else {
-        properties = Object.entries(this.parameter.default)
+        properties = Object.entries(this.parameter.default || {})
           .reduce((p, [key, value]) => {
             p[key] = {
               type: typeof value,
