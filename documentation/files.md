@@ -12,7 +12,40 @@ my_drawing.draft
 
 All yaml and js features in the are automatically registered as user features, and can be used by any of the other features within the `.draft` container.
 
-The `index.json` file stores metadata about the project.
+The `index.json` file stores metadata about the project. Project-wide settings can be defined in the `index.json`--see below for the defaults.
+
+```js
+{
+  "filetype": "JSDraft",
+  "version": "0.0.1",
+  "settings": {
+    "style": {
+      "fill": {
+        "color": "white"
+        "opacity": 1
+      },
+      "stroke": {
+        "color": "black",
+        "opacity": 1,
+        "stroke-width": 1.5,
+        "scaled": false
+      },
+      "annotation": {
+        "color": "black",
+        "h_align": "center",
+        "v_align": "middle",
+        "font_size": 12,
+        "scale": 1,
+        "extension": 5,
+        "hash_length": 5,
+        "offset": 50,
+        "text_offset": 10,
+        "precision": 0
+      }
+    },
+  }
+}
+```
 
 ## Importing JSDraft Files
 
