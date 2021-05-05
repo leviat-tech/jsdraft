@@ -51,6 +51,7 @@ module.exports = {
     'import/extensions': ['error', 'ignorePackages', {
       js: 'always',
       vue: 'always',
+      json: 'always',
     }],
     'import/no-unresolved': ['error',
       { ignore: ['@/'] },

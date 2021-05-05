@@ -33,8 +33,6 @@ Install the separate package, `@crhio/webpack-jsdraft-loader`. The webpack confi
 
 ```js
 // webpack.config.js
-import draftLoader from '@crhio/webpack-jsdraft-loader';
-
 module.exports = {
   module: {
     rules: [
@@ -42,7 +40,7 @@ module.exports = {
         test: /\.draft\/index\.json$/,
         type: 'javascript/auto',
         use: [
-          { loader: draftLoader },
+          { loader: '@crhio/webpack-jsdraft-loader' },
         ],
       }
     ]
@@ -58,6 +56,35 @@ import draft from 'path/to/file.draft';
 const svg = draft.render('my_sketch', [1, 2, 3], 'svg');
 ```
 
+If you are using the ESLint "import/extensions" rule, you may need to disable the requirement to include an extension on .json files:
+
+```js
+  rules: {
+    'import/extensions': ['error', 'ignorePackages', { json: 'always' }],
+  }
+```
+
+*NOTE*: JSDraft is not transpiled, and uses modern language features that may not be supported depending on the contect where you are using it. `vue-cli`, for instance, uses webpack 4, which may require you to transpile the jsdraft dependency:
+
+```js
+// vue.config.js
+module.exports = {
+  transpileDependencies: ['@crhio/jsdraft'],
+  configureWebpack: {
+    module: {
+      rules: [
+        {
+          test: /\.draft\/index\.json$/,
+          type: 'javascript/auto',
+          use: [
+            { loader: '@crhio/webpack-jsdraft-loader' },
+          ],
+        },
+      ],
+    },
+  },
+}
+```
 
 ### Rollup
 
