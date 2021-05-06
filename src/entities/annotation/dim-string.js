@@ -8,8 +8,9 @@ class DimString {
     args = normalize(args);
 
     /*
-      Args consist of two points for the start and end of the dimension:
-      [[0, 0], [5, 5]]
+      Args consist of two points for the start and end of the dimension,
+      and an array of "ticks" along the length of that dimension string:
+      [[0, 0], [5, 5], [1, 2, 3, 4]]
     */
 
     this.ps = new Point(...args[0]);
@@ -28,7 +29,7 @@ class DimString {
   }
 
   transform(matrix = new flatten.Matrix()) {
-    return new DimString(this.ps.transform(matrix), this.pe.transform(matrix));
+    return new DimString(this.ps.transform(matrix), this.pe.transform(matrix), this.ticks, this.side);
   }
 }
 

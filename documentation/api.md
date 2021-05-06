@@ -255,6 +255,28 @@ const dimSketch = sketch.aligned_dim([0, 0], [4, 3], "right");
 ```
 
 
+### _dim_string( point, point, array )_
+
+Places a dimension string between two points, with ticks at intermediate distances.
+
+```js
+// Construction: start point, endpoint, ticks
+const result = sketch.dim_string([0, 0], [100, 10], [20, 40, 60])
+// Will result in a dimension string with four labeled dimensions: 20, 40, 60,
+// and the remainder to the end of the dimension string.
+```
+
+
+### _angle_dim( point, point, number )_
+
+Places an angle dimension given a center point, a point along a line, and an angle.
+
+```js
+// Construction: center, point, angle
+const result = sketch.angle_dim([0, 0], [100, 0], 30);
+// Will result in an angle dimension indicating 30 degrees.
+```
+
 ## Operations
 
 ### _add_faces( sketch )_

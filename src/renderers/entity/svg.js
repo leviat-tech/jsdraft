@@ -293,6 +293,73 @@ const renderers = {
   },
 
 
+  angle_dim: function angle_dim(entity, {
+    annotation: {
+      extension: ex = 5,
+      text_offset: to = 10,
+      precision: pr = 0,
+      scale: s = 1,
+      font_size = 12,
+      h_align = 'center',
+      v_align = 'middle',
+      color = 'black',
+      width = '1px',
+    } = {},
+  }) {
+    const angle = entity.angle;
+    const exta = entity.exta || (ex * s);
+    const extb = entity.extb || (ex * s);
+
+    const ctr = Vector(entity.ps);
+    const pta = Vector(entity.pe);
+    const vec = pta.subtract(ctr).normalize();
+    const vec2 = vec.rotateDeg(angle);
+    const cvec = vec.rotateDeg(angle / 2);
+    const offset = pta.subtract(ctr).magnitude();
+
+    const a = pta.subtract(vec.scale(exta));
+    const b = pta.add(vec.scale(ex * s));
+    const c = ctr.add(vec2.scale(offset - extb));
+    const d = ctr.add(vec2.scale(offset + ex * s));
+    const f = ctr.add(vec2.scale(offset));
+
+    const path = `M ${a.x} ${a.y} L ${b.x} ${b.y} M ${c.x} ${c.y} L ${d.x} ${d.y} M ${pta.x} ${pta.y} A ${offset} ${offset} 0 0 1 ${f.x} ${f.y}`;
+
+    const cp = ctr.add(cvec.scale(offset + to * s));
+    const atext = `${angle.toFixed(pr)}°`;
+
+    const path_attributes = {
+      stroke: color,
+      fill: 'none',
+      'vector-effect': 'non-scaling-stroke',
+      'stroke-width': width,
+      d: path,
+    };
+
+    const rotation = 0;
+
+    const text_attributes = {
+      rotation,
+      x: cp.x,
+      y: -cp.y,
+      fontsize: font_size * s,
+      fill: color,
+      'dominant-baseline': svg_v_align(v_align),
+      'text-anchor': svg_h_align(h_align),
+      transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
+      'font-size': font_size * s,
+    };
+
+    return {
+      tag: 'g',
+      nodes: [
+        { tag: 'path', attributes: path_attributes },
+        { tag: 'text', attributes: text_attributes, contents: atext },
+      ],
+    };
+  },
+
+
   text: function text(entity, {
     annotation: {
       scale: s = 1,
