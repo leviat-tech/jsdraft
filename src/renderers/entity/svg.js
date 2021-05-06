@@ -203,6 +203,90 @@ const renderers = {
   },
 
 
+  dim_string: function dim_string(entity, {
+    annotation: {
+      extension: ex = 5,
+      hash_length: hl = 5,
+      offset: os = 50,
+      text_offset: to = 10,
+      precision: pr = 0,
+      scale: s = 1,
+      font_size = 12,
+      h_align = 'center',
+      v_align = 'middle',
+      color = 'black',
+      width = '1px',
+    } = {},
+  }) {
+    const v1 = Vector({ x: entity.ps.x, y: entity.ps.y });
+    const v2 = Vector({ x: entity.pe.x, y: entity.pe.y });
+    const length = v2.subtract(v1).magnitude();
+    const dim_vector = length !== 0 ? v2.subtract(v1).normalize() : Vector({ x: 1, y: 0 });
+    const ovec = entity.side === 'left' ? dim_vector.rotate(Math.PI / 2) : dim_vector.rotate(-Math.PI / 2);
+
+    const hashoffset1 = ovec.scale(ex * s);
+    const crossoffset = ovec.scale(os * s);
+    const hashoffset2 = ovec.scale((hl + os) * s);
+    const exoffset = dim_vector.scale(ex * s);
+    const textoffset = ovec.scale(to * s);
+
+    const a = v1.add(hashoffset1);
+    const b = v1.add(hashoffset2);
+    const c = v2.add(hashoffset1);
+    const d = v2.add(hashoffset2);
+    const e = v1.subtract(exoffset).add(crossoffset);
+    const f = v2.add(exoffset).add(crossoffset);
+
+    const path = `M ${a.x} ${a.y} L ${b.x} ${b.y} M ${c.x} ${c.y} L ${d.x} ${d.y} M ${e.x} ${e.y} L ${f.x} ${f.y}`;
+
+    const complete_path = entity.ticks.reduce((p, tick) => {
+      const translation = dim_vector.scale(tick);
+      const atick = a.add(translation);
+      const btick = b.add(translation);
+
+      return p.concat(` M ${atick.x} ${atick.y} L ${btick.x} ${btick.y}`);
+    }, path);
+
+    const text = entity.ticks.concat(length)
+      .map((dist, i, arr) => {
+        const prev = arr[i - 1] || 0;
+        const l = dist - prev;
+        const cp = v1.add(dim_vector.scale(prev + l / 2)).add(crossoffset).add(textoffset);
+        const rotation = -dim_vector.angleDeg();
+        return {
+          tag: 'text',
+          contents: l.toFixed(pr),
+          attributes: {
+            rotation,
+            x: cp.x,
+            y: -cp.y,
+            fontsize: font_size * s,
+            fill: color,
+            'dominant-baseline': svg_v_align(v_align),
+            'text-anchor': svg_h_align(h_align),
+            transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
+            'font-size': font_size * s,
+          },
+        };
+      });
+
+    const path_attributes = {
+      stroke: color,
+      'vector-effect': 'non-scaling-stroke',
+      'stroke-width': width,
+      d: complete_path,
+    };
+
+    return {
+      tag: 'g',
+      nodes: [
+        { tag: 'path', attributes: path_attributes },
+        ...text,
+      ],
+    };
+  },
+
+
   text: function text(entity, {
     annotation: {
       scale: s = 1,
