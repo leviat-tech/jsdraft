@@ -14,6 +14,8 @@ Table of Contents:
   * [Annotations](#annotations)
     * [text](#text-string-point-number-)
     * [aligned_dim](#aligned_dim-point-point-string-)
+    * [dim_string](#dim_string-point-point-array-)
+    * [angle_dim](#angle_dim-point-point-number-)
   * [Operations](#operations)
     * [add_faces](#add_faces-sketch-)
     * [explode](#explode)
