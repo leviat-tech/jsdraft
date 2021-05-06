@@ -180,7 +180,10 @@ const renderers = {
       d: path,
     };
 
-    const rotation = -dim_vector.angleDeg();
+    const r = -dim_vector.angleDeg();
+    const rotation = (Math.abs(r) + 1.19209290e-7) > 90
+      ? Math.sign(r) * -180 + r
+      : r;
 
     const text_attributes = {
       fill: color,
@@ -252,7 +255,10 @@ const renderers = {
         const prev = arr[i - 1] || 0;
         const l = dist - prev;
         const cp = v1.add(dim_vector.scale(prev + l / 2)).add(crossoffset).add(textoffset);
-        const rotation = -dim_vector.angleDeg();
+        const r = -dim_vector.angleDeg();
+        const rotation = (Math.abs(r) + 1.19209290e-7) > 90
+          ? Math.sign(r) * -180 + r
+          : r;
         return {
           tag: 'text',
           contents: l.toFixed(pr),

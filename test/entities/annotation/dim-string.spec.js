@@ -8,8 +8,10 @@ const DimString = require('../../../src/entities/annotation/dim-string');
 const render = require('../../../src/render');
 
 
-describe.only('Aligned Dim', () => {
+describe('Aligned Dim', () => {
   const dim = new DimString([0, 0], [90, 5], [20, 40, 60]);
+  const dim2 = new DimString([0, 0], [-5, 90], [30]);
+  const dim3 = new DimString([5, 90], [0, 0], [30], 'right');
 
   it('can be constructed from two points', () => {
     expect(dim).to.be.instanceof(DimString);
@@ -27,6 +29,17 @@ describe.only('Aligned Dim', () => {
     const svg = render(dim, 'svg');
     const parsed = parse(svg);
     const d = parsed.children[0].children[0].properties.d;
-    expect(d).to.eql('M 0.27735009811261485 -4.992301766027062 L 3.0508510792387633 -54.91531942629768 M 90.27735009811262 0.00769823397293834 L 93.05085107923877 -49.91531942629768 M -2.218800784900913 -50.20036775838323 L 97.7658027471532 -44.645667562158 M 20.24655716222086 -3.8829013735766034 L 23.02005814334701 -53.80591903384722 M 40.21576422632911 -2.773500981126145 L 42.989265207455254 -52.696518641396764 M 60.18497129043735 -1.6641005886756872 L 62.9584722715635 -51.587118248946304');
+    expect(d).to.eql('M -0.27735009811261424 4.992301766027062 L -3.0508510792387566 54.91531942629768 M 89.72264990188738 9.992301766027062 L 86.94914892076125 59.91531942629768 M -7.765802747153204 49.645667562158 L 92.2188007849009 55.20036775838323 M 19.691856965995633 6.10170215847752 L 16.91835598486949 56.02471981874814 M 39.66106403010388 7.211102550927978 L 36.88756304897774 57.13412021119859 M 59.63027109421213 8.320502943378436 L 56.856770113085986 58.24352060364905');
+  });
+
+  it('will flip dimensions to be right-side up', () => {
+    const svg2 = render(dim2, 'svg');
+    const svg3 = render(dim3, 'svg');
+    const parsed2 = parse(svg2);
+    const parsed3 = parse(svg3);
+    const r2 = parsed2.children[0].children[1].properties.rotation;
+    const r3 = parsed3.children[0].children[1].properties.rotation;
+    expect(Math.abs(r2)).to.be.below(90);
+    expect(Math.abs(r3)).to.be.below(90);
   });
 });

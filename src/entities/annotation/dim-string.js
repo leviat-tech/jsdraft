@@ -15,7 +15,7 @@ class DimString {
     this.ps = new Point(...args[0]);
     this.pe = new Point(...args[1]);
     this.ticks = args[2] ? args[2] : [];
-    this.side = args[2] ? args[2] : 'left';
+    this.side = args[3] ? args[3] : 'left';
   }
 
   get box() {
