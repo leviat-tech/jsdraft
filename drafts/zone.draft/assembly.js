@@ -17,14 +17,14 @@ return {
       .segment([length, 0], [length, width]);
 
     let assembly = sketch.new
-      .add(rect, l, r);
+      .add(rect);
 
     if (left) {
-      assembly = assembly.add(l.user[left]('left'));
+      assembly = assembly.add(l.user[left.type]('left'));
     }
     
     if (right) {
-      assembly = assembly.add(r.user[right]('right'));
+      assembly = assembly.add(r.user[right.type]('right'));
     }
 
     return sketch.add(assembly);
