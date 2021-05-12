@@ -385,11 +385,12 @@ const renderers = {
 };
 
 
-function svg(entity, { output = 'string', style = {} } = {}) {
+function svg(entity, { output = 'string', style = {}, z = 0 } = {}) {
   const type = base_entity_type(entity);
 
   const renderer = renderers[type];
   const js = renderer(entity, style);
+  js.z = z;
 
   if (output === 'js') return js;
 
