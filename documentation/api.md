@@ -40,6 +40,7 @@ Table of Contents:
     * [name](#name-string-)
     * [show](#show)
     * [tag](#tag)
+    * [z](#z-number)
 * [Sketch utility functions](#sketch-utility-functions)
   * [add](#add-args-)
   * [new](#new)
@@ -571,6 +572,18 @@ const rect = sketch.rectangle([0, 0], 10, 5, 1).tag('rectangles');
 
 const node = rect.find((s) => s.node.tags.includes('rectangles'));
 ```
+
+### _z( number )_
+
+Adds a z-index to a node, which can be supported by some renderers (like SVG).
+
+```js
+const a = sketch.new.circle([0, 0], 10).fill('red');
+const b = sketch.new.circle([5, 0], 10).fill('green').z(2);
+const c = sketch.new.circle([10, 0], 10).fill('blue').z(1);
+const result = sketch.add(a, b, c);
+```
+
 
 ## Sketch utility functions
 

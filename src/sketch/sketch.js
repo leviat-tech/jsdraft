@@ -22,6 +22,7 @@ class Sketch {
       children: [], // children: nodes attached as descendents to this node
       attributes: {}, // attributes: a free space for meta data associated with this node
       index: {}, // injected user feature index (owner attribute allows reference sketch that owns the index)
+      z: null, // z-index -- if present, will be used to sort siblings when iterating
     };
     if (Array.isArray(options)) {
       options = { entities: options };

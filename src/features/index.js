@@ -19,6 +19,7 @@ const hide = require('./meta/hide.js');
 const name = require('./meta/name.js');
 const show = require('./meta/show.js');
 const tag = require('./meta/tag.js');
+const z = require('./meta/z.js');
 
 const add_faces = require('./operations/add-faces.js');
 const explode = require('./operations/explode.js');
@@ -62,6 +63,7 @@ module.exports = [
   name,
   show,
   tag,
+  z,
 
   add_faces,
   explode,

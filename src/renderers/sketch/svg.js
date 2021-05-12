@@ -30,7 +30,9 @@ function recurse(sketch, style, show) {
   }
 
   // draw children
-  for (const child of sketch.node.children) {
+  const children = [...sketch.node.children];
+  children.sort((a, b) => a.node.z - b.node.z);
+  for (const child of children) {
     svg += recurse(child, s, show);
   }
 
@@ -60,7 +62,9 @@ function recurse_js(sketch, style, show) {
     svg = [...svg, svg_renderer(sketch.node.entity, { output: 'js', style: s })];
   }
 
-  for (const child of sketch.node.children) {
+  const children = [...sketch.node.children];
+  children.sort((a, b) => a.node.z - b.node.z);
+  for (const child of children) {
     svg = [...svg, ...recurse_js(child, s, show)];
   }
 
