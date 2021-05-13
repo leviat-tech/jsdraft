@@ -6,12 +6,18 @@ return {
     { name: "mortars", default: [{edge:0, thickness: 5}, {edge:3, thickness: 10}]}
   ],
   func: function (sketch,  width, height, material, mortars) {
+    const Style={
+      clay:{hatch:['lines', 1, 0, 'black', 'none'], stroke:["black",2]}, 
+      mortar:{hatch:"concrete", stroke:["black",.5]}, 
+    }
    const Block = sketch.polyface(
         [0,0],
         [width, 0],
         [width, height],
         [0, height]
-      ).fill("orange")
+      ).stroke(...Style[material].stroke)
+       .hatch(...Style[material].hatch)
+   
     const Mortars=[];
     mortars.forEach(mortar => {
     const edge1 = sketch.new.add(Block.edge(mortar.edge))
@@ -25,11 +31,10 @@ return {
       edge2.vertices[1]
     )
     const Mortar = sketch.new.add(MortarRight, MortarLeft, edge1, edge2)
-    .join().fill("grey").stroke("black", 0.5);
+    .join().stroke(...Style['mortar'].stroke).hatch(Style['mortar'].hatch);
     Mortars.push(Mortar);
     });
-    
-    
+
     return sketch.add(Block, ...Mortars);
   }
 }

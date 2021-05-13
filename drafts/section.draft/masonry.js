@@ -2,7 +2,7 @@ return {
   parameters: [
     { name: "height", default: 300 },
     { name: "thickness", default: 112.5 },
-    { name: "material", default: "brick" },
+    { name: "material", default: "clay" },
     { name: "mortar", default: 10}
   ],
   func: function (sketch, drop, thickness, material, mortar) {
