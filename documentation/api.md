@@ -35,6 +35,7 @@ Table of Contents:
   * [Style features](#style-features)
     * [fill](#fill-string-)
     * [hatch](#hatch-string-number-number-string-string-)
+    * [linestyle](#linestyle-number-number-)
     * [stroke](#stroke-string-number-)
   * [Meta features](#meta-features)
     * [hide](#hide)
@@ -513,7 +514,7 @@ const result = sketch.fill("green");
 ```
 
 
-### _hatch( string[, number[, number[, string[, string] ] ] ] )
+### _hatch( string[, number[, number[, string[, string] ] ] ] )_
 
 Applies the indicated hatch pattern to all polyfaces in a sketch.
 
@@ -530,6 +531,14 @@ const a = sketch.hatch('concrete', 0.5, 45, 'red', 'none');
 const b = sketch.hatch('crosshatch');
 ```
 
+
+### _linestyle( number[, ...number] )_
+
+Adds a style in the provided pattern of dashes and spaces.
+
+```js
+const a = sketch.linestyle(15, 5, 2, 5);
+```
 
 ### _stroke( string, number )_
 
