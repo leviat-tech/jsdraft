@@ -130,7 +130,19 @@ const renderers = {
       d,
     };
 
-    return { tag: 'path', attributes };
+    return {
+      tag: 'path',
+      attributes,
+      ...(styles.fill?.hatch && {
+        hatch: {
+          pattern: styles.fill.hatch,
+          angle: styles.fill.hatch_angle || 0,
+          scale: styles.fill.hatch_scale || 1,
+          color: styles.fill.hatch_color || 'black',
+          background: styles.fill.hatch_background || 'white',
+        },
+      }),
+    };
   },
 
 

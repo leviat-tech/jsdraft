@@ -34,6 +34,7 @@ Table of Contents:
     * [translate](#translate-number-number-)
   * [Style features](#style-features)
     * [fill](#fill-string-)
+    * [hatch](#hatch-string-number-number-string-string-)
     * [stroke](#stroke-string-number-)
   * [Meta features](#meta-features)
     * [hide](#hide)
@@ -509,6 +510,24 @@ Applies the given fill color to all entities in a sketch.
 
 ```js
 const result = sketch.fill("green");
+```
+
+
+### _hatch( string[, number[, number[, string[, string] ] ] ] )
+
+Applies the indicated hatch pattern to all polyfaces in a sketch.
+
+Valid values for the "pattern" argument:
+  - `crosshatch`
+  - `lines`
+  - `steel`
+  - `concrete`
+
+```js
+// pattern, scale = 1, angle = 0, color = 'black', background = 'white'
+const a = sketch.hatch('concrete', 0.5, 45, 'red', 'none');
+
+const b = sketch.hatch('crosshatch');
 ```
 
 

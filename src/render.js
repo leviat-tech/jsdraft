@@ -25,17 +25,7 @@ function render(element, format = 'svg', options = {}) {
     ? sketch_renderers[format]
     : entity_renderers[format];
 
-  const patterns = `
-  <defs>
-    <pattern id="hatch" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(45)">
-      <line style="stroke:black;stroke-width:1" x1="5" y1="0" x2="5" y2="10" />
-      <line style="stroke:black;stroke-width:1" x1="0" y1="5" x2="10" y2="5" />
-    </pattern>
-  </defs>
-  `;
-  const svg = renderer(element, options);
-  console.log(patterns, svg);
-  return svg;
+  return renderer(element, options);
 }
 
 module.exports = render;

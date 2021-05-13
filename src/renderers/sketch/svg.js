@@ -4,10 +4,37 @@ const set = require('lodash/set');
 const svg_renderer = require('../entity/svg');
 const calculate_viewbox = require('../utility/viewbox.js');
 const svg_string = require('../../utility/misc/svg-string.js');
+const hatches = require('../../utility/misc/hatches.js');
 
+
+// generate a unique id given an input
+function hash(v) {
+  const str = String(v);
+  let h = 0;
+  if (str.length === 0) return h;
+  for (let i = 0; i < str.length; i += 1) {
+    const char = str.charCodeAt(i);
+    h = ((h << 5) - h) + char;
+    h &= h; // Convert to 32bit integer
+  }
+  return h;
+}
 
 function svg_arr_to_string(arr) {
-  return arr.reduce((str, entity) => {
+  const h = {};
+  let entities = arr.reduce((str, entity) => {
+
+    if (entity.hatch && hatches[entity.hatch.pattern]) {
+      const hatch_name = `${entity.hatch.pattern}-${hash(entity.hatch.scale)}`;
+      h[hatch_name] = hatches[entity.hatch.pattern](
+        hatch_name,
+        entity.hatch.scale,
+        entity.hatch.angle,
+        entity.hatch.color,
+        entity.hatch.background,
+      );
+      set(entity, 'attributes.fill', `url(#${hatch_name})`);
+    }
 
     if (entity.tag === 'g') {
       const s = entity.nodes
@@ -18,6 +45,9 @@ function svg_arr_to_string(arr) {
 
     return str + svg_string(entity.tag, entity.attributes, entity.contents);
   }, '');
+
+  Object.values(h).forEach((hatch) => { entities = `${hatch}${entities}`; });
+  return entities;
 }
 
 
