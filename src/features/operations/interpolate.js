@@ -25,7 +25,7 @@ module.exports = {
     }
 
     const oriented = pcurve
-      .transform(flatten.matrix().rotate(angle).translate(pt_a.x, pt_a.y));
+      .transform(flatten.matrix().translate(pt_a.x, pt_a.y).rotate(angle));
 
     const positioned = positions
       .sort((a, b) => a - b)
