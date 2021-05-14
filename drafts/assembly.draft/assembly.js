@@ -2,8 +2,8 @@ return {
   parameters: [
     { name: "length", default: 100 },
     { name: "width", default: 10 },
-    { name: "left", default: { type: "cut" } },
-    { name: "right", default: { type: "cut" } },
+    { name: "left", default: { type: "plate" } },
+    { name: "right", default: { type: "plate" } },
   ],
 
   func: function (sketch, length, width, left, right) {
