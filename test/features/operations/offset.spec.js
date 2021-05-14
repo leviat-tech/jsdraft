@@ -56,6 +56,22 @@ describe('Offset', () => {
     expect(v[2]).to.be.a.point({ x: 3.1768, y: 3.1768 });
   });
 
+  it('can offset a polycurve with a radius', () => {
+    const pc = new Sketch()
+      .polycurve(
+        [0, 0],
+        [0, 50],
+        [-10, 50],
+      ).fillet(5);
+
+    const inset = pc.offset(4, false);
+    const v = inset.shape.vertices;
+    expect(v[0]).to.be.a.point({ x: -4, y: 0 });
+    expect(v[1]).to.be.a.point({ x: -4, y: 45 });
+    expect(v[2]).to.be.a.point({ x: -5, y: 46 });
+    expect(v[3]).to.be.a.point({ x: -10, y: 46 });
+  });
+
   it('can offset a polyface', () => {
     const offset = pface.offset(0.5, false);
     const v = offset.shape.vertices;

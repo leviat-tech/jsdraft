@@ -18,7 +18,7 @@
     "./src/loaders/load-file.js": "./src/loaders/load-file.browser.js"
   },
   "dependencies": {
-    "@crhio/offset": "^0.0.8",
+    "@crhio/offset": "^0.0.9",
     "@crhio/vector": "0.0.3",
     "@flatten-js/core": "git://github.com/leviat-tech/flatten-js.git#arc-reflection",
     "commander": "^7.1.0",
