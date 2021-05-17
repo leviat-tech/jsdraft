@@ -16,14 +16,14 @@ return {
       outer.vertices[0],
       inner.vertices[0],
       )
-//     const bottom = sketch.polycurve(
-//       inner.vertices[3],
-//       outer.vertices[3],
-//       )
-//     const angle = sketch.new.add(outer, inner, top, bottom)
-//     .join().translate(0, -thickness);
+    const bottom = sketch.polycurve(
+      inner.vertices.slice(-1)[0],
+      outer.vertices.slice(-1)[0],
+      )
+    const angle = sketch.new.add(outer, inner, top, bottom)
+    .join()
     
-    return sketch.add(outer, inner)
+    return sketch.add(angle)
   }
 }
 

@@ -15,7 +15,8 @@ return {
     })
     const angle = sketch.user.angle().translate(lower.x, lower.y-wv)
     const adjustmentplate = sketch.user.adjustmentplate()
-    return sketch.add(angle,wp, adjustmentplate)
+    const pressureplate = sketch.user.pressureplate()
+    return sketch.add(angle,wp, adjustmentplate, pressureplate)
   }
 }
 
