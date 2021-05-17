@@ -23,7 +23,11 @@ return {
     const angle = sketch.user.angle().translate(lower.x, lower.y-wv)
     const adjustmentplate = sketch.user.adjustmentplate().translate(upper.x, upper.y)
     const pressureplate = sketch.user.pressureplate().translate(upper.x, upper.y)
-    return sketch.add(angle,wp, adjustmentplate, pressureplate)
+    
+    const l = sketch.new.add(angle.edge(0));
+    const weld = l.user.weld("left");
+    
+    return sketch.add(angle,wp, adjustmentplate, pressureplate, weld)
   }
 }
 

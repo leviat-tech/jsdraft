@@ -49,7 +49,7 @@ return {
    .union(ToeSnapped)
    .subtract(Hole)
    .subtract(PillVoid)
-   .union(SideLipSnapped)
+//    .union(SideLipSnapped)
 //    .union(NeckSnapped)
 //    .subtract(HalfPillSnapped)
 
