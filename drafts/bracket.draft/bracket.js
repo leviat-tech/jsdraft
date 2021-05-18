@@ -1,5 +1,6 @@
 return {
   parameters: [
+    { name: "view", default: "side"},
     { name: "wv", default: 0 },
     { name: "wp_params", default: {
       k1: 100 ,
@@ -23,7 +24,7 @@ return {
       }
   }
   ],
-  func: function (sketch, wv, wp_params, angle_params) {
+  func: function (sketch, view, wv, wp_params, angle_params) {
     const wp = sketch.user.wp(wp_params)
     let lower = {x:Infinity, y: Infinity}
     let upper = {x:-Infinity, y: -Infinity}
@@ -42,7 +43,7 @@ return {
       } 
     })
     const angle = sketch.user.angle(angle_params).translate(lower.x, lower.y-wv)
-    const adjustmentplate = sketch.user.adjustmentplate().translate(upper.x, upper.y)
+    const adjustmentplate = sketch.user[`adjustmentplate_${view}`]().translate(upper.x, upper.y)
     const pressureplate = sketch.user.pressureplate().translate(upper.x, upper.y)
     
 //     const w1 = sketch.new.add(angle.edge(0));
