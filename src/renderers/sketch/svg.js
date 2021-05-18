@@ -25,7 +25,8 @@ function svg_arr_to_string(arr) {
   let entities = arr.reduce((str, entity) => {
 
     if (entity.hatch && hatches[entity.hatch.pattern]) {
-      const hatch_name = `${entity.hatch.pattern}-${hash(entity.hatch.scale)}`;
+      const hash_input = `${entity.hatch.scale}-${entity.hatch.angle}-${entity.hatch.color}-${entity.hatch.background}`;
+      const hatch_name = `${entity.hatch.pattern}-${hash(hash_input)}`;
       h[hatch_name] = hatches[entity.hatch.pattern](
         hatch_name,
         entity.hatch.scale,
@@ -46,7 +47,14 @@ function svg_arr_to_string(arr) {
     return str + svg_string(entity.tag, entity.attributes, entity.contents);
   }, '');
 
-  Object.values(h).forEach((hatch) => { entities = `${hatch}${entities}`; });
+  const hatch_arr = Object.values(h);
+  if (hatch_arr.length > 0) {
+    let defs = '\n<defs>';
+    hatch_arr.forEach((hatch) => { defs = defs.concat(hatch); });
+    defs = defs.concat('</defs>\n');
+    entities = `${defs}${entities}`;
+  }
+
   return entities;
 }
 
