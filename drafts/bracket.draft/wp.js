@@ -87,7 +87,8 @@ if (params.neck)
 //     {segment: ToeSnapped.edge(3), flip: true}
 //   ]);
 
-  let WebPlate = Main.fillet(params.radius, 2).union(...toAdd);
+  let WebPlate = Main.fillet(params.radius, 2)
+  .union(...toAdd);
 
   toRemove.forEach( shape => WebPlate = WebPlate.subtract(shape));
 

@@ -12,9 +12,18 @@ return {
       void: {h: 25, w: 60, offset: 20},
       side_lip: {h: 10, bw:50, tw:30} ,
       bottom_lip: {h: 10, bw:70, tw:50} ,
-      }}
+      }},
+      {
+      name: "angle_params",
+      default:{
+      height: 50 ,
+      width: 100 ,
+      thickness: 3 ,
+      radius: 5 
+      }
+  }
   ],
-  func: function (sketch, wv, wp_params) {
+  func: function (sketch, wv, wp_params, angle_params) {
     const wp = sketch.user.wp(wp_params)
     let lower = {x:Infinity, y: Infinity}
     let upper = {x:-Infinity, y: -Infinity}
@@ -32,7 +41,7 @@ return {
       upper.y = v.y
       } 
     })
-    const angle = sketch.user.angle().translate(lower.x, lower.y-wv)
+    const angle = sketch.user.angle(angle_params).translate(lower.x, lower.y-wv)
     const adjustmentplate = sketch.user.adjustmentplate().translate(upper.x, upper.y)
     const pressureplate = sketch.user.pressureplate().translate(upper.x, upper.y)
     
