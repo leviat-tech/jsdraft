@@ -20,7 +20,7 @@
   "dependencies": {
     "@crhio/offset": "^0.0.9",
     "@crhio/vector": "0.0.3",
-    "@flatten-js/core": "git://github.com/leviat-tech/flatten-js.git#boolean-fix",
+    "@flatten-js/core": "^1.2.23",
     "commander": "^7.1.0",
     "glob": "^7.1.6",
     "js-yaml": "^4.0.0",
