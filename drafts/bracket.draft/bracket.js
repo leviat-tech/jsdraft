@@ -8,6 +8,7 @@ return {
       k2: 50 ,
       i2: 60 ,
       radius: 10 ,
+      thickness: 5,
       hole: {r:5, offset: 10} ,
       halfpill: {h:20, w: 40, bottom: 15} ,
       void: {h: 25, w: 60, offset: 20},
@@ -25,7 +26,8 @@ return {
   }
   ],
   func: function (sketch, view, wv, wp_params, angle_params) {
-    const wp = sketch.user.wp(wp_params)
+
+    const wp = sketch.user[`wp_${view}`](wp_params)
     let lower = {x:Infinity, y: Infinity}
     let upper = {x:-Infinity, y: -Infinity}
     wp.vertices.forEach(v =>{ 

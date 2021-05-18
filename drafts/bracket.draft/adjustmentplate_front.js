@@ -16,9 +16,9 @@ return {
    const inner = sketch
   .polycurve(
     [params.width/2, params.height],
-    [params.width/2, 0],
+    [params.width/2, params.width/2+params.thickness],
     -1, 
-    [-params.width/2, 0],
+    [-params.width/2, params.width/2+params.thickness],
     [-params.width/2, params.height]
   )
   

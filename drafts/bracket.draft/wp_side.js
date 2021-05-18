@@ -6,6 +6,7 @@ return {
       k2: 50 ,
       i2: 60 ,
       radius: 10 ,
+      thickness: 5,
       hole: {r:5, offset: 10} ,
       halfpill: {h:20, w: 40, bottom: 15} ,
       void: {h: 25, w: 60, offset: 20},
