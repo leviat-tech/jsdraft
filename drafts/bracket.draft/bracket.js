@@ -47,11 +47,11 @@ return {
     
 //     const w1 = sketch.new.add(angle.edge(0));
 //     const w2 = sketch.new.add(adjustmentplate.edge(0));
-    const w3 = sketch.new.add(wp.edge(3));
+    const w3 = sketch.new.add(wp.edge(7));
     
 //     const welds = [w3].map(w=>{return w.user.weld("left")})
     
-    return sketch.add( wp, angle, adjustmentplate, pressureplate)
+    return sketch.add( wp, angle, adjustmentplate, pressureplate, w3.user.weld("left"))
   }
 }
 

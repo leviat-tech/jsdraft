@@ -8,7 +8,7 @@ return {
   func: function (sketch,  width, height, material, mortars) {
     const Style={
       clay:{hatch:['lines', 1, 0, 'black', 'none'], stroke:["black",2]}, 
-      mortar:{hatch:"concrete", stroke:["black",.5]}, 
+      mortar:{hatch:["concrete", 1, 0, 'black', 'none'], stroke:["black",.5]}, 
     }
    const Block = sketch.polyface(
         [0,0],
@@ -31,7 +31,7 @@ return {
       edge2.vertices[1]
     )
     const Mortar = sketch.new.add(MortarRight, MortarLeft, edge1, edge2)
-    .join().stroke(...Style['mortar'].stroke).hatch(Style['mortar'].hatch);
+    .join().stroke(...Style['mortar'].stroke).hatch(...Style['mortar'].hatch);
     Mortars.push(Mortar);
     });
 
