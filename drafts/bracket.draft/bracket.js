@@ -1,9 +1,21 @@
 return {
   parameters: [
     { name: "wv", default: 0 },
+    { name: "wp_params", default: {
+      k1: 100 ,
+      i1: 100 ,
+      k2: 50 ,
+      i2: 60 ,
+      radius: 10 ,
+      hole: {r:5, offset: 10} ,
+      halfpill: {h:20, w: 40, bottom: 15} ,
+      void: {h: 25, w: 60, offset: 20},
+      side_lip: {h: 10, bw:50, tw:30} ,
+      bottom_lip: {h: 10, bw:70, tw:50} ,
+      }}
   ],
-  func: function (sketch, wv) {
-    const wp = sketch.user.wp()
+  func: function (sketch, wv, wp_params) {
+    const wp = sketch.user.wp(wp_params)
     let lower = {x:Infinity, y: Infinity}
     let upper = {x:-Infinity, y: -Infinity}
     wp.vertices.forEach(v =>{ 
@@ -30,7 +42,7 @@ return {
     
 //     const welds = [w3].map(w=>{return w.user.weld("left")})
     
-    return sketch.add( wp, w3.user.weld("left"), w3.stroke("red",4))
+    return sketch.add( wp, angle, adjustmentplate, pressureplate)
   }
 }
 
