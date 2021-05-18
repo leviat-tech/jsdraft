@@ -24,10 +24,13 @@ return {
     const adjustmentplate = sketch.user.adjustmentplate().translate(upper.x, upper.y)
     const pressureplate = sketch.user.pressureplate().translate(upper.x, upper.y)
     
-    const l = sketch.new.add(angle.edge(0));
-    const weld = l.user.weld("left");
+//     const w1 = sketch.new.add(angle.edge(0));
+//     const w2 = sketch.new.add(adjustmentplate.edge(0));
+    const w3 = sketch.new.add(wp.edge(3));
     
-    return sketch.add(angle,wp, adjustmentplate, pressureplate, weld)
+//     const welds = [w3].map(w=>{return w.user.weld("left")})
+    
+    return sketch.add( wp, w3.user.weld("left"), w3.stroke("red",4))
   }
 }
 
