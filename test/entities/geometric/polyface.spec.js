@@ -1,20 +1,10 @@
 /* global describe, it */
 /* eslint-disable no-unused-expressions */
-const { expect, Assertion } = require('chai');
-const flatten = require('@flatten-js/core');
+const { expect, use } = require('chai');
+use(require('../../helpers.js'));
 const Rectangle = require('../../../src/entities/geometric/rectangle');
 const Polycurve = require('../../../src/entities/geometric/polycurve');
 const Polyface = require('../../../src/entities/geometric/polyface');
-
-
-Assertion.addMethod('polyface', function (vertices) {
-  new Assertion(this._obj).to.be.instanceof(Polyface);
-  if (typeof (vertices) === 'number') {
-    new Assertion(this._obj.vertices.length).to.eql(vertices);
-  } else {
-    expect(this._obj.vertices).to.eql(vertices.map((v) => flatten.point(...v)));
-  }
-});
 
 
 describe('Polyface', () => {

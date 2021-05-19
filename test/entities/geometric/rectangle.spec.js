@@ -1,17 +1,8 @@
 /* global describe, it */
 /* eslint-disable no-unused-expressions */
-const { expect, use, Assertion } = require('chai');
+const { expect, use } = require('chai');
 use(require('../../helpers'));
 const Rectangle = require('../../../src/entities/geometric/rectangle');
-
-
-Assertion.addMethod('rectangle', function rect(xmin, ymin, xmax, ymax) {
-  new Assertion(this._obj).to.be.instanceof(Rectangle);
-  new Assertion(this._obj.xmin).to.be.closeTo(xmin, 0.00001);
-  new Assertion(this._obj.ymin).to.be.closeTo(ymin, 0.00001);
-  new Assertion(this._obj.xmax).to.be.closeTo(xmax, 0.00001);
-  new Assertion(this._obj.ymax).to.be.closeTo(ymax, 0.00001);
-});
 
 
 describe('Rectangle', () => {

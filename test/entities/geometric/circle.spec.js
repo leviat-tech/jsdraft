@@ -1,7 +1,7 @@
 /* global describe, it */
 /* eslint-disable no-unused-expressions */
-const { expect, assert, Assertion } = require('chai');
-const flatten = require('@flatten-js/core');
+const { expect, use } = require('chai');
+use(require('../../helpers.js'));
 const Point = require('../../../src/entities/geometric/point');
 const Circle = require('../../../src/entities/geometric/circle');
 
@@ -9,12 +9,6 @@ const Circle = require('../../../src/entities/geometric/circle');
 const p1 = new Point(0, 0);
 const p2 = new Point(10, 0);
 const p3 = new Point(5, 5);
-
-Assertion.addMethod('circle', function (radius) {
-  new Assertion(this._obj).to.be.instanceof(Circle);
-  new Assertion(this._obj.area()).to.be.closeTo(radius ** 2 * Math.PI, 0.000001);
-});
-
 
 describe('Circle', () => {
 

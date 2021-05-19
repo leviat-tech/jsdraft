@@ -1,13 +1,9 @@
 /* global describe, it */
 /* eslint-disable no-unused-expressions */
-const { expect, Assertion } = require('chai');
+const { expect, use } = require('chai');
+use(require('../../helpers.js'));
 const Arc = require('../../../src/entities/geometric/arc');
 
-
-Assertion.addMethod('arc', function (radius) {
-  new Assertion(this._obj).to.be.instanceof(Arc);
-  new Assertion(this._obj.r).to.be.closeTo(radius, 0.000001);
-});
 
 describe('Arc', () => {
   it('can be constructed from center, radius, start, end, ccw', () => {

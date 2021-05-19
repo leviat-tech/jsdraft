@@ -1,13 +1,8 @@
 /* global describe, it */
 /* eslint-disable no-unused-expressions */
-const { expect, Assertion } = require('chai');
+const { expect, use } = require('chai');
+use(require('../../helpers.js'));
 const Polycurve = require('../../../src/entities/geometric/polycurve');
-
-
-Assertion.addMethod('polycurve', function (vertices) {
-  new Assertion(this._obj).to.be.instanceof(Polycurve);
-  new Assertion(this._obj.vertices.length).to.eql(vertices);
-});
 
 
 describe('Polycurve', () => {
