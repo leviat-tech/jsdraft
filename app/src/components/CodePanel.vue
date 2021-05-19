@@ -15,6 +15,12 @@
             <div class="filename">{{ currentFile }}</div>
           </div>
         </div>
+        <tool
+          tool-id="format"
+          icon="check-circle"
+          name="Format Code"
+          @click="format"
+        />
         <d-button name="Close Editor" @click="closeCodePanel">
           <chevron-right-icon class="lg" />
         </d-button>
@@ -36,12 +42,16 @@
 </template>
 
 <script>
+import prettier from 'prettier';
+import parserBabel from 'prettier/parser-babel.js';
+import parserYaml from 'prettier/parser-yaml.js';
 import { mapMutations, mapState, mapGetters, mapActions } from 'vuex';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import CodeEditor from './CodeEditor.vue';
 import DButton from './DButton.vue';
 import ErrorPanel from './ErrorPanel.vue';
+import Tool from './toolbar/Tool.vue';
 import ChevronRightIcon from '../assets/icons/chevron-right.svg';
 import CodeIcon from '../assets/icons/code.svg';
 import DotIcon from '../assets/icons/dot.svg';
@@ -56,6 +66,7 @@ export default {
     ChevronRightIcon,
     CodeIcon,
     DotIcon,
+    Tool,
   },
   data() {
     return {
@@ -117,7 +128,23 @@ export default {
   methods: {
     ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'updateFile']),
     ...mapActions(['save']),
+    format() {
+      const parser = {
+        js: 'babel',
+        yaml: 'yaml',
+        json: 'json',
+      }[this.language];
+
+      const formatted = prettier.format(this.localCode, {
+        parser,
+        plugins: [parserBabel, parserYaml],
+        printWidth: 60,
+      });
+
+      this.localCode = formatted;
+    },
     saveFile() {
+      this.format();
       this.updateFile({
         path: this.currentFile,
         code: this.localCode,

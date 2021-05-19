@@ -6,7 +6,7 @@ sketch:
   - circle: [[0, 0], 10]
 `;
 
-const js = (name) => `function ${snakeCase(name)} (sketch) {
+const js = (name) => `function ${snakeCase(name)}(sketch) {
   return sketch.circle([0, 0], 10);
 }
 `;
