@@ -1,6 +1,6 @@
 return {
   parameters: [
-    { name: "view", default: "top" },
+    { name: "view", default: "side" },
     { name: "wv", default: 0 },
     {
       name: "wp_params",
@@ -109,10 +109,10 @@ return {
 
         return sketch.add(
           wp,
-          angle,
+          angle_params && angle,
           adjustmentplate,
           pressureplate,
-          compressionplate,
+          compress_params && compressionplate,
           ...welds
         );
 
@@ -123,23 +123,26 @@ return {
           -wp_params.i1
         );
         return sketch.add(
-          compressionplate,
+          compress_params && compressionplate,
           wp,
           adjustmentplate,
-          angle
+          angle_params && angle
         );
 
       case "top":
-        angle = angle.translate(0, -wp_params.k1);
+        angle = angle.translate(
+          0,
+          -wp_params.k1 - wp_params.side_lip.h
+        );
         compressionplate = compressionplate.translate(
           0,
           -wp_params.side_lip.h
         );
         return sketch.add(
-          compressionplate,
+          compress_params && compressionplate,
           wp,
           adjustmentplate,
-          angle
+          angle_params && angle
         );
       default:
         break;
