@@ -140,6 +140,7 @@ const renderers = {
           scale: styles.fill.hatch_scale || 1,
           color: styles.fill.hatch_color || 'black',
           background: styles.fill.hatch_background || 'white',
+          stroke_width: styles.fill.hatch_stroke_width || 1,
         },
       }),
     };

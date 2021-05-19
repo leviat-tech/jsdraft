@@ -27,7 +27,8 @@ The `index.json` file stores metadata about the project. Project-wide settings c
         "hatch_angle": 0,
         "hatch_scale": 1,
         "hatch_color": "black",
-        "hatch_background": "none"
+        "hatch_background": "none",
+        "hatch_stroke_width": 1
       },
       "stroke": {
         "color": "black",

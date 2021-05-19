@@ -1,36 +1,36 @@
-function crosshatch(name, scale = 1, angle = 0, color = 'black', bg = 'white') {
+function crosshatch(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw = 1) {
   return `
   <pattern id="${name}" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(${45 + angle}) scale(${scale} ${scale})">
     <rect fill="${bg}" x="0" y="0" width="10" height="10" />
-    <line stroke="${color}" stroke-width="${1 / scale}" vector-effect="non-scaling-stroke" x1="5" y1="0" x2="5" y2="10" />
-    <line stroke="${color}" stroke-width="${1 / scale}" vector-effect="non-scaling-stroke" x1="0" y1="5" x2="10" y2="5" />
+    <line stroke="${color}" stroke-width="${sw / scale}" vector-effect="non-scaling-stroke" x1="5" y1="0" x2="5" y2="10" />
+    <line stroke="${color}" stroke-width="${sw / scale}" vector-effect="non-scaling-stroke" x1="0" y1="5" x2="10" y2="5" />
   </pattern>
   `;
 }
 
-function lines(name, scale = 1, angle = 0, color = 'black', bg = 'white') {
+function lines(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw = 1) {
   return `
   <pattern id="${name}" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(${45 + angle}) scale(${scale} ${scale})">
     <rect fill="${bg}" x="0" y="0" width="10" height="10" />
-    <line stroke="${color}" stroke-width="${1 / scale}" vector-effect="non-scaling-stroke" x1="0" y1="5" x2="10" y2="5" />
+    <line stroke="${color}" stroke-width="${sw / scale}" vector-effect="non-scaling-stroke" x1="0" y1="5" x2="10" y2="5" />
   </pattern>
   `;
 }
 
-function steel(name, scale = 1, angle = 0, color = 'black', bg = 'white') {
+function steel(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw = 1) {
   return `
   <pattern id="${name}" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(${45 + angle}) scale(${scale} ${scale})">
     <rect fill="${bg}" x="0" y="0" width="10" height="10" />
-    <line stroke="${color}" stroke-width="${1 / scale}" vector-effect="non-scaling-stroke" x1="0" y1="5" x2="10" y2="5" />
-    <line stroke="${color}" stroke-width="${1 / scale}" vector-effect="non-scaling-stroke" x1="0" y1="8" x2="10" y2="8" />
+    <line stroke="${color}" stroke-width="${sw / scale}" vector-effect="non-scaling-stroke" x1="0" y1="5" x2="10" y2="5" />
+    <line stroke="${color}" stroke-width="${sw / scale}" vector-effect="non-scaling-stroke" x1="0" y1="8" x2="10" y2="8" />
   </pattern>
   `;
 }
 
-function concrete(name, scale = 1, angle = 0, color = 'black', bg = 'white') {
+function concrete(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw = 1) {
   return `
   <pattern id="${name}" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(${angle}) scale(${scale * 10} ${scale * 10})">
-    <defs><style>.lines{fill:none;stroke:${color};vector-effect:non-scaling-stroke;stroke-width:${1 / (scale * 10)}}</style></defs>
+    <defs><style>.lines{fill:none;stroke:${color};vector-effect:non-scaling-stroke;stroke-width:${sw / (scale * 10)}}</style></defs>
     <rect fill="${bg}" x="0" y="0" width="10" height="10" />
     <path d="M0.477692 8.27538L0.625215 8.21918" class="lines"/>
     <path d="M1.00104 9.81383L1.41551 9.2132L1.73163 9.79275L1.00104 9.81383Z" class="lines"/>

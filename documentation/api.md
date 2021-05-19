@@ -529,7 +529,7 @@ const result = sketch.fill("green");
 ```
 
 
-### _hatch( string[, number[, number[, string[, string] ] ] ] )_
+### _hatch( string[, number[, number[, string[, string[, number] ] ] ] ] )_
 
 Applies the indicated hatch pattern to all polyfaces in a sketch.
 
@@ -540,7 +540,7 @@ Valid values for the "pattern" argument:
   - `concrete`
 
 ```js
-// pattern, scale = 1, angle = 0, color = 'black', background = 'white'
+// pattern, scale = 1, angle = 0, color = 'black', background = 'white', stroke_width = 1
 const a = sketch.hatch('concrete', 0.5, 45, 'red', 'none');
 
 const b = sketch.hatch('crosshatch');
