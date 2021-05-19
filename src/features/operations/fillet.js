@@ -6,7 +6,7 @@ const assert = require('../../utility/validation/assert.js');
 module.exports = function fillet(sketch, radius, index) {
   assert(radius, 'number');
 
-  for (const s of sketch.tree('level', 'all')) {
+  for (const s of sketch.tree('level')) {
     const type = s.node.entity && base_entity_type(s.node.entity);
     if (type === 'polycurve') {
       s.node.entity = fillet_edges(s.node.entity, radius, index);

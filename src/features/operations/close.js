@@ -3,7 +3,7 @@ const Polyface = require('../../entities/geometric/polyface.js');
 
 
 module.exports = function close(sketch, bulge = 0) {
-  for (const s of sketch.tree('level', 'all')) {
+  for (const s of sketch.tree('level')) {
     const type = s.node.entity && base_entity_type(s.node.entity);
 
     if (type === 'polycurve') {

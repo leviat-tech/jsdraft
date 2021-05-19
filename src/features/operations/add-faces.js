@@ -11,7 +11,7 @@ module.exports = {
     const faces = adding_sketch.polyfaces
       .map((pf) => pf.faces.values().next().value);
 
-    for (const s of sketch.tree('level', 'all')) {
+    for (const s of sketch.tree('level')) {
       if (s.node.entity && base_entity_type(s.node.entity) === 'polyface') {
         faces.forEach((face) => { s.node.entity.addFace(face); });
       }
