@@ -1,7 +1,6 @@
 return {
   parameters: [
     { name: "view", default: "side" },
-    { name: "wv", default: 0 },
     {
       name: "params",
       default: {
@@ -36,8 +35,9 @@ return {
         },
       },
     },
+    { name: "wv", default: 0 },
   ],
-  func: function (sketch, view, wv, params) {
+  func: function (sketch, view, params, wv) {
     let wp = sketch.user[`wp_${view}`](params.wp);
     let angle = sketch.user[`angle_${view}`](params.angle);
     let compressionplate = sketch.user[
@@ -128,12 +128,17 @@ return {
           0,
           -params.wp.side_lip.h
         );
-        return sketch.add(
-          params.compression && compressionplate,
-          wp,
-          adjustmentplate,
-          params.angle && angle
-        );
+        return sketch
+          .add(
+            params.compression && compressionplate,
+            wp,
+            adjustmentplate,
+            params.angle && angle
+          )
+          .translate(
+            0,
+            params.wp.k1 + params.wp.side_lip.h
+          );
       default:
         break;
     }
