@@ -5,7 +5,8 @@ return {
       default: {
         height: 70,
         depth: 40,
-        width: 15,
+        width: 20,
+        thickness: 5,
         overhang: { height: 5, depth: 3 },
         hole: { x: 10, y: 10, d: 5 },
         cutout: { height: 5, depth: 3 },

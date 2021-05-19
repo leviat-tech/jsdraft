@@ -12,19 +12,13 @@ return {
     },
   ],
   func: function (sketch, params) {
-    const layerHt = params.height / params.layers;
-    const layers = [];
-    const layer = sketch.rectangle(
+    const rect = sketch.rectangle(
       -params.width / 2,
       0,
       params.width / 2,
-      -layerHt
-    );
+      -params.depth
+    ).translate(0, params.overhang);
 
-    for (i = 0; i < params.layers; i++) {
-      layers.push(layer.translate(0, -layerHt * i));
-    }
-
-    return sketch.add(...layers);
+    return sketch.add(rect);
   },
 };

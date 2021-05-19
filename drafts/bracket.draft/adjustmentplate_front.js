@@ -7,9 +7,9 @@ return {
         depth: 40,
         width: 20,
         thickness: 5,
-        overhang: { height: 5, width: 3 },
+        overhang: { height: 5, depth: 3 },
         hole: { x: 10, y: 10, d: 5 },
-        cutout: { height: 5, width: 3 },
+        cutout: { height: 5, depth: 3 },
         teeth: {
           height: 5,
           depth: 5,
