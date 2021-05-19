@@ -5,6 +5,8 @@ return {
       default: {
         height: 50,
         depth: 100,
+        width: 200,
+        trim_width: 200,
         thickness: 3,
         radius: 5,
       },

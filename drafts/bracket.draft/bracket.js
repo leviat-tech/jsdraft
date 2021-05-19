@@ -23,6 +23,7 @@ return {
         height: 40,
         depth: 75,
         width: 200,
+        trim_width: 200,
         thickness: 5,
         radius: 8,
       },
