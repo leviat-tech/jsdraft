@@ -1,15 +1,23 @@
 return {
   parameters: [
-    { name: "height", default: 20 },
-    { name: "width", default: 40 },
-    { name: "offset", default: 10 },
+    {
+      name: "params",
+      default: { h: 20, w: 40, offset: 10 },
+    },
   ],
-  func: function (sketch, height, width, offset) {
-    return sketch.polyface(
-      [[0, -offset],height/2],
-      [[width, -offset], height/2],
-      [[width, -height-offset], height/2],
-      [[0, -height-offset],height/2],
-    )
-  }
-}
+  func: function (sketch, params) {
+    const ref = sketch
+      .polycurve([params.w, 0], [0, 0])
+      .name("ref")
+      .hide();
+
+    const pill = sketch.polyface(
+      [[0, -params.offset], params.h / 2],
+      [[params.w, -params.offset], params.h / 2],
+      [[params.w, -params.h - params.offset], params.h / 2],
+      [[0, -params.h - params.offset], params.h / 2]
+    );
+
+    return sketch.add(pill, ref);
+  },
+};

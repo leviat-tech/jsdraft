@@ -11,7 +11,7 @@ return {
         thickness: 5,
         hole: { r: 5, offset: 10 },
         halfpill: { h: 20, w: 40, bottom: 15 },
-        void: { h: 25, w: 60, offset: 20 },
+        void: { h: 25, w: 45, offset: 20 },
         side_lip: { h: 10, bw: 50, tw: 30 },
         bottom_lip: { h: 10, bw: 70, tw: 50 },
         leg: { h: 30, gap: 10, r: 5 },
@@ -115,19 +115,18 @@ return {
     }
 
     if (params.void) {
-      const PillVoid = sketch.user
-        .pillvoid(
-          params.void.h,
-          params.void.w,
-          params.void.offset
-        )
-        .orient(
-          [0, 0],
-          [1, 0],
-          Main.edge(3).vertices[0],
-          Main.edge(3).vertices[1]
-        );
-      toRemove.push(PillVoid);
+      const PillVoid = sketch.user.pillvoid(params.void);
+      const PillVoidSnapped = PillVoid.snap(
+        Main.edge(3).reverse(),
+        PillVoid.hidden.find("ref").show().edge(0)
+      );
+      //         .orient(
+      //           [0, 0],
+      //           [1, 0],
+      //           Main.edge(3).vertices[0],
+      //           Main.edge(3).vertices[1]
+      //         );
+      toRemove.push(PillVoidSnapped);
     }
 
     if (params.neck) {
