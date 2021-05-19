@@ -18,6 +18,7 @@ Table of Contents:
     * [angle_dim](#angle_dim-point-point-number-)
   * [Operations](#operations)
     * [add_faces](#add_faces-sketch-)
+    * [close](#close-number-)
     * [explode](#explode)
     * [fillet](#fillet-number-number-)
     * [interpolate](#interpolate-point-point-array-)
@@ -303,6 +304,19 @@ const pfaceSketch = sketch
     [25, 0],
   )
   .add_faces(circles)
+```
+
+
+### _close( [number] )_
+
+Closes any open polycurves in a sketch and converts to polyfaces.
+
+```js
+const sketch = sketch.polycurve([0, 0], [16, 16], [25, 0], [50, 0]).close();
+// Results in a closed polyface
+
+// if a bulge parameter is provided, the closing segment will be an arc.
+const sketch = sketch.polycurve([0, 0], [16, 16], [25, 0], [50, 0]).close(1);
 ```
 
 

@@ -16,7 +16,7 @@ class Polyface extends flatten.Polygon {
       return Polyface.from_polyface(...args);
     }
 
-    if (matches(args, 'polycurve')) {
+    if (matches(args, 'polycurve', '...')) {
       return Polyface.from_polycurve(...args);
     }
 

@@ -25,6 +25,7 @@ const tag = require('./meta/tag.js');
 const z = require('./meta/z.js');
 
 const add_faces = require('./operations/add-faces.js');
+const close = require('./operations/close.js');
 const explode = require('./operations/explode.js');
 const fillet = require('./operations/fillet.js');
 const interpolate = require('./operations/interpolate.js');
@@ -72,6 +73,7 @@ module.exports = [
   z,
 
   add_faces,
+  close,
   explode,
   fillet,
   interpolate,
