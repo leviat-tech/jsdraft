@@ -1,6 +1,6 @@
 return {
   parameters: [
-    { name: "view", default: "side" },
+    { name: "view", default: "front" },
     {
       name: "params",
       default: {
@@ -112,12 +112,14 @@ return {
           0,
           -params.wp.i1
         );
-        return sketch.add(
-          params.compression && compressionplate,
-          wp,
-          adjustmentplate,
-          params.angle && angle
-        );
+        return sketch
+          .add(
+            params.compression && compressionplate,
+            wp,
+            adjustmentplate,
+            params.angle && angle
+          )
+          .translate(0, -lower.y + wv);
 
       case "top":
         angle = angle.translate(
