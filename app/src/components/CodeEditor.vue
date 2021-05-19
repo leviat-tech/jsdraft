@@ -103,6 +103,7 @@ export default {
   margin-top: 0;
   height: 100%;
   position: relative;
+  overflow-y: hidden;
 }
 
 .codemirror-div {
