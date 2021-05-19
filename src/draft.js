@@ -14,6 +14,8 @@ class Draft {
 
     this.settings = {};
 
+    this.styles = {};
+
     this.meta = {
       filetype: 'JSDraft',
       version: '0.0.3',
@@ -63,6 +65,7 @@ class Draft {
 
     const source = this.features[type][name];
     const root = new Sketch();
+    root.node.styles = this.styles;
     Object.keys(this.features.sketch).forEach((key) => {
       const file = this.features.sketch[key];
       try {

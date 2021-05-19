@@ -18,6 +18,7 @@ class Sketch {
       feature: '', // feature: the name of the feature function that created this node
       hidden: false, // hidden: if false this node should not be rendered (except console renderer)
       style: {}, // style: stroke, fill, etc that should be applied to paths in decendent nodes
+      styles: {}, // a collection of named styles that can be applied to a node
       entity: null, // entity: a geometric, text, or other element attached to this node
       children: [], // children: nodes attached as descendents to this node
       attributes: {}, // attributes: a free space for meta data associated with this node
@@ -51,12 +52,19 @@ class Sketch {
 
   // convenience getter for new blank sketch
   get new() {
-    return new Sketch({ index: cloneDeep(this.node.index) });
+    return new Sketch({
+      index: cloneDeep(this.node.index),
+      styles: cloneDeep(this.node.styles),
+    });
   }
 
   // create new sketch
   create(options) {
-    return new Sketch({ index: cloneDeep(this.node.index), ...options });
+    return new Sketch({
+      index: cloneDeep(this.node.index),
+      styles: cloneDeep(this.node.styles),
+      ...options,
+    });
   }
 
   // return a clone of this sketch

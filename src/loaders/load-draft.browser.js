@@ -31,8 +31,10 @@ function load_draft_file(d, Draft) {
   }
 
   const settings = index.settings || {};
+  const styles = index.styles || {};
 
   draft.settings = settings;
+  draft.styles = styles;
 
   files.forEach((file) => {
     draft.add_feature(file.name, file.extension, file.contents);

@@ -21,7 +21,7 @@ The `index.json` file stores metadata about the project. Project-wide settings c
   "settings": {
     "style": {
       "fill": {
-        "color": "white"
+        "color": "white",
         "opacity": 1
       },
       "stroke": {
@@ -43,6 +43,13 @@ The `index.json` file stores metadata about the project. Project-wide settings c
         "precision": 0
       }
     },
+  },
+  "styles": {
+    "foo": {
+      "fill": {
+        "color": "red"
+      }
+    }
   }
 }
 ```

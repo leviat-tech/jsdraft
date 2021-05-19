@@ -37,6 +37,7 @@ Table of Contents:
     * [hatch](#hatch-string-number-number-string-string-)
     * [linestyle](#linestyle-number-number-)
     * [stroke](#stroke-string-number-)
+    * [style](#style-string-)
   * [Meta features](#meta-features)
     * [hide](#hide)
     * [name](#name-string-)
@@ -549,6 +550,13 @@ const result = sketch.stroke("red", 3);
 // Results in a red stroke of thickness 3.
 ```
 
+### _style( string )_
+
+Any named styles that are defined in the [index.json](files.md) can be applied to the node.
+
+```js
+const result = sketch.style('foo');
+```
 
 ## Meta features
 

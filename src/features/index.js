@@ -2,6 +2,7 @@ const fill = require('./style/fill.js');
 const hatch = require('./style/hatch.js');
 const linestyle = require('./style/linestyle.js');
 const stroke = require('./style/stroke.js');
+const style = require('./style/style.js');
 
 const aligned_dim = require('./annotation/aligned-dim.js');
 const angle_dim = require('./annotation/angle-dim.js');
@@ -48,6 +49,7 @@ module.exports = [
   hatch,
   linestyle,
   stroke,
+  style,
 
   aligned_dim,
   angle_dim,

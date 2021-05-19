@@ -54,6 +54,7 @@ function load_draft_file(d, Draft) {
   }
 
   const settings = index.settings || {};
+  const styles = index.styles || {};
 
   const files = sketch_feature_files
     .filter((file) => isFile(path.join(sketch_dir, file)))
@@ -69,6 +70,7 @@ function load_draft_file(d, Draft) {
   });
 
   draft.settings = settings;
+  draft.styles = styles;
 
   return draft;
 }
