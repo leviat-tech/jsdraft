@@ -1,6 +1,6 @@
 return {
   parameters: [
-    { name: "view", default: "side" },
+    { name: "view", default: "front" },
     { name: "wv", default: 0 },
     {
       name: "wp_params",
@@ -22,7 +22,8 @@ return {
       name: "angle_params",
       default: {
         height: 50,
-        width: 100,
+        depth: 100,
+        width: 200,
         thickness: 3,
         radius: 5,
       },
@@ -36,28 +37,29 @@ return {
     angle_params
   ) {
     let wp = sketch.user[`wp_${view}`](wp_params);
-    let angle = sketch.user.angle(angle_params);
+    let angle = sketch.user[`angle_${view}`](angle_params);
     let adjustmentplate =
       sketch.user[`adjustmentplate_${view}`]();
     let pressureplate = sketch.user.pressureplate();
+
+    let lower = { x: Infinity, y: Infinity };
+    let upper = { x: -Infinity, y: -Infinity };
+    wp.vertices.forEach((v) => {
+      if (v.x < lower.x) {
+        lower.x = v.x;
+      }
+      if (v.y < lower.y) {
+        lower.y = v.y;
+      }
+      if (v.x > upper.x) {
+        upper.x = v.x;
+      }
+      if (v.y > upper.y) {
+        upper.y = v.y;
+      }
+    });
     switch (view) {
       case "side":
-        let lower = { x: Infinity, y: Infinity };
-        let upper = { x: -Infinity, y: -Infinity };
-        wp.vertices.forEach((v) => {
-          if (v.x < lower.x) {
-            lower.x = v.x;
-          }
-          if (v.y < lower.y) {
-            lower.y = v.y;
-          }
-          if (v.x > upper.x) {
-            upper.x = v.x;
-          }
-          if (v.y > upper.y) {
-            upper.y = v.y;
-          }
-        });
         angle = angle.translate(lower.x, lower.y - wv);
         adjustmentplate = adjustmentplate.translate(
           upper.x,
@@ -83,7 +85,8 @@ return {
         );
 
       case "front":
-        return sketch.add(wp, adjustmentplate);
+        angle = angle.translate(0, lower.y - wv);
+        return sketch.add(wp, adjustmentplate, angle);
 
       default:
         break;
