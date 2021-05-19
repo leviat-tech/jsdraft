@@ -60,10 +60,6 @@ describe('evaluate', () => {
     expect(evaluate('return new Array(1, 2, )')).to.be.eql([1, 2]);
   });
 
-  it('can not evaluate statements', () => {
-    expect(() => evaluate('console.log(1);')).to.throw();
-  });
-
   it('works in a strict context', () => {
     function test() {
       'use strict'; // eslint-disable-line

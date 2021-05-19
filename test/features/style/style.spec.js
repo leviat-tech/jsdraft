@@ -42,7 +42,7 @@ describe('Style', () => {
     const bar = parsed.children[0].children[0].children[2];
     const baz = parsed.children[0].children[0].children[3];
     expect(foo.properties.fill).to.eql('red');
-    expect(bar.properties.fill).to.eql('url(#lines--2092888369)');
-    expect(baz.properties.fill).to.eql('url(#lines-640369507)');
+    expect(bar.properties.fill).to.eql('url(#lines--1221026637)');
+    expect(baz.properties.fill).to.eql('url(#lines-1214774343)');
   });
 });
