@@ -72,7 +72,6 @@ return {
     toRemove.push(PillVoid);
   }
 
-
 if (params.neck)
 {
   const Neck = sketch.user.extrusion(Main.edge(-1).length - params.neck.gap, params.neck.h,params.neck.r);
@@ -80,7 +79,6 @@ if (params.neck)
   toAdd.push(NeckSnapped);
 }
   
-
 //   const annotations = sketch.user.annotations([
 //     {segment: Main.edge(-1), flip: false}, 
 //     {segment: Main.edge(0), flip: false}, 
@@ -91,7 +89,7 @@ if (params.neck)
   let WebPlate = Main.fillet(params.radius, 2)
   .union(...toAdd);
 
-  toRemove.forEach( shape => WebPlate = WebPlate.subtract(shape));
+//   toRemove.forEach( shape => WebPlate = WebPlate.subtract(shape));
 
   return sketch.add(WebPlate)
 }
