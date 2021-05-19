@@ -3,56 +3,46 @@ return {
     { name: "view", default: "side" },
     { name: "wv", default: 0 },
     {
-      name: "wp_params",
+      name: "params",
       default: {
-        k1: 90,
-        i1: 100,
-        k2: 40,
-        i2: 60,
-        radius: 10,
-        thickness: 5,
-        hole: { r: 5, offset: 10 },
-        void: { h: 30, w: 45, offset: 20 },
-        side_lip: { h: 10, bw: 70, tw: 30 },
-        bottom_lip: { h: 8, bw: 50, tw: 40 },
-      },
-    },
-    {
-      name: "angle_params",
-      default: {
-        height: 40,
-        depth: 75,
-        width: 200,
-        trim_width: 200,
-        thickness: 5,
-        radius: 8,
-      },
-    },
-    {
-      name: "compress_params",
-      default: {
-        height: 15,
-        depth: 30,
-        width: 40,
-        layers: 2,
-        overhang: 5,
+        wp: {
+          k1: 90,
+          i1: 100,
+          k2: 40,
+          i2: 60,
+          radius: 10,
+          thickness: 5,
+          hole: { r: 5, offset: 10 },
+          void: { h: 30, w: 45, offset: 20 },
+          side_lip: { h: 10, bw: 70, tw: 30 },
+          bottom_lip: { h: 8, bw: 50, tw: 40 },
+        },
+
+        angle: {
+          height: 40,
+          depth: 75,
+          width: 200,
+          trim_width: 200,
+          thickness: 5,
+          radius: 8,
+        },
+
+        compression: {
+          height: 15,
+          depth: 30,
+          width: 40,
+          layers: 2,
+          overhang: 5,
+        },
       },
     },
   ],
-  func: function (
-    sketch,
-    view,
-    wv,
-    wp_params,
-    angle_params,
-    compress_params
-  ) {
-    let wp = sketch.user[`wp_${view}`](wp_params);
-    let angle = sketch.user[`angle_${view}`](angle_params);
-    let compressionplate =
-      sketch.user[`compressionplate_${view}`](
-        compress_params
-      );
+  func: function (sketch, view, wv, params) {
+    let wp = sketch.user[`wp_${view}`](params.wp);
+    let angle = sketch.user[`angle_${view}`](params.angle);
+    let compressionplate = sketch.user[
+      `compressionplate_${view}`
+    ](params.compression);
     let adjustmentplate =
       sketch.user[`adjustmentplate_${view}`]();
     let pressureplate = sketch.user.pressureplate();
@@ -109,10 +99,10 @@ return {
 
         return sketch.add(
           wp,
-          angle_params && angle,
+          params.angle && angle,
           adjustmentplate,
           pressureplate,
-          compress_params && compressionplate,
+          params.compression && compressionplate,
           ...welds
         );
 
@@ -120,29 +110,29 @@ return {
         angle = angle.translate(0, lower.y - wv);
         compressionplate = compressionplate.translate(
           0,
-          -wp_params.i1
+          -params.wp.i1
         );
         return sketch.add(
-          compress_params && compressionplate,
+          params.compression && compressionplate,
           wp,
           adjustmentplate,
-          angle_params && angle
+          params.angle && angle
         );
 
       case "top":
         angle = angle.translate(
           0,
-          -wp_params.k1 - wp_params.side_lip.h
+          -params.wp.k1 - params.wp.side_lip.h
         );
         compressionplate = compressionplate.translate(
           0,
-          -wp_params.side_lip.h
+          -params.wp.side_lip.h
         );
         return sketch.add(
-          compress_params && compressionplate,
+          params.compression && compressionplate,
           wp,
           adjustmentplate,
-          angle_params && angle
+          params.angle && angle
         );
       default:
         break;
