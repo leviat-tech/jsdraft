@@ -11,9 +11,13 @@ return {
       [0, 0],
       [0, -i1],
       [-k1, -i1],
-      [[-k1, -(i1 - i2)],radius],
+      [[-k1, -(i1 - i2)], radius],
       [-k2, 0]
-    )
-    return sketch.add( main)
-  }
-}
+    );
+    const bottom_right = sketch.new
+      .add(main.edge(1))
+      .name("bottom")
+      .hide();
+    return sketch.add(main, bottom_right);
+  },
+};

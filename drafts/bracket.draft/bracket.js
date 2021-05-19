@@ -1,6 +1,6 @@
 return {
   parameters: [
-    { name: "view", default: "front" },
+    { name: "view", default: "side" },
     { name: "wv", default: 0 },
     {
       name: "wp_params",
@@ -38,6 +38,8 @@ return {
   ) {
     let wp = sketch.user[`wp_${view}`](wp_params);
     let angle = sketch.user[`angle_${view}`](angle_params);
+    let compressionplate =
+      sketch.user[`compressionplate_${view}`]();
     let adjustmentplate =
       sketch.user[`adjustmentplate_${view}`]();
     let pressureplate = sketch.user.pressureplate();
@@ -60,6 +62,16 @@ return {
     });
     switch (view) {
       case "side":
+        const bottom = wp.hidden.find("bottom").show();
+        const compressRef = compressionplate.hidden
+          .find("ref")
+          .show();
+        compressionplate = compressionplate.snap(
+          bottom.edge(0),
+          compressRef.edge(0),
+          0,
+          true
+        );
         angle = angle.translate(lower.x, lower.y - wv);
         adjustmentplate = adjustmentplate.translate(
           upper.x,
@@ -81,7 +93,8 @@ return {
           angle,
           adjustmentplate,
           pressureplate,
-          w3.user.weld("left")
+          w3.user.weld("left"),
+          compressionplate
         );
 
       case "front":
