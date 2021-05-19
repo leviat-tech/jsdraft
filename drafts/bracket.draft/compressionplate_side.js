@@ -4,7 +4,7 @@ return {
       name: "params",
       default: {
         height: 10,
-        depth: 20,
+        depth: 30,
         width: 40,
         layers: 2,
         overhang: 5,

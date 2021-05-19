@@ -53,6 +53,11 @@ return {
       params.hole.d / 2
     );
 
-    return sketch.add(plate.subtract(hole));
+    const ref = sketch
+      .polycurve([0, 0], [-params.depth, 0])
+      .name("ref")
+      .hide();
+
+    return sketch.add(plate.subtract(hole), ref);
   },
 };
