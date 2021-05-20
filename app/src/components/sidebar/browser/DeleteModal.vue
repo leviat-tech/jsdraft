@@ -41,7 +41,7 @@ export default {
       this.showing = false;
     },
     remove() {
-      this.$store.commit('removeFile', this.file.path);
+      this.$store.dispatch('removeFile', this.file.path);
     },
   },
 };

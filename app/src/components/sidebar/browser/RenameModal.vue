@@ -64,7 +64,7 @@ export default {
       } else if (this.alreadyExists) {
         this.error = 'A file with this name already exists';
       } else {
-        this.$store.commit('renameFile', { path: this.initial.path, newPath: this.path });
+        this.$store.dispatch('renameFile', { path: this.initial.path, newPath: this.path });
         this.close();
       }
     },

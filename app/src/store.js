@@ -35,6 +35,19 @@ function traverseFiles(files, condition, path = '') {
   return null;
 }
 
+function diffFiles(test, files, path = []) {
+  return Object.entries(test).reduce((diff, [name, contents]) => {
+    if (typeof contents === 'object') {
+      const paths = diffFiles(contents, files[name] || {}, [...path, name]);
+      diff.push(...paths);
+    } else if (!files[name]) {
+      diff.push([...path, name]);
+    }
+
+    return diff;
+  }, []);
+}
+
 function reset() {
   return {
     zoomScale: 1,
@@ -43,7 +56,7 @@ function reset() {
     showHidden: false,
     viewBox: { minX: -100, minY: -100, width: 200, height: 200 },
     currentFile: null,
-    filename: 'Draft',
+    filename: 'untitled.draft',
     path: undefined,
     overrides: [],
     hovered: null,
@@ -166,6 +179,13 @@ export default createStore({
 
     async getDiskState({ state, commit }) {
       const files = await window.electron.getFile(state.path);
+
+      const newFilePaths = diffFiles(files, state.files);
+
+      newFilePaths.forEach((path) => {
+        commit('updateFile', { path: path.join('/'), code: get(files, path) });
+      });
+
       commit('setDiskFiles', files);
     },
 
@@ -177,15 +197,34 @@ export default createStore({
       if (first) commit('setCurrentFile', first.path);
     },
 
-    save({ state, commit }) {
+    async save({ state, commit, dispatch }) {
       if (!electron) {
         saveFileInBrowser(state.filename, state.files);
       } else if (state.path) {
         window.electron.saveFile(state.path, toRaw(state.files));
       } else {
-        const path = window.electron.saveAs(state.filename, toRaw(state.files));
+        const { path, filename, canceled } = await window.electron.saveAs(state.filename, toRaw(state.files));
+        if (canceled) return;
+        commit('setFilename', filename);
         commit('setPath', path);
+        dispatch('watchPath');
       }
+    },
+
+    async removeFile({ state, commit }, path) {
+      if (electron && state.path) {
+        await window.electron.removeFile(`${state.path}/${path}`);
+      }
+
+      commit('removeFile', path);
+    },
+
+    async renameFile({ state, commit }, { path, newPath }) {
+      if (electron && state.path) {
+        await window.electron.renameFile(`${state.path}/${path}`, `${state.path}/${newPath}`);
+      }
+
+      commit('renameFile', { path, newPath });
     },
   },
 

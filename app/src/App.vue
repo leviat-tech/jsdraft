@@ -13,10 +13,15 @@ export default {
   components: {
     Layout,
   },
-  mounted() {
+  async mounted() {
     if (this.$store.state.electron && this.$store.state.path) {
-      this.$store.dispatch('getDiskState');
-      this.$store.dispatch('watchPath');
+      const exists = await window.electron.fileExists(this.$store.state.path);
+      if (exists) {
+        this.$store.dispatch('getDiskState');
+        this.$store.dispatch('watchPath');
+      } else {
+        this.$store.commit('setPath', null);
+      }
     }
   },
 };

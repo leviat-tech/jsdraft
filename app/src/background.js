@@ -35,8 +35,8 @@ function createMainWindow() {
   ipcMain.handle('open-file', async () => dialog
     .showOpenDialog({ properties: ['openDirectory'] }));
 
-  ipcMain.handle('save-as', async () => dialog
-    .showSaveDialog({ properties: ['createDirectory'] }));
+  ipcMain.handle('save-as', async (event, name) => dialog
+    .showSaveDialog({ defaultPath: name, properties: ['createDirectory'] }));
 
   const port = process.env.PORT || 3333;
   if (isDev) {

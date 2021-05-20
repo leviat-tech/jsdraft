@@ -8,6 +8,13 @@ let watcher = {};
 async function watchDirectory(directory, commit) {
   if (watcher.close) await watcher.close();
 
+
+  try {
+    await fs.stat(directory);
+  } catch {
+    return;
+  }
+
   watcher = chokidar.watch(`${directory}/**/*.(js|yaml|json)`, {
     persistent: true,
     ignoreInitial: true,
