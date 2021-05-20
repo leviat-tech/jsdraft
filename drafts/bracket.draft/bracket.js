@@ -1,6 +1,6 @@
 return {
   parameters: [
-    { name: "view", default: "front" },
+    { name: "view", default: "side" },
     {
       name: "params",
       default: {
@@ -97,14 +97,16 @@ return {
           return w.user.weld("left");
         });
 
-        return sketch.add(
-          wp,
-          params.angle && angle,
-          adjustmentplate,
-          pressureplate,
-          params.compression && compressionplate,
-          ...welds
-        );
+        return sketch
+          .add(
+            wp,
+            params.angle && angle,
+            adjustmentplate,
+            pressureplate,
+            params.compression && compressionplate,
+            ...welds
+          )
+          .translate(-lower.x, -lower.y + wv);
 
       case "front":
         angle = angle.translate(0, lower.y - wv);
