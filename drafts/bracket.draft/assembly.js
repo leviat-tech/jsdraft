@@ -84,16 +84,12 @@ return {
         angle = angle.translate(params.angle.width / 2, 0);
         //         angle = angle.user.edge_plate("left", 20, 60);
         //         angle = angle.user.edge_plate("right", 20, 60);
-        //         angle = angle.user.edge_angle("right", {
-        //           ...params.angle,
-        //           width: 50,
-        //         });
-        angle = angle.user.edge_cut(
-          "right",
-          30,
-          20,
-          "back"
-        );
+        angle = angle.user.edge_angle("right", {
+          ...params.angle,
+          width: 50,
+        });
+        //         angle = angle.user.edge_cut("left", 30, 20, "back");
+        angle = angle.user.edge_miter("left", 30);
         brackets = params.brackets.map((bracket) => {
           return sketch.user
             .bracket(view, bracket.params, bracket.wv)
