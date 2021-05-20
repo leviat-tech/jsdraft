@@ -1,6 +1,6 @@
 return {
   parameters: [
-    { name: "view", default: "side" },
+    { name: "view", default: "front" },
     {
       name: "params",
       default: {
@@ -83,7 +83,7 @@ return {
         angle = angle.translate(params.angle.width / 2, 0);
         brackets = params.brackets.map((bracket) => {
           return sketch.user
-            .bracket(view, bracket.params, wv)
+            .bracket(view, bracket.params, bracket.wv)
             .translate(bracket.position, 0);
         });
         return sketch.add(...brackets, angle);
