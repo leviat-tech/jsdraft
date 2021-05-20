@@ -1,9 +1,11 @@
 <template>
   <div class="file-browser">
     <file-header />
-    <file-tab v-for="file in files" :key="file.name" :file="file" />
-    <div v-if="files.length === 0" class="empty">
-      Click the plus to add a new feature.
+    <div class="file-browser-contents">
+      <file-tab v-for="file in files" :key="file.name" :file="file" />
+      <div v-if="files.length === 0" class="empty">
+        Click the plus to add a new feature.
+      </div>
     </div>
   </div>
 </template>
@@ -59,11 +61,20 @@ export default {
 <style lang="scss" scoped>
   @import '../../../assets/styles/variables.scss';
   .file-browser {
+    max-height: 20rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
     .empty {
       font-size: .8rem;
       text-align: center;
       padding: 1rem 0rem;
       color: $color-gray-08
+    }
+
+    .file-browser-contents {
+      overflow-y: auto;
     }
   }
 </style>

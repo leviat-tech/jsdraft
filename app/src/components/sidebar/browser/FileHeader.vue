@@ -29,6 +29,7 @@ export default {
   @import '../../../assets/styles/variables.scss';
 
   .file-header {
+    flex: none;
     padding: .5rem 1rem;
     border-top: $border-sm solid $color-gray-03;
     border-bottom: $border-sm solid $color-gray-03;
