@@ -79,8 +79,15 @@ return {
         return sketch
           .add(...brackets, angle)
           .translate(params.angle.thickness, 0);
+
       default:
         angle = angle.translate(params.angle.width / 2, 0);
+        //         angle = angle.user.edge_plate("left", 20, 60);
+        //         angle = angle.user.edge_plate("right", 20, 60);
+        angle = angle.user.edge_angle("right", {
+          ...params.angle,
+          width: 50,
+        });
         brackets = params.brackets.map((bracket) => {
           return sketch.user
             .bracket(view, bracket.params, bracket.wv)

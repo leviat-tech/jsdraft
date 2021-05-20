@@ -6,7 +6,6 @@ return {
         height: 50,
         depth: 100,
         width: 400,
-        trim_width: 200,
         thickness: 3,
         radius: 5,
       },
@@ -27,10 +26,19 @@ return {
       .rectangle(-width / 2, 0, width / 2, -params.height)
       .stroke(stroke);
 
-    const bottom = rect.edges[0];
+    const top = rect.edges[0];
+    const rightRef = sketch.new
+      .add(rect.edges[1].reverse())
+      .name("right")
+      .hide();
+    const leftRef = sketch.new
+      .add(rect.edges[3])
+      .name("left")
+      .hide();
+    const topRef = sketch.new.add(top).name("top").hide();
 
     const visLines = lineHts.map((ht) => {
-      return bottom.translate(0, ht);
+      return top.translate(0, ht);
     });
 
     if (params.trim_width) {
@@ -43,6 +51,13 @@ return {
       });
     }
 
-    return sketch.add(rect, ...visLines, ...dottedLines);
+    return sketch.add(
+      rect,
+      ...visLines,
+      ...dottedLines,
+      rightRef,
+      leftRef,
+      topRef
+    );
   },
 };
