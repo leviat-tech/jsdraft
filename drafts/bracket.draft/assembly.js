@@ -1,6 +1,6 @@
 return {
   parameters: [
-    { name: "view", default: "front" },
+    { name: "view", default: "top" },
     {
       name: "params",
       default: {
@@ -44,8 +44,8 @@ return {
               wp: {
                 k1: 122,
                 i1: 100,
-                k2: 40,
-                i2: 60,
+                k2: 60,
+                i2: 70,
                 radius: 10,
                 thickness: 5,
                 hole: { r: 5, offset: 10 },

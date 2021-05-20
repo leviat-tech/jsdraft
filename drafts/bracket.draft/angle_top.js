@@ -5,7 +5,7 @@ return {
       default: {
         height: 50,
         depth: 100,
-        width: 200,
+        width: 400,
         trim_width: 200,
         thickness: 3,
         radius: 5,
@@ -16,18 +16,15 @@ return {
     let lineHts = [-params.thickness];
     let stroke = "black";
     let dottedLines = [];
+    let width = params.width;
     if (params.trim_width) {
       lineHts.push(0);
       lineHts.push(-params.height);
       stroke = "transparent";
+      width = params.trim_width;
     }
     const rect = sketch
-      .rectangle(
-        -params.width / 2,
-        0,
-        params.width / 2,
-        -params.height
-      )
+      .rectangle(-width / 2, 0, width / 2, -params.height)
       .stroke(stroke);
 
     const bottom = rect.edges[0];
@@ -42,10 +39,7 @@ return {
         .linestyle(15, 2, 2, 5);
 
       dottedLines = [-1, 1].map((dir) => {
-        return middle.translate(
-          (dir * params.width) / 2,
-          0
-        );
+        return middle.translate((dir * width) / 2, 0);
       });
     }
 
