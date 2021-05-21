@@ -51,7 +51,9 @@ class Arc extends flatten.Arc {
     const radius = start_pt.dist(center_pt);
     const start_angle = start_pt.subtract(center_pt).angle();
     const end_angle = cc ? start_angle + angle : start_angle - angle;
-    return new Arc(center, radius, start_angle, end_angle, cc);
+    const sa = start_angle < 0 ? start_angle + (2 * Math.PI) : start_angle;
+    const ea = end_angle < 0 ? end_angle + (2 * Math.PI) : end_angle;
+    return new Arc(center, radius, sa, ea, cc);
   }
 
   static from_through_point(start, through, end) {
@@ -62,12 +64,16 @@ class Arc extends flatten.Arc {
     const end_angle = end_pt.subtract({ x, y }).angle();
     const o = orientation(start, through, end);
     const cc = o === 'counterclockwise';
-    return new Arc([x, y], r, start_angle, end_angle, cc);
+    const sa = start_angle < 0 ? start_angle + (2 * Math.PI) : start_angle;
+    const ea = end_angle < 0 ? end_angle + (2 * Math.PI) : end_angle;
+    return new Arc([x, y], r, sa, ea, cc);
   }
 
   static from_bulge(start, bulge, end) {
     const { radius, center, start_angle, end_angle, ccw } = sagitta_arc(start, end, bulge);
-    return new Arc(center, radius, start_angle, end_angle, ccw);
+    const sa = start_angle < 0 ? start_angle + (2 * Math.PI) : start_angle;
+    const ea = end_angle < 0 ? end_angle + (2 * Math.PI) : end_angle;
+    return new Arc(center, radius, sa, ea, ccw);
   }
 
   static from_tangents(a, b, radius, cc) {
@@ -83,10 +89,12 @@ class Arc extends flatten.Arc {
 
     const pt_a = flatten.vector(i.x, i.y).add(va.multiply(l_tan));
     const pt_b = flatten.vector(i.x, i.y).add(vb.multiply(l_tan));
-    const start = Math.atan2(pt_a.y, pt_a.x);
-    const end = Math.atan2(pt_b.y, pt_b.x);
+    const start_angle = Math.atan2(pt_a.y, pt_a.x);
+    const end_angle = Math.atan2(pt_b.y, pt_b.x);
 
-    return new Arc(center, radius, start, end, cc);
+    const sa = start_angle < 0 ? start_angle + (2 * Math.PI) : start_angle;
+    const ea = end_angle < 0 ? end_angle + (2 * Math.PI) : end_angle;
+    return new Arc(center, radius, sa, ea, cc);
   }
 }
 

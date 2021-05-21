@@ -50,4 +50,33 @@ describe('Union', () => {
     expect(v[7]).to.be.a.point({ x: 10, y: -30 });
     expect(v[8]).to.be.a.point({ x: 10, y: 0 });
   });
+
+  it('should unify two polyfaces', () => {
+    const a = sketch.new.polyface(
+      [0, 0],
+      [0, -100],
+      [-100, -100],
+      [-100, -40],
+      [-50, 0],
+    ).fillet(9, 2);
+
+    const b = sketch.new.polyface(
+      [0, 0],
+      [0, -50],
+      [10, -30],
+      [10, 0],
+    );
+
+    const union = sketch.new.add(a, b).union();
+    const v = union.vertices;
+    expect(v[0]).to.be.a.point({ x: 0, y: 0 });
+    expect(v[1]).to.be.a.point({ x: -50, y: 0 });
+    expect(v[2]).to.be.a.point({ x: -96.6223, y: -37.2978 });
+    expect(v[3]).to.be.a.point({ x: -100, y: -44.3256 });
+    expect(v[4]).to.be.a.point({ x: -100, y: -100 });
+    expect(v[5]).to.be.a.point({ x: 0, y: -100 });
+    expect(v[6]).to.be.a.point({ x: 0, y: -50 });
+    expect(v[7]).to.be.a.point({ x: 10, y: -30 });
+    expect(v[8]).to.be.a.point({ x: 10, y: 0 });
+  });
 });

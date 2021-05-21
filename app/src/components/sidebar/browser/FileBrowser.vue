@@ -61,7 +61,7 @@ export default {
 <style lang="scss" scoped>
   @import '../../../assets/styles/variables.scss';
   .file-browser {
-    max-height: 20rem;
+    max-height: min(20rem, 50%);
     overflow: hidden;
     display: flex;
     flex-direction: column;
