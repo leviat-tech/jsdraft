@@ -22,6 +22,7 @@ Table of Contents:
     * [explode](#explode)
     * [fillet](#fillet-number-number-)
     * [interpolate](#interpolate-point-point-array-)
+    * [intersect](#intersect-sketch-)
     * [join](#join)
     * [offset](#offset-number-boolean-)
     * [prune](#prune-condition-condition-)
@@ -349,6 +350,7 @@ const filleted = sketch
 // only the first inner vertex will be filleted.
 ```
 
+
 ### _interpolate( point, point, array )_
 
 Interpolates a polycurve between two points. The polycurve is created by taking a polycurve, orienting it along the axis between two points, and connecting the endpoints of each polycurve into a single new polycurve.
@@ -365,6 +367,19 @@ const interpolatedSketch = sketch
   .interpolate([0, 0], [100, 100], [20, 50, 80]);
 ```
 
+
+### _intersect( sketch )_
+
+Intersects the geometry in any sketch with the geometry in another sketch. Resulting sketch will contain points for all intersections.
+
+```js
+const a = sketch.rectangle([0, 0], 10, 5);
+const b = sketch.arc([2, -1], 1, [-1, -1]);
+
+const intersections = a.intersect(b);
+// Result will contain two points:
+// [{ x: 1.618, y: 0 }, { x: 0, y: 0.4142 }]
+```
 
 ### _join()_
 
@@ -431,7 +446,7 @@ const pruned = result.prune('bar', 'baz');
 
 ### _subtract( sketch )_
 
-Performs a boolean subtraction: any polyfaces in the provided sketch will be subtracted from any polyfaces in the original sketch.
+Performs a boolean subtraction: any polyfaces in the provided sketch will be subtracted from any polyfaces in the original sketch. Will also work with non-polyface geometry--segments, arcs, and polyfaces will be trimmed by the cutting polygon, points will be removed.
 
 ```js
 const result = sketch
