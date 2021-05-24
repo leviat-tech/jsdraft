@@ -4,11 +4,11 @@ return {
       name: "params",
       default: {
         height: 50,
-        depth: 100,
-        width: 200,
-        trim_width: 200,
+        width: 100,
+        length: 200,
+        trim_length: 200,
         thickness: 3,
-        radius: 5,
+        radius: 10,
       },
     },
   ],
@@ -17,7 +17,7 @@ return {
       .polycurve(
         [0, params.height],
         [0, 0],
-        [-params.depth, 0]
+        [-params.width, 0]
       )
       .fillet(params.radius);
     const inner = outer.offset(-params.thickness);

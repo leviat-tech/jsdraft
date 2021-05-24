@@ -16,16 +16,6 @@ return {
           side_lip: { h: 10, bw: 70, tw: 30 },
           bottom_lip: { h: 8, bw: 50, tw: 40 },
         },
-
-        angle: {
-          height: 40,
-          depth: 75,
-          width: 200,
-          trim_width: 200,
-          thickness: 5,
-          radius: 8,
-        },
-
         compression: {
           height: 15,
           depth: 30,
@@ -39,7 +29,6 @@ return {
   ],
   func: function (sketch, view, params, wv) {
     let wp = sketch.user[`wp_${view}`](params.wp);
-    let angle = sketch.user[`angle_${view}`](params.angle);
     let compressionplate = sketch.user[
       `compressionplate_${view}`
     ](params.compression);
@@ -75,7 +64,6 @@ return {
           0,
           true
         );
-        angle = angle.translate(lower.x, lower.y - wv);
         adjustmentplate = adjustmentplate.translate(
           upper.x,
           upper.y
@@ -85,7 +73,6 @@ return {
           upper.y
         );
 
-        const w1 = sketch.new.add(angle.edge(0));
         const w2 = adjustmentplate.hidden
           .find("ref")
           .show();
@@ -93,14 +80,13 @@ return {
           .find("ref")
           .show();
 
-        const welds = [w1, w2, w3].map((w) => {
+        const welds = [w2, w3].map((w) => {
           return w.user.weld("left");
         });
 
         return sketch
           .add(
             wp,
-            params.angle && angle,
             adjustmentplate,
             pressureplate,
             params.compression && compressionplate,
@@ -109,7 +95,6 @@ return {
           .translate(-lower.x, -lower.y + wv);
 
       case "front":
-        angle = angle.translate(0, lower.y - wv);
         compressionplate = compressionplate.translate(
           0,
           -params.wp.i1
@@ -118,16 +103,11 @@ return {
           .add(
             params.compression && compressionplate,
             wp,
-            adjustmentplate,
-            params.angle && angle
+            adjustmentplate
           )
           .translate(0, -lower.y + wv);
 
       case "top":
-        angle = angle.translate(
-          0,
-          -params.wp.k1 - params.wp.side_lip.h
-        );
         compressionplate = compressionplate.translate(
           0,
           -params.wp.side_lip.h
@@ -136,8 +116,7 @@ return {
           .add(
             params.compression && compressionplate,
             wp,
-            adjustmentplate,
-            params.angle && angle
+            adjustmentplate
           )
           .translate(
             0,

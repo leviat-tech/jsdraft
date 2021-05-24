@@ -1,32 +1,31 @@
 function angle(
   sketch,
-  side = "left",
+  side = 'left',
   params = {
     height: 40,
-    depth: 75,
-    width: 50,
+    width: 75,
+    length: 50,
     thickness: 5,
     radius: 8,
-  }
+  },
 ) {
-  const flip = side !== "left";
+  const flip = side !== 'left';
   const angle = sketch.new.user.angle_top({
     ...params,
-    width: params.width + params.thickness,
+    length: params.length + params.thickness,
   });
-  const source =
-    side === "left"
-      ? sketch.hidden.find("top").show().edge(0)
-      : sketch.hidden.find("top").show().edge(0).reverse();
+  const source = side === 'left'
+    ? sketch.hidden.find('top').show().edge(0)
+    : sketch.hidden.find('top').show().edge(0).reverse();
   const angleSnapped = angle
     .snap(
       source,
-      angle.hidden.find("right").show().edge(0),
+      angle.hidden.find('right').show().edge(0),
       0,
-      flip
+      flip,
     )
     .translate(0, -params.thickness)
-    .prune("left", "right", "top");
+    .prune('left', 'right', 'top');
 
   return sketch.add(angleSnapped);
 }

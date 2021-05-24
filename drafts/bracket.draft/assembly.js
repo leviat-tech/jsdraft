@@ -1,23 +1,24 @@
 return {
   parameters: [
-    { name: "view", default: "top" },
+    { name: "view", default: "side" },
     {
       name: "params",
       default: {
-        angle: {
+        profile: {
+          family: "angle",
           height: 40,
-          depth: 75,
-          width: 500,
+          width: 75,
+          length: 500,
           thickness: 5,
           radius: 8,
-          left: { type: "miter", params: {} },
+          left: { type: "plate", params: {} },
           right: { type: "angle", params: {} },
         },
         brackets: [
           {
             position: 40,
             wv: 0,
-            params: {
+            dimenstions: {
               wp: {
                 k1: 90,
                 i1: 118,
@@ -42,7 +43,7 @@ return {
           {
             position: 180,
             wv: 5,
-            params: {
+            dimenstions: {
               wp: {
                 k1: 122,
                 i1: 100,
@@ -69,39 +70,44 @@ return {
     },
   ],
   func: function wp(sketch, view, params) {
-    let angle = sketch.user[`angle_${view}`](params.angle);
+    let profile = sketch.user[
+      `${params.profile.family}_${view}`
+    ](params.profile);
     let brackets = [];
     switch (view) {
       case "side":
         brackets = params.brackets.map((bracket) => {
           return sketch.user
-            .bracket(view, bracket.params, bracket.wv)
+            .bracket(view, bracket.dimenstions, bracket.wv)
             .z(bracket.position);
         });
         return sketch
-          .add(...brackets, angle)
-          .translate(params.angle.thickness, 0);
+          .add(...brackets, profile)
+          .translate(params.profile.thickness, 0);
 
       default:
-        angle = angle.translate(params.angle.width / 2, 0);
-        if (params.angle.left && view === "top") {
-          angle =
-            angle.user[`edge_${params.angle.left.type}`](
-              "left"
-            );
+        profile = profile.translate(
+          params.profile.length / 2,
+          0
+        );
+        if (params.profile.left && view === "top") {
+          profile =
+            profile.user[
+              `edge_${params.profile.left.type}`
+            ]("left");
         }
-        if (params.angle.right && view === "top") {
-          angle =
-            angle.user[`edge_${params.angle.right.type}`](
-              "right"
-            );
+        if (params.profile.right && view === "top") {
+          profile =
+            profile.user[
+              `edge_${params.profile.right.type}`
+            ]("right");
         }
         brackets = params.brackets.map((bracket) => {
           return sketch.user
             .bracket(view, bracket.params, bracket.wv)
             .translate(bracket.position, 0);
         });
-        return sketch.add(...brackets, angle);
+        return sketch.add(...brackets, profile);
     }
   },
 };
