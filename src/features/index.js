@@ -29,6 +29,7 @@ const close = require('./operations/close.js');
 const explode = require('./operations/explode.js');
 const fillet = require('./operations/fillet.js');
 const interpolate = require('./operations/interpolate.js');
+const intersect = require('./operations/intersect.js');
 const join = require('./operations/join.js');
 const offset = require('./operations/offset.js');
 const prune = require('./operations/prune.js');
@@ -77,6 +78,7 @@ module.exports = [
   explode,
   fillet,
   interpolate,
+  intersect,
   join,
   offset,
   prune,
