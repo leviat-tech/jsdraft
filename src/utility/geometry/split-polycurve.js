@@ -5,13 +5,13 @@ const Polycurve = require('../../entities/geometric/polycurve.js');
 module.exports = function split_polycurve(polycurve, intersections) {
   const ordered_intersections = intersections
     // Find edge and arc length for each intersection
-    .map((intersection) => {
+    .map((pt) => {
       let edge;
       let edge_index;
 
       let i = 0;
       for (const e of polycurve) {
-        if (e.shape.contains(intersection)) {
+        if (e.shape.contains(pt)) {
           edge = e;
           edge_index = i;
           break;
@@ -19,7 +19,7 @@ module.exports = function split_polycurve(polycurve, intersections) {
         i += 1;
       }
 
-      const shapes = edge.shape.split(intersection);
+      const shapes = edge.shape.split(pt);
 
       let len;
       if (shapes[0] === null) { // point incident to edge start
@@ -43,7 +43,7 @@ module.exports = function split_polycurve(polycurve, intersections) {
         ? 0
         : edge.arc_length + len;
 
-      return { edge, edge_index, intersection, arc_length, shapes };
+      return { edge, edge_index, pt, arc_length, shapes };
     })
 
     // Sort intersections along length of polycurve
@@ -70,35 +70,22 @@ module.exports = function split_polycurve(polycurve, intersections) {
       if (!prev) return intersection;
 
       if (intersection.edge_index === prev.edge_index) {
-        intersection.shapes = prev.shapes[1].split(intersection.intersection);
+        intersection.shapes = prev.shapes[1].split(intersection.pt);
       }
 
       return intersection;
     });
 
-  const results = [];
-  let prev_edge = -1;
-  let initial = [];
   const edges = polycurve.toShapes();
+  return ordered_intersections.reduce((segs, intersection) => {
+    const edge = segs[intersection.edge_index];
+    const shapes = edge[edge.length - 1].split(intersection.pt);
 
-  ordered_intersections.forEach((intersection) => {
-    const current_edge = intersection.edge_index;
+    if (shapes[0] !== null && shapes[1] !== null) {
+      edge.pop();
+      edge.push(...shapes);
+    }
 
-    const segments = edges.slice(prev_edge + 1, current_edge);
-    segments.unshift(...initial);
-
-    if (intersection.shapes[0]) segments.push(intersection.shapes[0]);
-    initial = intersection.shapes[1] ? [intersection.shapes[1]] : [];
-
-    results.push(new Polycurve(...segments));
-
-    prev_edge = current_edge;
-  });
-
-  // Add final polycurve
-  const last_intersection = ordered_intersections[ordered_intersections.length - 1];
-  const segs = edges.slice(prev_edge + 1, last_intersection.edge_index);
-  results.push(new Polycurve(...initial, ...segs));
-
-  return results;
+    return segs;
+  }, edges.map((e) => ([e]))).flat();
 };

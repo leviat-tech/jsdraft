@@ -5,6 +5,8 @@ const polyface_orientation = require('../../utility/geometry/polyface-orientatio
 const intersect_polycurve = require('../../utility/geometry/intersect-polycurve.js');
 const split_polycurve = require('../../utility/geometry/split-polycurve.js');
 const split_segment = require('../../utility/geometry/split-segment.js');
+const points_are_near = require('../../utility/geometry/points-are-near.js');
+const Polycurve = require('../../entities/geometric/polycurve.js');
 
 
 module.exports = function subtract(sketch, to_subtract) {
@@ -56,13 +58,40 @@ module.exports = function subtract(sketch, to_subtract) {
 
       const split = split_polycurve(entity, intersections);
 
-      split.forEach((pcurve) => {
-        const is_contained = subtracted_polyfaces.some((polyface) => {
-          const pcurve_shapes = pcurve.toShapes();
-          return pcurve_shapes.every((segment) => polyface.contains(segment));
-        });
-        if (!is_contained) res.push(pcurve);
-      });
+      const pcurves = split
+        // Remove contained segments from flat list of segments
+        .reduce((segs, segment) => {
+          const is_contained = subtracted_polyfaces
+            .some((polyface) => polyface.contains(segment));
+          if (!is_contained) segs.push(segment);
+          return segs;
+        }, [])
+
+        // Turn flat segment list to array of chains
+        .reduce((p, seg) => {
+          const chain = p[p.length - 1];
+
+          if (!chain) {
+            p.push([seg]);
+            return p;
+          }
+
+          const last = chain[chain.length - 1];
+          const end = last.vertices[1];
+          const start = seg.vertices[0];
+          if (points_are_near(start, end)) {
+            chain.push(seg);
+          } else {
+            p.push([seg]);
+          }
+
+          return p;
+        }, [])
+
+        // Join chains into polycurves
+        .map((chain) => new Polycurve(...chain));
+
+      res.push(...pcurves);
     }
 
     return res;
