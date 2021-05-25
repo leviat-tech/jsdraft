@@ -1,12 +1,12 @@
 {
   "name": "@crhio/webpack-jsdraft-loader",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "JSDraft loader for Webpack",
   "scripts": {
     "test-build": "webpack"
   },
   "dependencies": {
-    "@crhio/jsdraft": "^0.0.2",
+    "@crhio/jsdraft": "^0.0.5",
     "lodash": "^4.17.21",
     "tosource": "^2.0.0-alpha.2"
   },
