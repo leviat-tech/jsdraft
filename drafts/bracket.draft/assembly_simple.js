@@ -1,6 +1,6 @@
 return {
   parameters: [
-    { name: "view", default: "front" },
+    { name: "view", default: "top" },
     {
       name: "params",
       default: {
@@ -72,7 +72,7 @@ return {
           thickness: 5,
           height: 50,
           width: 70,
-          length: 500,
+          length: 800,
           radius: 5,
           family: "angle",
         },
