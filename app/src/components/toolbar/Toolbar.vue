@@ -78,17 +78,17 @@
         />
 
         <tool
+          tool-id="reload"
+          name="Reload"
+          icon="repeat"
+          @click="reload"
+        />
+
+        <tool
           tool-id="export"
           name="Export"
           icon="file-export"
           @click="exportFile"
-        />
-
-        <tool
-          tool-id="reload"
-          name="Reload"
-          icon="redo"
-          @click="reload"
         />
       </tool-group>
 

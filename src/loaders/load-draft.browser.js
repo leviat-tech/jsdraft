@@ -38,7 +38,15 @@ function load_draft_file(d, Draft) {
 
   if (index.xrefs && _xrefs) {
     Object.keys(index.xrefs).forEach((name) => {
-      xrefs[name] = load_draft_file(_xrefs[name], Draft);
+      if (_xrefs[name]) {
+
+        // Catching errors so that drafts with failed xrefs can still be loaded.
+        try {
+          xrefs[name] = load_draft_file(_xrefs[name], Draft);
+        } catch {
+          console.error(`Unable to load xref "${name}".`);
+        }
+      }
     });
   }
 
