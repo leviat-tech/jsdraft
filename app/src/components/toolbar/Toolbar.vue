@@ -83,6 +83,13 @@
           icon="file-export"
           @click="exportFile"
         />
+
+        <tool
+          tool-id="reload"
+          name="Reload"
+          icon="redo"
+          @click="reload"
+        />
       </tool-group>
 
       <tool-group>
@@ -124,7 +131,6 @@
 import Mousetrap from 'mousetrap';
 import { mapState, mapMutations, mapActions } from 'vuex';
 import isEqual from 'lodash/isEqual';
-import cloneDeep from 'lodash/cloneDeep';
 import ToolGroup from './ToolGroup.vue';
 import Tool from './Tool.vue';
 import Toggle from './Toggle.vue';
@@ -182,14 +188,12 @@ export default {
     });
   },
   methods: {
-    ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'setFilename', 'setPath', 'reset', 'setDiskFiles']),
-    ...mapActions(['loadFiles', 'save']),
+    ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'reset']),
+    ...mapActions(['save', 'importFile', 'updateXrefs']),
     chooseTool(id) {
       this.setCurrentTool(id);
     },
-    fitToExtents() {
-
-    },
+    fitToExtents() {},
     openFolder() {
       if (!this.electron) {
         const fileReader = document.getElementById('fileReader');
@@ -222,25 +226,21 @@ export default {
       });
     },
     async loadFile(e) {
-      if (!this.electron) {
-        const loaded = await loadFileInBrowser(e);
-        this.reset();
-        this.loadFiles(loaded.files);
-        this.setFilename(loaded.filename);
-      } else {
-        const loaded = await window.electron.openFile();
-        this.reset();
-        this.loadFiles(loaded.files);
-        this.setDiskFiles(cloneDeep(loaded.files));
-        this.setFilename(loaded.filename);
-        this.setPath(loaded.path);
-        this.$store.dispatch('watchPath');
-      }
+      const loaded = await (this.electron
+        ? window.electron.openFile()
+        : loadFileInBrowser(e));
 
-      this.fitToExtents();
+      this.importFile(loaded);
     },
     exportFile() {
 
+    },
+    reload() {
+      if (!this.path) {
+        this.openFolder();
+      } else {
+        this.updateXrefs();
+      }
     },
     openCodePanel() {
       this.setShowCodePanel(true);

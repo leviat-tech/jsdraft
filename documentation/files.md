@@ -56,6 +56,9 @@ The `index.json` file stores metadata about the project. Project-wide settings c
         "color": "red"
       }
     }
+  },
+  "xrefs": {
+    "foo": "../foo.draft"
   }
 }
 ```

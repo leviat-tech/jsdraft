@@ -23,7 +23,9 @@ function load_draft_file(d, Draft) {
 
   const draft = new Draft();
 
-  d = path.join(process.cwd(), d);
+  if (!path.isAbsolute(d)) {
+    d = path.join(process.cwd(), d);
+  }
 
   const p = path.basename(d) === 'index.json' ? path.dirname(d) : d;
 
@@ -55,6 +57,14 @@ function load_draft_file(d, Draft) {
 
   const settings = index.settings || {};
   const styles = index.styles || {};
+  const xrefs = {};
+
+  if (index.xrefs) {
+    Object.entries(index.xrefs).forEach(([name, rel_path]) => {
+      const xref_path = path.join(d, rel_path);
+      xrefs[name] = load_draft_file(xref_path, Draft);
+    });
+  }
 
   const files = sketch_feature_files
     .filter((file) => isFile(path.join(sketch_dir, file)))
@@ -71,6 +81,7 @@ function load_draft_file(d, Draft) {
 
   draft.settings = settings;
   draft.styles = styles;
+  draft.xrefs = xrefs;
 
   return draft;
 }

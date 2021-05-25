@@ -2,6 +2,7 @@ import { Draft, parse } from '@crhio/jsdraft';
 import set from 'lodash/set';
 import get from 'lodash/get';
 import unset from 'lodash/unset';
+import cloneDeep from 'lodash/cloneDeep';
 import { createStore } from 'vuex';
 import { toRaw } from 'vue';
 import isElectron from 'is-electron';
@@ -18,7 +19,7 @@ const electron = isElectron();
 
 function traverseFiles(files, condition, path = '') {
   const arr = Object.entries(files);
-  for (let i = 0; i < arr.length - 1; i += 1) {
+  for (let i = 0; i < arr.length; i += 1) {
     const file = arr[i];
 
     if (typeof file[1] === 'object') {
@@ -63,6 +64,7 @@ function reset() {
     selected: {},
     files: {}, // In-memory state of files
     disk: {}, // State of files on disk (only relevant for electron)
+    xrefs: {}, // In-memory contents of x-ref'ed draft files
     electron,
     currentPoint: { x: 0, y: 0 },
   };
@@ -153,6 +155,9 @@ export default createStore({
     setDiskFiles(state, value) {
       state.disk = value;
     },
+    setXrefs(state, value) {
+      state.xrefs = value;
+    },
     updateDiskFile(state, { path, code }) {
       const p = path.split('/');
       set(state.disk, p, code);
@@ -178,7 +183,7 @@ export default createStore({
     },
 
     async getDiskState({ state, commit }) {
-      const files = await window.electron.getFile(state.path);
+      const { _xrefs, ...files } = await window.electron.getFile(state.path);
 
       const newFilePaths = diffFiles(files, state.files);
 
@@ -189,11 +194,35 @@ export default createStore({
       commit('setDiskFiles', files);
     },
 
+    async importFile({ dispatch, commit }, { files, filename, path }) {
+      commit('reset');
+
+      const { _xrefs, ...draftFiles } = files;
+
+      dispatch('loadFiles', draftFiles);
+      commit('setFilename', filename);
+      if (_xrefs) commit('setXrefs', _xrefs);
+
+      if (electron) {
+        commit('setDiskFiles', cloneDeep(files));
+        commit('setPath', path);
+        dispatch('watchPath');
+      }
+    },
+
+    async updateXrefs({ state, commit }) {
+      const { _xrefs } = await window.electron.getFile(state.path);
+      if (_xrefs) commit('setXrefs', _xrefs);
+    },
+
     loadFiles({ commit }, files) {
       commit('setFiles', files);
 
       // Choose the first as the new active file
-      const first = traverseFiles(files, (file) => ['js', 'yaml'].includes(file[0].split('.').pop()));
+      const first = traverseFiles(
+        files,
+        (file) => ['js', 'yaml'].includes(file[0].split('.').pop()),
+      );
       if (first) commit('setCurrentFile', first.path);
     },
 
@@ -251,7 +280,7 @@ export default createStore({
       return null;
     },
     draft(state) {
-      return Draft.load(state.files);
+      return Draft.load({ ...state.files, _xrefs: state.xrefs });
     },
     entities(state, getters) {
       try {
@@ -272,7 +301,7 @@ export default createStore({
           state.overrides,
           'entities',
         ));
-      } catch (e) {
+      } catch {
         return [];
       }
     },
@@ -285,7 +314,7 @@ export default createStore({
           'svg',
           { viewport: null, show: state.showHidden ? 'all' : 'visible' },
         );
-      } catch (e) {
+      } catch {
         // console.debug(e);
         return '';
       }

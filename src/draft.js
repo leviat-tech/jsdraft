@@ -16,6 +16,8 @@ class Draft {
 
     this.styles = {};
 
+    this.xrefs = {};
+
     this.meta = {
       filetype: 'JSDraft',
       version: '0.0.3',
@@ -46,9 +48,26 @@ class Draft {
     delete this.features[type][name];
   }
 
-  // Note: this load function is Node-only
   static load(d) {
     return load_draft_file(d, Draft);
+  }
+
+  get root() {
+    const root = new Sketch();
+    root.node.styles = this.styles;
+    root.node.xrefs = this.xrefs;
+
+    Object.keys(this.features.sketch).forEach((key) => {
+      const file = this.features.sketch[key];
+      try {
+        const feature = parse(file.extension, file.contents, key);
+        root.inject(feature);
+      } catch (error) {
+        console.warn(`Failed to parse and inject ${key}: ${error}`);
+      }
+    });
+
+    return root;
   }
 
   render(name, params, format, options = {}) {
@@ -64,17 +83,7 @@ class Draft {
     }
 
     const source = this.features[type][name];
-    const root = new Sketch();
-    root.node.styles = this.styles;
-    Object.keys(this.features.sketch).forEach((key) => {
-      const file = this.features.sketch[key];
-      try {
-        const feature = parse(file.extension, file.contents, key);
-        root.inject(feature);
-      } catch (error) {
-        console.warn(`Failed to parse and inject ${key}: ${error}`);
-      }
-    });
+    const root = this.root;
     const func = parse(source.extension, source.contents, source.name);
     const sketch = func(root, ...params);
     if (format === 'sketch') return sketch;

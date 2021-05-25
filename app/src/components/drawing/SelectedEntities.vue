@@ -53,7 +53,7 @@ export default {
             },
           },
         }));
-      } catch (e) {
+      } catch {
         return [];
       }
     },

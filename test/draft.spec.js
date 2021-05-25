@@ -1,6 +1,7 @@
 /* global describe, it */
 /* eslint-disable no-unused-expressions */
 const { expect, use } = require('chai');
+const { parse } = require('svg-parser');
 const Draft = require('../src/draft.js');
 use(require('./helpers'));
 
@@ -117,5 +118,15 @@ describe('draft', () => {
 
     const result = draft.render('test3', [], 'svg');
     expect(result).to.contain('path');
+  });
+
+  it('should be able to load a file with xrefs', () => {
+    const draft = Draft.load('./test/test-draft-files/test4.draft');
+    expect(Object.keys(draft.xrefs).length).to.eql(1);
+
+    const result = draft.render('main', [], 'svg');
+    const parsed = parse(result);
+    const circle = parsed.children[0].children[0].children[0];
+    expect(circle.tagName).to.eql('path');
   });
 });

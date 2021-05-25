@@ -40,10 +40,26 @@ async function getFile(p) {
   ]);
 
   const files = f.reduce((obj, file) => {
-    const p = file.path.split('/');
-    set(obj, p, file.contents);
+    const file_path = file.path.split('/');
+    set(obj, file_path, file.contents);
     return obj;
   }, {});
+
+  const xrefs = {};
+
+  try {
+    const index = JSON.parse(files['index.json']);
+    if (index.xrefs) {
+      for (const [name, rel_path] of Object.entries(index.xrefs)) {
+        const xref_path = path.join(p, rel_path);
+        xrefs[name] = await getFile(xref_path);
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
+
+  files._xrefs = xrefs;
 
   return files;
 }

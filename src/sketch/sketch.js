@@ -23,6 +23,7 @@ class Sketch {
       children: [], // children: nodes attached as descendents to this node
       attributes: {}, // attributes: a free space for meta data associated with this node
       index: {}, // injected user feature index (owner attribute allows reference sketch that owns the index)
+      xrefs: {}, // a collection of linked draft files that can be referenced at runtime
       z: null, // z-index -- if present, will be used to sort siblings when iterating
     };
     if (Array.isArray(options)) {
@@ -55,6 +56,7 @@ class Sketch {
     return new Sketch({
       index: cloneDeep(this.node.index),
       styles: cloneDeep(this.node.styles),
+      xrefs: this.node.xrefs,
     });
   }
 
@@ -63,6 +65,7 @@ class Sketch {
     return new Sketch({
       index: cloneDeep(this.node.index),
       styles: cloneDeep(this.node.styles),
+      xrefs: this.node.xrefs,
       ...options,
     });
   }
@@ -228,6 +231,24 @@ class Sketch {
   // access user defined / injected features
   get user() {
     return this.node.index;
+  }
+
+  // access xref-ed draft functions
+  get xref() {
+    const xref = Object.entries(this.node.xrefs).reduce((funcs, [name, draft]) => {
+      funcs[name] = {};
+
+      const root = draft.root;
+      Object.keys(root.node.index).forEach((func_name) => {
+        funcs[name][func_name] = function d(...args) {
+          return draft.render(func_name, args, 'sketch');
+        };
+      });
+
+      return funcs;
+    }, {});
+
+    return xref;
   }
 
   // create feature from a vanilla function

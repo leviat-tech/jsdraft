@@ -10,9 +10,11 @@ The provided parameter, "d", should be an object. It can either have:
 function load_draft_file(d, Draft) {
   const draft = new Draft();
 
-  const sketch_dir = d['sketch-features']
-    ? Object.entries(d['sketch-features'])
-    : Object.entries(d);
+  const { _xrefs, ...dir } = d;
+
+  const sketch_dir = dir['sketch-features']
+    ? Object.entries(dir['sketch-features'])
+    : Object.entries(dir);
 
   const files = sketch_dir
     .filter(([filename]) => parse_filename(filename))
@@ -23,8 +25,8 @@ function load_draft_file(d, Draft) {
 
   let index;
   try {
-    index = d['index.json']
-      ? JSON.parse(d['index.json'])
+    index = dir['index.json']
+      ? JSON.parse(dir['index.json'])
       : {};
   } catch (e) {
     index = {};
@@ -32,9 +34,17 @@ function load_draft_file(d, Draft) {
 
   const settings = index.settings || {};
   const styles = index.styles || {};
+  const xrefs = {};
+
+  if (index.xrefs && _xrefs) {
+    Object.keys(index.xrefs).forEach((name) => {
+      xrefs[name] = load_draft_file(_xrefs[name], Draft);
+    });
+  }
 
   draft.settings = settings;
   draft.styles = styles;
+  draft.xrefs = xrefs;
 
   files.forEach((file) => {
     draft.add_feature(file.name, file.extension, file.contents);
