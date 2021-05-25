@@ -1,6 +1,6 @@
 return {
   parameters: [
-    { name: "view", default: "side" },
+    { name: "view", default: "top" },
     {
       name: "params",
       default: {

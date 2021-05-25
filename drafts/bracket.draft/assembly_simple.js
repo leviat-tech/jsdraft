@@ -4,20 +4,19 @@ return {
     {
       name: "params",
       default: {
-        id: "acee734a-3770-4b2a-bb93-33416db317e6",
+        id: "c4ffb16e-b86d-4874-b79b-444df852aa49",
         name: "Assembly 1",
         number: 1,
         brackets: [
           {
-            id: "60820f54-3db0-4825-b90e-8129180cd3fb",
+            id: "19c6224e-aa89-4695-b283-f86b994b701e",
             name: "Bracket 1",
             number: 1,
             assembly_id:
-              "acee734a-3770-4b2a-bb93-33416db317e6",
+              "c4ffb16e-b86d-4874-b79b-444df852aa49",
             assembly: null,
             anchoring: {
-              type: "Fischer-FV",
-              length: 0.15,
+              type: "HTA+HS-FV",
               depth: 0.1,
             },
             dimensions: {
@@ -36,18 +35,49 @@ return {
             position: 100,
           },
         ],
-        zone_id: "b4e2aee9-6aa3-4da5-a207-97db76fdf11e",
-        zone: null,
+        zone_id: "c10f05d9-a9ee-478e-b310-fb619f06b8d3",
+        zone: {
+          id: "c10f05d9-a9ee-478e-b310-fb619f06b8d3",
+          number: 1,
+          name: "Zone 1",
+          segments: [],
+          assemblies: [],
+          sections: [],
+          material_preferences: {
+            custom_color: "",
+            gloss_level: 0,
+            ral_color: "STD",
+            paint_coats: 1,
+            material: "WBS235 FV",
+          },
+          right_edge_condition: {
+            B: 30,
+            L: 150,
+            side: "back",
+            angle: 45,
+            type: "plate",
+          },
+          left_edge_condition: {
+            B: 40,
+            L: 105,
+            side: "back",
+            angle: 45,
+            type: "plate",
+          },
+          quantity: 1,
+          group: "",
+          description: "",
+        },
         profile: {
           thickness: 5,
-          height: 30,
-          width: 50,
+          height: 50,
+          width: 70,
           length: 500,
-          radius: 10,
+          radius: 5,
           family: "angle",
         },
         status: "unchecked",
-        position: 100,
+        position: 0,
       },
     },
   ],
@@ -72,17 +102,21 @@ return {
           params.profile.length / 2,
           0
         );
-        if (params.profile.left && view === "top") {
-          profile =
-            profile.user[
-              `edge_${params.profile.left.type}`
-            ]("left");
+        if (
+          params.zone.left_edge_condition &&
+          view === "top"
+        ) {
+          profile = profile.user[
+            `edge_${params.zone.left_edge_condition.type}`
+          ]("left", params.zone.left_edge_condition);
         }
-        if (params.profile.right && view === "top") {
-          profile =
-            profile.user[
-              `edge_${params.profile.right.type}`
-            ]("right");
+        if (
+          params.zone.right_edge_condition &&
+          view === "top"
+        ) {
+          profile = profile.user[
+            `edge_${params.zone.right_edge_condition.type}`
+          ]("right", params.zone.right_edge_condition);
         }
         brackets = params.brackets.map((bracket) => {
           return sketch.user
