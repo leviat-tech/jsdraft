@@ -13,7 +13,7 @@ const js = (name) => `function ${snakeCase(name)}(sketch) {
 
 const json = () => `{
   "filetype": "JSDraft",
-  "version": "0.0.2",
+  "version": "0.0.2"
 }
 `;
 

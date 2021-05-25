@@ -280,7 +280,11 @@ export default createStore({
       return null;
     },
     draft(state) {
-      return Draft.load({ ...state.files, _xrefs: state.xrefs });
+      try {
+        return Draft.load({ ...state.files, _xrefs: state.xrefs });
+      } catch {
+        return null;
+      }
     },
     entities(state, getters) {
       try {
@@ -321,6 +325,7 @@ export default createStore({
     },
     errors(state, getters) {
       const errors = {};
+      if (!getters.draft) return errors;
       Object.keys(getters.draft.features.sketch).forEach((name) => {
         const sketch = getters.draft.features.sketch[name];
         try {
