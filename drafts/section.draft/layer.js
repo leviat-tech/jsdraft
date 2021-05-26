@@ -91,8 +91,7 @@ return {
           [params.cavity + params.width, 0]
         )
         .offset(-Offset[params.datum_reference])
-        .stroke("black", 2)
-        .linestyle(15, 2, 2, 5)
+        .style("datum")
         .name("datum")
         .z(99);
       const Text = sketch.new

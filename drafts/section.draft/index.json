@@ -10,7 +10,7 @@
         "hatch_color": "black",
         "hatch_background": "none"
       },
-      "stroke": { "color": "black", "stroke-width": 0.5 }
+      "stroke": { "color": "black", "width": 0.5 }
     },
     "concrete": {
       "fill": {
@@ -20,7 +20,7 @@
         "hatch_color": "black",
         "hatch_background": "none"
       },
-      "stroke": { "color": "black", "stroke-width": 2 }
+      "stroke": { "color": "black", "swidth": 2 }
     },
     "steel_beam": {
       "fill": {
@@ -30,7 +30,10 @@
         "hatch_color": "black",
         "hatch_background": "none"
       },
-      "stroke": { "color": "black", "stroke-width": 2 }
+      "stroke": {
+        "color": "black",
+        "width": 2
+      }
     },
     "concrete_beam": {
       "fill": {
@@ -40,7 +43,7 @@
         "hatch_color": "black",
         "hatch_background": "none"
       },
-      "stroke": { "color": "black", "stroke-width": 2 }
+      "stroke": { "color": "black", "width": 2 }
     },
 
     "concrete_slab": {
@@ -51,7 +54,7 @@
         "hatch_color": "black",
         "hatch_background": "none"
       },
-      "stroke": { "color": "black", "stroke-width": 2 }
+      "stroke": { "color": "black", "width": 2 }
     },
     "reinforced_concrete": {
       "fill": {
@@ -61,7 +64,7 @@
         "hatch_color": "black",
         "hatch_background": "none"
       },
-      "stroke": { "color": "black", "stroke-width": 2 }
+      "stroke": { "color": "black", "width": 2 }
     },
     "masonry": {
       "fill": {
@@ -71,7 +74,7 @@
         "hatch_color": "black",
         "hatch_background": "none"
       },
-      "stroke": { "color": "black", "stroke-width": 2 }
+      "stroke": { "color": "black", "width": 2 }
     },
     "mortar": {
       "fill": {
@@ -81,7 +84,14 @@
         "hatch_color": "black",
         "hatch_background": "none"
       },
-      "stroke": { "color": "black", "stroke-width": 0.5 }
+      "stroke": { "color": "black", "width": 0.5 }
+    },
+    "datum": {
+      "stroke": {
+        "color": "black",
+        "width": 2,
+        "pattern": [15, 2, 2, 5]
+      }
     }
   }
 }
