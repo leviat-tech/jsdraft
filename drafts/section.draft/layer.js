@@ -15,7 +15,7 @@ return {
         wall_type: "reinforced_concrete",
         description: "",
         beam_profile: "HEB 100",
-        type: "wall",
+        type: "steel_beam",
       },
     },
   ],
@@ -60,8 +60,7 @@ return {
             -params.height + params.padding_bottom,
           ]
         )
-        .stroke(...Style[params.type].stroke)
-        .hatch(...Style[params.type].hatch);
+        .style(params.type);
       sketches.push(Layer);
     } else {
       const Wall = sketch.user

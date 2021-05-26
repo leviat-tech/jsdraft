@@ -18,16 +18,6 @@ return {
     material,
     mortars
   ) {
-    const Style = {
-      masonry: {
-        hatch: ["lines", 1, 0, "black", "none"],
-        stroke: ["black", 2],
-      },
-      mortar: {
-        hatch: ["concrete", 1, 0, "black", "none"],
-        stroke: ["black", 0.5],
-      },
-    };
     const Block = sketch
       .polyface(
         [0, 0],
@@ -35,8 +25,7 @@ return {
         [width, height],
         [0, height]
       )
-      .stroke(...Style[material].stroke)
-      .hatch(...Style[material].hatch);
+      .style(material);
 
     const Mortars = [];
     mortars.forEach((mortar) => {
@@ -55,8 +44,7 @@ return {
       const Mortar = sketch.new
         .add(MortarRight, MortarLeft, edge1, edge2)
         .join()
-        .stroke(...Style["mortar"].stroke)
-        .hatch(...Style["mortar"].hatch);
+        .style("mortar");
       Mortars.push(Mortar);
     });
 

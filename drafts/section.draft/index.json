@@ -1,4 +1,87 @@
 {
   "filetype": "JSDraft",
   "version": "0.0.1",
+  "styles": {
+    "finish": {
+      "fill": {
+        "hatch": "crosshatch",
+        "hatch_angle": 0,
+        "hatch_scale": 1,
+        "hatch_color": "black",
+        "hatch_background": "none"
+      },
+      "stroke": { "color": "black", "stroke-width": 0.5 }
+    },
+    "concrete": {
+      "fill": {
+        "hatch": "concrete",
+        "hatch_angle": 0,
+        "hatch_scale": 1,
+        "hatch_color": "black",
+        "hatch_background": "none"
+      },
+      "stroke": { "color": "black", "stroke-width": 2 }
+    },
+    "steel_beam": {
+      "fill": {
+        "hatch": "steel",
+        "hatch_angle": 0,
+        "hatch_scale": 1,
+        "hatch_color": "black",
+        "hatch_background": "none"
+      },
+      "stroke": { "color": "black", "stroke-width": 2 }
+    },
+    "concrete_beam": {
+      "fill": {
+        "hatch": "concrete",
+        "hatch_angle": 0,
+        "hatch_scale": 1,
+        "hatch_color": "black",
+        "hatch_background": "none"
+      },
+      "stroke": { "color": "black", "stroke-width": 2 }
+    },
+
+    "concrete_slab": {
+      "fill": {
+        "hatch": "concrete",
+        "hatch_angle": 0,
+        "hatch_scale": 1,
+        "hatch_color": "black",
+        "hatch_background": "none"
+      },
+      "stroke": { "color": "black", "stroke-width": 2 }
+    },
+    "reinforced_concrete": {
+      "fill": {
+        "hatch": "concrete",
+        "hatch_angle": 0,
+        "hatch_scale": 1,
+        "hatch_color": "black",
+        "hatch_background": "none"
+      },
+      "stroke": { "color": "black", "stroke-width": 2 }
+    },
+    "masonry": {
+      "fill": {
+        "hatch": "lines",
+        "hatch_angle": 0,
+        "hatch_scale": 1,
+        "hatch_color": "black",
+        "hatch_background": "none"
+      },
+      "stroke": { "color": "black", "stroke-width": 2 }
+    },
+    "mortar": {
+      "fill": {
+        "hatch": "concrete",
+        "hatch_angle": 0,
+        "hatch_scale": 1,
+        "hatch_color": "black",
+        "hatch_background": "none"
+      },
+      "stroke": { "color": "black", "stroke-width": 0.5 }
+    }
+  }
 }

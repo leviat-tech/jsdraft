@@ -18,32 +18,6 @@ return {
       params.drop / (mortar + MUheight)
     );
     MUheight = params.drop / count - mortar;
-    const Style = {
-      finish: {
-        hatch: ["crosshatch", 1, 0, "black", "none"],
-        stroke: ["black", 0.5],
-      },
-      steel_beam: {
-        hatch: ["steel", 1, 0, "black", "none"],
-        stroke: ["black", 2],
-      },
-      concrete_beam: {
-        hatch: ["concrete", 1, 0, "black", "none"],
-        stroke: ["black", 2],
-      },
-      concrete_slab: {
-        hatch: ["concrete", 1, 0, "black", "none"],
-        stroke: ["black", 2],
-      },
-      reinforced_concrete: {
-        hatch: ["concrete", 1, 0, "black", "none"],
-        stroke: ["black", 2],
-      },
-      concrete: {
-        hatch: ["concrete", 1, 0, "black", "none"],
-        stroke: ["black", 2],
-      },
-    };
     if (params.material === "masonry") {
       for (
         i = 0;
@@ -66,8 +40,7 @@ return {
     } else {
       const wall = sketch.new
         .rectangle(0, 0, -params.thickness, params.drop)
-        .stroke(...Style[params.material].stroke)
-        .hatch(...Style[params.material].hatch);
+        .style(params.material);
       sketches.push(wall);
     }
     return sketch.add(...sketches);
