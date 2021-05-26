@@ -1808,9 +1808,34 @@ return {
       return pts;
     };
 
-    const path = getPathInnerBeamSteel();
-    console.log(path);
+    const paths = getPathInnerBeamSteel();
+    let currentPt = paths[0].l;
+    let pts = [];
+    pts.push(currentPt);
 
-    return sketch.add(...sketches);
+    paths.forEach((path) => {
+      switch (path.d) {
+        case "M":
+          break;
+        case "v":
+          currentPt = [
+            currentPt[0],
+            currentPt[1] + path.l[0],
+          ];
+          pts.push(currentPt);
+          break;
+        case "h":
+          currentPt = [
+            currentPt[0] + path.l[0],
+            currentPt[1],
+          ];
+          pts.push(currentPt);
+          break;
+        default:
+          break;
+      }
+    });
+
+    return sketch.polyface(...pts);
   },
 };
