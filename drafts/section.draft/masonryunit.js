@@ -1,13 +1,13 @@
 return {
   parameters: [
-    { name: "width", default: 112.5 },
-    { name: "height", default: 65 },
+    { name: "width", default: 112.5 * 0.001 },
+    { name: "height", default: 65 * 0.001 },
     { name: "material", default: "masonry" },
     {
       name: "mortars",
       default: [
-        { edge: 0, thickness: 5 },
-        { edge: 3, thickness: 10 },
+        { edge: 0, thickness: 5 * 0.001 },
+        { edge: 3, thickness: 10 * 0.001 },
       ],
     },
   ],

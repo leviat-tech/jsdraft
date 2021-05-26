@@ -3,17 +3,17 @@ return {
     {
       name: "params",
       default: {
-        drop: 150,
+        drop: 150 * 0.001,
         specific_weight: 1.8,
-        thickness: 100,
+        thickness: 100 * 0.001,
         material: "masonry",
       },
     },
   ],
   func: function (sketch, params) {
     const sketches = [];
-    let MUheight = 65;
-    const mortar = 10;
+    let MUheight = 65 * 0.001;
+    const mortar = 10 * 0.001;
     let count = Math.floor(
       params.drop / (mortar + MUheight)
     );

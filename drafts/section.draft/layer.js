@@ -3,14 +3,14 @@ return {
     {
       name: "params",
       default: {
-        datum_offset: 0,
+        datum_offset: 0 * 0.001,
         datum_reference: "top",
         is_datum: true,
-        padding_bottom: -10,
-        padding_top: 0,
-        cavity: 10,
-        height: 100,
-        width: 100,
+        padding_bottom: -10 * 0.001,
+        padding_top: 0 * 0.001,
+        cavity: 10 * 0.001,
+        height: 100 * 0.001,
+        width: 100 * 0.001,
         concrete_grade: "C25/30",
         wall_type: "reinforced_concrete",
         description: "",
@@ -21,28 +21,6 @@ return {
   ],
   func: function (sketch, params) {
     const sketches = [];
-    const Style = {
-      finish: {
-        hatch: ["crosshatch", 1, 0, "black", "none"],
-        stroke: ["black", 0.5],
-      },
-      steel_beam: {
-        hatch: ["steel", 1, 0, "black", "none"],
-        stroke: ["black", 2],
-      },
-      concrete_beam: {
-        hatch: ["concrete", 1, 0, "black", "none"],
-        stroke: ["black", 2],
-      },
-      concrete_slab: {
-        hatch: ["concrete", 1, 0, "black", "none"],
-        stroke: ["black", 2],
-      },
-      reinforced_concrete: {
-        hatch: ["concrete", 1, 0, "black", "none"],
-        stroke: ["black", 2],
-      },
-    };
     if (params.type != "wall") {
       const Layer = sketch
         .polyface(
@@ -96,7 +74,7 @@ return {
         .z(99);
       const Text = sketch.new
         .text("0.00", Datumline.vertices[0])
-        .translate(12, 8)
+        .translate(0.0012, 0.008)
         .z(99);
       sketches.push(Datumline, Text);
     }

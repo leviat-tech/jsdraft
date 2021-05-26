@@ -1,12 +1,19 @@
 {
   "filetype": "JSDraft",
   "version": "0.0.1",
+  "settings": {
+    "style": {
+      "annotation": {
+        "font_size": 0.012
+      }
+    }
+  },
   "styles": {
     "finish": {
       "fill": {
         "hatch": "crosshatch",
         "hatch_angle": 0,
-        "hatch_scale": 1,
+        "hatch_scale": 0.001,
         "hatch_color": "black",
         "hatch_background": "none"
       },
@@ -16,7 +23,7 @@
       "fill": {
         "hatch": "concrete",
         "hatch_angle": 0,
-        "hatch_scale": 1,
+        "hatch_scale": 0.001,
         "hatch_color": "black",
         "hatch_background": "none"
       },
@@ -26,7 +33,7 @@
       "fill": {
         "hatch": "steel",
         "hatch_angle": 0,
-        "hatch_scale": 1,
+        "hatch_scale": 0.001,
         "hatch_color": "black",
         "hatch_background": "none"
       },
@@ -39,7 +46,7 @@
       "fill": {
         "hatch": "concrete",
         "hatch_angle": 0,
-        "hatch_scale": 1,
+        "hatch_scale": 0.001,
         "hatch_color": "black",
         "hatch_background": "none"
       },
@@ -50,7 +57,7 @@
       "fill": {
         "hatch": "concrete",
         "hatch_angle": 0,
-        "hatch_scale": 1,
+        "hatch_scale": 0.001,
         "hatch_color": "black",
         "hatch_background": "none"
       },
@@ -60,7 +67,7 @@
       "fill": {
         "hatch": "concrete",
         "hatch_angle": 0,
-        "hatch_scale": 1,
+        "hatch_scale": 0.001,
         "hatch_color": "black",
         "hatch_background": "none"
       },
@@ -70,7 +77,7 @@
       "fill": {
         "hatch": "lines",
         "hatch_angle": 0,
-        "hatch_scale": 1,
+        "hatch_scale": 0.001,
         "hatch_color": "black",
         "hatch_background": "none"
       },
@@ -80,7 +87,7 @@
       "fill": {
         "hatch": "concrete",
         "hatch_angle": 0,
-        "hatch_scale": 1,
+        "hatch_scale": 0.001,
         "hatch_color": "black",
         "hatch_background": "none"
       },
