@@ -3,17 +3,21 @@ return {
     {
       name: "params",
       default: {
-        height: 70,
-        depth: 40,
-        width: 20,
-        thickness: 5,
-        overhang: { height: 5, depth: 3 },
-        hole: { x: 10, y: 10, d: 5 },
-        cutout: { height: 5, depth: 3 },
+        height: 70 * 0.001,
+        depth: 40 * 0.001,
+        width: 20 * 0.001,
+        thickness: 5 * 0.001,
+        overhang: { height: 5 * 0.001, depth: 3 * 0.001 },
+        hole: {
+          x: 10 * 0.001,
+          y: 10 * 0.001,
+          d: 5 * 0.001,
+        },
+        cutout: { height: 5 * 0.001, depth: 3 * 0.001 },
         teeth: {
-          height: 5,
-          depth: 5,
-          positions: [0, 10, 20],
+          height: 5 * 0.001,
+          depth: 5 * 0.001,
+          positions: [0 * 0.001, 10 * 0.001, 20 * 0.001],
         },
       },
     },
@@ -26,7 +30,11 @@ return {
         [params.teeth.height, -params.teeth.depth],
         [params.teeth.height, 0]
       )
-      .interpolate([0, 0], [0, -30], params.teeth.positions)
+      .interpolate(
+        [0, 0],
+        [0, -params.height + params.overhang.height],
+        params.teeth.positions
+      )
       .translate(0, params.height - params.overhang.height);
 
     const plate = sketch.polyface(

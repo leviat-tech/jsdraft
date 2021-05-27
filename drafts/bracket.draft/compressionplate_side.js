@@ -3,7 +3,7 @@ return {
     {
       name: "params",
       default: {
-        height: 10,
+        height: 15,
         depth: 30,
         width: 40,
         layers: 2,

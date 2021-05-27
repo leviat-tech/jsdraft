@@ -1,29 +1,37 @@
 return {
   parameters: [
-    { name: "height", default: 45 },
-    { name: "width", default: 10 },
-    { name: "thickness", default: 5 },
-    { name: "radius", default: 5 }
+    {
+      name: "params",
+      default: {
+        height: 45,
+        width: 10,
+        thickness: 5,
+        radius: 5,
+      },
+    },
   ],
-  func: function (sketch, height, width, thickness, radius) {
-    const outer = sketch.polycurve(
-      [0, 0],
-      [0,height],
-      [-width, height]
-    ).fillet(radius);
-    const inner = outer.offset(thickness)
+  func: function (sketch, params) {
+    const outer = sketch
+      .polycurve(
+        [0, 0],
+        [0, params.height],
+        [-params.width, params.height]
+      )
+      .fillet(params.radius);
+    const inner = outer.offset(params.thickness);
     const top = sketch.polycurve(
       outer.vertices[0],
-      inner.vertices[0],
-      )
+      inner.vertices[0]
+    );
     const bottom = sketch.polycurve(
       inner.vertices.slice(-1)[0],
-      outer.vertices.slice(-1)[0],
-      )
-    const angle = sketch.new.add(outer, inner, top, bottom)
-    .join().translate(thickness, 0)
-    
-    return sketch.add(angle)
-  }
-}
+      outer.vertices.slice(-1)[0]
+    );
+    const angle = sketch.new
+      .add(outer, inner, top, bottom)
+      .join()
+      .translate(params.thickness, 0);
 
+    return sketch.add(angle);
+  },
+};
