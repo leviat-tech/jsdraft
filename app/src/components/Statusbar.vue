@@ -22,6 +22,12 @@
 import { mapState, mapGetters } from 'vuex';
 
 
+function numDisplay(number) {
+  const precision = parseFloat(number.toPrecision(4));
+  return parseFloat(precision.toFixed(2));
+}
+
+
 export default {
   name: 'Statusbar',
   computed: {
@@ -29,8 +35,8 @@ export default {
     ...mapGetters(['draft']),
     pointDisplay() {
       return {
-        x: Math.round(this.currentPoint.x),
-        y: Math.round(this.currentPoint.y),
+        x: numDisplay(this.currentPoint.x),
+        y: numDisplay(this.currentPoint.y),
       };
     },
     modelUnits() {
@@ -64,7 +70,7 @@ export default {
 
   .coordinate {
     display: inline-block;
-    width: 2rem;
+    width: 2.5rem;
   }
 
   .svg {

@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     ...mapGetters(['extents', 'draft']),
-    ...mapState(['gridStepSize']),
+    ...mapState(['gridStepSize', 'zoomScale']),
     width() {
       return this.maxX - this.minY;
     },
@@ -103,6 +103,12 @@ export default {
           const ps = convertUnits(plotSize, plotUnit, modelUnit) / scale;
 
           const gridStepSize = orderMagnitude(ps / 40);
+          const zoomScale = this.gridStepSize / gridStepSize;
+
+          if (this.gridStepSize !== gridStepSize) {
+            this.setZoomScale(zoomScale * this.zoomScale);
+          }
+
           this.setGridStepSize(gridStepSize);
 
           this.minX = -(gridStepSize * 20);
@@ -114,7 +120,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setGridStepSize']),
+    ...mapMutations(['setGridStepSize', 'setZoomScale']),
   },
 };
 </script>
