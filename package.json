@@ -1,6 +1,6 @@
 {
   "name": "@crhio/jsdraft",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A functional toolkit for drawing and flexing 2D parametric drawings",
   "bin": "src/cli.js",
   "scripts": {
@@ -26,7 +26,6 @@
     "js-yaml": "^4.0.0",
     "lodash": "^4.17.21",
     "mathjs": "^8.1.0",
-    "pdf-lib": "^1.13.0",
     "rbush": "^3.0.1",
     "uuid": "^8.3.2"
   },

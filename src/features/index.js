@@ -46,7 +46,7 @@ const translate = require('./transformations/translate.js');
 const rainbow = require('./debugging/rainbow.js');
 
 
-module.exports = [
+module.exports = {
   fill,
   hatch,
   linestyle,
@@ -93,4 +93,4 @@ module.exports = [
   translate,
 
   rainbow,
-];
+};

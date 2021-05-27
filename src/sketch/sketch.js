@@ -296,7 +296,7 @@ class Sketch {
 }
 
 // include all built in js feature functions
-features.forEach((feature) => Sketch.include(decorate(feature)));
+Object.entries(features).forEach(([name, feature]) => Sketch.include(decorate(feature, name)));
 
 
 module.exports = Sketch;
