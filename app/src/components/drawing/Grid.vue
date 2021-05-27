@@ -28,8 +28,15 @@
 </template>
 
 <script>
+import { mapGetters, mapState, mapMutations } from 'vuex';
 import range from 'lodash/range';
+import convertUnits from '../../utility/convert-units.js';
 
+
+function orderMagnitude(n) {
+  const order = Math.floor(Math.log(n) / Math.LN10 + 0.000000001);
+  return 10 ** order;
+}
 
 export default {
   name: 'Grid',
@@ -38,7 +45,6 @@ export default {
   },
   data() {
     return {
-      stepSize: 10,
       minX: -200,
       maxX: 200,
       minY: -200,
@@ -46,6 +52,8 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['extents', 'draft']),
+    ...mapState(['gridStepSize']),
     width() {
       return this.maxX - this.minY;
     },
@@ -53,35 +61,60 @@ export default {
       return this.maxY - this.minY;
     },
     hLines() {
-      const minMod = this.minY % this.stepSize;
+      const minMod = this.minY % this.gridStepSize;
       const min = this.minY - minMod;
 
-      const maxMod = this.maxY % this.stepSize;
+      const maxMod = this.maxY % this.gridStepSize;
       const max = this.maxX - maxMod;
 
       const eMin = min - (max - min) * 2;
       const eMax = max + (max - min) * 2;
-      return range(eMin, eMax + this.stepSize, this.stepSize).map((y) => {
+      return range(eMin, eMax + this.gridStepSize, this.gridStepSize).map((y) => {
         const pt0 = { x: this.minX - (this.width) * 2, y };
         const pt1 = { x: this.maxX + (this.width) * 2, y };
         return { pt0, pt1 };
       });
     },
     vLines() {
-      const minMod = this.minX % this.stepSize;
+      const minMod = this.minX % this.gridStepSize;
       const min = this.minX - minMod;
 
-      const maxMod = this.maxX % this.stepSize;
+      const maxMod = this.maxX % this.gridStepSize;
       const max = this.maxX - maxMod;
 
       const eMin = min - (max - min) * 2;
       const eMax = max + (max - min) * 2;
-      return range(eMin, eMax + this.stepSize, this.stepSize).map((x) => {
+      return range(eMin, eMax + this.gridStepSize, this.gridStepSize).map((x) => {
         const pt0 = { x, y: this.minY - (this.height) * 2 };
         const pt1 = { x, y: this.maxY + (this.height) * 2 };
         return { pt0, pt1 };
       });
     },
+  },
+  watch: {
+    extents: {
+      immediate: true,
+      handler(extents) {
+        if (extents) {
+          const plotSize = this.draft.settings.plot_size || 1000;
+          const modelUnit = this.draft.settings.model_unit || 'mm';
+          const plotUnit = this.draft.settings.plot_unit || modelUnit;
+          const scale = this.draft.settings.scale || 1;
+          const ps = convertUnits(plotSize, plotUnit, modelUnit) / scale;
+
+          const gridStepSize = orderMagnitude(ps / 40);
+          this.setGridStepSize(gridStepSize);
+
+          this.minX = -(gridStepSize * 20);
+          this.maxX = gridStepSize * 20;
+          this.minY = -(gridStepSize * 20);
+          this.maxY = gridStepSize * 20;
+        }
+      },
+    },
+  },
+  methods: {
+    ...mapMutations(['setGridStepSize']),
   },
 };
 </script>

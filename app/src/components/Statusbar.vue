@@ -1,8 +1,13 @@
 <template>
   <div class="statusbar">
-    <div class="current-point">
-      x: <span class="coordinate">{{ pointDisplay.x }}</span>
-      y: <span class="coordinate">{{ pointDisplay.y }}</span>
+    <div class="left">
+      <div class="current-point">
+        x: <span class="coordinate">{{ pointDisplay.x }}</span>
+        y: <span class="coordinate">{{ pointDisplay.y }}</span>
+      </div>
+      <div class="grid-size">
+        Grid line: {{ gridStepSize }} {{ modelUnits }}
+      </div>
     </div>
     <div v-if="path">
       <img
@@ -14,18 +19,22 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 
 export default {
   name: 'Statusbar',
   computed: {
-    ...mapState(['currentPoint', 'path']),
+    ...mapState(['currentPoint', 'path', 'gridStepSize']),
+    ...mapGetters(['draft']),
     pointDisplay() {
       return {
         x: Math.round(this.currentPoint.x),
         y: Math.round(this.currentPoint.y),
       };
+    },
+    modelUnits() {
+      return (this.draft && this.draft.settings.model_unit) || 'mm';
     },
   },
 };
@@ -43,9 +52,14 @@ export default {
     justify-content: space-between;
   }
 
-  .current-point {
+  .left {
+    display: flex;
     margin-left: 1rem;
     font-size: $text-sm;
+  }
+
+  .current-point {
+    margin-right: 1rem;
   }
 
   .coordinate {

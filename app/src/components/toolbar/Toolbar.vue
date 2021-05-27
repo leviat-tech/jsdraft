@@ -161,7 +161,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['currentTool', 'showCodePanel', 'filename', 'path', 'files', 'electron']),
+    ...mapState(['currentTool', 'showCodePanel', 'filename', 'path', 'files', 'electron', 'sketch']),
     filesHaveChanged() {
       return !isEqual(this.files, {
         'index.json': json(),
@@ -189,11 +189,13 @@ export default {
   },
   methods: {
     ...mapMutations(['setCurrentTool', 'setShowCodePanel', 'reset']),
-    ...mapActions(['save', 'importFile', 'updateXrefs']),
+    ...mapActions(['save', 'importFile', 'updateXrefs', 'zoomToExtents']),
     chooseTool(id) {
       this.setCurrentTool(id);
     },
-    fitToExtents() {},
+    fitToExtents() {
+      this.zoomToExtents();
+    },
     openFolder() {
       if (!this.electron) {
         const fileReader = document.getElementById('fileReader');

@@ -67,6 +67,7 @@ function reset() {
     xrefs: {}, // In-memory contents of x-ref'ed draft files
     electron,
     currentPoint: { x: 0, y: 0 },
+    gridStepSize: 10,
   };
 }
 
@@ -175,6 +176,9 @@ export default createStore({
     setSelected(state, value) {
       state.selected = value;
     },
+    setGridStepSize(state, value) {
+      state.gridStepSize = value;
+    },
   },
 
   actions: {
@@ -208,6 +212,8 @@ export default createStore({
         commit('setPath', path);
         dispatch('watchPath');
       }
+
+      dispatch('zoomToExtents');
     },
 
     async updateXrefs({ state, commit }) {
@@ -255,6 +261,38 @@ export default createStore({
 
       commit('renameFile', { path, newPath });
     },
+
+    zoomToExtents({ state, getters, commit }) {
+      const extents = getters.extents;
+      if (!extents) return;
+
+      const size = {
+        width: extents.xmax - extents.xmin,
+        height: extents.ymax - extents.ymin,
+      };
+
+      const contentAspectRatio = size.width / size.height;
+      const viewAspectRatio = state.viewBox.width / state.viewBox.height;
+
+      const zoomScale = contentAspectRatio > viewAspectRatio
+        ? state.viewBox.width / size.width
+        : state.viewBox.height / size.height;
+
+      const center = {
+        x: (extents.xmin + (extents.xmax - extents.xmin) / 2) * zoomScale,
+        y: -(extents.ymin + (extents.ymax - extents.ymin) / 2) * zoomScale,
+      };
+
+      const viewBox = {
+        minX: center.x - state.viewBox.width / 2,
+        minY: center.y - state.viewBox.height / 2,
+        width: state.viewBox.width,
+        height: state.viewBox.height,
+      };
+
+      commit('setViewBox', viewBox);
+      commit('setZoomScale', zoomScale);
+    },
   },
 
   getters: {
@@ -286,25 +324,27 @@ export default createStore({
         return null;
       }
     },
+    sketch(state, getters) {
+      try {
+        return getters.draft.render(getters.currentFeatureName, state.overrides, 'sketch');
+      } catch {
+        return null;
+      }
+    },
+    extents(state, getters) {
+      if (!getters.sketch) return null;
+      return getters.sketch.extents;
+    },
     entities(state, getters) {
       try {
         let hidden = [];
         if (state.showHidden) {
-          hidden = getters.draft.render(
-            getters.currentFeatureName,
-            state.overrides,
-            'entities',
-            { show: 'hidden' },
-          ).map((e) => {
+          hidden = getters.sketch.hidden.entities.map((e) => {
             e.hidden = true;
             return e;
           });
         }
-        return hidden.concat(getters.draft.render(
-          getters.currentFeatureName,
-          state.overrides,
-          'entities',
-        ));
+        return hidden.concat(getters.sketch.entities);
       } catch {
         return [];
       }
