@@ -1,6 +1,6 @@
 return {
   parameters: [
-    { name: "view", default: "top" },
+    { name: "view", default: "front" },
     {
       name: "params",
       default: {
@@ -29,10 +29,10 @@ return {
               max: 0,
               actual: 0,
             },
-            plate_thickness: 5,
-            adjustability: 0,
+            plate_thickness: 5 * 0.001,
+            adjustability: 0 * 0.001,
             family: "GH",
-            position: 100,
+            position: 100 * 0.001,
           },
         ],
         zone_id: "c10f05d9-a9ee-478e-b310-fb619f06b8d3",
@@ -51,15 +51,15 @@ return {
             material: "WBS235 FV",
           },
           right_edge_condition: {
-            B: 30,
-            L: 150,
+            B: 30 * 0.001,
+            L: 150 * 0.001,
             side: "back",
             angle: 45,
             type: "plate",
           },
           left_edge_condition: {
-            B: 40,
-            L: 105,
+            B: 40 * 0.001,
+            L: 105 * 0.001,
             side: "back",
             angle: 45,
             type: "plate",
@@ -69,11 +69,11 @@ return {
           description: "",
         },
         profile: {
-          thickness: 5,
-          height: 50,
-          width: 70,
-          length: 800,
-          radius: 5,
+          thickness: 5 * 0.001,
+          height: 50 * 0.001,
+          width: 70 * 0.001,
+          length: 800 * 0.001,
+          radius: 5 * 0.001,
           family: "angle",
         },
         status: "unchecked",
