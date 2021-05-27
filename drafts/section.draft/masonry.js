@@ -3,11 +3,10 @@ return {
     {
       name: "params",
       default: {
-        drop: 150 * 0.001,
         specific_weight: 1.8,
         thickness: 100 * 0.001,
         material: "masonry",
-        height: 250 * 0.001,
+        height: 260 * 0.001,
       },
     },
   ],
@@ -44,6 +43,10 @@ return {
         .style(params.material);
       sketches.push(wall);
     }
-    return sketch.add(...sketches);
+    const ref = sketch.new
+      .polycurve([-params.thickness, 0], [0, 0])
+      .name("bottom")
+      .hide();
+    return sketch.add(...sketches, ref);
   },
 };

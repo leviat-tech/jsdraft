@@ -1,6 +1,5 @@
 return {
   parameters: [
-    { name: "profileType", default: "HEB" },
     { name: "profileName", default: "HEB 100" },
     { name: "isMirrored", default: false },
     {
@@ -1727,13 +1726,12 @@ return {
   ],
   func: function (
     sketch,
-    profileType,
     profileName,
     isMirrored,
     profileDB
   ) {
     const sketches = [];
-
+    const profileType = profileName.split(" ")[0];
     const getDimensionsSteelProfile = () => {
       const profileTypes = profileType
         ? profileDB[profileType]
@@ -1809,7 +1807,10 @@ return {
     };
 
     const paths = getPathInnerBeamSteel();
-    let currentPt = paths[0].l;
+    let currentPt = [
+      paths[0].l[0] * 0.001,
+      paths[0].l[1] * 0.001,
+    ];
     let pts = [];
     pts.push(currentPt);
 
@@ -1820,13 +1821,13 @@ return {
         case "v":
           currentPt = [
             currentPt[0],
-            currentPt[1] + path.l[0],
+            currentPt[1] - path.l[0] * 0.001,
           ];
           pts.push(currentPt);
           break;
         case "h":
           currentPt = [
-            currentPt[0] + path.l[0],
+            currentPt[0] + path.l[0] * 0.001,
             currentPt[1],
           ];
           pts.push(currentPt);

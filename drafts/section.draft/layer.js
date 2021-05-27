@@ -15,46 +15,57 @@ return {
         wall_type: "reinforced_concrete",
         description: "",
         beam_profile: "HEB 100",
-        type: "steel_beam",
+        type: "wall",
       },
     },
   ],
   func: function (sketch, params) {
     const sketches = [];
-    if (params.type != "wall") {
-      const Layer = sketch
-        .polyface(
-          [
-            params.cavity + params.width,
-            -params.padding_top,
-          ],
-          [params.cavity, -params.padding_top],
-          [
-            params.cavity,
-            -params.height + params.padding_bottom,
-          ],
-          [
-            params.cavity + params.width,
-            -params.height + params.padding_bottom,
-          ]
-        )
-        .style(params.type);
-      sketches.push(Layer);
-    } else {
-      const Wall = sketch.user
-        .masonry({
-          drop:
-            params.height -
-            params.padding_bottom -
-            params.padding_top,
-          thickness: params.width,
-          material: params.wall_type,
-        })
-        .translate(
-          params.width + params.cavity,
-          -params.height + params.padding_bottom
-        );
-      sketches.push(Wall);
+
+    switch (params.type) {
+      case "wall":
+        const Wall = sketch.user
+          .masonry({
+            height:
+              params.height -
+              params.padding_bottom -
+              params.padding_top,
+            thickness: params.width,
+            material: params.wall_type,
+          })
+          .translate(
+            params.width + params.cavity,
+            -params.height + params.padding_bottom
+          );
+        sketches.push(Wall);
+        break;
+      case "steel_beam":
+        const beam = sketch.user
+          .steelbeam(params.beam_profile, false)
+          .translate(params.cavity, 0)
+          .style("steel_beam");
+        sketches.push(beam);
+        break;
+      default:
+        const Layer = sketch
+          .polyface(
+            [
+              params.cavity + params.width,
+              -params.padding_top,
+            ],
+            [params.cavity, -params.padding_top],
+            [
+              params.cavity,
+              -params.height + params.padding_bottom,
+            ],
+            [
+              params.cavity + params.width,
+              -params.height + params.padding_bottom,
+            ]
+          )
+          .style(params.type);
+        sketches.push(Layer);
+        break;
     }
 
     if (params.is_datum) {

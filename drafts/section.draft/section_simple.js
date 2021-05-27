@@ -12,8 +12,8 @@ return {
             datum_reference: "top",
             padding_bottom: -10 * 0.001,
             padding_top: 0 * 0.001,
-            cavity: 60 * 0.001,
-            width: 70 * 0.001,
+            cavity: 150 * 0.001,
+            width: 100 * 0.001,
             height: 300 * 0.001,
             wall_type: "masonry",
             beam_profile: "HEB 100",
@@ -22,11 +22,22 @@ return {
           {
             datum_offset: 0 * 0.001,
             datum_reference: "top",
+            padding_bottom: -10 * 0.001,
+            padding_top: 0 * 0.001,
+            cavity: 250 * 0.001,
+            height: 0 * 0.001,
+            wall_type: "masonry",
+            beam_profile: "HEB 100",
+            type: "finish",
+          },
+          {
+            datum_offset: 0 * 0.001,
+            datum_reference: "top",
             padding_bottom: 0 * 0.001,
             padding_top: 10 * 0.001,
             is_datum: true,
-            cavity: 50 * 0.001,
-            height: 100 * 0.001,
+            cavity: 140 * 0.001,
+            height: 120 * 0.001,
             wall_type: "reinforced_concrete",
             beam_profile: "HEB 100",
             type: "concrete_slab",
@@ -35,10 +46,9 @@ return {
             datum_offset: 0 * 0.001,
             datum_reference: "top",
             padding_bottom: 0 * 0.001,
-            padding_top: 0 * 0.001,
-            cavity: 100 * 0.001,
-            width: 70 * 0.001,
-            height: 30 * 0.001,
+            padding_top: 10 * 0.001,
+            cavity: 200 * 0.001,
+            height: 150 * 0.001,
             wall_type: "reinforced_concrete",
             beam_profile: "HEB 100",
             type: "steel_beam",
@@ -72,6 +82,7 @@ return {
       if (layer.is_datum) {
         Datum = Layer.find("datum").vertices[0];
       }
+
       Stackheight += layer.height;
       sketches.push(Layer);
     });
