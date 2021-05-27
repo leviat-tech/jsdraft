@@ -7,6 +7,7 @@ return {
         specific_weight: 1.8,
         thickness: 100 * 0.001,
         material: "masonry",
+        height: 250 * 0.001,
       },
     },
   ],
@@ -15,13 +16,13 @@ return {
     let MUheight = 65 * 0.001;
     const mortar = 10 * 0.001;
     let count = Math.floor(
-      params.drop / (mortar + MUheight)
+      params.height / (mortar + MUheight)
     );
-    MUheight = params.drop / count - mortar;
+    MUheight = params.height / count - mortar;
     if (params.material === "masonry") {
       for (
         i = 0;
-        i * (MUheight + mortar) < params.drop;
+        i * (MUheight + mortar) < params.height;
         i++
       ) {
         const MU = sketch.user
@@ -39,7 +40,7 @@ return {
       }
     } else {
       const wall = sketch.new
-        .rectangle(0, 0, -params.thickness, params.drop)
+        .rectangle(0, 0, -params.thickness, params.height)
         .style(params.material);
       sketches.push(wall);
     }

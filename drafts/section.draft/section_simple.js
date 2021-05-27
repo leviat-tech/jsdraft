@@ -48,7 +48,7 @@ return {
           drop: 190 * 0.001,
           specific_weight: 1.8 * 0.001,
           thickness: 100 * 0.001,
-          material: "concrete",
+          material: "masonry",
         },
         description: "",
       },
