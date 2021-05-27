@@ -1,10 +1,14 @@
 const merge = require('lodash/merge');
+const cloneDeep = require('lodash/cloneDeep');
 const get = require('lodash/get');
 const set = require('lodash/set');
 const svg_renderer = require('../entity/svg');
-const calculate_viewbox = require('../utility/viewbox.js');
+const fit_viewbox = require('../utility/fit-viewbox.js');
+const fit_vbscale = require('../utility/fit-vbscale.js');
+const scale_viewbox = require('../utility/scale-viewbox.js');
 const svg_string = require('../../utility/misc/svg-string.js');
 const hatches = require('../../utility/misc/hatches.js');
+const convert_units = require('../../utility/misc/convert-units.js');
 
 
 // generate a unique id given an input
@@ -99,44 +103,61 @@ function render(sketch, {
   viewport = 'svg',
   show = 'visible',
   fit = true,
-  aspect_ratio = 1,
   padding = 0,
   padding_top = 0,
   padding_right = 0,
   padding_bottom = 0,
   padding_left = 0,
   center,
-  size = 1000,
+  aspect_ratio = 1,
+  model_unit = 'mm',
+  plot_size = 1000,
+  plot_unit = model_unit,
   scale = 1,
   style = {},
 } = {}) {
+  style = cloneDeep(style);
 
+  // Normalize plot settings
+  const pad = {
+    top: padding_top || padding,
+    right: padding_right || padding,
+    bottom: padding_bottom || padding,
+    left: padding_left || padding,
+  };
+
+  const extents = sketch.extents;
+
+  const size = convert_units(plot_size, plot_unit, model_unit);
+  const ref_size = 1000;
+  const anno_scale = get(style, 'annotation.scale') || 1;
+  const scalefactor = (viewport === 'svg' && fit)
+    ? fit_vbscale(extents, pad, aspect_ratio)
+    : size / (ref_size * scale);
+  const hatch_scale = get(style, 'fill.hatch_scale') || 1;
+  const ref_hatch_scale = convert_units(1, 'mm', model_unit);
+  set(style, 'annotation.scale', anno_scale * scalefactor);
+  set(style, 'fill.hatch_scale', hatch_scale * ref_hatch_scale);
+
+  // No svg/g viewport defined, raw svg entities will be exported as string
   if (viewport === null) {
     const svg = recurse(sketch, style, show);
     svg.sort((a, b) => a.z - b.z);
     return svg_arr_to_string(svg);
   }
 
+  // No svg/g viewport defined, raw svg entities will be exported as JS objects
   if (viewport === 'js') {
     const svg = recurse(sketch, style, show);
     svg.sort((a, b) => a.z - b.z);
     return svg;
   }
 
+  // Viewport is defined as "svg", therefore a viewBox property can be added to output
   if (viewport === 'svg') {
-    const pad = {
-      top: padding_top || padding,
-      right: padding_right || padding,
-      bottom: padding_bottom || padding,
-      left: padding_left || padding,
-    };
-
-    const extents = sketch.extents;
-    const anno_scale = get(style, 'annotation.scale') || 1;
-    const { viewbox, scalefactor } = calculate_viewbox(
-      extents, fit, pad, aspect_ratio, center, size / scale,
-    );
-    set(style, 'annotation.scale', anno_scale * scalefactor);
+    const viewbox = fit
+      ? fit_viewbox(extents, pad, aspect_ratio)
+      : scale_viewbox(extents, aspect_ratio, center, size / scale);
 
     const svg = recurse(sketch, style, show);
     svg.sort((a, b) => a.z - b.z);

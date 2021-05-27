@@ -26,7 +26,7 @@ describe('Render', () => {
   });
 
   it('should plot to scale', () => {
-    const svg = render(sketch, 'svg', { fit: false, size: 50 });
+    const svg = render(sketch, 'svg', { fit: false, plot_size: 50 });
     const parsed = parse(svg);
     const svgnode = parsed.children[0];
     const textnode = parsed.children[0].children[0].children[1].children[1];
@@ -42,14 +42,14 @@ describe('Render', () => {
   });
 
   it('should allow the drawing to be scaled', () => {
-    const svg = render(sketch, 'svg', { fit: false, size: 100, scale: 2 });
+    const svg = render(sketch, 'svg', { fit: false, plot_size: 100, scale: 2 });
     const parsed = parse(svg);
     const svgnode = parsed.children[0];
     expect(svgnode.properties.viewBox).to.eql('-23 -35 50 50');
   });
 
   it('should allow the drawing to be centered about a dfferent point', () => {
-    const svg = render(sketch, 'svg', { fit: false, size: 100, center: [16, 16] });
+    const svg = render(sketch, 'svg', { fit: false, plot_size: 100, center: [16, 16] });
     const parsed = parse(svg);
     const svgnode = parsed.children[0];
     expect(svgnode.properties.viewBox).to.eql('-34 -66 100 100');

@@ -153,7 +153,7 @@ const renderers = {
       hash_length: hl = 5,
       offset: os = 50,
       text_offset: to = 10,
-      precision: pr = 0,
+      precision: pr = 4,
       scale: s = 1,
       font_size = 12,
       h_align = 'center',
@@ -184,7 +184,7 @@ const renderers = {
     const path = `M ${a.x} ${a.y} L ${b.x} ${b.y} M ${c.x} ${c.y} L ${d.x} ${d.y} M ${e.x} ${e.y} L ${f.x} ${f.y}`;
 
     const cp = v1.add(dim_vector.scale(length / 2)).add(crossoffset).add(textoffset);
-    const ltext = length.toFixed(pr);
+    const ltext = parseFloat(length.toPrecision(pr));
 
     const path_attributes = {
       stroke: color,
@@ -225,7 +225,7 @@ const renderers = {
       hash_length: hl = 5,
       offset: os = 50,
       text_offset: to = 10,
-      precision: pr = 0,
+      precision: pr = 4,
       scale: s = 1,
       font_size = 12,
       h_align = 'center',
@@ -274,7 +274,7 @@ const renderers = {
           : r;
         return {
           tag: 'text',
-          contents: l.toFixed(pr),
+          contents: parseFloat(l.toPrecision(pr)),
           attributes: {
             rotation,
             x: cp.x,
@@ -310,7 +310,7 @@ const renderers = {
     annotation: {
       extension: ex = 5,
       text_offset: to = 10,
-      precision: pr = 0,
+      precision: pr = 4,
       scale: s = 1,
       font_size = 12,
       h_align = 'center',
@@ -339,7 +339,7 @@ const renderers = {
     const path = `M ${a.x} ${a.y} L ${b.x} ${b.y} M ${c.x} ${c.y} L ${d.x} ${d.y} M ${pta.x} ${pta.y} A ${offset} ${offset} 0 0 1 ${f.x} ${f.y}`;
 
     const cp = ctr.add(cvec.scale(offset + to * s));
-    const atext = `${angle.toFixed(pr)}°`;
+    const atext = `${parseFloat(angle.toPrecision(pr))}°`;
 
     const path_attributes = {
       stroke: color,
