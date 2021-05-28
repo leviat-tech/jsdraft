@@ -17,6 +17,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import camelCase from 'lodash/camelCase';
+import upperFirst from 'lodash/upperFirst';
 import EntityDetails from './EntityDetails.vue';
 import entityDetails from '../../utility/entity-details.js';
 
@@ -29,17 +31,7 @@ export default {
   computed: {
     ...mapGetters(['entities']),
     entityTypes() {
-      return this.entities
-        .map((e) => {
-          // Handle case where Rollup has mangled constructor name
-          // https://github.com/rollup/rollup/issues/1914
-          const name = e.constructor.name.split('$')[0];
-
-          return {
-            Multiline: 'Polycurve',
-            Polygon: 'Polyface',
-          }[name] || name;
-        });
+      return this.entities.map((e) => upperFirst(camelCase(e.type)));
     },
   },
   methods: {
