@@ -19,6 +19,8 @@ class DimString {
     this.side = args[3] ? args[3] : 'left';
   }
 
+  get type() { return 'dim_string'; }
+
   get box() {
     return {
       xmin: Math.min(this.ps.x, this.pe.x),

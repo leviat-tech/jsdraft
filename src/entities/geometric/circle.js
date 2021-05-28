@@ -32,6 +32,8 @@ class Circle extends Polyface {
     return super(...args);
   }
 
+  get type() { return 'circle'; }
+
   static from_center_radius(center, radius) {
     return new Circle(center, radius);
   }

@@ -8,7 +8,7 @@ const DimString = require('../../../src/entities/annotation/dim-string');
 const render = require('../../../src/render');
 
 
-describe('Aligned Dim', () => {
+describe('Dim String', () => {
   const dim = new DimString([0, 0], [90, 5], [20, 40, 60]);
   const dim2 = new DimString([0, 0], [-5, 90], [30]);
   const dim3 = new DimString([5, 90], [0, 0], [30], 'right');

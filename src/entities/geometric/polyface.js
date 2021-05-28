@@ -8,6 +8,11 @@ const { matches_fillet_point } = require('../../utility/arguments/matches');
 const { numeric_array } = require('../../utility/arguments/numeric');
 
 
+// Monkey patch flatten.Polygon to add type property
+Object.defineProperty(flatten.Polygon.prototype, 'type', {
+  get() { return 'polyface'; },
+});
+
 class Polyface extends flatten.Polygon {
   constructor(...args) {
     args = normalize(args);

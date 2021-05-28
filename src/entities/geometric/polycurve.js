@@ -7,6 +7,11 @@ const Segment = require('./segment.js');
 const { numeric_array } = require('../../utility/arguments/numeric');
 
 
+// Monkey patch flatten.Multiline to add type property
+Object.defineProperty(flatten.Multiline.prototype, 'type', {
+  get() { return 'polycurve'; },
+});
+
 class Polycurve extends flatten.Multiline {
   constructor(...args) {
     args = normalize(args);

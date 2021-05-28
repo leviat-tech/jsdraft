@@ -17,6 +17,8 @@ class Text {
     this.rotation = args[2] || 0;
   }
 
+  get type() { return 'text'; }
+
   get box() {
     return {
       xmin: this.p.x,

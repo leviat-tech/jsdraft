@@ -17,6 +17,8 @@ class AngleDim {
     this.angle = args[2];
   }
 
+  get type() { return 'angle_dim'; }
+
   get box() {
     return {
       xmin: Math.min(this.ps.x, this.pe.x),

@@ -17,6 +17,8 @@ class AlignedDim {
     this.side = args[2] ? args[2] : 'left';
   }
 
+  get type() { return 'aligned_dim'; }
+
   get box() {
     return {
       xmin: Math.min(this.ps.x, this.pe.x),

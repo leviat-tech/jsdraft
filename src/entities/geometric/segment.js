@@ -3,6 +3,11 @@ const { normalize, matches } = require('../../utility/arguments');
 const Point = require('./point');
 
 
+// Monkey patch flatten.Segment to add type property
+Object.defineProperty(flatten.Segment.prototype, 'type', {
+  get() { return 'segment'; },
+});
+
 class Segment extends flatten.Segment {
   constructor(...args) {
     args = normalize(args);

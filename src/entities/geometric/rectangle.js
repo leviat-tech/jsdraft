@@ -51,6 +51,8 @@ class Rectangle extends Polyface {
     super(...args);
   }
 
+  get type() { return 'rectangle'; }
+
   static from_boundaries(xmin, ymin, xmax, ymax) {
     return new Rectangle(xmin, ymin, xmax, ymax);
   }

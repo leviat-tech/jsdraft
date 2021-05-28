@@ -19,6 +19,10 @@ The `index.json` file stores metadata about the project. Project-wide settings c
   "filetype": "JSDraft",
   "version": "0.0.1",
   "settings": {
+    "model_unit": "mm",
+    "plot_size": 1000,
+    "plot_unit": "mm",
+    "scale": 1,
     "style": {
       "fill": {
         "color": "white",

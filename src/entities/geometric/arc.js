@@ -7,6 +7,11 @@ const sagitta_arc = require('../../utility/geometry/sagitta-arc.js');
 const Segment = require('./segment.js');
 
 
+// Monkey patch flatten.Arc to add type property
+Object.defineProperty(flatten.Arc.prototype, 'type', {
+  get() { return 'arc'; },
+});
+
 class Arc extends flatten.Arc {
   constructor(...args) {
     args = normalize(args);
