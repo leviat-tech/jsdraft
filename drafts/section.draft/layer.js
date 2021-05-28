@@ -15,7 +15,7 @@ return {
         wall_type: "reinforced_concrete",
         description: "",
         beam_profile: "HEB 100",
-        type: "wall",
+        type: "steel_beam",
       },
     },
   ],
@@ -62,8 +62,7 @@ return {
               params.cavity + params.width,
               -params.height + params.padding_bottom,
             ]
-          )
-          .style(params.type);
+          ).style(params.type);
         sketches.push(Layer);
         break;
     }
