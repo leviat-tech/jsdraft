@@ -65,35 +65,35 @@ function svg_arr_to_string(arr) {
 
 
 // Return an array of JS objects respresenting SVG nodes
-function recurse(sketch, style, show, z) {
+function recurse(sketch, options) {
+  options = cloneDeep(options);
   let svg = [];
 
-  if (sketch.node.hidden && show === 'visible') return svg;
-  if (!sketch.node.hidden && show === 'hidden') return svg;
+  if (sketch.node.hidden && options.show === 'visible') return svg;
+  if (!sketch.node.hidden && options.show === 'hidden') return svg;
 
   // set style
-  let s;
   if (sketch.node.hidden) {
-    s = {
+    options.style = {
       stroke: { color: '#aaa', width: '1px' },
       fill: { color: '#fff', opacity: '0.5' },
       annotation: { color: '#fff' },
     };
   } else {
-    s = merge({}, style, sketch.node.style);
+    options.style = merge({}, options.style, sketch.node.style);
   }
 
   // set z-index
-  z = sketch.node.z || z;
+  options.z = sketch.node.z || options.z;
 
   // draw entities
   if (sketch.node.entity) {
-    svg = [...svg, svg_renderer(sketch.node.entity, { output: 'js', style: s, z })];
+    svg = [...svg, svg_renderer(sketch.node.entity, { output: 'js', ...options })];
   }
 
   // draw children
   for (const child of sketch.node.children) {
-    svg = [...svg, ...recurse(child, s, show, z)];
+    svg = [...svg, ...recurse(child, options)];
   }
 
   return svg;
@@ -127,28 +127,24 @@ function render(sketch, {
   };
 
   const extents = sketch.extents;
-
   const size = convert_units(plot_size, plot_unit, model_unit);
   const ref_size = 1000;
-  const anno_scale = get(style, 'annotation.scale') || 1;
-  const scalefactor = (viewport === 'svg' && fit)
+  const annotation_scale = (viewport === 'svg' && fit)
     ? fit_vbscale(extents, pad, aspect_ratio)
     : size / (ref_size * scale);
-  const hatch_scale = get(style, 'fill.hatch_scale') || 1;
-  const ref_hatch_scale = convert_units(1, 'mm', model_unit);
-  set(style, 'annotation.scale', anno_scale * scalefactor);
-  set(style, 'fill.hatch_scale', hatch_scale * ref_hatch_scale);
+  const model_scale = convert_units(1, 'mm', model_unit);
+  const options = { style, show, annotation_scale, model_scale };
 
   // No svg/g viewport defined, raw svg entities will be exported as string
   if (viewport === null) {
-    const svg = recurse(sketch, style, show);
+    const svg = recurse(sketch, options);
     svg.sort((a, b) => a.z - b.z);
     return svg_arr_to_string(svg);
   }
 
   // No svg/g viewport defined, raw svg entities will be exported as JS objects
   if (viewport === 'js') {
-    const svg = recurse(sketch, style, show);
+    const svg = recurse(sketch, options);
     svg.sort((a, b) => a.z - b.z);
     return svg;
   }
@@ -159,7 +155,7 @@ function render(sketch, {
       ? fit_viewbox(extents, pad, aspect_ratio)
       : scale_viewbox(extents, aspect_ratio, center, size / scale);
 
-    const svg = recurse(sketch, style, show);
+    const svg = recurse(sketch, options);
     svg.sort((a, b) => a.z - b.z);
 
     return `<${viewport} viewBox="${viewbox}" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" display="block">
@@ -168,7 +164,7 @@ function render(sketch, {
 </${viewport}>`;
   }
 
-  const svg = recurse(sketch, style, show);
+  const svg = recurse(sketch, options);
   svg.sort((a, b) => a.z - b.z);
   return `<${viewport}>${svg_arr_to_string(svg)}</${viewport}>`;
 }

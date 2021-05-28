@@ -43,10 +43,10 @@ function svg_h_align(prop) {
 
 
 const renderers = {
-  point: function point(entity, styles) {
+  point: function point(entity, { style } = {}) {
     const attributes = {
       stroke: 'black',
-      ...style_to_svg(styles),
+      ...style_to_svg(style),
       d: `M${entity.x},${entity.y} L${entity.x},${entity.y + 0.0001}`,
       'stroke-linecap': 'round',
       'stroke-width': '10px',
@@ -57,11 +57,11 @@ const renderers = {
   },
 
 
-  segment: function segment(entity, styles) {
+  segment: function segment(entity, { style } = {}) {
     const d = `M${entity.start.x},${entity.start.y} L${entity.end.x},${entity.end.y}`;
     const attributes = {
       ...DEFAULT_ATTRIBUTES,
-      ...style_to_svg(styles),
+      ...style_to_svg(style),
       d,
     };
 
@@ -69,7 +69,7 @@ const renderers = {
   },
 
 
-  arc: function arc(entity, styles) {
+  arc: function arc(entity, { style = {} } = {}) {
     let laf;
     let d;
     const sf = entity.counterClockwise ? '1' : '0';
@@ -96,7 +96,7 @@ const renderers = {
     const attributes = {
       ...DEFAULT_ATTRIBUTES,
       fill: 'transparent',
-      ...style_to_svg(styles),
+      ...style_to_svg(style),
       d,
     };
 
@@ -104,14 +104,14 @@ const renderers = {
   },
 
 
-  polycurve: function polycurve(entity, styles) {
+  polycurve: function polycurve(entity, { style = {} } = {}) {
     let d = `M${entity.first.start.x},${entity.first.start.y}`;
     for (const edge of entity) { d += edge.svg(); }
 
     const attributes = {
       ...DEFAULT_ATTRIBUTES,
       fill: 'transparent',
-      ...style_to_svg(styles),
+      ...style_to_svg(style),
       d,
     };
 
@@ -119,28 +119,30 @@ const renderers = {
   },
 
 
-  polyface: function polyface(entity, styles) {
+  polyface: function polyface(entity, { model_scale = 1, style = {} } = {}) {
     let d = '';
     for (const face of entity.faces) { d += face.svg(); }
 
     const attributes = {
       ...DEFAULT_ATTRIBUTES,
       'fill-rule': 'evenodd',
-      ...style_to_svg(styles),
+      ...style_to_svg(style),
       d,
     };
+
+    const hatch_scale = style.fill?.hatch_scale || 1;
 
     return {
       tag: 'path',
       attributes,
-      ...(styles.fill?.hatch && {
+      ...(style.fill?.hatch && {
         hatch: {
-          pattern: styles.fill.hatch,
-          angle: styles.fill.hatch_angle || 0,
-          scale: styles.fill.hatch_scale || 1,
-          color: styles.fill.hatch_color || 'black',
-          background: styles.fill.hatch_background || 'white',
-          stroke_width: styles.fill.hatch_stroke_width || 1,
+          pattern: style.fill.hatch,
+          angle: style.fill.hatch_angle || 0,
+          scale: hatch_scale * model_scale,
+          color: style.fill.hatch_color || 'black',
+          background: style.fill.hatch_background || 'white',
+          stroke_width: style.fill.hatch_stroke_width || 1,
         },
       }),
     };
@@ -148,20 +150,24 @@ const renderers = {
 
 
   aligned_dim: function aligned_dim(entity, {
-    annotation: {
-      extension: ex = 5,
-      hash_length: hl = 5,
-      offset: os = 50,
-      text_offset: to = 10,
-      precision: pr = 4,
-      scale: s = 1,
-      font_size = 12,
-      h_align = 'center',
-      v_align = 'middle',
-      color = 'black',
-      width = '1px',
+    annotation_scale = 1,
+    style: {
+      annotation: {
+        extension: ex = 5,
+        hash_length: hl = 5,
+        offset: os = 50,
+        text_offset: to = 10,
+        precision: pr = 4,
+        scale = 1,
+        font_size = 12,
+        h_align = 'center',
+        v_align = 'middle',
+        color = 'black',
+        width = '1px',
+      } = {},
     } = {},
   }) {
+    const s = annotation_scale * scale;
     const v1 = Vector({ x: entity.ps.x, y: entity.ps.y });
     const v2 = Vector({ x: entity.pe.x, y: entity.pe.y });
     const length = v2.subtract(v1).magnitude();
@@ -220,20 +226,24 @@ const renderers = {
 
 
   dim_string: function dim_string(entity, {
-    annotation: {
-      extension: ex = 5,
-      hash_length: hl = 5,
-      offset: os = 50,
-      text_offset: to = 10,
-      precision: pr = 4,
-      scale: s = 1,
-      font_size = 12,
-      h_align = 'center',
-      v_align = 'middle',
-      color = 'black',
-      width = '1px',
+    annotation_scale = 1,
+    style: {
+      annotation: {
+        extension: ex = 5,
+        hash_length: hl = 5,
+        offset: os = 50,
+        text_offset: to = 10,
+        precision: pr = 4,
+        scale = 1,
+        font_size = 12,
+        h_align = 'center',
+        v_align = 'middle',
+        color = 'black',
+        width = '1px',
+      } = {},
     } = {},
   }) {
+    const s = annotation_scale * scale;
     const v1 = Vector({ x: entity.ps.x, y: entity.ps.y });
     const v2 = Vector({ x: entity.pe.x, y: entity.pe.y });
     const length = v2.subtract(v1).magnitude();
@@ -307,18 +317,22 @@ const renderers = {
 
 
   angle_dim: function angle_dim(entity, {
-    annotation: {
-      extension: ex = 5,
-      text_offset: to = 10,
-      precision: pr = 4,
-      scale: s = 1,
-      font_size = 12,
-      h_align = 'center',
-      v_align = 'middle',
-      color = 'black',
-      width = '1px',
+    annotation_scale = 1,
+    style: {
+      annotation: {
+        extension: ex = 5,
+        text_offset: to = 10,
+        precision: pr = 4,
+        scale = 1,
+        font_size = 12,
+        h_align = 'center',
+        v_align = 'middle',
+        color = 'black',
+        width = '1px',
+      } = {},
     } = {},
   }) {
+    const s = annotation_scale * scale;
     const angle = entity.angle;
     const exta = entity.exta || (ex * s);
     const extb = entity.extb || (ex * s);
@@ -374,14 +388,19 @@ const renderers = {
 
 
   text: function text(entity, {
-    annotation: {
-      scale: s = 1,
-      font_size = 12,
-      h_align = 'center',
-      v_align = 'middle',
-      color = 'black',
+    annotation_scale = 1,
+    style: {
+      annotation: {
+        scale = 1,
+        font_size = 12,
+        h_align = 'center',
+        v_align = 'middle',
+        color = 'black',
+      } = {},
     } = {},
   }) {
+    const s = annotation_scale * scale;
+
     const attributes = {
       fill: color,
       x: entity.p.x,
@@ -398,12 +417,12 @@ const renderers = {
 };
 
 
-function svg(entity, { output = 'string', style = {}, z = 0 } = {}) {
+function svg(entity, { output = 'string', ...options }) {
   const type = base_entity_type(entity);
 
   const renderer = renderers[type];
-  const js = renderer(entity, style);
-  js.z = z;
+  const js = renderer(entity, options);
+  js.z = options.z || 0;
 
   if (output === 'js') return js;
 
