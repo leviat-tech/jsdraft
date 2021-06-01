@@ -1,4 +1,4 @@
-const { det } = require('mathjs');
+const det = require('../math/determinant.js');
 
 
 function circle_from_three_pts(start, through, end) {
