@@ -5,6 +5,7 @@ const Polycurve = require('../src/entities/geometric/polycurve.js');
 const Arc = require('../src/entities/geometric/arc.js');
 const Circle = require('../src/entities/geometric/circle.js');
 const Rectangle = require('../src/entities/geometric/rectangle.js');
+const AlignedDim = require('../src/entities/annotation/aligned-dim.js');
 
 
 module.exports = function helpers(chai) {
@@ -60,5 +61,16 @@ module.exports = function helpers(chai) {
     new Assertion(this._obj.ymin).to.be.closeTo(ymin, 0.00001);
     new Assertion(this._obj.xmax).to.be.closeTo(xmax, 0.00001);
     new Assertion(this._obj.ymax).to.be.closeTo(ymax, 0.00001);
+  });
+
+  Assertion.addMethod('aligned_dim', function aligned_dim(ps, pe) {
+    new Assertion(this._obj).to.be.instanceof(AlignedDim);
+    if (ps) {
+      new Assertion(this._obj.ps).to.be.a.point(ps);
+    }
+
+    if (pe) {
+      new Assertion(this._obj.pe).to.be.a.point(pe);
+    }
   });
 };

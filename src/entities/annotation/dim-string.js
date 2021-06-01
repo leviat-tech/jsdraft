@@ -33,6 +33,10 @@ class DimString {
   transform(matrix = new flatten.Matrix()) {
     return new DimString(this.ps.transform(matrix), this.pe.transform(matrix), this.ticks, this.side);
   }
+
+  toJSON() {
+    return { ...this, ps: { ...this.ps }, pe: { ...this.pe } };
+  }
 }
 
 module.exports = DimString;

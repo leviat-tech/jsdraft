@@ -31,6 +31,10 @@ class AngleDim {
   transform(matrix = new flatten.Matrix()) {
     return new AngleDim(this.ps.transform(matrix), this.pe.transform(matrix));
   }
+
+  toJSON() {
+    return { ...this, ps: { ...this.ps }, pe: { ...this.pe } };
+  }
 }
 
 module.exports = AngleDim;

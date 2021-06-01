@@ -1,6 +1,5 @@
 const merge = require('lodash/merge');
 const cloneDeep = require('lodash/cloneDeep');
-const get = require('lodash/get');
 const set = require('lodash/set');
 const svg_renderer = require('../entity/svg');
 const fit_viewbox = require('../utility/fit-viewbox.js');
@@ -67,7 +66,7 @@ function svg_arr_to_string(arr) {
 // Return an array of JS objects respresenting SVG nodes
 function recurse(sketch, options) {
   options = cloneDeep(options);
-  let svg = [];
+  const svg = [];
 
   if (sketch.node.hidden && options.show === 'visible') return svg;
   if (!sketch.node.hidden && options.show === 'hidden') return svg;
@@ -88,12 +87,12 @@ function recurse(sketch, options) {
 
   // draw entities
   if (sketch.node.entity) {
-    svg = [...svg, svg_renderer(sketch.node.entity, { output: 'js', ...options })];
+    svg.push(svg_renderer(sketch.node.entity, { output: 'js', ...options }));
   }
 
   // draw children
   for (const child of sketch.node.children) {
-    svg = [...svg, ...recurse(child, options)];
+    svg.push(...recurse(child, options));
   }
 
   return svg;

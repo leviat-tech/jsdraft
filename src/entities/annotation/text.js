@@ -31,6 +31,10 @@ class Text {
   transform(matrix = new flatten.Matrix()) {
     return new Text(this.text, this.p.transform(matrix), this.rotation);
   }
+
+  toJSON() {
+    return { ...this, p: { ...this.p } };
+  }
 }
 
 module.exports = Text;

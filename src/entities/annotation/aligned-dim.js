@@ -31,6 +31,10 @@ class AlignedDim {
   transform(matrix = new flatten.Matrix()) {
     return new AlignedDim(this.ps.transform(matrix), this.pe.transform(matrix), this.side);
   }
+
+  toJSON() {
+    return { ...this, ps: { ...this.ps }, pe: { ...this.pe } };
+  }
 }
 
 module.exports = AlignedDim;

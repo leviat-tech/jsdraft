@@ -13,12 +13,6 @@ function base_entity_type(entity) {
 
 function entity_type(entity) {
   return entity.type;
-  const constructor_name = entity.constructor.name;
-
-  return {
-    Multiline: 'polycurve',
-    Polygon: 'polyface',
-  }[constructor_name] || snakeCase(entity.constructor.name);
 }
 
 module.exports = { base_entity_type, entity_type };
