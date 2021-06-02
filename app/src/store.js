@@ -332,8 +332,11 @@ export default createStore({
       }
     },
     extents(state, getters) {
-      if (!getters.sketch) return null;
-      return getters.sketch.extents;
+      try {
+        return getters.sketch.extents;
+      } catch {
+        return null;
+      }
     },
     entities(state, getters) {
       try {
