@@ -14,6 +14,7 @@ describe('Intersect', () => {
   const e = sketch.polycurve([2, 3], 1, [4, 3], [5, 6], -1, [7, 6], [8, 3]);
   const f = sketch.segment([-1, -1], [20, 20]);
   const g = sketch.polycurve([-1, -1], [3, 3], [7, 3], [11, -1]);
+  const h = sketch.rectangle([5, 0], 10, 5);
 
   it('Should allow a polyface to be intersected with a polycurve', () => {
     const result = a.intersect(b);
@@ -64,5 +65,11 @@ describe('Intersect', () => {
 
     expect(v[0]).to.be.a.point({ x: 0, y: 0 });
     expect(v.length).to.eql(2);
+  });
+
+  it('should return edges when polyfaces have colinear segments', () => {
+    const result = a.intersect(h);
+    const edges = result.edges;
+    expect(edges.length).to.eql(2);
   });
 });
