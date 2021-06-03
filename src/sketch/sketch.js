@@ -248,7 +248,8 @@ class Sketch {
       const original_xrefs = clone.node.xrefs;
 
       // Combine the correct child nodes with the correct user functions
-      clone.node.index = root.node.index;
+      clone.node.index = cloneDeep(root.node.index);
+      clone.node.index.owner = () => clone;
       clone.node.xrefs = root.node.xrefs;
 
       Object.keys(root.node.index).forEach((func_name) => {

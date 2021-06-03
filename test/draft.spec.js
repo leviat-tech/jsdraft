@@ -19,7 +19,7 @@ function composed(sketch) {
 `;
 
 
-describe('draft', () => {
+describe('Draft', () => {
 
   it('should render a feature', () => {
     const draft = new Draft();
@@ -128,5 +128,14 @@ describe('draft', () => {
     const parsed = parse(result);
     const circle = parsed.children[0].children[0].children[0];
     expect(circle.tagName).to.eql('path');
+  });
+
+  it('should allow xref-ed files to modify sketches', () => {
+    const draft = Draft.load('./test/test-draft-files/test4.draft');
+
+    const entities = draft.render('foo', [], 'entities');
+    expect(entities.length).to.eql(2);
+    expect(entities[0]).to.be.a.circle(5);
+    expect(entities[1]).to.be.a.rectangle(0, 0, 10, 5);
   });
 });
