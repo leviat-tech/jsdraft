@@ -238,10 +238,27 @@ class Sketch {
     const xref = Object.entries(this.node.xrefs).reduce((funcs, [name, draft]) => {
       funcs[name] = {};
 
+      // Root sketch of the xref-ed draft has the correct user functions + xrefs
       const root = draft.root;
+
+      // Current sketch has the necessary child nodes
+      const clone = this.clone();
+
+      const original_index = clone.node.index;
+      const original_xrefs = clone.node.xrefs;
+
+      // Combine the correct child nodes with the correct user functions
+      clone.node.index = root.node.index;
+      clone.node.xrefs = root.node.xrefs;
+
       Object.keys(root.node.index).forEach((func_name) => {
         funcs[name][func_name] = function d(...args) {
-          return draft.render(func_name, args, 'sketch');
+          const sketch = clone.user[func_name](...args);
+
+          // After calling xref-ed feature, replace index on result
+          sketch.node.index = original_index;
+          sketch.node.xrefs = original_xrefs;
+          return sketch;
         };
       });
 
