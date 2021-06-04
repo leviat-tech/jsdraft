@@ -110,8 +110,8 @@ function render(sketch, {
   center,
   aspect_ratio = 1,
   model_unit = 'mm',
-  plot_size = 1000,
   plot_unit = model_unit,
+  plot_size = convert_units(1000, 'mm', plot_unit),
   scale = 1,
   style = {},
 } = {}) {
@@ -132,7 +132,8 @@ function render(sketch, {
     ? fit_vbscale(extents, pad, aspect_ratio)
     : size / (ref_size * scale);
   const model_scale = convert_units(1, 'mm', model_unit);
-  const options = { style, show, annotation_scale, model_scale };
+  const dim_conversion = convert_units(1, model_unit, plot_unit);
+  const options = { style, show, annotation_scale, model_scale, dim_conversion };
 
   // No svg/g viewport defined, raw svg entities will be exported as string
   if (viewport === null) {

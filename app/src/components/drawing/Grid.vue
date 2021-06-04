@@ -96,9 +96,9 @@ export default {
       immediate: true,
       handler(extents) {
         if (extents) {
-          const plotSize = this.draft.settings.plot_size || 1000;
           const modelUnit = this.draft.settings.model_unit || 'mm';
           const plotUnit = this.draft.settings.plot_unit || modelUnit;
+          const plotSize = this.draft.settings.plot_size || convertUnits(1000, 'mm', plotUnit);
           const scale = this.draft.settings.scale || 1;
           const ps = convertUnits(plotSize, plotUnit, modelUnit) / scale;
 

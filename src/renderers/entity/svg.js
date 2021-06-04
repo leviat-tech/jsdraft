@@ -151,6 +151,7 @@ const renderers = {
 
   aligned_dim: function aligned_dim(entity, {
     annotation_scale = 1,
+    dim_conversion = 1,
     style: {
       annotation: {
         extension: ex = 5,
@@ -190,7 +191,7 @@ const renderers = {
     const path = `M ${a.x} ${a.y} L ${b.x} ${b.y} M ${c.x} ${c.y} L ${d.x} ${d.y} M ${e.x} ${e.y} L ${f.x} ${f.y}`;
 
     const cp = v1.add(dim_vector.scale(length / 2)).add(crossoffset).add(textoffset);
-    const ltext = parseFloat(length.toPrecision(pr));
+    const ltext = parseFloat((length * dim_conversion).toPrecision(pr));
 
     const path_attributes = {
       stroke: color,
@@ -227,6 +228,7 @@ const renderers = {
 
   dim_string: function dim_string(entity, {
     annotation_scale = 1,
+    dim_conversion,
     style: {
       annotation: {
         extension: ex = 5,
@@ -284,7 +286,7 @@ const renderers = {
           : r;
         return {
           tag: 'text',
-          contents: parseFloat(l.toPrecision(pr)),
+          contents: parseFloat((l * dim_conversion).toPrecision(pr)),
           attributes: {
             rotation,
             x: cp.x,
@@ -389,6 +391,7 @@ const renderers = {
 
   radius_dim: function radius_dim(entity, {
     annotation_scale = 1,
+    dim_conversion = 1,
     style: {
       annotation: {
         extension: ex = 5,
@@ -433,7 +436,7 @@ const renderers = {
 
     // const cp = e.add(leadervec.scale(to * s));
     const cp = e;
-    const ltext = `R${parseFloat(r.toPrecision(pr))}`;
+    const ltext = `R${parseFloat((r * dim_conversion).toPrecision(pr))}`;
 
     const rotation = rad_to_deg(textangle);
     const text_attributes = {
@@ -460,6 +463,7 @@ const renderers = {
 
   diameter_dim: function diameter_dim(entity, {
     annotation_scale = 1,
+    dim_conversion = 1,
     style: {
       annotation: {
         extension: ex = 5,
@@ -504,7 +508,7 @@ const renderers = {
 
     // const cp = e.add(leadervec.scale(to * s));
     const cp = e;
-    const ltext = `⌀${parseFloat(entity.d.toPrecision(pr))}`;
+    const ltext = `⌀${parseFloat((entity.d * dim_conversion).toPrecision(pr))}`;
 
     const rotation = rad_to_deg(textangle);
     const text_attributes = {
