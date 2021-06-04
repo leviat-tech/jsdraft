@@ -387,6 +387,148 @@ const renderers = {
   },
 
 
+  radius_dim: function radius_dim(entity, {
+    annotation_scale = 1,
+    style: {
+      annotation: {
+        extension: ex = 5,
+        text_offset: to = 10,
+        precision: pr = 4,
+        scale = 1,
+        font_size = 12,
+        v_align = 'middle',
+        color = 'black',
+        width = '1px',
+      } = {},
+    } = {},
+  }) {
+    const s = annotation_scale * scale;
+    const pc = Vector(entity.pc);
+    const pt = Vector(entity.pt);
+    const r = entity.r;
+    const vec = pt.subtract(pc).normalize();
+    const angle = vec.angle();
+    const textangle = entity.textangle || 0;
+    const tvec = Vector({ x: 1, y: 0 }).rotate(textangle);
+    const ahead1 = vec.rotateDeg(30).scale(ex * s);
+    const ahead2 = vec.rotateDeg(-30).scale(ex * s);
+    const leader_left = Math.cos(angle) < 0;
+    const leadervec = leader_left ? tvec.rotateDeg(180) : tvec;
+
+    const a = pc.subtract(vec.scale(r));
+    const b = pt;
+    const c = a.add(ahead1);
+    const d = a.add(ahead2);
+    const e = b.add(leadervec.scale(ex * s));
+
+    const path = `M ${a.x} ${a.y} L ${b.x} ${b.y} L ${e.x} ${e.y} M ${c.x} ${c.y} L ${a.x} ${a.y} L ${d.x} ${d.y}`;
+
+    const path_attributes = {
+      stroke: color,
+      fill: 'none',
+      'vector-effect': 'non-scaling-stroke',
+      'stroke-width': width,
+      d: path,
+    };
+
+    // const cp = e.add(leadervec.scale(to * s));
+    const cp = e;
+    const ltext = `R${parseFloat(r.toPrecision(pr))}`;
+
+    const rotation = rad_to_deg(textangle);
+    const text_attributes = {
+      rotation,
+      x: cp.x,
+      y: -cp.y,
+      fontsize: font_size * s,
+      fill: color,
+      'dominant-baseline': svg_v_align(v_align),
+      'text-anchor': leader_left ? 'end' : 'start',
+      transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
+      'font-size': font_size * s,
+    };
+
+    return {
+      tag: 'g',
+      nodes: [
+        { tag: 'path', attributes: path_attributes },
+        { tag: 'text', attributes: text_attributes, contents: ltext },
+      ],
+    };
+  },
+
+
+  diameter_dim: function diameter_dim(entity, {
+    annotation_scale = 1,
+    style: {
+      annotation: {
+        extension: ex = 5,
+        text_offset: to = 10,
+        precision: pr = 4,
+        scale = 1,
+        font_size = 12,
+        v_align = 'middle',
+        color = 'black',
+        width = '1px',
+      } = {},
+    } = {},
+  }) {
+    const s = annotation_scale * scale;
+    const pc = Vector(entity.pc);
+    const pt = Vector(entity.pt);
+    const r = entity.d / 2;
+    const vec = pt.subtract(pc).normalize();
+    const angle = vec.angle();
+    const textangle = entity.textangle || 0;
+    const tvec = Vector({ x: 1, y: 0 }).rotate(textangle);
+    const ahead1 = vec.rotateDeg(30).scale(ex * s);
+    const ahead2 = vec.rotateDeg(-30).scale(ex * s);
+    const leader_left = Math.cos(angle) < 0;
+    const leadervec = leader_left ? tvec.rotateDeg(180) : tvec;
+
+    const a = pc.subtract(vec.scale(r));
+    const b = pt;
+    const c = a.add(ahead1);
+    const d = a.add(ahead2);
+    const e = b.add(leadervec.scale(ex * s));
+
+    const path = `M ${a.x} ${a.y} L ${b.x} ${b.y} L ${e.x} ${e.y} M ${c.x} ${c.y} L ${a.x} ${a.y} L ${d.x} ${d.y}`;
+
+    const path_attributes = {
+      stroke: color,
+      fill: 'none',
+      'vector-effect': 'non-scaling-stroke',
+      'stroke-width': width,
+      d: path,
+    };
+
+    // const cp = e.add(leadervec.scale(to * s));
+    const cp = e;
+    const ltext = `⌀${parseFloat(entity.d.toPrecision(pr))}`;
+
+    const rotation = rad_to_deg(textangle);
+    const text_attributes = {
+      rotation,
+      x: cp.x,
+      y: -cp.y,
+      fontsize: font_size * s,
+      fill: color,
+      'dominant-baseline': svg_v_align(v_align),
+      'text-anchor': leader_left ? 'end' : 'start',
+      transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
+      'font-size': font_size * s,
+    };
+
+    return {
+      tag: 'g',
+      nodes: [
+        { tag: 'path', attributes: path_attributes },
+        { tag: 'text', attributes: text_attributes, contents: ltext },
+      ],
+    };
+  },
+
+
   text: function text(entity, {
     annotation_scale = 1,
     style: {

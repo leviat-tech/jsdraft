@@ -75,6 +75,16 @@ const entities = {
     text: e.text,
     rotation: e.rotation,
   }),
+  RadiusDim: (e) => f({
+    ps: { ...e.ps },
+    r: e.r,
+    pt: { ...e.pt },
+  }),
+  DiameterDim: (e) => f({
+    ps: { ...e.ps },
+    d: e.d,
+    pt: { ...e.pt },
+  }),
 };
 
 export default entities;

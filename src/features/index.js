@@ -6,7 +6,9 @@ const style = require('./style/style.js');
 
 const aligned_dim = require('./annotation/aligned-dim.js');
 const angle_dim = require('./annotation/angle-dim.js');
+const diameter_dim = require('./annotation/diameter-dim.js');
 const dim_string = require('./annotation/dim-string.js');
+const radius_dim = require('./annotation/radius-dim.js');
 const text = require('./annotation/text.js');
 
 const arc = require('./geometric/arc.js');
@@ -55,7 +57,9 @@ module.exports = {
 
   aligned_dim,
   angle_dim,
+  diameter_dim,
   dim_string,
+  radius_dim,
   text,
 
   arc,

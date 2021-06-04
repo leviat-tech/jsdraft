@@ -234,10 +234,6 @@ export default {
   display: flex;
 }
 
-.drawing > g text {
-  text-anchor: middle;
-}
-
 .path-point {
   fill: $color-black;
 
