@@ -423,8 +423,13 @@ const renderers = {
     const c = a.add(ahead1);
     const d = a.add(ahead2);
     const e = b.add(leadervec.scale(ex * s));
+    const cross = (ex * s) / 2;
+    const f = pc.subtract({ x: cross, y: 0 });
+    const g = pc.add({ x: cross, y: 0 });
+    const h = pc.add({ x: 0, y: cross });
+    const i = pc.subtract({ x: 0, y: cross });
 
-    const path = `M ${a.x} ${a.y} L ${b.x} ${b.y} L ${e.x} ${e.y} M ${c.x} ${c.y} L ${a.x} ${a.y} L ${d.x} ${d.y}`;
+    const path = `M ${a.x} ${a.y} L ${b.x} ${b.y} L ${e.x} ${e.y} M ${c.x} ${c.y} L ${a.x} ${a.y} L ${d.x} ${d.y} M ${f.x} ${f.y} L ${g.x} ${g.y} M ${h.x} ${h.y} L ${i.x} ${i.y}`;
 
     const path_attributes = {
       stroke: color,
@@ -434,8 +439,7 @@ const renderers = {
       d: path,
     };
 
-    // const cp = e.add(leadervec.scale(to * s));
-    const cp = e;
+    const cp = e.add(leadervec.scale((to * s) / 2));
     const ltext = `R${parseFloat((r * dim_conversion).toPrecision(pr))}`;
 
     const rotation = rad_to_deg(textangle);
@@ -496,7 +500,13 @@ const renderers = {
     const d = a.add(ahead2);
     const e = b.add(leadervec.scale(ex * s));
 
-    const path = `M ${a.x} ${a.y} L ${b.x} ${b.y} L ${e.x} ${e.y} M ${c.x} ${c.y} L ${a.x} ${a.y} L ${d.x} ${d.y}`;
+    const cross = (ex * s) / 2;
+    const f = pc.subtract({ x: cross, y: 0 });
+    const g = pc.add({ x: cross, y: 0 });
+    const h = pc.add({ x: 0, y: cross });
+    const i = pc.subtract({ x: 0, y: cross });
+
+    const path = `M ${a.x} ${a.y} L ${b.x} ${b.y} L ${e.x} ${e.y} M ${c.x} ${c.y} L ${a.x} ${a.y} L ${d.x} ${d.y} M ${f.x} ${f.y} L ${g.x} ${g.y} M ${h.x} ${h.y} L ${i.x} ${i.y}`;
 
     const path_attributes = {
       stroke: color,
@@ -506,8 +516,7 @@ const renderers = {
       d: path,
     };
 
-    // const cp = e.add(leadervec.scale(to * s));
-    const cp = e;
+    const cp = e.add(leadervec.scale((to * s) / 2));
     const ltext = `⌀${parseFloat((entity.d * dim_conversion).toPrecision(pr))}`;
 
     const rotation = rad_to_deg(textangle);
@@ -559,6 +568,74 @@ const renderers = {
     };
 
     return { tag: 'text', attributes, contents: entity.text };
+  },
+
+
+  leader: function leader(entity, {
+    annotation_scale = 1,
+    style: {
+      annotation: {
+        extension: ex = 5,
+        text_offset: to = 10,
+        scale = 1,
+        font_size = 12,
+        v_align = 'middle',
+        color = 'black',
+        width = '1px',
+      } = {},
+    } = {},
+  }) {
+    const s = annotation_scale * scale;
+    const ps = Vector(entity.ps);
+    const pe = Vector(entity.pe);
+    const vec = pe.subtract(ps).normalize();
+    const angle = vec.angle();
+    const textangle = entity.textangle || 0;
+    const tvec = Vector({ x: 1, y: 0 }).rotate(textangle);
+    const ahead1 = vec.rotateDeg(30).scale(ex * s);
+    const ahead2 = vec.rotateDeg(-30).scale(ex * s);
+    const leader_left = Math.cos(angle) < 0;
+    const leadervec = leader_left ? tvec.rotateDeg(180) : tvec;
+
+    const a = ps;
+    const b = pe;
+    const c = a.add(ahead1);
+    const d = a.add(ahead2);
+    const e = b.add(leadervec.scale(ex * s));
+
+    const path = `M ${a.x} ${a.y} L ${b.x} ${b.y} L ${e.x} ${e.y} M ${c.x} ${c.y} L ${a.x} ${a.y} L ${d.x} ${d.y}`;
+
+    const path_attributes = {
+      stroke: color,
+      fill: 'none',
+      'vector-effect': 'non-scaling-stroke',
+      'stroke-width': width,
+      d: path,
+    };
+
+    const cp = e.add(leadervec.scale((to * s) / 2));
+    const ltext = entity.text;
+
+    const rotation = rad_to_deg(textangle);
+    const text_attributes = {
+      rotation,
+      x: cp.x,
+      y: -cp.y,
+      fontsize: font_size * s,
+      fill: color,
+      'dominant-baseline': svg_v_align(v_align),
+      'text-anchor': leader_left ? 'end' : 'start',
+      transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
+      'font-size': font_size * s,
+    };
+
+    return {
+      tag: 'g',
+      nodes: [
+        { tag: 'path', attributes: path_attributes },
+        { tag: 'text', attributes: text_attributes, contents: ltext },
+      ],
+    };
   },
 };
 

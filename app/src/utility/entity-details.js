@@ -75,13 +75,18 @@ const entities = {
     text: e.text,
     rotation: e.rotation,
   }),
-  RadiusDim: (e) => f({
+  Leader: (e) => f({
     ps: { ...e.ps },
+    pe: { ...e.pe },
+    text: e.text,
+  }),
+  RadiusDim: (e) => f({
+    pc: { ...e.pc },
     r: e.r,
     pt: { ...e.pt },
   }),
   DiameterDim: (e) => f({
-    ps: { ...e.ps },
+    pc: { ...e.pc },
     d: e.d,
     pt: { ...e.pt },
   }),
