@@ -7,7 +7,7 @@ const Leader = require('../../../src/entities/annotation/leader.js');
 const render = require('../../../src/render.js');
 
 
-describe.only('Leader', () => {
+describe('Leader', () => {
   const leader = new Leader('hello, world', [5, 10], [100, -20]);
 
   it('can be constructed with a point and a text string', () => {
