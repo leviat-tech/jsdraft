@@ -52,6 +52,13 @@ export default {
       return this.value;
     },
   },
+  watch: {
+    modelValue: {
+      handler(nv) {
+        this.value = nv;
+      },
+    },
+  },
   methods: {
     handleUpdate() {
       if (typeof this.coercedValue === 'number' && !Number.isNaN(this.coercedValue)) {

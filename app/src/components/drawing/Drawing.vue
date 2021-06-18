@@ -4,6 +4,7 @@
     <selected-entities
       v-if="selectedEntities.length > 0"
       :entities="selectedEntities"
+      node-id="selected"
     />
     <selected-entities
       :entities="entities"
@@ -12,6 +13,7 @@
       stroke="transparent"
       stroke-width="10px"
       fill="transparent"
+      node-id="hover-boxes"
       @hover="hover"
       @unhover="unhover"
       @click-entity="select"

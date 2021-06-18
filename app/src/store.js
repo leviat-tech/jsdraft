@@ -5,6 +5,7 @@ import unset from 'lodash/unset';
 import cloneDeep from 'lodash/cloneDeep';
 import { createStore } from 'vuex';
 import { toRaw } from 'vue';
+import { nanoid } from 'nanoid';
 import isElectron from 'is-electron';
 import VuexPersistence from 'vuex-persist';
 import parseFilename from './utility/parse-filename.js';
@@ -62,6 +63,7 @@ function reset() {
     overrides: [],
     hovered: null,
     selected: {},
+    selectedInput: null,
     files: {}, // In-memory state of files
     disk: {}, // State of files on disk (only relevant for electron)
     xrefs: {}, // In-memory contents of x-ref'ed draft files
@@ -175,6 +177,9 @@ export default createStore({
     },
     setSelected(state, value) {
       state.selected = value;
+    },
+    setSelectedInput(state, value) {
+      state.selectedInput = value;
     },
     setGridStepSize(state, value) {
       state.gridStepSize = value;
@@ -320,6 +325,17 @@ export default createStore({
     draft(state) {
       try {
         return Draft.load({ ...state.files, _xrefs: state.xrefs });
+      } catch {
+        return null;
+      }
+    },
+    parameters(state, getters) {
+      try {
+        const file = getters.draft.features.sketch[getters.currentFeatureName];
+        return file && file.parameters.map((p) => ({
+          parameter: p,
+          id: nanoid(5), // force refresh of parameter input
+        }));
       } catch {
         return null;
       }

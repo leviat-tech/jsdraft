@@ -27,6 +27,7 @@
         <drawing />
       </g>
     </svg>
+    <editable-dimension />
   </div>
 </template>
 
@@ -37,6 +38,7 @@ import { mapState, mapMutations } from 'vuex';
 import { nextTick } from 'vue';
 import Grid from './drawing/Grid.vue';
 import Drawing from './drawing/Drawing.vue';
+import EditableDimension from './inputs/EditableDimension.vue';
 
 
 function domToSVGCoords(el, pt) {
@@ -50,6 +52,7 @@ export default {
   components: {
     Grid,
     Drawing,
+    EditableDimension,
   },
 
 

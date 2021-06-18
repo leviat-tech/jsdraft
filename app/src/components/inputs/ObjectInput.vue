@@ -75,6 +75,12 @@ export default {
         this.$emit('update:modelValue', this.value);
       },
     },
+    modelValue: {
+      deep: true,
+      handler() {
+        this.value = this.modelValue;
+      },
+    },
   },
 };
 </script>

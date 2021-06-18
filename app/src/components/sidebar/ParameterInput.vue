@@ -58,6 +58,11 @@ export default {
         this.$emit('update:modelValue', nv);
       }, 500),
     },
+    modelValue: {
+      handler(nv) {
+        this.value = nv;
+      },
+    },
   },
 };
 </script>

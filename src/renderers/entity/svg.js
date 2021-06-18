@@ -220,7 +220,7 @@ const renderers = {
       tag: 'g',
       nodes: [
         { tag: 'path', attributes: path_attributes },
-        { tag: 'text', attributes: text_attributes, contents: ltext },
+        { tag: 'text', attributes: text_attributes, contents: ltext, callback: entity.callback },
       ],
     };
   },

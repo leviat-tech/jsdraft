@@ -52,8 +52,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['extents', 'draft']),
     ...mapState(['gridStepSize', 'zoomScale']),
+    ...mapGetters(['extents', 'draft']),
     width() {
       return this.maxX - this.minY;
     },

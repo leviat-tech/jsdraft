@@ -10,12 +10,19 @@
       @click.stop="click(i)"
     >
       <template v-if="entity.tag === 'g'">
-        <component
-          :is="node.tag"
+        <template
           v-for="(node, j) in entity.nodes"
-          v-bind="node.attributes"
           :key="`${i}_${j}`"
-        />
+        >
+          <component
+            :is="node.tag"
+            v-bind="node.attributes"
+            :id="`${nodeId}-${node.tag}-${i}-${j}`"
+            @click.stop="clickInput(node, i, j)"
+          >
+            <template v-if="node.contents">{{ node.contents }}</template>
+          </component>
+        </template>
       </template>
     </component>
   </g>
@@ -23,6 +30,7 @@
 
 <script>
 import { render } from '@crhio/jsdraft';
+import { mapMutations, mapState } from 'vuex';
 
 
 export default {
@@ -34,8 +42,10 @@ export default {
     fill: { type: String, default: 'none' },
     hoverEvents: { type: Boolean, default: false },
     clickEvents: { type: Boolean, default: false },
+    nodeId: { type: String, required: true },
   },
   computed: {
+    ...mapState(['selectedInput']),
     svg() {
       try {
         return this.entities.map((entity) => render(entity, 'svg', {
@@ -59,6 +69,7 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(['setSelectedInput']),
     hover(index) {
       if (this.hoverEvents) this.$emit('hover', index);
     },
@@ -68,6 +79,22 @@ export default {
     click(index) {
       if (this.clickEvents) this.$emit('click-entity', index);
     },
+    clickInput(node, entityIndex, nodeIndex) {
+      if (this.clickEvents) this.$emit('click-entity', entityIndex);
+      if (node.tag !== 'text') return;
+      if (!node.callback) return;
+      this.setSelectedInput({
+        id: `hover-boxes-${node.tag}-${entityIndex}-${nodeIndex}`,
+        value: node.contents,
+        callback: node.callback,
+      });
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.invisible {
+  color: transparent;
+}
+</style>

@@ -5,7 +5,7 @@
       <parameter-input
         v-for="(p, i) in parameters"
         :key="p.id"
-        v-model="overrides[i]"
+        v-model="localOverrides[i]"
         :parameter="p.parameter"
       />
     </div>
@@ -16,8 +16,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex';
-import { nanoid } from 'nanoid';
+import { mapState, mapGetters, mapMutations } from 'vuex';
 import cloneDeep from 'lodash/cloneDeep';
 import ParameterInput from './ParameterInput.vue';
 
@@ -29,37 +28,32 @@ export default {
   },
   data() {
     return {
-      overrides: [],
+      localOverrides: [],
     };
   },
   computed: {
-    ...mapGetters(['draft', 'currentFeatureName']),
-    parameters() {
-      try {
-        const file = this.draft.features.sketch[this.currentFeatureName];
-        return file && file.parameters.map((p) => ({
-          parameter: p,
-          id: nanoid(5), // force refresh of parameter input
-        }));
-      } catch {
-        return null;
-      }
-    },
+    ...mapState(['overrides']),
+    ...mapGetters(['parameters']),
   },
   watch: {
     parameters: {
       immediate: true,
       handler(nv) {
         if (!nv) {
-          this.overrides = [];
+          this.localOverrides = [];
         } else {
-          this.overrides = nv.map((p) => cloneDeep(p.parameter.default));
+          this.localOverrides = nv.map((p) => cloneDeep(p.parameter.default));
         }
       },
     },
-    overrides: {
+    localOverrides: {
       handler(nv) {
         this.setOverrides(nv);
+      },
+    },
+    overrides: {
+      handler(nv, ov) {
+        if (nv !== ov) this.localOverrides = nv;
       },
     },
   },
