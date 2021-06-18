@@ -7,29 +7,21 @@ const fit_vbscale = require('../utility/fit-vbscale.js');
 const scale_viewbox = require('../utility/scale-viewbox.js');
 const svg_string = require('../../utility/misc/svg-string.js');
 const hatches = require('../../utility/misc/hatches.js');
+const hash = require('../../utility/misc/hash.js');
 const convert_units = require('../../utility/misc/convert-units.js');
 
-
-// generate a unique id given an input
-function hash(v) {
-  const str = String(v);
-  let h = 0;
-  if (str.length === 0) return h;
-  for (let i = 0; i < str.length; i += 1) {
-    const char = str.charCodeAt(i);
-    h = ((h << 5) - h) + char;
-    h &= h; // Convert to 32bit integer
-  }
-  return h;
-}
 
 function svg_arr_to_string(arr) {
   const h = {};
   let entities = arr.reduce((str, entity) => {
 
     if (entity.hatch && hatches[entity.hatch.pattern]) {
+      console.log('hatch pattern!', entity.hatch.pattern);
+
       const hash_input = `${entity.hatch.scale}-${entity.hatch.angle}-${entity.hatch.color}-${entity.hatch.background}-${entity.hatch.stroke_width}`;
+      console.log('hatch_input', hash_input);
       const hatch_name = `${entity.hatch.pattern}-${hash(hash_input)}`;
+      console.log('hatch_name', hatch_name);
       h[hatch_name] = hatches[entity.hatch.pattern](
         hatch_name,
         entity.hatch.scale,
