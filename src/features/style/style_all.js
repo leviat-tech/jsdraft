@@ -1,10 +1,11 @@
 const merge = require('lodash/merge');
 const cloneDeep = require('lodash/cloneDeep');
+const isEmpty = require('lodash/isEmpty');
 
 
 function recurse(sketch, style) {
   sketch.node.children.forEach((child) => {
-    if (child.node.style) {
+    if (!isEmpty(child.node.style)) {
       const s = merge({}, child.node.style, cloneDeep(style));
       child.node.style = s;
     }
