@@ -29,4 +29,16 @@ describe('Hatch', () => {
     const patterns = parsed.children[0].children[0].children[0].children;
     expect(patterns.length).to.eql(2);
   });
+
+  it('should transform the pattern', () => {
+    const a = new Sketch()
+      .rectangle([0, 0], 20, 10)
+      .hatch('lines')
+      .rotate(30)
+      .translate(20, 0);
+    const svg = render(a, 'svg');
+    const parsed = parse(svg);
+    const pattern = parsed.children[0].children[0].children[0].children[0];
+    expect(pattern.properties.patternTransform).to.contain('matrix');
+  });
 });

@@ -11,17 +11,18 @@ const hash = require('../../utility/misc/hash.js');
 const convert_units = require('../../utility/misc/convert-units.js');
 
 
+function convert_transform_matrix(transform) {
+  if (!transform) return '';
+  return ` matrix(${transform.join(' ')})`;
+}
+
 function svg_arr_to_string(arr) {
   const h = {};
   let entities = arr.reduce((str, entity) => {
 
     if (entity.hatch && hatches[entity.hatch.pattern]) {
-      console.log('hatch pattern!', entity.hatch.pattern);
-
       const hash_input = `${entity.hatch.scale}-${entity.hatch.angle}-${entity.hatch.color}-${entity.hatch.background}-${entity.hatch.stroke_width}`;
-      console.log('hatch_input', hash_input);
       const hatch_name = `${entity.hatch.pattern}-${hash(hash_input)}`;
-      console.log('hatch_name', hatch_name);
       h[hatch_name] = hatches[entity.hatch.pattern](
         hatch_name,
         entity.hatch.scale,
@@ -29,6 +30,7 @@ function svg_arr_to_string(arr) {
         entity.hatch.color,
         entity.hatch.background,
         entity.hatch.stroke_width,
+        convert_transform_matrix(entity.transform),
       );
       set(entity, 'attributes.fill', `url(#${hatch_name})`);
     }
@@ -74,8 +76,9 @@ function recurse(sketch, options) {
     options.style = merge({}, options.style, sketch.node.style);
   }
 
-  // set z-index
+  // set z-index and transformation matrix
   options.z = sketch.node.z || options.z;
+  options.transform = sketch.node.transform;
 
   // draw entities
   if (sketch.node.entity) {

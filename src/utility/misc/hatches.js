@@ -1,9 +1,10 @@
 const hash = require('./hash.js');
 
 
-function crosshatch(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw = 1) {
+function crosshatch(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw = 1, transform) {
   return `
-  <pattern id="${name}" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(${45 + angle}) scale(${scale} ${scale})">
+  <pattern id="${name}" patternUnits="userSpaceOnUse" width="10" height="10"
+    patternTransform="rotate(${45 + angle}) scale(${scale} ${scale})${transform}">
     <rect fill="${bg}" x="0" y="0" width="10" height="10" />
     <line stroke="${color}" stroke-width="${sw / scale}" vector-effect="non-scaling-stroke" x1="5" y1="0" x2="5" y2="10" />
     <line stroke="${color}" stroke-width="${sw / scale}" vector-effect="non-scaling-stroke" x1="0" y1="5" x2="10" y2="5" />
@@ -11,18 +12,18 @@ function crosshatch(name, scale = 1, angle = 0, color = 'black', bg = 'white', s
   `;
 }
 
-function lines(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw = 1) {
+function lines(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw = 1, transform) {
   return `
-  <pattern id="${name}" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(${45 + angle}) scale(${scale} ${scale})">
+  <pattern id="${name}" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(${45 + angle}) scale(${scale} ${scale})${transform}">
     <rect fill="${bg}" x="0" y="0" width="10" height="10" />
     <line stroke="${color}" stroke-width="${sw / scale}" vector-effect="non-scaling-stroke" x1="0" y1="5" x2="10" y2="5" />
   </pattern>
   `;
 }
 
-function steel(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw = 1) {
+function steel(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw = 1, transform) {
   return `
-  <pattern id="${name}" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(${45 + angle}) scale(${scale} ${scale})">
+  <pattern id="${name}" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(${45 + angle}) scale(${scale} ${scale})${transform}">
     <rect fill="${bg}" x="0" y="0" width="10" height="10" />
     <line stroke="${color}" stroke-width="${sw / scale}" vector-effect="non-scaling-stroke" x1="0" y1="5" x2="10" y2="5" />
     <line stroke="${color}" stroke-width="${sw / scale}" vector-effect="non-scaling-stroke" x1="0" y1="8" x2="10" y2="8" />
@@ -30,13 +31,13 @@ function steel(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw = 1
   `;
 }
 
-function concrete(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw = 1) {
+function concrete(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw = 1, transform) {
   const hash_input = `${color}-${sw}-${scale}`;
   const h = hash(hash_input);
   const l = `lines-${h}`;
 
   return `
-  <pattern id="${name}" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(${angle}) scale(${scale * 10} ${scale * 10})">
+  <pattern id="${name}" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(${angle}) scale(${scale * 10} ${scale * 10})${transform}">
     <defs><style>.${l}{fill:none;stroke:${color};vector-effect:non-scaling-stroke;stroke-width:${sw / (scale * 10)}}</style></defs>
     <rect fill="${bg}" x="0" y="0" width="10" height="10" />
     <path d="M0.477692 8.27538L0.625215 8.21918" class="${l}"/>

@@ -646,6 +646,7 @@ function svg(entity, { output = 'string', ...options }) {
   const renderer = renderers[type];
   const js = renderer(entity, options);
   js.z = options.z || 0;
+  js.transform = options.transform || null;
 
   if (output === 'js') return js;
 

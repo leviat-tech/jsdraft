@@ -24,6 +24,7 @@ class Sketch {
       attributes: {}, // attributes: a free space for meta data associated with this node
       index: {}, // injected user feature index (owner attribute allows reference sketch that owns the index)
       xrefs: {}, // a collection of linked draft files that can be referenced at runtime
+      transform: null, // transformation matrix that has been applied to this sketch node
       z: null, // z-index -- if present, will be used to sort siblings when iterating
     };
     if (Array.isArray(options)) {
