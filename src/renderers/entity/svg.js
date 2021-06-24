@@ -553,8 +553,24 @@ const renderers = {
         color = 'black',
       } = {},
     } = {},
+    transform,
   }) {
     const s = annotation_scale * scale;
+
+    let t;
+    if (transform) {
+      t = [
+        transform[0],
+        transform[1],
+        transform[2],
+        transform[3],
+        0,
+        0,
+      ];
+      t = `translate(${entity.p.x}, ${entity.p.y}) matrix(${t.join(' ')}) translate(${-entity.p.x}, ${-entity.p.y}) `;
+    } else {
+      t = '';
+    }
 
     const attributes = {
       fill: color,
@@ -563,7 +579,7 @@ const renderers = {
       rotation: entity.rotation,
       'dominant-baseline': svg_v_align(v_align),
       'text-anchor': svg_h_align(h_align),
-      transform: `scale(1 -1) rotate(${rad_to_deg(entity.rotation)},${entity.p.x},${-entity.p.y})`,
+      transform: `${t}scale(1 -1) rotate(${rad_to_deg(entity.rotation)},${entity.p.x},${-entity.p.y})`,
       'font-size': font_size * s,
     };
 

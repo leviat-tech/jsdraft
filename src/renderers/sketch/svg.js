@@ -21,7 +21,8 @@ function svg_arr_to_string(arr) {
   let entities = arr.reduce((str, entity) => {
 
     if (entity.hatch && hatches[entity.hatch.pattern]) {
-      const hash_input = `${entity.hatch.scale}-${entity.hatch.angle}-${entity.hatch.color}-${entity.hatch.background}-${entity.hatch.stroke_width}`;
+      const transform = convert_transform_matrix(entity.transform);
+      const hash_input = `${entity.hatch.scale}-${entity.hatch.angle}-${entity.hatch.color}-${entity.hatch.background}-${entity.hatch.stroke_width}-${transform}`;
       const hatch_name = `${entity.hatch.pattern}-${hash(hash_input)}`;
       h[hatch_name] = hatches[entity.hatch.pattern](
         hatch_name,
@@ -30,7 +31,7 @@ function svg_arr_to_string(arr) {
         entity.hatch.color,
         entity.hatch.background,
         entity.hatch.stroke_width,
-        convert_transform_matrix(entity.transform),
+        transform,
       );
       set(entity, 'attributes.fill', `url(#${hatch_name})`);
     }

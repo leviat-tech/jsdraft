@@ -49,8 +49,8 @@ describe('Style', () => {
     const bar = parsed.children[0].children[0].children[2];
     const baz = parsed.children[0].children[0].children[3];
     expect(foo.properties.fill).to.eql('red');
-    expect(bar.properties.fill).to.eql('url(#lines--1221026637)');
-    expect(baz.properties.fill).to.eql('url(#lines-1214774343)');
+    expect(bar.properties.fill).to.eql('url(#lines-802879962)');
+    expect(baz.properties.fill).to.eql('url(#lines--996700986)');
   });
 
   it('should allow hatch scale to scale by model unit', () => {
