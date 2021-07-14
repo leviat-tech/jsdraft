@@ -26,7 +26,7 @@ describe('Aligned Dim', () => {
     expect(render(dim, 'svg')).to.contain('text');
   });
 
-  it.only('can accept a callback', () => {
+  it('can accept a callback', () => {
 
   });
 });

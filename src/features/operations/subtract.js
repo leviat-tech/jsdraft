@@ -11,6 +11,8 @@ const Polycurve = require('../../entities/geometric/polycurve.js');
 
 module.exports = function subtract(sketch, to_subtract) {
   const entities = sketch.entities;
+  const hidden = sketch.new.add(...sketch.hidden.entities).hide();
+
   to_subtract = assert(to_subtract, 'sketch', sketch);
   const subtracted_polyfaces = to_subtract.polyfaces;
 
@@ -96,6 +98,10 @@ module.exports = function subtract(sketch, to_subtract) {
 
     return res;
   }, []);
+
+  if (hidden.node.children.length > 0) {
+    return sketch.new.add(hidden, ...result);
+  }
 
   return sketch.new.add(...result);
 };

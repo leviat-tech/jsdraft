@@ -24,6 +24,8 @@ function uniq(intersections) {
 }
 
 module.exports = function intersect(sketch, intersected) {
+  const hidden = sketch.new.add(...sketch.hidden.entities).hide();
+
   const a = sketch.entities
     .filter((e) => ['polycurve', 'polyface', 'arc', 'segment'].includes(base_entity_type(e)));
 
@@ -48,6 +50,10 @@ module.exports = function intersect(sketch, intersected) {
 
     return i;
   }, []);
+
+  if (hidden.node.children.length > 0) {
+    return sketch.new.add(hidden, ...intersections);
+  }
 
   return sketch.new.add(...intersections);
 };

@@ -50,6 +50,7 @@ function join_entities(a, b, jt) {
 module.exports = function join(sketch) {
   // initialize spatial index
   const result = [];
+  const hidden = sketch.new.add(...sketch.hidden.entities).hide();
   const tree = new RBush();
   for (const entity of sketch.shapes()) {
     const type = base_entity_type(entity);
@@ -141,6 +142,10 @@ module.exports = function join(sketch) {
     }
 
     result.push(c);
+  }
+
+  if (hidden.node.children.length > 0) {
+    return sketch.new.add(hidden, ...result);
   }
 
   return sketch.new.add(...result);

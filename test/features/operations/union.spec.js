@@ -79,4 +79,27 @@ describe('Union', () => {
     expect(v[7]).to.be.a.point({ x: 10, y: -30 });
     expect(v[8]).to.be.a.point({ x: 10, y: 0 });
   });
+
+  it('should ignore hidden entities', () => {
+    const a = sketch.new.polyface(
+      [0, 0],
+      [0, -100],
+      [-100, -100],
+      [-100, -40],
+      [-50, 0],
+    ).fillet(9, 2);
+
+    const b = sketch.new.polyface(
+      [0, 0],
+      [0, -50],
+      [10, -30],
+      [10, 0],
+    );
+
+    const c = sketch.new.rectangle([0, -5], 15, 10).hide();
+
+    const union = sketch.new.add(a, b, c).union();
+    expect(union.entities.length).to.eql(1);
+    expect(union.hidden.entities.length).to.eql(1);
+  });
 });
