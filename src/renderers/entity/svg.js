@@ -3,6 +3,7 @@ const { base_entity_type } = require('../../utility/misc/entity-type');
 const svg_string = require('../../utility/misc/svg-string');
 const { rad_to_deg } = require('../../utility/misc/rad-deg');
 const almost_equal = require('../../utility/misc/almost-equal.js');
+const svg_color = require('../../utility/misc/svg-color.js');
 
 
 const DEFAULT_ATTRIBUTES = {
@@ -15,11 +16,11 @@ const DEFAULT_ATTRIBUTES = {
 function style_to_svg(style) {
   return {
     ...(style.stroke?.width && { 'stroke-width': style.stroke.width }),
-    ...(style.stroke?.color && { stroke: style.stroke.color }),
+    ...(style.stroke?.color && { stroke: svg_color(style.stroke.color) }),
     ...(style.stroke?.scaled && { 'vector-effect': 'none' }),
     ...(style.stroke?.pattern && { 'stroke-dasharray': style.stroke.pattern }),
     ...(style.stroke?.opacity && { 'stroke-opacity': style.stroke.opacity }),
-    ...(style.fill?.color && { fill: style.fill.color }),
+    ...(style.fill?.color && { fill: svg_color(style.fill.color) }),
     ...(style.fill?.opacity && { 'fill-opacity': style.fill.opacity }),
     ...(style.opacity && { opacity: style.opacity }),
   };
@@ -140,7 +141,7 @@ const renderers = {
           pattern: style.fill.hatch,
           angle: style.fill.hatch_angle || 0,
           scale: hatch_scale * model_scale,
-          color: style.fill.hatch_color || 'black',
+          color: svg_color(style.fill.hatch_color) || 'black',
           background: style.fill.hatch_background || 'white',
           stroke_width: style.fill.hatch_stroke_width || 1,
         },
@@ -194,7 +195,7 @@ const renderers = {
     const ltext = parseFloat((length * dim_conversion).toPrecision(pr));
 
     const path_attributes = {
-      stroke: color,
+      stroke: svg_color(color),
       'vector-effect': 'non-scaling-stroke',
       'stroke-width': width,
       d: path,
@@ -206,7 +207,7 @@ const renderers = {
       : r;
 
     const text_attributes = {
-      fill: color,
+      fill: svg_color(color),
       x: cp.x,
       y: -cp.y,
       rotation,
@@ -292,7 +293,7 @@ const renderers = {
             x: cp.x,
             y: -cp.y,
             fontsize: font_size * s,
-            fill: color,
+            fill: svg_color(color),
             'dominant-baseline': svg_v_align(v_align),
             'text-anchor': svg_h_align(h_align),
             transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
@@ -302,7 +303,7 @@ const renderers = {
       });
 
     const path_attributes = {
-      stroke: color,
+      stroke: svg_color(color),
       'vector-effect': 'non-scaling-stroke',
       'stroke-width': width,
       d: complete_path,
@@ -358,7 +359,7 @@ const renderers = {
     const atext = `${parseFloat(angle.toPrecision(pr))}°`;
 
     const path_attributes = {
-      stroke: color,
+      stroke: svg_color(color),
       fill: 'none',
       'vector-effect': 'non-scaling-stroke',
       'stroke-width': width,
@@ -372,7 +373,7 @@ const renderers = {
       x: cp.x,
       y: -cp.y,
       fontsize: font_size * s,
-      fill: color,
+      fill: svg_color(color),
       'dominant-baseline': svg_v_align(v_align),
       'text-anchor': svg_h_align(h_align),
       transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
@@ -432,7 +433,7 @@ const renderers = {
     const path = `M ${a.x} ${a.y} L ${b.x} ${b.y} L ${e.x} ${e.y} M ${c.x} ${c.y} L ${a.x} ${a.y} L ${d.x} ${d.y} M ${f.x} ${f.y} L ${g.x} ${g.y} M ${h.x} ${h.y} L ${i.x} ${i.y}`;
 
     const path_attributes = {
-      stroke: color,
+      stroke: svg_color(color),
       fill: 'none',
       'vector-effect': 'non-scaling-stroke',
       'stroke-width': width,
@@ -448,7 +449,7 @@ const renderers = {
       x: cp.x,
       y: -cp.y,
       fontsize: font_size * s,
-      fill: color,
+      fill: svg_color(color),
       'dominant-baseline': svg_v_align(v_align),
       'text-anchor': leader_left ? 'end' : 'start',
       transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
@@ -509,7 +510,7 @@ const renderers = {
     const path = `M ${a.x} ${a.y} L ${b.x} ${b.y} L ${e.x} ${e.y} M ${c.x} ${c.y} L ${a.x} ${a.y} L ${d.x} ${d.y} M ${f.x} ${f.y} L ${g.x} ${g.y} M ${h.x} ${h.y} L ${i.x} ${i.y}`;
 
     const path_attributes = {
-      stroke: color,
+      stroke: svg_color(color),
       fill: 'none',
       'vector-effect': 'non-scaling-stroke',
       'stroke-width': width,
@@ -525,7 +526,7 @@ const renderers = {
       x: cp.x,
       y: -cp.y,
       fontsize: font_size * s,
-      fill: color,
+      fill: svg_color(color),
       'dominant-baseline': svg_v_align(v_align),
       'text-anchor': leader_left ? 'end' : 'start',
       transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
@@ -573,7 +574,7 @@ const renderers = {
     }
 
     const attributes = {
-      fill: color,
+      fill: svg_color(color),
       x: entity.p.x,
       y: -entity.p.y,
       rotation: entity.rotation,
@@ -622,7 +623,7 @@ const renderers = {
     const path = `M ${a.x} ${a.y} L ${b.x} ${b.y} L ${e.x} ${e.y} M ${c.x} ${c.y} L ${a.x} ${a.y} L ${d.x} ${d.y}`;
 
     const path_attributes = {
-      stroke: color,
+      stroke: svg_color(color),
       fill: 'none',
       'vector-effect': 'non-scaling-stroke',
       'stroke-width': width,
@@ -638,7 +639,7 @@ const renderers = {
       x: cp.x,
       y: -cp.y,
       fontsize: font_size * s,
-      fill: color,
+      fill: svg_color(color),
       'dominant-baseline': svg_v_align(v_align),
       'text-anchor': leader_left ? 'end' : 'start',
       transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
