@@ -215,6 +215,8 @@ const ral_colors = {
 };
 
 function svg_color(str) {
+  if (typeof str !== 'string') return str;
+
   const match = str.match(/^RAL\s?(\d{4})$/);
   if (match) {
     const color = ral_colors[match[1]];

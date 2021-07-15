@@ -24,10 +24,18 @@ function uniq(intersections) {
 }
 
 module.exports = function intersect(sketch, intersected) {
-  const hidden = sketch.new.add(...sketch.hidden.entities).hide();
+  const a = [];
+  const hidden = [];
 
-  const a = sketch.entities
-    .filter((e) => ['polycurve', 'polyface', 'arc', 'segment'].includes(base_entity_type(e)));
+  for (const s of sketch.tree('partition')) {
+    if (s.node.hidden) {
+      hidden.push(s);
+    } else if (s.node.entity
+      && ['polycurve', 'polyface', 'arc', 'segment'].includes(base_entity_type(s.node.entity))
+    ) {
+      a.push(s.node.entity);
+    }
+  }
 
   const b = intersected.entities
     .filter((e) => ['polycurve', 'polyface', 'arc', 'segment'].includes(base_entity_type(e)));
@@ -51,9 +59,5 @@ module.exports = function intersect(sketch, intersected) {
     return i;
   }, []);
 
-  if (hidden.node.children.length > 0) {
-    return sketch.new.add(hidden, ...intersections);
-  }
-
-  return sketch.new.add(...intersections);
+  return sketch.new.add(...hidden, ...intersections);
 };

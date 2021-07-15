@@ -50,9 +50,20 @@ function join_entities(a, b, jt) {
 module.exports = function join(sketch) {
   // initialize spatial index
   const result = [];
-  const hidden = sketch.new.add(...sketch.hidden.entities).hide();
+  const hidden = [];
   const tree = new RBush();
-  for (const entity of sketch.shapes()) {
+  for (const s of sketch.tree('partition')) {
+    if (s.node.hidden) {
+      hidden.push(s);
+      continue;
+    }
+
+    if (!s.node.entity) {
+      continue;
+    }
+
+    const entity = s.node.entity;
+
     const type = base_entity_type(entity);
     if (['segment', 'arc', 'polycurve'].includes(type)) {
       const end = entity.vertices[entity.vertices.length - 1];
@@ -144,9 +155,5 @@ module.exports = function join(sketch) {
     result.push(c);
   }
 
-  if (hidden.node.children.length > 0) {
-    return sketch.new.add(hidden, ...result);
-  }
-
-  return sketch.new.add(...result);
+  return sketch.new.add(...hidden, ...result);
 };

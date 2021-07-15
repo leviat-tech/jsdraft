@@ -3,9 +3,17 @@ const { base_entity_type } = require('../../utility/misc/entity-type.js');
 
 module.exports = function explode(sketch) {
   const result = [];
-  const hidden = sketch.new.add(...sketch.hidden.entities).hide();
+  const hidden = [];
 
-  for (const entity of sketch.shapes()) {
+  for (const s of sketch.tree('partition')) {
+    if (s.node.hidden) {
+      hidden.push(s);
+      continue;
+    } else if (!s.node.entity) {
+      continue;
+    }
+
+    const entity = s.node.entity;
     const type = base_entity_type(entity);
     if (type === 'polycurve') {
       result.push(...entity.toShapes());
@@ -17,9 +25,5 @@ module.exports = function explode(sketch) {
     }
   }
 
-  if (hidden.node.children.length > 0) {
-    return sketch.new.add(hidden, ...result);
-  }
-
-  return sketch.new.add(...result);
+  return sketch.new.add(...hidden, ...result);
 };
