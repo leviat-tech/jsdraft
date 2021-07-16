@@ -48,6 +48,17 @@ describe('Offset', () => {
   const rect = new Sketch()
     .rectangle([0, 0], 10, 5);
 
+  const pcurve2 = new Sketch()
+    .polycurve(
+      [0, 0],
+      [3, 3],
+      1,
+      [5, 4],
+      [10, 2],
+      [[15, 8], 1],
+      [10, 8],
+    );
+
   it('can offset a polycurve', () => {
     const offset = pcurve.offset(0.25, false);
     const v = offset.shape.vertices;
@@ -135,5 +146,12 @@ describe('Offset', () => {
     const offset = rect.offset(-1, false);
     const v = offset.shape.vertices;
     expect(v.length).to.eql(8);
+  });
+
+  it('can apply a negative offset', () => {
+    const offset = pcurve2.offset(-1);
+    const v = offset.shape.vertices;
+    expect(v.length).to.eql(7);
+    expect(v[3]).to.be.a.point({ x: 10.3031, y: 0.8017 });
   });
 });
