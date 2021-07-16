@@ -88,6 +88,17 @@ class Sketch {
     const xmax = Math.max(...boxes.map((b) => b.xmax));
     const ymin = Math.min(...boxes.map((b) => b.ymin));
     const ymax = Math.max(...boxes.map((b) => b.ymax));
+
+    if (this.node.mask) {
+      const mask = this.node.mask.box;
+      return {
+        xmin: Math.max(xmin, mask.xmin),
+        xmax: Math.min(xmax, mask.xmax),
+        ymin: Math.max(ymin, mask.ymin),
+        ymax: Math.min(ymax, mask.ymax),
+      };
+    }
+
     return { xmin, ymin, xmax, ymax };
   }
 
