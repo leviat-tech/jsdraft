@@ -667,14 +667,7 @@ function svg(entity, { output = 'string', ...options }) {
 
   if (output === 'js') return js;
 
-  if (js.tag === 'g') {
-    const str = js.nodes
-      .map((o) => svg_string(o.tag, o.attributes, o.contents))
-      .join('');
-    return `<g>${str}</g>`;
-  }
-
-  return svg_string(js.tag, js.attributes, js.contents);
+  return svg_string(js);
 }
 
 module.exports = svg;

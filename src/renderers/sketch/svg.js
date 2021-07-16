@@ -36,14 +36,7 @@ function svg_arr_to_string(arr) {
       set(entity, 'attributes.fill', `url(#${hatch_name})`);
     }
 
-    if (entity.tag === 'g') {
-      const s = entity.nodes
-        .map((o) => svg_string(o.tag, o.attributes, o.contents))
-        .join('');
-      return `${str}<g>${s}</g>`;
-    }
-
-    return str + svg_string(entity.tag, entity.attributes, entity.contents);
+    return str + svg_string(entity);
   }, '');
 
   const hatch_arr = Object.values(h);
@@ -80,10 +73,34 @@ function recurse(sketch, options) {
   // set z-index and transformation matrix
   options.z = sketch.node.z || options.z;
   options.transform = sketch.node.transform;
+  options.mask = options.mask || (sketch.node.mask && `mask_${sketch.node.id}`);
+
+  // draw mask
+  if (sketch.node.mask) {
+    const mask = svg_renderer(sketch.node.mask, {
+      output: 'js',
+      style: {
+        fill: { color: 'white' },
+        stroke: { color: 'none' },
+      },
+    });
+
+    svg.push({
+      tag: 'mask',
+      attributes: { id: `mask_${sketch.node.id}` },
+      nodes: [mask],
+    });
+  }
 
   // draw entities
   if (sketch.node.entity) {
-    svg.push(svg_renderer(sketch.node.entity, { output: 'js', ...options }));
+    if (options.mask) {
+      const entity = svg_renderer(sketch.node.entity, { output: 'js', ...options });
+      set(entity, 'attributes.mask', `url(#${options.mask})`);
+      svg.push(entity);
+    } else {
+      svg.push(svg_renderer(sketch.node.entity, { output: 'js', ...options }));
+    }
   }
 
   // draw children
