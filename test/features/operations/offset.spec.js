@@ -59,6 +59,14 @@ describe('Offset', () => {
       [10, 8],
     );
 
+  const pcurve3 = new Sketch()
+    .polycurve(
+      [0, -70 * 0.001],
+      [0, 0],
+      [-10 * 0.001, 0],
+    )
+    .fillet(2 * 0.001);
+
   it('can offset a polycurve', () => {
     const offset = pcurve.offset(0.25, false);
     const v = offset.shape.vertices;
@@ -153,5 +161,14 @@ describe('Offset', () => {
     const v = offset.shape.vertices;
     expect(v.length).to.eql(7);
     expect(v[3]).to.be.a.point({ x: 10.3031, y: 0.8017 });
+  });
+
+  it('can offset a curve with small dimensions', () => {
+    const offset = pcurve3.offset(2 * 0.001);
+    const v = offset.shape.vertices;
+    console.log(v);
+    expect(v[0]).to.be.a.point({ x: -0.002, y: -0.07 });
+    expect(v[1]).to.be.a.point({ x: -0.002, y: -0.002 });
+    expect(v[2]).to.be.a.point({ x: -0.01, y: -0.002 });
   });
 });

@@ -32,6 +32,8 @@ module.exports = function offset(sketch, distance, sharp_corners = true) {
 
     const offset_pline = offset_polyline(pline, distance, sharp_corners);
 
+    if (!offset_pline[0]) continue;
+
     const pcurve_args = [];
     offset_pline[0].vertexes.forEach((vertex) => {
       pcurve_args.push([vertex.x, vertex.y]);
