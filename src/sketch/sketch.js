@@ -27,6 +27,7 @@ class Sketch {
       xrefs: {}, // a collection of linked draft files that can be referenced at runtime
       transform: null, // transformation matrix that has been applied to this sketch node
       z: null, // z-index -- if present, will be used to sort siblings when iterating
+      layer: null, // will assign entities to layer (if layer is a concept in output format)
     };
     if (Array.isArray(options)) {
       options = { entities: options };

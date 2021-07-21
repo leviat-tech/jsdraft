@@ -23,6 +23,7 @@ const rectangle = require('./geometric/rectangle.js');
 const segment = require('./geometric/segment.js');
 
 const hide = require('./meta/hide.js');
+const layer = require('./meta/layer.js');
 const mask = require('./meta/mask.js');
 const name = require('./meta/name.js');
 const show = require('./meta/show.js');
@@ -77,6 +78,7 @@ module.exports = {
   segment,
 
   hide,
+  layer,
   mask,
   name,
   show,
