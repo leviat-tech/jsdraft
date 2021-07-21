@@ -77,6 +77,7 @@ export default {
 .modal {
   background-color: $color-white;
   max-width: 24rem;
+  min-width: 16rem;
   border-radius: $radius;
   display: flex;
   flex-direction: column;
@@ -111,5 +112,6 @@ export default {
 
 .modal-content {
   padding: 1.5rem;
+  width: 100%;
 }
 </style>

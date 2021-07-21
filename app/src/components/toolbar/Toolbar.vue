@@ -10,6 +10,11 @@
     >
       Are you sure you want to create a new file? Any unsaved changes will be lost.
     </warning-modal>
+    <export-modal
+      v-if="exportingFile"
+      @cancel="exportingFile = false"
+      @export="exportFile"
+    />
     <div class="tools">
       <tool-group>
         <tool
@@ -88,7 +93,7 @@
           tool-id="export"
           name="Export"
           icon="file-export"
-          @click="exportFile"
+          @click="showExportDialog"
         />
       </tool-group>
 
@@ -129,14 +134,16 @@
 
 <script>
 import Mousetrap from 'mousetrap';
-import { mapState, mapMutations, mapActions } from 'vuex';
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 import isEqual from 'lodash/isEqual';
 import ToolGroup from './ToolGroup.vue';
 import Tool from './Tool.vue';
 import Toggle from './Toggle.vue';
 import WarningModal from '../WarningModal.vue';
+import ExportModal from '../ExportModal.vue';
 import DButton from '../DButton.vue';
 import loadFileInBrowser from '../../utility/load-file-in-browser.js';
+import downloadFile from '../../utility/download-file.js';
 import CodeIcon from '../../assets/icons/code.svg';
 import EyeIcon from '../../assets/icons/eye.svg';
 import EyeSlashIcon from '../../assets/icons/eye-slash.svg';
@@ -153,15 +160,18 @@ export default {
     CodeIcon,
     EyeIcon,
     EyeSlashIcon,
+    ExportModal,
     WarningModal,
   },
   data() {
     return {
       creatingNewFile: false,
+      exportingFile: false,
     };
   },
   computed: {
-    ...mapState(['currentTool', 'showCodePanel', 'filename', 'path', 'files', 'electron', 'sketch']),
+    ...mapState(['currentTool', 'showCodePanel', 'filename', 'path', 'files', 'electron', 'overrides']),
+    ...mapGetters(['draft', 'currentFeatureName']),
     filesHaveChanged() {
       return !isEqual(this.files, {
         'index.json': json(),
@@ -234,8 +244,17 @@ export default {
 
       this.importFile(loaded);
     },
-    exportFile() {
-
+    showExportDialog() {
+      this.exportingFile = true;
+    },
+    exportFile(type) {
+      console.log('export', type);
+      try {
+        const file = this.draft.render(this.currentFeatureName, this.overrides, type);
+        downloadFile(file, `${this.currentFeatureName}.${type}`);
+      } catch (e) {
+        console.log('Export error', e);
+      }
     },
     reload() {
       if (!this.path) {
