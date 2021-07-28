@@ -65,6 +65,8 @@ export default {
           }, {});
       }
 
+      if (!this.value) return {};
+
       return properties;
     },
   },

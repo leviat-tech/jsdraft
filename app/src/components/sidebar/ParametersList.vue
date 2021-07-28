@@ -52,6 +52,7 @@ export default {
       },
     },
     overrides: {
+      immediate: true,
       handler(nv, ov) {
         if (nv !== ov) this.localOverrides = nv;
       },
