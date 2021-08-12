@@ -852,3 +852,43 @@ Valid options for sketch svg output:
   - `"visible"` (default): include only elements that are not marked as "hidden"
   - `"all"`: include all elements, both hidden and visible
   - `"hidden"`: include only hidden elements
+
+- `fit`:
+  - `true` (default): The SVG viewbox will be scaled so that the drawing extents fit within the resulting output drawing. Any "scale" property is ignored; padding (in model units) can be used.
+  - `false`: The drawing will be plotted to scale; the "scale" property is observed, while the "padding" property will be ignored.
+
+- `padding`: A numerical value in model units can be provided (default is 0). if a drawing is plotted with `fit`: `true`, the padding will be added to the resulting drawing.
+- `padding_top`, `padding_right`, `padding_bottom`, `padding_left`: Can be used instead of (or in combination with) the `padding` property
+- `center`: An [x, y] coordinate which can be used to indicate the center of the resulting drawing. Only observed when `fit`: `false`
+- `aspect_ratio`: used to define the aspect ratio of the resulting viewbox, default is 1
+- `scale`: used to define the scale of the output drawing. Only observed when `fit`: `false`
+
+Some example svg output options:
+
+```js
+// No output options provided, defualt (render to fit 1:1 square viewbox) will be used
+const svg = draft.render(
+  'my_drawing',
+  [1, 2],
+  'svg',
+);
+
+// Add padding to output
+const svg = draft.render(
+  'my_drawing',
+  [1, 2],
+  'svg',
+  { padding: 10 }, // 10 units of padding will be added to output
+)
+
+// Plot to scale. The plot_size property indicates the paper-space
+// size of the drawing in the relevant plot_unit (default is mm).
+// This is the horizontal size if aspect_ratio > 1, or the vertical
+// size if aspect_ratio < 1.
+const svg = draft.render(
+  'my_drawing',
+  [1, 2],
+  'svg',
+  { fit: false, plot_size: 50, scale: 0.5 },
+)
+```
