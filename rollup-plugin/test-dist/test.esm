@@ -1,0 +1,10 @@
+import { Draft } from '@crhio/jsdraft';
+
+const files = { "circle.js":"function circle(sketch) {\n  return sketch\n    .circle([0, 0], 10);\n}\n",
+  "index.json":"{\n  \"filetype\": \"JSDraft\",\n  \"version\": \"0.0.1\"\n}",
+  _xrefs:{} };
+
+          const draft = Draft.load(files);
+
+console.log('test', draft);
+console.log('render', draft.render('circle', [], 'svg'));
