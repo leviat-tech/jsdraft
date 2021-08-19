@@ -18,6 +18,8 @@ class Draft {
 
     this.xrefs = {};
 
+    this.renderers = {};
+
     this.meta = {
       filetype: 'JSDraft',
       version: '0.0.3',
@@ -46,6 +48,14 @@ class Draft {
 
   remove_feature(name, type = 'sketch') {
     delete this.features[type][name];
+  }
+
+  add_renderer(name, func) {
+    this.renderers[name] = func;
+  }
+
+  remove_renderer(name) {
+    delete this.renderers[name];
   }
 
   static load(d) {
@@ -86,6 +96,12 @@ class Draft {
     const root = this.root;
     const func = parse(source.extension, source.contents, source.name);
     const sketch = func(root, ...params);
+
+    // Check whether there is a user-provided renderer
+    if (this.renderers[format]) {
+      return this.renderers[format](sketch, options);
+    }
+
     if (format === 'sketch') return sketch;
     return render(sketch, format, options);
   }
