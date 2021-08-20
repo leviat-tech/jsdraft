@@ -1,6 +1,6 @@
 {
   "name": "@crhio/rollup-plugin-jsdraft",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "JSDraft loader for Rollup",
   "scripts": {
     "test-build": "rollup --config",
@@ -13,7 +13,7 @@
     "tosource": "^2.0.0-alpha.2"
   },
   "peerDependencies": {
-    "@crhio/jsdraft": "^0.0.21"
+    "@crhio/jsdraft": "^0.0.22"
   },
   "main": "dist/main.js",
   "keywords": [],

@@ -9,6 +9,11 @@ function isFile(p) {
   return stat.isFile();
 }
 
+function isDirectory(p) {
+  const stat = fs.lstatSync(p);
+  return stat.isDirectory();
+}
+
 function isValidFilename(filename) {
   if (!filename) return false;
 
@@ -69,51 +74,48 @@ export default function plugin() {
 
   return {
     name: '@crhio/rollup-plugin-jsdraft',
+    enforce: 'pre',
 
     async resolveId(source, importer) {
-      if (ext.test(source)) {
-        const p = path.resolve(path.dirname(importer || '.'), source);
-        return p;
-      }
+      if (!ext.test(source)) return null;
 
-      return null;
+      const p = path.resolve(path.dirname(importer || '.'), source);
+      return p;
     },
 
     load(id) {
-      if (ext.test(id)) {
-        console.log('load', id);
-        return id;
-      }
+      if (!ext.test(id)) return null;
 
-      return null;
+      const cwd = process.cwd();
+      let p = id.startsWith(cwd)
+        ? id
+        : path.join(cwd, id);
+
+      p = isDirectory(p) ? p : path.dirname(p);
+      const files = getFile(p);
+
+      return JSON.stringify(files);
     },
 
     transform(content, id) {
-      if (ext.test(id)) {
-        const cwd = process.cwd();
-        const p = content.startsWith(cwd)
-          ? content
-          : path.join(cwd, content);
+      if (!ext.test(id)) return null;
 
-        const files = getFile(p);
+      const files = JSON.parse(content);
 
-        const code = `
-          import { Draft } from '@crhio/jsdraft';
+      const code = `
+        import { Draft } from '@crhio/jsdraft';
 
-          const files = ${toSource(files)};
+        const files = ${toSource(files)};
 
-          const draft = Draft.load(files);
+        const draft = Draft.load(files);
 
-          export default draft;
-        `;
+        export default draft;
+      `;
 
-        return {
-          code,
-          map: { mappings: '' },
-        };
-      }
-
-      return null;
+      return {
+        code,
+        map: { mappings: '' },
+      };
     },
   };
 }

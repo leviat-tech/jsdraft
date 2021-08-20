@@ -4,7 +4,7 @@ const files = { "circle.js":"function circle(sketch) {\n  return sketch\n    .ci
   "index.json":"{\n  \"filetype\": \"JSDraft\",\n  \"version\": \"0.0.1\"\n}",
   _xrefs:{} };
 
-          const draft = Draft.load(files);
+        const draft = Draft.load(files);
 
 console.log('test', draft);
 console.log('render', draft.render('circle', [], 'svg'));
