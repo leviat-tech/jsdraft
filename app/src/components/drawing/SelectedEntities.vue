@@ -30,7 +30,8 @@
 
 <script>
 import { render } from '@crhio/jsdraft';
-import { mapMutations, mapState } from 'vuex';
+import { mapMutations, mapState, mapGetters } from 'vuex';
+import annotationScale from '../../utility/annotation-scale.js';
 
 
 export default {
@@ -46,9 +47,11 @@ export default {
   },
   computed: {
     ...mapState(['selectedInput']),
+    ...mapGetters(['draft']),
     svg() {
       try {
         return this.entities.map((entity) => render(entity, 'svg', {
+          ...annotationScale(this.draft.settings),
           output: 'js',
           style: {
             stroke: {

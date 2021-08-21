@@ -124,7 +124,7 @@ function render(sketch, {
   aspect_ratio = 1,
   model_unit = 'mm',
   plot_unit = model_unit,
-  plot_size = convert_units(1000, 'mm', plot_unit),
+  plot_size = 1000,
   scale = 1,
   style = {},
 } = {}) {
