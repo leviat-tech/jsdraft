@@ -18,7 +18,9 @@ class Arc extends flatten.Arc {
 
     if (matches(args, 'point', 'number', 'number', 'number', '...')) {
       const [center, radius, start, end, cc] = args;
-      return super(flatten.point(...center), radius, start, end, cc);
+      const sa = start < 0 ? start + (2 * Math.PI) : start;
+      const ea = end < 0 ? end + (2 * Math.PI) : end;
+      return super(flatten.point(...center), radius, sa, ea, cc);
     }
 
     if (matches(args, 'point', 'point', 'number', '...')) {
@@ -56,9 +58,7 @@ class Arc extends flatten.Arc {
     const radius = start_pt.dist(center_pt);
     const start_angle = start_pt.subtract(center_pt).angle();
     const end_angle = cc ? start_angle + angle : start_angle - angle;
-    const sa = start_angle < 0 ? start_angle + (2 * Math.PI) : start_angle;
-    const ea = end_angle < 0 ? end_angle + (2 * Math.PI) : end_angle;
-    return new Arc(center, radius, sa, ea, cc);
+    return new Arc(center, radius, start_angle, end_angle, cc);
   }
 
   static from_through_point(start, through, end) {
@@ -69,16 +69,12 @@ class Arc extends flatten.Arc {
     const end_angle = end_pt.subtract({ x, y }).angle();
     const o = orientation(start, through, end);
     const cc = o === 'counterclockwise';
-    const sa = start_angle < 0 ? start_angle + (2 * Math.PI) : start_angle;
-    const ea = end_angle < 0 ? end_angle + (2 * Math.PI) : end_angle;
-    return new Arc([x, y], r, sa, ea, cc);
+    return new Arc([x, y], r, start_angle, end_angle, cc);
   }
 
   static from_bulge(start, bulge, end) {
     const { radius, center, start_angle, end_angle, ccw } = sagitta_arc(start, end, bulge);
-    const sa = start_angle < 0 ? start_angle + (2 * Math.PI) : start_angle;
-    const ea = end_angle < 0 ? end_angle + (2 * Math.PI) : end_angle;
-    return new Arc(center, radius, sa, ea, ccw);
+    return new Arc(center, radius, start_angle, end_angle, ccw);
   }
 
   static from_tangents(a, b, radius, cc) {
@@ -96,10 +92,7 @@ class Arc extends flatten.Arc {
     const pt_b = flatten.vector(i.x, i.y).add(vb.multiply(l_tan));
     const start_angle = Math.atan2(pt_a.y, pt_a.x);
     const end_angle = Math.atan2(pt_b.y, pt_b.x);
-
-    const sa = start_angle < 0 ? start_angle + (2 * Math.PI) : start_angle;
-    const ea = end_angle < 0 ? end_angle + (2 * Math.PI) : end_angle;
-    return new Arc(center, radius, sa, ea, cc);
+    return new Arc(center, radius, start_angle, end_angle, cc);
   }
 }
 

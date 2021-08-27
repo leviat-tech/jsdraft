@@ -79,7 +79,7 @@ describe('A sketch rendered to DXF', () => {
     const curve_a = entities[0].vertices.map((v) => ({ x: v.x, y: v.y }));
     expect(curve_a).to.eql([
       { x: 0, y: 0 },
-      { x: 50, y: 0 },
+      { x: 49.99999999999999, y: 0 },
       { x: 50, y: 50 },
       { x: 0, y: 50 },
     ]);
