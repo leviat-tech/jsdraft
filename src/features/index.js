@@ -22,6 +22,7 @@ const polyface = require('./geometric/polyface.js');
 const rectangle = require('./geometric/rectangle.js');
 const segment = require('./geometric/segment.js');
 
+const add_attribute = require('./meta/add-attribute.js');
 const hide = require('./meta/hide.js');
 const layer = require('./meta/layer.js');
 const mask = require('./meta/mask.js');
@@ -77,6 +78,7 @@ module.exports = {
   rectangle,
   segment,
 
+  add_attribute,
   hide,
   layer,
   mask,

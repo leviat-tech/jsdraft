@@ -83,6 +83,19 @@ class Sketch {
     return new Sketch(cloneDeep(sketch.node));
   }
 
+  get attributes() {
+    let a = {};
+
+    for (const s of this.tree('level', 'all')) {
+      a = {
+        ...a,
+        ...s.node.attributes,
+      };
+    }
+
+    return a;
+  }
+
   get extents() {
     const boxes = this.entities.map((d) => d.box);
     const xmin = Math.min(...boxes.map((b) => b.xmin));

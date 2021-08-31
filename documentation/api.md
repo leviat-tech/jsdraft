@@ -41,6 +41,7 @@ Table of Contents:
     * [stroke](#stroke-string-number-)
     * [style](#style-string-)
   * [Meta features](#meta-features)
+    * [add_attribute](#add_attribute-string-value-)
     * [hide](#hide)
     * [name](#name-string-)
     * [show](#show)
@@ -588,6 +589,19 @@ const result = sketch.style('foo');
 ```
 
 ## Meta features
+
+### _add_attribute( string, value )_
+
+Add an attribute to a sketch node. All attributes of a sketch and its descendants (both visible and hidden) can be retrieved by using the sketch getter `.attributes`.
+
+```js
+const result = sketch
+    .add_attribute('foo', 'bar')
+    .add_attribute('baz', 'bat');
+
+console.log(sketch.attributes);
+// { foo: 'bar', baz: 'bat' }
+```
 
 ### _hide()_
 
