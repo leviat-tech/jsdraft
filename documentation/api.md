@@ -599,7 +599,7 @@ const result = sketch
     .add_attribute('foo', 'bar')
     .add_attribute('baz', 'bat');
 
-console.log(sketch.attributes);
+console.log(result.attributes);
 // { foo: 'bar', baz: 'bat' }
 ```
 
