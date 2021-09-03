@@ -1,6 +1,6 @@
 {
   "name": "@crhio/jsdraft",
-  "version": "0.0.24",
+  "version": "0.0.25",
   "description": "A functional toolkit for drawing and flexing 2D parametric drawings",
   "bin": "src/cli.js",
   "scripts": {

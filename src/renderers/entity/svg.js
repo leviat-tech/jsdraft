@@ -174,7 +174,7 @@ const renderers = {
     const v2 = Vector({ x: entity.pe.x, y: entity.pe.y });
     const length = v2.subtract(v1).magnitude();
     const dim_vector = length !== 0 ? v2.subtract(v1).normalize() : Vector({ x: 1, y: 0 });
-    const ovec = entity.side === 'left' ? dim_vector.rotate(Math.PI / 2) : dim_vector.rotate(-Math.PI / 2);
+    const ovec = dim_vector.rotate(Math.PI / 2).scale(entity.offset);
 
     const hashoffset1 = ovec.scale(ex * s);
     const crossoffset = ovec.scale(os * s);
@@ -251,7 +251,7 @@ const renderers = {
     const v2 = Vector({ x: entity.pe.x, y: entity.pe.y });
     const length = v2.subtract(v1).magnitude();
     const dim_vector = length !== 0 ? v2.subtract(v1).normalize() : Vector({ x: 1, y: 0 });
-    const ovec = entity.side === 'left' ? dim_vector.rotate(Math.PI / 2) : dim_vector.rotate(-Math.PI / 2);
+    const ovec = dim_vector.rotate(Math.PI / 2).scale(entity.offset);
 
     const hashoffset1 = ovec.scale(ex * s);
     const crossoffset = ovec.scale(os * s);

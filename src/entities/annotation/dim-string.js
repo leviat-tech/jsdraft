@@ -16,7 +16,16 @@ class DimString {
     this.ps = new Point(...args[0]);
     this.pe = new Point(...args[1]);
     this.ticks = args[2] ? args[2] : [];
-    this.side = args[3] ? args[3] : 'left';
+
+    if (args[3] === undefined) {
+      this.offset = 1;
+    } else if (args[3] === 'left') {
+      this.offset = 1;
+    } else if (args[3] === 'right') {
+      this.offset = -1;
+    } else {
+      this.offset = args[3];
+    }
   }
 
   get type() { return 'dim_string'; }
@@ -31,7 +40,7 @@ class DimString {
   }
 
   transform(matrix = new flatten.Matrix()) {
-    return new DimString(this.ps.transform(matrix), this.pe.transform(matrix), this.ticks, this.side);
+    return new DimString(this.ps.transform(matrix), this.pe.transform(matrix), this.ticks, this.offset);
   }
 
   toJSON() {

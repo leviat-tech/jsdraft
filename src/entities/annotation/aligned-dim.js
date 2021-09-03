@@ -15,7 +15,16 @@ class AlignedDim {
 
     this.ps = new Point(...args[0]);
     this.pe = new Point(...args[1]);
-    this.side = args[2] ? args[2] : 'left';
+
+    if (args[2] === undefined) {
+      this.offset = 1;
+    } else if (args[2] === 'left') {
+      this.offset = 1;
+    } else if (args[2] === 'right') {
+      this.offset = -1;
+    } else {
+      this.offset = args[2];
+    }
 
     // A callback can be defined which can be used to set overrides in app
     this.callback = typeof args[3] === 'string'
@@ -35,7 +44,7 @@ class AlignedDim {
   }
 
   transform(matrix = new flatten.Matrix()) {
-    return new AlignedDim(this.ps.transform(matrix), this.pe.transform(matrix), this.side, this.callback);
+    return new AlignedDim(this.ps.transform(matrix), this.pe.transform(matrix), this.offset, this.callback);
   }
 
   toJSON() {
