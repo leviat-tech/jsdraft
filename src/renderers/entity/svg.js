@@ -174,11 +174,18 @@ const renderers = {
     const v2 = Vector({ x: entity.pe.x, y: entity.pe.y });
     const length = v2.subtract(v1).magnitude();
     const dim_vector = length !== 0 ? v2.subtract(v1).normalize() : Vector({ x: 1, y: 0 });
-    const ovec = dim_vector.rotate(Math.PI / 2).scale(entity.offset);
+
+    const ovec = (entity.offset < 0 || entity.offset === 'right')
+      ? dim_vector.rotate(Math.PI / 2).reverse()
+      : dim_vector.rotate(Math.PI / 2);
+
+    const offset = (typeof entity.offset === 'number')
+      ? Math.abs(entity.offset)
+      : os * s;
 
     const hashoffset1 = ovec.scale(ex * s);
-    const crossoffset = ovec.scale(os * s);
-    const hashoffset2 = ovec.scale((hl + os) * s);
+    const crossoffset = ovec.scale(offset);
+    const hashoffset2 = ovec.scale(offset + (hl * s));
     const exoffset = dim_vector.scale(ex * s);
     const textoffset = ovec.scale(to * s);
 
@@ -251,11 +258,16 @@ const renderers = {
     const v2 = Vector({ x: entity.pe.x, y: entity.pe.y });
     const length = v2.subtract(v1).magnitude();
     const dim_vector = length !== 0 ? v2.subtract(v1).normalize() : Vector({ x: 1, y: 0 });
-    const ovec = dim_vector.rotate(Math.PI / 2).scale(entity.offset);
+
+    const ovec = entity.offset < 0
+      ? dim_vector.rotate(Math.PI / 2).reverse()
+      : dim_vector.rotate(Math.PI / 2);
+
+    const offset = entity.offset === undefined ? os * s : Math.abs(entity.offset);
 
     const hashoffset1 = ovec.scale(ex * s);
-    const crossoffset = ovec.scale(os * s);
-    const hashoffset2 = ovec.scale((hl + os) * s);
+    const crossoffset = ovec.scale(offset);
+    const hashoffset2 = ovec.scale(offset + (hl * s));
     const exoffset = dim_vector.scale(ex * s);
     const textoffset = ovec.scale(to * s);
 

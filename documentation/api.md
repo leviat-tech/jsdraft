@@ -249,7 +249,7 @@ const textSketch = sketch.text("Hello, world!", [0, 0], 25);
 ```
 
 
-### _aligned_dim( point, point[, string] )_
+### _aligned_dim( point, point[, offset] )_
 
 Places an aligned dimension between two points.
 
@@ -261,18 +261,30 @@ const dimSketch = sketch.aligned_dim([0, 0], [4, 3]);
 const dimSketch = sketch.aligned_dim([0, 0], [4, 3], "right");
 // Places the same aligned dimension string, but offset to the opposite side
 // as in the previous example.
+
+const dimSketch = sketch.aligned_dim([0, 0], [4, 3], 1);
+// Places the same aligned dimension string, but with the offset bar one unit
+// from the line between the two points.
+
+const dimSketch = sketch.aligned_dim([0, 0], [4, 3], [3, 6]);
+// Places the same aligned dimension string, but with the offset bar passing
+// through the point [3, 6].
 ```
 
 
-### _dim_string( point, point, array )_
+### _dim_string( point, point, array[, offset] )_
 
 Places a dimension string between two points, with ticks at intermediate distances.
 
 ```js
 // Construction: start point, endpoint, ticks
-const result = sketch.dim_string([0, 0], [100, 10], [20, 40, 60])
+const result = sketch.dim_string([0, 0], [100, 10], [20, 40, 60]);
 // Will result in a dimension string with four labeled dimensions: 20, 40, 60,
 // and the remainder to the end of the dimension string.
+
+const result = sketch.dim_string([0, 0], [100, 10], [20, 40, 60], 10);
+// Places the same dimension string, but with the offset bar being
+// 10 units from the line between the two points.
 ```
 
 

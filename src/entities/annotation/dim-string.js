@@ -1,6 +1,7 @@
 const flatten = require('@flatten-js/core');
 const Point = require('../geometric/point.js');
 const { normalize } = require('../../utility/arguments');
+const orientation = require('../../utility/geometry/orientation.js');
 
 
 class DimString {
@@ -17,12 +18,20 @@ class DimString {
     this.pe = new Point(...args[1]);
     this.ticks = args[2] ? args[2] : [];
 
-    if (args[3] === undefined) {
-      this.offset = 1;
-    } else if (args[3] === 'left') {
-      this.offset = 1;
-    } else if (args[3] === 'right') {
-      this.offset = -1;
+    if (Array.isArray(args[3])) {
+      const offset_pt = new Point(...args[3]);
+      const line = flatten.line(this.ps, this.pe);
+      const distance = line.distanceTo(offset_pt);
+      const pe = distance[1].pe;
+      const o = orientation(
+        [this.ps.x, this.ps.y],
+        [this.pe.x, this.pe.y],
+        [pe.x, pe.y],
+      );
+
+      this.offset = o === 'clockwise'
+        ? -distance[0]
+        : distance[0];
     } else {
       this.offset = args[3];
     }
