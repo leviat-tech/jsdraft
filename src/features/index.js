@@ -24,6 +24,7 @@ const segment = require('./geometric/segment.js');
 
 const add_attribute = require('./meta/add-attribute.js');
 const hide = require('./meta/hide.js');
+const ignore_mask = require('./meta/ignore-mask.js');
 const layer = require('./meta/layer.js');
 const mask = require('./meta/mask.js');
 const name = require('./meta/name.js');
@@ -80,6 +81,7 @@ module.exports = {
 
   add_attribute,
   hide,
+  ignore_mask,
   layer,
   mask,
   name,

@@ -74,6 +74,7 @@ function recurse(sketch, options) {
   options.z = sketch.node.z || options.z;
   options.transform = sketch.node.transform;
   options.mask = options.mask || (sketch.node.mask && `mask_${sketch.node.id}`);
+  options.ignore_mask = sketch.node.ignore_mask || options.ignore_mask;
 
   // draw mask
   if (sketch.node.mask) {
@@ -94,7 +95,7 @@ function recurse(sketch, options) {
 
   // draw entities
   if (sketch.node.entity) {
-    if (options.mask) {
+    if (options.mask && !options.ignore_mask) {
       const entity = svg_renderer(sketch.node.entity, { output: 'js', ...options });
       set(entity, 'attributes.mask', `url(#${options.mask})`);
       svg.push(entity);

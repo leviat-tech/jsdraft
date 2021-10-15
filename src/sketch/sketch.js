@@ -21,6 +21,7 @@ class Sketch {
       styles: {}, // a collection of named styles that can be applied to a node
       entity: null, // entity: a geometric, text, or other element attached to this node
       mask: null, // a polyface that can be used to mask drawn entities
+      ignore_mask: false, // a flag which, when true, will cause a branch to ignore mask
       children: [], // children: nodes attached as descendents to this node
       attributes: {}, // attributes: a free space for meta data associated with this node
       index: {}, // injected user feature index (owner attribute allows reference sketch that owns the index)
