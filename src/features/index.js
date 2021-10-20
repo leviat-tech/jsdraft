@@ -33,6 +33,7 @@ const tag = require('./meta/tag.js');
 const z = require('./meta/z.js');
 
 const add_faces = require('./operations/add-faces.js');
+const b_and = require('./operations/and.js');
 const close = require('./operations/close.js');
 const explode = require('./operations/explode.js');
 const fillet = require('./operations/fillet.js');
@@ -90,6 +91,7 @@ module.exports = {
   z,
 
   add_faces,
+  and: b_and,
   close,
   explode,
   fillet,
