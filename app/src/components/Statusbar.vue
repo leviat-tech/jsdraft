@@ -12,7 +12,7 @@
     <div v-if="path">
       <img
         class="svg"
-        src="icons/save.svg"
+        :src="'icons/save.svg'"
       >
     </div>
   </div>

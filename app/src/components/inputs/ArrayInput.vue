@@ -9,10 +9,10 @@
     />
     <div class="add-remove">
       <div class="add-remove-button" @click="removeItem">
-        <img class="svg" src="icons/minus.svg">
+        <img class="svg" :src="'icons/minus.svg'">
       </div>
       <div class="add-remove-button" @click="addItem">
-        <img class="svg" src="icons/plus.svg">
+        <img class="svg" :src="'icons/plus.svg'">
       </div>
     </div>
   </div>
