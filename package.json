@@ -6,6 +6,8 @@
   "scripts": {
     "render": "./src/cli.js",
     "build": "rollup --config",
+    "build-app": "rollup --config && npm run build --prefix ./app",
+    "build-electron-app": "rollup --config && npm run electron-build --prefix ./app",
     "build:watch": "chokidar \"src/**/*.js\" --initial -c \"rollup --config\"",
     "test": "mocha --recursive",
     "test:watch": "mocha --recursive --reporter min --colors -w --watch-ignore node_modules,.git,app"
