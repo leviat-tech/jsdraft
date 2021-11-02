@@ -6,7 +6,7 @@ It includes:
 - A javascript library (@crhio/jsdraft) for manipulating 2D parametric drawings
 - A simple editor app to assist in creating new drawings
 - A webkit loader (@crhio/webpack-jsdraft-loader) for importing drawings into webkit projects
-- TODO: A vite loader (@crhio/vite-jsdraft-loader) for importing drawings into vite projects
+- A rollup/vite plugin (@crhio/rollup-plugin-jsdraft) for importing drawings into rollup/vite projects
 
 
 JSDraft documentation can be found below:
@@ -20,9 +20,11 @@ JSDraft documentation can be found below:
 
 ## Running the app
 
+A demo of the app can be found here: https://jsdraft.netlify.app
+
 The app can run in the browser, or as a standalone Electron app.
 
-To run the app, begin by cloning the repository and compiling the library:
+To run the app locally, begin by cloning the repository and compiling the library:
 ```bash
 npm install
 npm run build
