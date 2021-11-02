@@ -2,7 +2,7 @@
 
 JSDraft is a tool for creating 2D parametric drawings which can be flexed at runtime and output to a range of potential outputs (i.e., SVG, DXF, etc).
 
-![Path Diagram](https://github.com/leviat-tech/jsdraft/blob/main/diagram.png)
+![Path Diagram](https://github.com/leviat-tech/jsdraft/blob/main/documentation/diagram.png)
 
 ## Sketch
 
