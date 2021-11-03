@@ -17,7 +17,7 @@ module.exports = function union(sketch, ...args) {
   }
 
   const polyfaces = sketch_polyfaces.concat(...args.map((a) => a.polyfaces || [a]));
-  if (polyfaces.length < 2) throw new Error('At least two polyfaces must be supplied to union');
+  if (polyfaces.length < 1) throw new Error('At least one polyface must be supplied to union');
 
   const first = polyfaces[0];
   if (polyface_orientation(first) !== -1) first.reverse();

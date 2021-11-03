@@ -80,6 +80,13 @@ describe('Union', () => {
     expect(v[8]).to.be.a.point({ x: 10, y: 0 });
   });
 
+  it('should return original when unioning one polyface', () => {
+    const a = sketch.new.rectangle([0, 0], 10, 5);
+    const result = a.union();
+    const entities = result.entities;
+    expect(entities.length).to.eql(1);
+  });
+
   it('should ignore hidden entities', () => {
     const a = sketch.new.polyface(
       [0, 0],
