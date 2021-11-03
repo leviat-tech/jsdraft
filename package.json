@@ -9,8 +9,8 @@
     "build-app": "rollup --config && npm install --prefix ./app && npm run build --prefix ./app",
     "build-electron-app": "rollup --config && npm run electron-build --prefix ./app",
     "build:watch": "chokidar \"src/**/*.js\" --initial -c \"rollup --config\"",
-    "test": "mocha --recursive",
-    "test:watch": "mocha --recursive --reporter min --colors -w --watch-ignore node_modules,.git,app"
+    "test": "mocha \"./test/**/*.spec.js\"",
+    "test:watch": "mocha \"./test/**/*.spec.js\" --reporter min --colors -w --watch-ignore node_modules,.git,app"
   },
   "author": "CRH Technology Studio",
   "main": "src/index.js",

@@ -2,8 +2,9 @@
 function evaluate(expression, scope) {
   scope = scope ?? {};
   const str = expression.trim()
-    .replace(/^return\s+/, '') // allow explicit return statement
+    .replace(/^(return\s+|export\s+default\s+)/, '') // allow explicit return or export statement
     .replace(/;$/, ''); // ignore trailing semicolon
+
   const f = new Function(...Object.keys(scope), `return (${str});`); // eslint-disable-line no-new-func
   return f(...Object.values(scope));
 }

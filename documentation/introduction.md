@@ -60,6 +60,9 @@ A feature can add "entities" to a sketch. Entities are the geometric and annotat
 * Polyface
 * Text
 * AlignedDim
+* DimString
+* Leader
+...etc
 
 There are [built-in features](api.md) for all of these primitive entities, which can be combined in user-defined features to create more complex drawings.
 
@@ -72,14 +75,14 @@ const point = sketch.shape;
 // Point { x: 1, y: 2 }
 ```
 
-All of the entities in a sketch can be retrieved with the `.entities()` iterator:
+All of the entities in a sketch can be retrieved with the `.entities` getter:
 ```js
 const sketch = new Sketch()
   .point(1, 2)
   .circle([0, 0], 20)
   .rectangle([10, 10], 10, 5);
 
-const entities = [...sketch.entities()];
+const entities = sketch.entities;
 // [
 //   Point { x: 1, y: 2},
 //   Circle { pc: { x: 0, y: 0 }, r: 20 },
@@ -91,7 +94,7 @@ const entities = [...sketch.entities()];
 
 A "draft" is a collection of sketch features, stored as raw strings. Features can be defined in either a [YAML-based syntax](yaml-syntax.md) or in [JavaScript](js-syntax.md).
 
-All features in a draft "file" are automatically registered so that they can be used by any of the other features. When stored on disk, a draft "file" is actually just a folder, which by convention has a ".draft" extension; all sketch features contained within this folder should follow the naming pattern `name.sketch.js` or `name.sketch.yaml`.
+All features in a draft "file" are automatically registered so that they can be used by any of the other features. When stored on disk, a draft "file" is actually just a folder, which by convention has a ".draft" extension; all sketch features contained within this folder should follow the naming pattern `name.js` or `name.yaml`. Draft files should also have an `index.json`, which is used to define settings and properties that apply to the entire collection.
 
 The draft file can then be [imported](importing.md) and used within a project:
 
