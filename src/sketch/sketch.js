@@ -11,7 +11,7 @@ class Sketch {
 
   // construct a new empty sketch
   constructor(options) {
-    this.node = {
+    const node = {
       id: uuidv4(), // id: the uuid of node
       name: '', // name: the name of this node
       tags: [], // tags: any 'tags' that have been added to this node
@@ -30,12 +30,20 @@ class Sketch {
       z: null, // z-index -- if present, will be used to sort siblings when iterating
       layer: null, // will assign entities to layer (if layer is a concept in output format)
     };
-    if (Array.isArray(options)) {
-      options = { entities: options };
+
+    if (!options) {
+      options = {};
+    } else if (options.node) {
+      options = options.node;
     }
-    options = options || {};
+
     delete options.uuidv4;
-    this.node = { ...this.node, ...options };
+
+    if (options.children) {
+      options.children = options.children.map((c) => new Sketch(c));
+    }
+
+    this.node = { ...node, ...options };
     this.node.index.owner = () => this;
   }
 
