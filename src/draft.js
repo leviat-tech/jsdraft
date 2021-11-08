@@ -8,8 +8,14 @@ const load_draft_file = require('./loaders/load-draft.js');
 
 class Draft {
   constructor(file) {
-    if (file && file._file_id === 'Serialized Draft') {
-      return load_draft_file(file, Draft);
+    if (file) {
+      if (typeof file === 'string') {
+        file = JSON.parse(file);
+      }
+
+      if (file._file_id === 'Serialized Draft') {
+        return load_draft_file(file, Draft);
+      }
     }
 
     this.features = {

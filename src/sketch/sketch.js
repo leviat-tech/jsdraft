@@ -33,6 +33,8 @@ class Sketch {
 
     if (!options) {
       options = {};
+    } else if (typeof options === 'string') {
+      options = JSON.parse(options).node;
     } else if (options.node) {
       options = options.node;
     }
