@@ -7,7 +7,11 @@ const load_draft_file = require('./loaders/load-draft.js');
 
 
 class Draft {
-  constructor() {
+  constructor(file) {
+    if (file && file._file_id === 'Serialized Draft') {
+      return load_draft_file(file, Draft);
+    }
+
     this.features = {
       sketch: {},
     };
@@ -23,6 +27,29 @@ class Draft {
     this.meta = {
       filetype: 'JSDraft',
       version: '0.0.3',
+    };
+  }
+
+  toJSON() {
+    const features = Object.entries(this.features.sketch)
+      .reduce((d, [n, f]) => ({ ...d, [`${n}.${f.extension}`]: f.contents }), {});
+
+    const index = {
+      settings: this.settings,
+      styles: this.styles,
+      xrefs: {},
+    };
+
+    const _xrefs = Object.entries(this.xrefs).reduce((x, [name, xref]) => {
+      index[name] = 'Serialized XREF';
+      x[name] = JSON.stringify(xref);
+      return x;
+    }, {});
+
+    return {
+      ...features,
+      _file_id: 'Serialized Draft',
+      _xrefs,
     };
   }
 
