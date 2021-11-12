@@ -1,5 +1,5 @@
 const flatten = require('@flatten-js/core');
-const Vector = require('@crhio/vector').default;
+const { Vector } = require('@crhio/vector');
 
 
 module.exports = {

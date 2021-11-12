@@ -1,4 +1,4 @@
-const Vector = require('@crhio/vector').default;
+const { Vector } = require('@crhio/vector');
 
 
 // Takes three points and a radius and returns a curve of the filleted segment

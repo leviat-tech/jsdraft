@@ -42,6 +42,7 @@ const intersect = require('./operations/intersect.js');
 const join = require('./operations/join.js');
 const offset = require('./operations/offset.js');
 const prune = require('./operations/prune.js');
+const slice = require('./operations/slice.js');
 const subtract = require('./operations/subtract.js');
 const union = require('./operations/union.js');
 
@@ -100,6 +101,7 @@ module.exports = {
   join,
   offset,
   prune,
+  slice,
   subtract,
   union,
 

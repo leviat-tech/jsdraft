@@ -26,6 +26,7 @@ Table of Contents:
     * [join](#join)
     * [offset](#offset-number-boolean-)
     * [prune](#prune-condition-condition-)
+    * [slice](#slice-segment-boolean-)
     * [subtract](#subtract-sketch-)
     * [union](#union-sketch-)
   * [Transformations](#transformations)
@@ -43,6 +44,9 @@ Table of Contents:
   * [Meta features](#meta-features)
     * [add_attribute](#add_attribute-string-value-)
     * [hide](#hide)
+    * [ignore_mask](#ignore_mask)
+    * [layer](#layer-string-)
+    * [mask](#mask-polyface-)
     * [name](#name-string-)
     * [show](#show)
     * [tag](#tag)
@@ -457,6 +461,26 @@ const pruned = result.prune('bar', 'baz');
 // Result will contain only the "foo" node.
 ```
 
+
+### _slice( segment[, boolean] )_
+
+Cuts any polyface into a series of segments, given an input line. Useful when constructing a "section" drawing.
+
+```js
+const foo = sketch
+  .circle([0, 0], 10)
+  .subtract(
+    sketch.circle([0, 0], 4)
+  );
+
+// First argument is a segment, second optional argument determines whether the original input
+// polyface should be removed from the resulting sketch (default is true).
+const sliced = foo
+  .slice([[-10, 0], [30, 0]], false)
+  .slice([[-10, 1], [30, 1]], false)
+  .slice([[-10, 3], [30, 3]], false);
+```
+
 ### _subtract( sketch )_
 
 Performs a boolean subtraction: any polyfaces in the provided sketch will be subtracted from any polyfaces in the original sketch. Will also work with non-polyface geometry--segments, arcs, and polyfaces will be trimmed by the cutting polygon, points will be removed.
@@ -625,6 +649,38 @@ const h1 = sketch.polycurve([0, 0], 1, [5, 5]).hide();
 
 // hidden entities can still be queried by using the "hidden" getter
 const entities = sketch.hidden.entities;
+```
+
+### _ignore_mask()_
+
+If a mask has been applied to a sketch, using the `ignore_mask` function on any child node will cause the mask to be ignored for that child node and its children. An optional boolean argument can be supplied to toggle the result of this feature.
+
+```js
+const foo = sketch.polycurve([0, 0], 1, [5, 5]).ignore_mask();
+const bar = sketch.rectangle([0, 0], 10, 5, 1);
+
+const result = sketch.add(foo, bar)
+  .mask([2, -1], [8, -1], [8, 8]);
+```
+
+### _layer( string )_
+
+Assigns a sketch to a layer.
+
+```js
+const result = sketch.layer('my_layer');
+```
+
+### _mask( polyface )_
+
+Masks a sketch by the provided polyface--any drawing content outside the polyface will be invisible in the rendered output. Can be used in conjunction with [ignore_mask](#ignore_mask).
+
+```js
+const foo = sketch.polycurve([0, 0], 1, [5, 5]);
+const bar = sketch.rectangle([0, 0], 10, 5, 1);
+
+const result = sketch.add(foo, bar)
+  .mask([2, -1], [8, -1], [8, 8]);
 ```
 
 ### _name( string )_

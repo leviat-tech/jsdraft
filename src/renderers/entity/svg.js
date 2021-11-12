@@ -1,4 +1,4 @@
-const Vector = require('@crhio/vector').default;
+const { Vector } = require('@crhio/vector');
 const { base_entity_type } = require('../../utility/misc/entity-type');
 const svg_string = require('../../utility/misc/svg-string');
 const { rad_to_deg } = require('../../utility/misc/rad-deg');

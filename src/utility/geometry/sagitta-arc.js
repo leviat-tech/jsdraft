@@ -1,4 +1,4 @@
-const Vector = require('@crhio/vector').default;
+const { Vector } = require('@crhio/vector');
 
 
 const determinant = (m) => (m.length == 1 // eslint-disable-line

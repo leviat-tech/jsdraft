@@ -1,5 +1,5 @@
 const flatten = require('@flatten-js/core');
-const Vector = require('@crhio/vector').default;
+const { Vector } = require('@crhio/vector');
 const { deg_to_rad } = require('../../utility/misc/rad-deg');
 
 
