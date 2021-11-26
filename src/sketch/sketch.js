@@ -132,7 +132,15 @@ class Sketch {
   }
 
   get vertices() {
-    return [].concat(...this.entities.map((e) => e.vertices));
+    return [].concat(...this.entities.map((e) => {
+      const type = base_entity_type(e);
+
+      if (type === 'polyface') {
+        return [].concat(...[...e.faces].map((face) => [...face].map((s) => s.start)));
+      }
+
+      return e.vertices;
+    }));
   }
 
   edge(i) {
@@ -147,7 +155,7 @@ class Sketch {
       if (type === 'polycurve') {
         result.push(...entity.toShapes());
       } else if (type === 'polyface') {
-        const edges = [...entity.edges].map((e) => e.shape);
+        const edges = [].concat(...[...entity.faces].map((face) => [...face].map((e) => e.shape)));
         result.push(...edges);
       } else if (['arc', 'segment'].includes(type)) {
         result.push(entity);

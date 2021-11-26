@@ -5,7 +5,7 @@ use(require('../../helpers.js'));
 const Sketch = require('../../../src/sketch/sketch.js');
 
 
-describe.only('Slice', () => {
+describe('Slice', () => {
   const foo = new Sketch()
     .polyface([0, 0], [16, 2], [25, 25], [2, 10]);
 

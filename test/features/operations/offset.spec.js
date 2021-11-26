@@ -166,7 +166,6 @@ describe('Offset', () => {
   it('can offset a curve with small dimensions', () => {
     const offset = pcurve3.offset(2 * 0.001);
     const v = offset.shape.vertices;
-    console.log(v);
     expect(v[0]).to.be.a.point({ x: -0.002, y: -0.07 });
     expect(v[1]).to.be.a.point({ x: -0.002, y: -0.002 });
     expect(v[2]).to.be.a.point({ x: -0.01, y: -0.002 });
