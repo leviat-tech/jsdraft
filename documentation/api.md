@@ -19,6 +19,7 @@ Table of Contents:
   * [Operations](#operations)
     * [add_faces](#add_faces-sketch-)
     * [close](#close-number-)
+    * [connect](#connect)
     * [explode](#explode)
     * [fillet](#fillet-number-number-)
     * [interpolate](#interpolate-point-point-array-)
@@ -338,6 +339,21 @@ const sketch = sketch.polycurve([0, 0], [16, 16], [25, 0], [50, 0]).close(1);
 ```
 
 
+### _connect()_
+
+Will connect discontinuous polycurves into one polycurve end-to-end, adding segments where necessary.
+
+```js
+const a = sketch
+  .polycurve([0, 0], [16, 16], [25, 0], [50, 0]);
+
+const b = sketch
+  .polycurve([-10, 20], [-25, -25]);
+
+const result = a.connect(b);
+```
+
+
 ### _explode()_
 
 Returns a new sketch with all polycurves and polyfaces converted to arcs and segments.
@@ -383,7 +399,6 @@ const interpolatedSketch = sketch
   )
   .interpolate([0, 0], [100, 100], [20, 50, 80]);
 ```
-
 
 ### _intersect( sketch )_
 
