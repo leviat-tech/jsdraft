@@ -97,10 +97,14 @@ function recurse(sketch, options) {
   if (sketch.node.entity) {
     if (options.mask && !options.ignore_mask) {
       const entity = svg_renderer(sketch.node.entity, { output: 'js', ...options });
-      set(entity, 'attributes.mask', `url(#${options.mask})`);
-      svg.push(entity);
+
+      if (entity) {
+        set(entity, 'attributes.mask', `url(#${options.mask})`);
+        svg.push(entity);
+      }
     } else {
-      svg.push(svg_renderer(sketch.node.entity, { output: 'js', ...options }));
+      const entity = svg_renderer(sketch.node.entity, { output: 'js', ...options });
+      if (entity) svg.push(entity);
     }
   }
 

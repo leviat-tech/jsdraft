@@ -3,6 +3,7 @@ const { base_entity_type } = require('../../utility/misc/entity-type');
 const svg_string = require('../../utility/misc/svg-string');
 const { rad_to_deg } = require('../../utility/misc/rad-deg');
 const almost_equal = require('../../utility/misc/almost-equal.js');
+const points_are_near = require('../../utility/geometry/points-are-near.js');
 const svg_color = require('../../utility/misc/svg-color.js');
 
 
@@ -169,6 +170,8 @@ const renderers = {
       } = {},
     } = {},
   }) {
+    if (points_are_near(entity.ps, entity.pe)) return null;
+
     const s = annotation_scale * scale;
     const v1 = Vector({ x: entity.ps.x, y: entity.ps.y });
     const v2 = Vector({ x: entity.pe.x, y: entity.pe.y });
@@ -674,6 +677,9 @@ function svg(entity, { output = 'string', ...options }) {
 
   const renderer = renderers[type];
   const js = renderer(entity, options);
+
+  if (!js) return null;
+
   js.z = options.z || 0;
   js.transform = options.transform || null;
 

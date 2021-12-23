@@ -3,6 +3,7 @@ const set = require('lodash/set');
 const Point = require('../geometric/point.js');
 const { normalize } = require('../../utility/arguments');
 const orientation = require('../../utility/geometry/orientation.js');
+const points_are_near = require('../../utility/geometry/points-are-near.js');
 
 
 class AlignedDim {
@@ -17,20 +18,26 @@ class AlignedDim {
     this.ps = new Point(...args[0]);
     this.pe = new Point(...args[1]);
 
-    if (Array.isArray(args[2])) {
+    if (Array.isArray(args[2]) || args[2] instanceof Point) {
       const offset_pt = new Point(...args[2]);
-      const line = flatten.line(this.ps, this.pe);
-      const distance = line.distanceTo(offset_pt);
-      const pe = distance[1].pe;
-      const o = orientation(
-        [this.ps.x, this.ps.y],
-        [this.pe.x, this.pe.y],
-        [pe.x, pe.y],
-      );
 
-      this.offset = o === 'clockwise'
-        ? -distance[0]
-        : distance[0];
+      if (points_are_near(this.ps, this.pe)) {
+        this.offset = this.ps.distanceTo(offset_pt);
+      } else {
+        const line = flatten.line(this.ps, this.pe);
+        const distance = line.distanceTo(offset_pt);
+        const pe = distance[1].pe;
+        const o = orientation(
+          [this.ps.x, this.ps.y],
+          [this.pe.x, this.pe.y],
+          [pe.x, pe.y],
+        );
+
+        this.offset = o === 'clockwise'
+          ? -distance[0]
+          : distance[0];
+      }
+
     } else {
       this.offset = args[2];
     }

@@ -8,7 +8,7 @@ chai.expect();
 
 const { expect } = chai;
 
-describe.only('Connect', () => {
+describe('Connect', () => {
   const a = new Sketch()
     .polycurve([0, 0], [10, 10]);
 

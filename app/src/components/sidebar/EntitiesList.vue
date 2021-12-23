@@ -38,6 +38,7 @@ export default {
     details(index) {
       const entity = this.entities[index];
       const type = this.entityTypes[index];
+      if (!entityDetails[type]) return null;
       return entityDetails[type](entity);
     },
   },

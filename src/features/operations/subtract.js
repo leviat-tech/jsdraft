@@ -35,9 +35,8 @@ module.exports = function subtract(sketch, to_subtract) {
       }, entity);
 
       res.push(subtracted);
-    }
 
-    if (['arc', 'segment'].includes(type)) {
+    } else if (['arc', 'segment'].includes(type)) {
       const intersections = subtracted_polyfaces.reduce((i, polyface) => {
         i.push(...polyface.intersect(entity));
         return i;
@@ -51,16 +50,14 @@ module.exports = function subtract(sketch, to_subtract) {
 
         if (!is_contained) res.push(segment);
       });
-    }
 
-    if (type === 'point') {
+    } else if (type === 'point') {
       const is_contained = subtracted_polyfaces
         .some((polyface) => polyface.contains(entity));
 
       if (!is_contained) res.push(entity);
-    }
 
-    if (type === 'polycurve') {
+    } else if (type === 'polycurve') {
       const intersections = subtracted_polyfaces.reduce((i, polyface) => {
         i.push(...intersect_polycurve(entity, polyface));
         return i;
@@ -102,6 +99,10 @@ module.exports = function subtract(sketch, to_subtract) {
         .map((chain) => new Polycurve(...chain));
 
       res.push(...pcurves);
+
+    } else {
+      // entity is not subtractable
+      res.push(entity);
     }
 
     return res;

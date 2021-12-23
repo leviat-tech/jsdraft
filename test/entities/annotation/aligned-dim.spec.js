@@ -4,6 +4,7 @@ const { expect, use } = require('chai');
 use(require('../../helpers'));
 const flatten = require('@flatten-js/core');
 const AlignedDim = require('../../../src/entities/annotation/aligned-dim');
+const Point = require('../../../src/entities/geometric/point');
 const render = require('../../../src/render');
 
 
@@ -14,6 +15,13 @@ describe('Aligned Dim', () => {
     expect(dim).to.be.instanceof(AlignedDim);
     expect(dim.ps).to.be.a.point({ x: 0, y: 0 });
     expect(dim.pe).to.be.a.point({ x: 10, y: 5 });
+  });
+
+  it('can gracefully handle two coincident points', () => {
+    const ptA = new Point(0, 0);
+    const ptB = new Point(0, 0);
+    const dim2 = new AlignedDim(ptA, ptB, [0, 5]);
+    expect(dim2).to.be.instanceof(AlignedDim);
   });
 
   it('can be transformed', () => {
