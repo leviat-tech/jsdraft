@@ -50,22 +50,24 @@ export default {
     ...mapGetters(['draft']),
     svg() {
       try {
-        return this.entities.map((entity) => render(entity, 'svg', {
-          ...annotationScale(this.draft.settings),
-          output: 'js',
-          style: {
-            stroke: {
-              color: this.stroke,
-              width: this.strokeWidth,
+        return this.entities
+          .map((entity) => render(entity, 'svg', {
+            ...annotationScale(this.draft.settings),
+            output: 'js',
+            style: {
+              stroke: {
+                color: this.stroke,
+                width: this.strokeWidth,
+              },
+              fill: {
+                color: this.fill,
+              },
+              annotation: {
+                color: this.stroke,
+              },
             },
-            fill: {
-              color: this.fill,
-            },
-            annotation: {
-              color: this.stroke,
-            },
-          },
-        }));
+          }))
+          .filter((entity) => entity);
       } catch {
         return [];
       }
