@@ -70,6 +70,12 @@ const entities = {
     pe: { x: e.pe.x, y: e.pe.y },
     side: e.side,
   }),
+  DimString: (e) => f({
+    ps: { x: e.ps.x, y: e.ps.y },
+    pe: { x: e.pe.x, y: e.pe.y },
+    side: e.side,
+    ticks: e.ticks,
+  }),
   Text: (e) => f({
     p: { x: e.p.x, y: e.p.y },
     text: e.text,

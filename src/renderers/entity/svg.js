@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid');
 const { Vector } = require('@crhio/vector');
 const { base_entity_type } = require('../../utility/misc/entity-type');
 const svg_string = require('../../utility/misc/svg-string');
@@ -199,16 +200,37 @@ const renderers = {
     const e = v1.subtract(exoffset).add(crossoffset);
     const f = v2.add(exoffset).add(crossoffset);
 
+    const g = v1.add(crossoffset);
+    const h = v2.add(crossoffset);
+
     const path = `M ${a.x} ${a.y} L ${b.x} ${b.y} M ${c.x} ${c.y} L ${d.x} ${d.y} M ${e.x} ${e.y} L ${f.x} ${f.y}`;
 
-    const cp = v1.add(dim_vector.scale(length / 2)).add(crossoffset).add(textoffset);
     const ltext = parseFloat((length * dim_conversion).toPrecision(pr));
+    const mask_w = font_size * s * (ltext.toString().length * 0.6 + 0.5);
+
+    // if overall text width is less than the distance between points, then
+    // position the dimension on the line. Otherwise position the dimension
+    // above the line.
+    const text_on_line = (mask_w * mask_w) < v1.distSq(v2);
+    const cp = text_on_line
+      ? v1.add(dim_vector.scale(length / 2)).add(crossoffset)
+      : v1.add(dim_vector.scale(length / 2)).add(crossoffset).add(textoffset);
+    const mask_id = uuidv4().slice(10);
 
     const path_attributes = {
       stroke: svg_color(color),
       'vector-effect': 'non-scaling-stroke',
       'stroke-width': width,
       d: path,
+      ...(text_on_line && { mask: `url(#${mask_id})` }),
+    };
+
+    const circle_attributes = {
+      r: s,
+      fill: 'none',
+      stroke: svg_color(color),
+      'vector-effect': 'non-scaling-stroke',
+      'stroke-width': width,
     };
 
     const r = -dim_vector.angleDeg();
@@ -225,11 +247,50 @@ const renderers = {
       'text-anchor': svg_h_align(h_align),
       transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
       'font-size': font_size * s,
+      'font-family': 'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
+    };
+
+    const dim_min_x = Math.min(a.x, b.x, c.x, d.x, e.x, f.x) - s;
+    const dim_max_x = Math.max(a.x, b.x, c.x, d.x, e.x, f.x) + s;
+    const dim_min_y = Math.min(a.y, b.y, c.y, d.y, e.y, f.y) - s;
+    const dim_max_y = Math.max(a.y, b.y, c.y, d.y, e.y, f.y) + s;
+    const dim_attributes = {
+      x: dim_min_x,
+      y: dim_min_y,
+      width: dim_max_x - dim_min_x,
+      height: dim_max_y - dim_min_y,
+      fill: 'white',
+    };
+
+    const mask_h = font_size * s * 2;
+    const mask_attributes = {
+      x: cp.x - mask_w / 2,
+      y: cp.y - mask_h / 2,
+      width: mask_w,
+      height: mask_h,
+      fill: 'black',
+      rotation,
     };
 
     return {
       tag: 'g',
       nodes: [
+        ...(text_on_line ? [{
+          tag: 'mask',
+          attributes: { id: mask_id },
+          nodes: [
+            { tag: 'rect', attributes: dim_attributes },
+            { tag: 'rect', attributes: mask_attributes },
+          ],
+        }] : []),
+        {
+          tag: 'circle',
+          attributes: { ...circle_attributes, cx: g.x, cy: g.y },
+        },
+        {
+          tag: 'circle',
+          attributes: { ...circle_attributes, cx: h.x, cy: h.y },
+        },
         { tag: 'path', attributes: path_attributes },
         { tag: 'text', attributes: text_attributes, contents: ltext, callback: entity.callback },
       ],
@@ -281,6 +342,28 @@ const renderers = {
     const e = v1.subtract(exoffset).add(crossoffset);
     const f = v2.add(exoffset).add(crossoffset);
 
+    const g = v1.add(crossoffset);
+    const h = v2.add(crossoffset);
+
+    const circle_attributes = {
+      r: s,
+      fill: 'none',
+      stroke: svg_color(color),
+      'vector-effect': 'non-scaling-stroke',
+      'stroke-width': width,
+    };
+
+    const circles = [
+      {
+        tag: 'circle',
+        attributes: { ...circle_attributes, cx: g.x, cy: g.y },
+      },
+      {
+        tag: 'circle',
+        attributes: { ...circle_attributes, cx: h.x, cy: h.y },
+      },
+    ];
+
     const path = `M ${a.x} ${a.y} L ${b.x} ${b.y} M ${c.x} ${c.y} L ${d.x} ${d.y} M ${e.x} ${e.y} L ${f.x} ${f.y}`;
 
     const complete_path = entity.ticks.reduce((p, tick) => {
@@ -288,18 +371,68 @@ const renderers = {
       const atick = a.add(translation);
       const btick = b.add(translation);
 
+      // Add circle to tick mark
+      const circle = v1.add(translation).add(crossoffset);
+      circles.push({
+        tag: 'circle',
+        attributes: { ...circle_attributes, cx: circle.x, cy: circle.y },
+      });
+
       return p.concat(` M ${atick.x} ${atick.y} L ${btick.x} ${btick.y}`);
     }, path);
+
+    const dim_min_x = Math.min(a.x, b.x, c.x, d.x, e.x, f.x) - s;
+    const dim_max_x = Math.max(a.x, b.x, c.x, d.x, e.x, f.x) + s;
+    const dim_min_y = Math.min(a.y, b.y, c.y, d.y, e.y, f.y) - s;
+    const dim_max_y = Math.max(a.y, b.y, c.y, d.y, e.y, f.y) + s;
+    const dim_attributes = {
+      x: dim_min_x,
+      y: dim_min_y,
+      width: dim_max_x - dim_min_x,
+      height: dim_max_y - dim_min_y,
+      fill: 'white',
+    };
+
+    const mask_id = uuidv4().slice(10);
+    const mask_nodes = [
+      { tag: 'rect', attributes: dim_attributes },
+    ];
 
     const text = entity.ticks.concat(length)
       .map((dist, i, arr) => {
         const prev = arr[i - 1] || 0;
         const l = dist - prev;
-        const cp = v1.add(dim_vector.scale(prev + l / 2)).add(crossoffset).add(textoffset);
+
+        const ltext = parseFloat((l * dim_conversion).toPrecision(pr));
+        const mask_w = font_size * s * (ltext.toString().length * 0.6 + 0.5);
+
+        // if overall text width is less than the distance between ticks, then
+        // position the dimension on the line. Otherwise position the dimension
+        // above the line.
+        const text_on_line = mask_w < l;
+        const cp = text_on_line
+          ? v1.add(dim_vector.scale(prev + l / 2)).add(crossoffset)
+          : v1.add(dim_vector.scale(prev + l / 2)).add(crossoffset).add(textoffset);
+
         const r = -dim_vector.angleDeg();
         const rotation = (Math.abs(r) + 1.19209290e-7) > 90
           ? Math.sign(r) * -180 + r
           : r;
+
+        if (text_on_line) {
+          const mask_h = font_size * s * 2;
+          const mask_attributes = {
+            x: cp.x - mask_w / 2,
+            y: cp.y - mask_h / 2,
+            width: mask_w,
+            height: mask_h,
+            fill: 'black',
+            rotation,
+          };
+
+          mask_nodes.push({ tag: 'rect', attributes: mask_attributes });
+        }
+
         return {
           tag: 'text',
           contents: parseFloat((l * dim_conversion).toPrecision(pr)),
@@ -313,6 +446,7 @@ const renderers = {
             'text-anchor': svg_h_align(h_align),
             transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
             'font-size': font_size * s,
+            'font-family': 'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
           },
         };
       });
@@ -322,12 +456,19 @@ const renderers = {
       'vector-effect': 'non-scaling-stroke',
       'stroke-width': width,
       d: complete_path,
+      mask: `url(#${mask_id})`,
     };
 
     return {
       tag: 'g',
       nodes: [
+        {
+          tag: 'mask',
+          attributes: { id: mask_id },
+          nodes: mask_nodes,
+        },
         { tag: 'path', attributes: path_attributes },
+        ...circles,
         ...text,
       ],
     };
@@ -393,6 +534,7 @@ const renderers = {
       'text-anchor': svg_h_align(h_align),
       transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
       'font-size': font_size * s,
+      'font-family': 'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
     };
 
     return {
@@ -469,6 +611,7 @@ const renderers = {
       'text-anchor': leader_left ? 'end' : 'start',
       transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
       'font-size': font_size * s,
+      'font-family': 'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
     };
 
     return {
@@ -546,6 +689,7 @@ const renderers = {
       'text-anchor': leader_left ? 'end' : 'start',
       transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
       'font-size': font_size * s,
+      'font-family': 'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
     };
 
     return {
@@ -597,6 +741,7 @@ const renderers = {
       'text-anchor': svg_h_align(h_align),
       transform: `${t}scale(1 -1) rotate(${rad_to_deg(entity.rotation)},${entity.p.x},${-entity.p.y})`,
       'font-size': font_size * s,
+      'font-family': 'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
     };
 
     return { tag: 'text', attributes, contents: entity.text };
@@ -659,6 +804,7 @@ const renderers = {
       'text-anchor': leader_left ? 'end' : 'start',
       transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
       'font-size': font_size * s,
+      'font-family': 'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
     };
 
     return {
