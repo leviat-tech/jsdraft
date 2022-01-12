@@ -1,4 +1,5 @@
 const flatten = require('@flatten-js/core');
+const set = require('lodash/set');
 const Point = require('../geometric/point.js');
 const { normalize } = require('../../utility/arguments');
 const orientation = require('../../utility/geometry/orientation.js');
@@ -42,6 +43,11 @@ class DimString {
     } else {
       this.offset = args[3];
     }
+
+    // A callback can be defined which can be used to set overrides in app
+    this.callback = typeof args[3] === 'string'
+      ? (values) => set({}, args[3], values)
+      : args[3];
   }
 
   get type() { return 'dim_string'; }

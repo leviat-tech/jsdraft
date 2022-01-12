@@ -268,8 +268,8 @@ const renderers = {
       y: cp.y - mask_h / 2,
       width: mask_w,
       height: mask_h,
+      transform: `rotate(${-rotation},${cp.x},${cp.y})`,
       fill: 'black',
-      rotation,
     };
 
     return {
@@ -427,7 +427,7 @@ const renderers = {
             width: mask_w,
             height: mask_h,
             fill: 'black',
-            rotation,
+            transform: `rotate(${-rotation},${cp.x},${cp.y})`,
           };
 
           mask_nodes.push({ tag: 'rect', attributes: mask_attributes });
