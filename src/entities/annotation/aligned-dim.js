@@ -46,6 +46,9 @@ class AlignedDim {
     this.callback = typeof args[3] === 'string'
       ? (value) => set({}, args[3], value)
       : args[3];
+
+    // options.prefix and options.suffix implemented as modifiers to text string in svg renderer
+    this.options = (typeof args[4] === 'object' && args[4] !== null) ? args[4] : {};
   }
 
   get type() { return 'aligned_dim'; }
