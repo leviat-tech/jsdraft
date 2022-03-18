@@ -11,7 +11,7 @@
     "electron-build": "run-s electron-build:*",
     "electron-build:vite": "vite build -c vite-electron.config.js",
     "electron-build:electron": "electron-builder build",
-    "postinstall": "node node_modules/electron/install.js && node node_modules/esbuild/install.js"
+    "__postinstall": "node node_modules/electron/install.js && node node_modules/esbuild/install.js"
   },
   "dependencies": {
     "@crhio/jsdraft": "../",
