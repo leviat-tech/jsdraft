@@ -253,6 +253,7 @@ const renderers = {
       'font-family': 'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
     };
 
+    // add data- properties to <text> element for event handling
     if (entity.options.dataset) {
       Object.entries(entity.options.dataset).forEach(([key, val]) => {
         const attr = `data-${key}`;
