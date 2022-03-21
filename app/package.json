@@ -10,8 +10,7 @@
     "electron-dev:electron": "electron src/background.js",
     "electron-build": "run-s electron-build:*",
     "electron-build:vite": "vite build -c vite-electron.config.js",
-    "electron-build:electron": "electron-builder build",
-    "_postinstall": "node node_modules/electron/install.js && node node_modules/esbuild/install.js"
+    "electron-build:electron": "electron-builder build"
   },
   "dependencies": {
     "@crhio/jsdraft": "../",
