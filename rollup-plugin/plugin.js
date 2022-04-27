@@ -3,6 +3,7 @@ import path from 'path';
 import set from 'lodash/set';
 import toSource from 'tosource';
 
+const draftIds = {};
 
 function isFile(p) {
   const stat = fs.lstatSync(p);
@@ -21,6 +22,11 @@ function isValidFilename(filename) {
   return split.length > 1
     && split[0]
     && ['json', 'js', 'yaml'].includes(split[split.length - 1]);
+}
+
+function isDraft(filepath) {
+  const ext = /\.draft(\/.+\.js(on)?)?$/
+  return ext.test(filepath);
 }
 
 function fileContents(files, root, dir = '') {
@@ -70,21 +76,21 @@ function getFile(p) {
 }
 
 export default function plugin() {
-  const ext = /\.draft(\/index\.json)?$/;
-
   return {
     name: '@crhio/rollup-plugin-jsdraft',
     enforce: 'pre',
 
     async resolveId(source, importer) {
-      if (!ext.test(source)) return null;
+      if (!isDraft(source)) return null;
 
       const p = path.resolve(path.dirname(importer || '.'), source);
       return p;
     },
 
     load(id) {
-      if (!ext.test(id)) return null;
+      if (!isDraft(id)) return null;
+
+      draftIds[id] = true;
 
       const cwd = process.cwd();
       let p = id.startsWith(cwd)
@@ -98,7 +104,7 @@ export default function plugin() {
     },
 
     transform(content, id) {
-      if (!ext.test(id)) return null;
+      if (!isDraft(id)) return null;
 
       const files = JSON.parse(content);
 
@@ -116,6 +122,12 @@ export default function plugin() {
         code,
         map: { mappings: '' },
       };
+    },
+
+    handleHotUpdate(ctx) {
+      if (!isDraft(ctx.file)) return null;
+
+      return Object.keys(draftIds).map(id => ctx.server.moduleGraph.getModuleById(id));
     },
   };
 }
