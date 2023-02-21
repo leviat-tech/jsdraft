@@ -253,6 +253,14 @@ const renderers = {
       'font-family': 'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
     };
 
+    // add data- properties to <text> element for event handling
+    if (entity.options.dataset) {
+      Object.entries(entity.options.dataset).forEach(([key, val]) => {
+        const attr = `data-${key}`;
+        text_attributes[attr] = val;
+      });
+    }
+
     const dim_min_x = Math.min(a.x, b.x, c.x, d.x, e.x, f.x) - s;
     const dim_max_x = Math.max(a.x, b.x, c.x, d.x, e.x, f.x) + s;
     const dim_min_y = Math.min(a.y, b.y, c.y, d.y, e.y, f.y) - s;
