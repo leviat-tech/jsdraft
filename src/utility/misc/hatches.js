@@ -21,6 +21,25 @@ function lines(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw = 1
   `;
 }
 
+function brick(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw = 1, transform) {
+  return `
+  <pattern id="${name}" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(${45 + angle}) scale(${scale} ${scale})${transform}">
+    <rect fill="${bg}" x="0" y="0" width="10" height="10" />
+    <line stroke="${color}" stroke-width="${sw / scale}" vector-effect="non-scaling-stroke" x1="0" y1="3.5" x2="10" y2="3.5" />
+    <line stroke="${color}" stroke-width="${sw / scale}" vector-effect="non-scaling-stroke" x1="0" y1="6.5" x2="10" y2="6.5" />
+  </pattern>
+  `;
+}
+
+function insulation(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw = 1, transform) {
+  return `
+  <pattern id="${name}" patternUnits="userSpaceOnUse" width="40" height="20" patternTransform="rotate(${angle}) scale(${scale} ${scale})${transform}">
+    <rect fill="${bg}" x="0" y="0" width="40" height="20" />
+    <path d="M0,-1.3322676295501878e-15 A9.882117688026186,9.882117688026186 0 0,0 13,8.999999999999998 L27,1 A9.882117688026185,9.882117688026185 0 0,1 40,10 A9.882117688026186,9.882117688026186 0 0,1 27,19 L13,11 A9.882117688026185,9.882117688026185 0 0,0 0,20.000000000000007" stroke="${color}" stroke-width="${sw / scale}" fill="none" vector-effect="non-scaling-stroke"/>
+  </pattern>
+  `;
+}
+
 function steel(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw = 1, transform) {
   return `
   <pattern id="${name}" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(${45 + angle}) scale(${scale} ${scale})${transform}">
@@ -127,4 +146,6 @@ module.exports = {
   lines,
   steel,
   concrete,
+  brick,
+  insulation,
 };
