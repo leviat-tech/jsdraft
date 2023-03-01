@@ -60,7 +60,7 @@ function normalize_js_param(param) {
 
 function parameters(file) {
   if (file.extension === 'js') {
-    const def = evaluate(file.contents.trim());
+    const def = typeof file.contents === 'object' ? file.contents : evaluate(file.contents.trim());
 
     return def
       && def.parameters

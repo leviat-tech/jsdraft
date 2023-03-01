@@ -14,7 +14,7 @@
   },
   "author": "CRH Technology Studio",
   "main": "src/index.js",
-  "module": "dist/jsdraft.esm.js",
+  "module": "src/index.js",
   "browser": {
     "./src/loaders/load-draft.js": "./src/loaders/load-draft.browser.js",
     "./src/loaders/load-file.js": "./src/loaders/load-file.browser.js"

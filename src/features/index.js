@@ -46,6 +46,7 @@ const prune = require('./operations/prune.js');
 const slice = require('./operations/slice.js');
 const subtract = require('./operations/subtract.js');
 const union = require('./operations/union.js');
+const group = require('./operations/group.js');
 
 const orient = require('./transformations/orient.js');
 const snap = require('./transformations/snap.js');
@@ -98,6 +99,7 @@ module.exports = {
   close,
   explode,
   fillet,
+  group,
   interpolate,
   intersect,
   join,
