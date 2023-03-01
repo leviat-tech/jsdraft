@@ -120,6 +120,11 @@ function recurse(sketch, options) {
     }
   }
 
+  // draw children
+  for (const child of sketch.node.children) {
+    svg.push(...recurse(child, options));
+  }
+
   return svg;
 }
 
