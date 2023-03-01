@@ -10,9 +10,19 @@ const hatches = require('../../utility/misc/hatches.js');
 const hash = require('../../utility/misc/hash.js');
 const convert_units = require('../../utility/misc/convert-units.js');
 
+function convert_transform_matrix(_transform, scale) {
+  if (!_transform) return '';
 
-function convert_transform_matrix(transform) {
-  if (!transform) return '';
+  const transform = _transform.slice();
+
+  if (scale && scale !== 1) {
+    const transformXIndex = 4;
+    const transformYIndex = 5;
+
+    transform[transformXIndex] /= scale;
+    transform[transformYIndex] /= scale;
+  }
+
   return ` matrix(${transform.join(' ')})`;
 }
 
@@ -21,7 +31,7 @@ function svg_arr_to_string(arr) {
   let entities = arr.reduce((str, entity) => {
 
     if (entity.hatch && hatches[entity.hatch.pattern]) {
-      const transform = convert_transform_matrix(entity.transform);
+      const transform = convert_transform_matrix(entity.transform, entity.hatch.scale);
       const hash_input = `${entity.hatch.scale}-${entity.hatch.angle}-${entity.hatch.color}-${entity.hatch.background}-${entity.hatch.stroke_width}-${transform}`;
       const hatch_name = `${entity.hatch.pattern}-${hash(hash_input)}`;
       h[hatch_name] = hatches[entity.hatch.pattern](
@@ -42,7 +52,9 @@ function svg_arr_to_string(arr) {
   const hatch_arr = Object.values(h);
   if (hatch_arr.length > 0) {
     let defs = '\n<defs>';
-    hatch_arr.forEach((hatch) => { defs = defs.concat(hatch); });
+    hatch_arr.forEach((hatch) => {
+      defs = defs.concat(hatch);
+    });
     defs = defs.concat('</defs>\n');
     entities = `${defs}${entities}`;
   }
@@ -106,11 +118,6 @@ function recurse(sketch, options) {
       const entity = svg_renderer(sketch.node.entity, { output: 'js', ...options });
       if (entity) svg.push(entity);
     }
-  }
-
-  // draw children
-  for (const child of sketch.node.children) {
-    svg.push(...recurse(child, options));
   }
 
   return svg;
