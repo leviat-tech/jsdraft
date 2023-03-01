@@ -52,9 +52,7 @@ function svg_arr_to_string(arr) {
   const hatch_arr = Object.values(h);
   if (hatch_arr.length > 0) {
     let defs = '\n<defs>';
-    hatch_arr.forEach((hatch) => {
-      defs = defs.concat(hatch);
-    });
+    hatch_arr.forEach((hatch) => { defs = defs.concat(hatch); });
     defs = defs.concat('</defs>\n');
     entities = `${defs}${entities}`;
   }
