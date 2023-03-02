@@ -1,5 +1,89 @@
 # JSDraft files
 
+## ES6 modules
+
+As of version 0.0.48 you no longer need a loader to load draft files into your project. Files can still be defined and loaded the old way, but now you can define features as ES6 modules and import these into the draft index file. One of the biggest benefits is that you can import shared helpers/config into feature definitions.
+
+```
+my_drawing
+├── index.js
+├── feature1.js
+├── feature2.js
+```
+
+The `index.js` file stores metadata about the project. Project-wide settings can be defined in the `index.js` - see below for the defaults. Features should be imported here and defined in the exported config. The format for [js feature files](js-syntax.md) is the same but make sure you `export default` the function/config instead of returning it
+
+```js
+import feature1 from './feature1';
+import feature2 from './feature2';
+import helper1 from '../helpers/helper1'
+import helper2 from '../helpers/helper2'
+
+
+export default {
+  filetype: 'JSDraft',
+  version: '0.0.1',
+  settings: {
+    model_unit: 'mm',
+    plot_size: 1000,
+    plot_unit: 'mm',
+    scale: 1,
+    style: {
+      fill: {
+        color: 'white',
+        opacity: 1,
+        hatch: 'concrete',
+        hatch_angle: 0,
+        hatch_scale: 1,
+        hatch_color: 'black',
+        hatch_background: 'none',
+        hatch_stroke_width: 1
+      },
+      stroke: {
+        color: 'black',
+        opacity: 1,
+        strokewidth: 1.5,
+        scaled: false
+      },
+      annotation: {
+        color: 'black',
+        h_align: 'center',
+        v_align: 'middle',
+        font_size: 12,
+        scale: 1,
+        extension: 5,
+        hash_length: 5,
+        offset: 50,
+        text_offset: 10,
+        precision: 0
+      }
+    },
+  },
+  styles: {
+    foo: {
+      fill: {
+        color: 'red'
+      }
+    }
+  },
+  features: {
+    feature1,
+    feature2
+  },
+  xrefs: {
+    foo: {
+      helper1,
+      helper2
+    }
+  }
+}
+```
+
+
+
+
+## Legacy format via loader
+
 JSDraft "files" are just folders containing any number of feature functions, written in either [JS](js-syntax.md) or [YAML](yaml-syntax.md) syntax. The files are uncompressed to allow for simplified editing in the user's preferred editor. The folder containing these files has a `.draft` extension. A typical `.draft` file might look like this:
 
 ```
@@ -14,7 +98,7 @@ All yaml and js features in the are automatically registered as user features, a
 
 The `index.json` file stores metadata about the project. Project-wide settings can be defined in the `index.json`--see below for the defaults.
 
-```js
+```json
 {
   "filetype": "JSDraft",
   "version": "0.0.1",
