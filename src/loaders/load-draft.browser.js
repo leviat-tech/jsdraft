@@ -16,6 +16,7 @@ function load_draft_file(d, Draft) {
     ? Object.entries(dir['sketch-features'])
     : Object.entries(dir);
 
+  // Get dir files
   const files = sketch_dir
     .filter(([filename]) => parse_filename(filename))
     .map(([filename, contents]) => ({
@@ -23,6 +24,7 @@ function load_draft_file(d, Draft) {
       contents,
     }));
 
+  // Get index
   let index;
   try {
     index = dir['index.json']

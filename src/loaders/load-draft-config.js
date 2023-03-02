@@ -4,36 +4,30 @@ const reduce = require('lodash/reduce');
 
 function load_draft_config(config, Draft) {
   const draft = new Draft();
-
-  draft.settings = config.settings || {};
-  draft.styles = config.styles || {};
-
-  console.log(config.xrefs);
+  const xrefs = {};
 
   if (config.xrefs) {
-    draft.xrefs = reduce(config.xrefs, (xrefs, xref, key) => {
-      console.log(xref, key);
+    each(config.xrefs, (xref, key) => {
+      xrefs[key] = new Draft();
+
       // Catch errors so that drafts with failed xrefs can still be loaded.
       try {
-        xrefs[key] = reduce(xref, (currXref, func, name) => {
-          console.log(currXref, func, name);
-          currXref[name] = new Draft();
-          return currXref;
-        }, {});
+       each(xref, (func, name) => {
+          xrefs[key].add_feature(name, 'js', { parameters: [], func })
+       });
       } catch {
         console.error(`Unable to load xref "${key}".`);
       }
-
-      return xrefs;
-    }, {});
+    });
   }
-
-  console.log(draft);
-
 
   each(config.features, (value, key) => {
     draft.add_feature(key, 'js', value);
   });
+
+  draft.settings = config.settings || {};
+  draft.styles = config.styles || {};
+  draft.xrefs = xrefs;
 
   return draft;
 }
