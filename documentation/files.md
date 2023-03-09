@@ -14,13 +14,14 @@ my_drawing
 The `index.js` file stores metadata about the project. Project-wide settings can be defined in the `index.js` - see below for the defaults. Features should be imported here and defined in the exported config. The format for [js feature files](js-syntax.md) is the same but make sure you `export default` the function/config instead of returning it
 
 ```js
+import { Draft } from '@crhio/jsdraft';
 import feature1 from './feature1';
 import feature2 from './feature2';
 import helper1 from '../helpers/helper1'
 import helper2 from '../helpers/helper2'
 
 
-export default {
+export default Draft.load_config({
   filetype: 'JSDraft',
   version: '0.0.1',
   settings: {
@@ -76,7 +77,7 @@ export default {
       helper2
     }
   }
-}
+})
 ```
 
 
