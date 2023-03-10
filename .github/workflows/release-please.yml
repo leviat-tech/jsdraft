@@ -1,0 +1,40 @@
+on:
+    push:
+      branches:
+        - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+name: release-please
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          command: manifest
+
+      # The logic below handles the npm publication:
+      - name: Checkout Repository
+        if: ${{ steps.release.outputs.releases_created }}
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        if: ${{ steps.release.outputs.releases_created }}
+        with:
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org'
+      - name: Build Packages
+        if: ${{ steps.release.outputs.releases_created }}
+        run: |
+          npm install
+          npm run build
+      - name: Publish to NPM
+        if: ${{ steps.release.outputs.releases_created }}
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+        run: npm publish
