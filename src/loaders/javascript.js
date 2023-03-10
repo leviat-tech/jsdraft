@@ -23,7 +23,7 @@ function decorate(def, identifier) {
 }
 
 function parse(contents, identifier) {
-  const def = evaluate(contents.trim());
+  const def = typeof contents === 'object' ? contents : evaluate(contents.trim());
 
   return decorate(def, identifier);
 }

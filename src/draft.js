@@ -4,6 +4,7 @@ const Sketch = require('./sketch/sketch.js');
 const render = require('./render.js');
 const { parameters } = require('./loaders/parameters.js');
 const load_draft_file = require('./loaders/load-draft.js');
+const load_draft_config = require('./loaders/load-draft-config.js');
 
 
 class Draft {
@@ -59,10 +60,16 @@ class Draft {
     };
   }
 
+  /**
+   * @param { string } name
+   * @param { string} extension - yaml or js
+   * @param { string | object } definition - raw string of file contents or module
+   * @param { string } type
+   */
   add_feature(name, extension, contents, type = 'sketch') {
     this.features[type][name] = {
-      extension, // yaml or js
-      contents, // raw string of file contents
+      extension,
+      contents,
     };
 
     Object.defineProperty(this.features[type][name], 'parameters', {
@@ -95,6 +102,10 @@ class Draft {
     return load_draft_file(d, Draft);
   }
 
+  static load_config(config) {
+    return load_draft_config(config, Draft);
+  }
+
   get root() {
     const root = new Sketch();
     root.node.styles = this.styles;
@@ -120,9 +131,7 @@ class Draft {
     if (options.type) {
       type = options.type;
     } else {
-      type = this.features.sketch[name]
-        ? 'sketch'
-        : 'model';
+      type = this.features.sketch[name] ? 'sketch' : 'model';
     }
 
     const source = this.features[type][name];

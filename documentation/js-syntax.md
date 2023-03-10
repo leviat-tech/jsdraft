@@ -46,7 +46,7 @@ Defining function parameters explicitly is useful for:
 * Validating input parameters or coercing them into desired classes
 * Letting the app UI provide parameter override inputs, which can be useful for testing the flexing behavior of a function
 
-To do this, instead of returning a function, we reeturn an object, which allows the definition of some additional properties:
+To do this, instead of returning a function, we return an object, which allows the definition of some additional properties:
 
 ```js
 {
