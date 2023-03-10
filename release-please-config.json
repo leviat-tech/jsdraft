@@ -1,0 +1,9 @@
+{
+  "bootstrap-sha": "d42d70d7902deebac2162450694ade44310c7a99",
+  "packages": {
+    ".": {
+      "release-type": "node",
+      "bump-patch-for-minor-pre-major": true
+    }
+  }
+}
