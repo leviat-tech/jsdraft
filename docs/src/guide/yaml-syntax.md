@@ -1,4 +1,4 @@
-# YAML Syntax
+# JSDraft YAML Syntax
 
 Features can be defined as YAML document. A YAML feature can consist of any of the following top-level features (all optional):
 

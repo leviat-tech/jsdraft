@@ -2,7 +2,7 @@
 
 JSDraft is a tool for creating 2D parametric drawings which can be flexed at runtime and output to a range of potential outputs (i.e., SVG, DXF, etc).
 
-![Path Diagram](https://github.com/leviat-tech/jsdraft/blob/main/documentation/diagram.png)
+![Path Diagram](./diagram.png)
 
 ## Sketch
 
@@ -96,7 +96,7 @@ A "draft" is a collection of sketch features, stored as raw strings. Features ca
 
 All features in a draft "file" are automatically registered so that they can be used by any of the other features. When stored on disk, a draft "file" is actually just a folder, which by convention has a ".draft" extension; all sketch features contained within this folder should follow the naming pattern `name.js` or `name.yaml`. Draft files should also have an `index.json`, which is used to define settings and properties that apply to the entire collection.
 
-The draft file can then be [imported](importing.md) and used within a project:
+The draft file can then be imported and used within a project:
 
 ```js
 import draft from 'path/to/file.draft';
@@ -109,10 +109,3 @@ const svg = draft.render(
   {},        // rendering options
 );
 ```
-
-Additional documentation:
-* [Using the JSDraft app](app.md)
-* [YAML feature syntax](yaml-syntax.md)
-* [JS feature syntax](js-syntax.md)
-* [Draft api](api.md)
-* [Importing draft files](files.md)
