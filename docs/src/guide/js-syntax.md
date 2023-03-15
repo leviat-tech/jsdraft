@@ -1,4 +1,4 @@
-# JS Syntax
+# JSDraft JS Syntax
 
 Defining features in JavaScript offers more freedom and power than in [YAML](yaml-syntax.md), at the expense of being somewhat more verbose for certain types of features. It will perhaps be a better option for users who are already familiar with JavaScript; also, there may be fewer surprises compared to understanding all of the ways that YAML might interpret an unquoted string.
 
