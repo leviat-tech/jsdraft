@@ -59,3 +59,5 @@ import draft from 'path/to/file.draft';
 
 const svg = draft.render('my_sketch', [1, 2, 3], 'svg');
 ```
+
+[CONTRIBUTING](CONTRIBUTING.MD)
