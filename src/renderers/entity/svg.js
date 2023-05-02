@@ -206,9 +206,17 @@ const renderers = {
     const path = `M ${a.x} ${a.y} L ${b.x} ${b.y} M ${c.x} ${c.y} L ${d.x} ${d.y} M ${e.x} ${e.y} L ${f.x} ${f.y}`;
 
     const value = parseFloat((length * dim_conversion).toPrecision(pr));
-    const textPrefix = (entity.options?.prefix) ? `${entity.options.prefix} ` : '';
-    const textSuffix = (entity.options?.suffix) ? ` ${entity.options.suffix}` : '';
-    const ltext = `${textPrefix}${value}${textSuffix}`;
+
+    let ltext;
+
+    if (entity.options?.formatter) {
+      ltext = entity.options.formatter(value);
+    } else {
+      const textPrefix = (entity.options?.prefix) ? `${entity.options.prefix} ` : '';
+      const textSuffix = (entity.options?.suffix) ? ` ${entity.options.suffix}` : '';
+      ltext = `${textPrefix}${value}${textSuffix}`;
+    }
+
     const mask_w = font_size * s * (ltext.toString().length * 0.6 + 0.5);
 
     // if overall text width is less than the distance between points, then
