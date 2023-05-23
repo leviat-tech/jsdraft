@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.49](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.48...jsdraft-v0.0.49) (2023-05-23)
+
+
+### Bug Fixes
+
+* update rollup plugin peer dep version ([d77b1ab](https://github.com/leviat-tech/jsdraft/commit/d77b1ab5c397685e68013fd6b84f687d153dcea4))
+
 ## [0.0.48](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.47...jsdraft-v0.0.48) (2023-05-02)
 
 
