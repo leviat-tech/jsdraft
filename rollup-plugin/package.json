@@ -13,7 +13,7 @@
     "tosource": "^2.0.0-alpha.2"
   },
   "peerDependencies": {
-    "@crhio/jsdraft": "~0.0.23"
+    "@crhio/jsdraft": "~0.1.1"
   },
   "main": "dist/main.js",
   "keywords": [],
