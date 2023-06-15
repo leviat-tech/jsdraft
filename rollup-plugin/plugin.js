@@ -87,12 +87,15 @@ export default function plugin() {
       return p;
     },
 
-    load(id) {
+    load(_id) {
+      // Convert windows path by replacing backslashes and removing drive reference at start of string (e.g. C:/)
+      const id = _id.replace(/\w:\//, '').replace(/\\/g, '/');
+
       if (!isDraft(id)) return null;
 
       draftIds[id] = true;
 
-      const cwd = process.cwd();
+      const cwd = process.cwd().replace(/\\/g, '/');
       let p = id.startsWith(cwd)
         ? id
         : path.join(cwd, id);
