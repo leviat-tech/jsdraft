@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.49](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.48...jsdraft-v0.0.49) (2023-06-21)
+
+
+### Bug Fixes
+
+* options not passed into dxf entity ([7477daa](https://github.com/leviat-tech/jsdraft/commit/7477daaf05e19a47ee2cff5d1c43a4c1b7f929cb))
+* update rollup plugin peer dep version ([d77b1ab](https://github.com/leviat-tech/jsdraft/commit/d77b1ab5c397685e68013fd6b84f687d153dcea4))
+
 ## [0.0.48](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.47...jsdraft-v0.0.48) (2023-05-02)
 
 
