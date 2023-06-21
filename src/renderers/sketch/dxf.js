@@ -41,7 +41,7 @@ function recurse(sketch, d, options) {
 
   if (sketch.node.entity) {
     const type = base_entity_type(sketch.node.entity);
-    if (renderers[type]) renderers[type](d, sketch.node.entity);
+    if (renderers[type]) renderers[type](d, sketch.node.entity, options);
   }
 
   for (const child of sketch.node.children) {
