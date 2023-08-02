@@ -23,6 +23,7 @@ const rectangle = require('./geometric/rectangle.js');
 const segment = require('./geometric/segment.js');
 
 const add_attribute = require('./meta/add-attribute.js');
+const dataset = require('./meta/dataset.js');
 const hide = require('./meta/hide.js');
 const ignore_mask = require('./meta/ignore-mask.js');
 const layer = require('./meta/layer.js');
@@ -56,7 +57,6 @@ const translate = require('./transformations/translate.js');
 
 const rainbow = require('./debugging/rainbow.js');
 
-
 module.exports = {
   fill,
   hatch,
@@ -83,6 +83,7 @@ module.exports = {
   segment,
 
   add_attribute,
+  dataset,
   hide,
   ignore_mask,
   layer,

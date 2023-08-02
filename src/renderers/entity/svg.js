@@ -7,7 +7,6 @@ const almost_equal = require('../../utility/misc/almost-equal.js');
 const points_are_near = require('../../utility/geometry/points-are-near.js');
 const svg_color = require('../../utility/misc/svg-color.js');
 
-
 const DEFAULT_ATTRIBUTES = {
   stroke: 'black',
   'stroke-width': '1.5px',
@@ -44,7 +43,6 @@ function svg_h_align(prop) {
   }[prop];
 }
 
-
 const renderers = {
   point: function point(entity, { style } = {}) {
     const attributes = {
@@ -59,7 +57,6 @@ const renderers = {
     return { tag: 'path', attributes };
   },
 
-
   segment: function segment(entity, { style } = {}) {
     const d = `M${entity.start.x},${entity.start.y} L${entity.end.x},${entity.end.y}`;
     const attributes = {
@@ -71,7 +68,6 @@ const renderers = {
     return { tag: 'path', attributes };
   },
 
-
   arc: function arc(entity, { style = {} } = {}) {
     let laf;
     let d;
@@ -82,7 +78,10 @@ const renderers = {
       laf = '0';
 
       const ps = entity.start;
-      const v = Vector(entity.pc).subtract(ps).normalize().scale(entity.r * 2);
+      const v = Vector(entity.pc)
+        .subtract(ps)
+        .normalize()
+        .scale(entity.r * 2);
       const pe = Vector(ps).add(v);
 
       const ha1 = `M${ps.x},${ps.y} A${entity.r},${entity.r},0,${laf},${sf},${pe.x},${pe.y}`;
@@ -90,7 +89,7 @@ const renderers = {
 
       d = `${ha1} ${ha2}`;
 
-    // Otherwise draw as a typical arc
+      // Otherwise draw as a typical arc
     } else {
       laf = entity.sweep <= Math.PI ? '0' : '1';
       d = `M${entity.start.x},${entity.start.y} A${entity.r},${entity.r},0,${laf},${sf},${entity.end.x},${entity.end.y}`;
@@ -106,10 +105,11 @@ const renderers = {
     return { tag: 'path', attributes };
   },
 
-
   polycurve: function polycurve(entity, { style = {} } = {}) {
     let d = `M${entity.first.start.x},${entity.first.start.y}`;
-    for (const edge of entity) { d += edge.svg(); }
+    for (const edge of entity) {
+      d += edge.svg();
+    }
 
     const attributes = {
       ...DEFAULT_ATTRIBUTES,
@@ -121,10 +121,11 @@ const renderers = {
     return { tag: 'path', attributes };
   },
 
-
   polyface: function polyface(entity, { model_scale = 1, style = {} } = {}) {
     let d = '';
-    for (const face of entity.faces) { d += face.svg(); }
+    for (const face of entity.faces) {
+      d += face.svg();
+    }
 
     const attributes = {
       ...DEFAULT_ATTRIBUTES,
@@ -151,45 +152,48 @@ const renderers = {
     };
   },
 
-
-  aligned_dim: function aligned_dim(entity, {
-    annotation_scale = 1,
-    dim_conversion = 1,
-    style: {
-      annotation: {
-        extension: ex = 5,
-        hash_length: hl = 5,
-        offset: os = 50,
-        text_offset: to = 10,
-        precision: pr = 4,
-        scale = 1,
-        font_size = 12,
-        h_align = 'center',
-        v_align = 'middle',
-        color = 'black',
-        width = '1px',
+  aligned_dim: function aligned_dim(
+    entity,
+    {
+      annotation_scale = 1,
+      dim_conversion = 1,
+      style: {
+        annotation: {
+          extension: ex = 5,
+          hash_length: hl = 5,
+          offset: os = 50,
+          text_offset: to = 10,
+          precision: pr = 4,
+          scale = 1,
+          font_size = 12,
+          h_align = 'center',
+          v_align = 'middle',
+          color = 'black',
+          width = '1px',
+        } = {},
       } = {},
-    } = {},
-  }) {
+    }
+  ) {
     if (points_are_near(entity.ps, entity.pe)) return null;
 
     const s = annotation_scale * scale;
     const v1 = Vector({ x: entity.ps.x, y: entity.ps.y });
     const v2 = Vector({ x: entity.pe.x, y: entity.pe.y });
     const length = v2.subtract(v1).magnitude();
-    const dim_vector = length !== 0 ? v2.subtract(v1).normalize() : Vector({ x: 1, y: 0 });
+    const dim_vector =
+      length !== 0 ? v2.subtract(v1).normalize() : Vector({ x: 1, y: 0 });
 
-    const ovec = (entity.offset < 0 || entity.offset === 'right')
-      ? dim_vector.rotate(Math.PI / 2).reverse()
-      : dim_vector.rotate(Math.PI / 2);
+    const ovec =
+      entity.offset < 0 || entity.offset === 'right'
+        ? dim_vector.rotate(Math.PI / 2).reverse()
+        : dim_vector.rotate(Math.PI / 2);
 
-    const offset = (typeof entity.offset === 'number')
-      ? Math.abs(entity.offset)
-      : os * s;
+    const offset =
+      typeof entity.offset === 'number' ? Math.abs(entity.offset) : os * s;
 
     const hashoffset1 = ovec.scale(ex * s);
     const crossoffset = ovec.scale(offset);
-    const hashoffset2 = ovec.scale(offset + (hl * s));
+    const hashoffset2 = ovec.scale(offset + hl * s);
     const exoffset = dim_vector.scale(ex * s);
     const textoffset = ovec.scale(to * s);
 
@@ -212,8 +216,12 @@ const renderers = {
     if (entity.options?.formatter) {
       ltext = entity.options.formatter(value);
     } else {
-      const textPrefix = (entity.options?.prefix) ? `${entity.options.prefix} ` : '';
-      const textSuffix = (entity.options?.suffix) ? ` ${entity.options.suffix}` : '';
+      const textPrefix = entity.options?.prefix
+        ? `${entity.options.prefix} `
+        : '';
+      const textSuffix = entity.options?.suffix
+        ? ` ${entity.options.suffix}`
+        : '';
       ltext = `${textPrefix}${value}${textSuffix}`;
     }
 
@@ -222,10 +230,13 @@ const renderers = {
     // if overall text width is less than the distance between points, then
     // position the dimension on the line. Otherwise position the dimension
     // above the line.
-    const text_on_line = (mask_w * mask_w) < v1.distSq(v2);
+    const text_on_line = mask_w * mask_w < v1.distSq(v2);
     const cp = text_on_line
       ? v1.add(dim_vector.scale(length / 2)).add(crossoffset)
-      : v1.add(dim_vector.scale(length / 2)).add(crossoffset).add(textoffset);
+      : v1
+          .add(dim_vector.scale(length / 2))
+          .add(crossoffset)
+          .add(textoffset);
     const mask_id = uuidv4().slice(10);
 
     const path_attributes = {
@@ -245,9 +256,8 @@ const renderers = {
     };
 
     const r = -dim_vector.angleDeg();
-    const rotation = (Math.abs(r) + 1.19209290e-7) > 90
-      ? Math.sign(r) * -180 + r
-      : r;
+    const rotation =
+      Math.abs(r) + 1.1920929e-7 > 90 ? Math.sign(r) * -180 + r : r;
 
     const text_attributes = {
       fill: svg_color(color),
@@ -258,7 +268,8 @@ const renderers = {
       'text-anchor': svg_h_align(h_align),
       transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
       'font-size': font_size * s,
-      'font-family': 'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
+      'font-family':
+        'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
     };
 
     // add data- properties to <text> element for event handling
@@ -294,14 +305,18 @@ const renderers = {
     return {
       tag: 'g',
       nodes: [
-        ...(text_on_line ? [{
-          tag: 'mask',
-          attributes: { id: mask_id },
-          nodes: [
-            { tag: 'rect', attributes: dim_attributes },
-            { tag: 'rect', attributes: mask_attributes },
-          ],
-        }] : []),
+        ...(text_on_line
+          ? [
+              {
+                tag: 'mask',
+                attributes: { id: mask_id },
+                nodes: [
+                  { tag: 'rect', attributes: dim_attributes },
+                  { tag: 'rect', attributes: mask_attributes },
+                ],
+              },
+            ]
+          : []),
         {
           tag: 'circle',
           attributes: { ...circle_attributes, cx: g.x, cy: g.y },
@@ -311,46 +326,56 @@ const renderers = {
           attributes: { ...circle_attributes, cx: h.x, cy: h.y },
         },
         { tag: 'path', attributes: path_attributes },
-        { tag: 'text', attributes: text_attributes, contents: ltext, callback: entity.callback },
+        {
+          tag: 'text',
+          attributes: text_attributes,
+          contents: ltext,
+          callback: entity.callback,
+        },
       ],
     };
   },
 
-
-  dim_string: function dim_string(entity, {
-    annotation_scale = 1,
-    dim_conversion,
-    style: {
-      annotation: {
-        extension: ex = 5,
-        hash_length: hl = 5,
-        offset: os = 50,
-        text_offset: to = 10,
-        precision: pr = 4,
-        scale = 1,
-        font_size = 12,
-        h_align = 'center',
-        v_align = 'middle',
-        color = 'black',
-        width = '1px',
+  dim_string: function dim_string(
+    entity,
+    {
+      annotation_scale = 1,
+      dim_conversion,
+      style: {
+        annotation: {
+          extension: ex = 5,
+          hash_length: hl = 5,
+          offset: os = 50,
+          text_offset: to = 10,
+          precision: pr = 4,
+          scale = 1,
+          font_size = 12,
+          h_align = 'center',
+          v_align = 'middle',
+          color = 'black',
+          width = '1px',
+        } = {},
       } = {},
-    } = {},
-  }) {
+    }
+  ) {
     const s = annotation_scale * scale;
     const v1 = Vector({ x: entity.ps.x, y: entity.ps.y });
     const v2 = Vector({ x: entity.pe.x, y: entity.pe.y });
     const length = v2.subtract(v1).magnitude();
-    const dim_vector = length !== 0 ? v2.subtract(v1).normalize() : Vector({ x: 1, y: 0 });
+    const dim_vector =
+      length !== 0 ? v2.subtract(v1).normalize() : Vector({ x: 1, y: 0 });
 
-    const ovec = entity.offset < 0
-      ? dim_vector.rotate(Math.PI / 2).reverse()
-      : dim_vector.rotate(Math.PI / 2);
+    const ovec =
+      entity.offset < 0
+        ? dim_vector.rotate(Math.PI / 2).reverse()
+        : dim_vector.rotate(Math.PI / 2);
 
-    const offset = entity.offset === undefined ? os * s : Math.abs(entity.offset);
+    const offset =
+      entity.offset === undefined ? os * s : Math.abs(entity.offset);
 
     const hashoffset1 = ovec.scale(ex * s);
     const crossoffset = ovec.scale(offset);
-    const hashoffset2 = ovec.scale(offset + (hl * s));
+    const hashoffset2 = ovec.scale(offset + hl * s);
     const exoffset = dim_vector.scale(ex * s);
     const textoffset = ovec.scale(to * s);
 
@@ -413,62 +438,62 @@ const renderers = {
     };
 
     const mask_id = uuidv4().slice(10);
-    const mask_nodes = [
-      { tag: 'rect', attributes: dim_attributes },
-    ];
+    const mask_nodes = [{ tag: 'rect', attributes: dim_attributes }];
 
-    const text = entity.ticks.concat(length)
-      .map((dist, i, arr) => {
-        const prev = arr[i - 1] || 0;
-        const l = dist - prev;
+    const text = entity.ticks.concat(length).map((dist, i, arr) => {
+      const prev = arr[i - 1] || 0;
+      const l = dist - prev;
 
-        const ltext = parseFloat((l * dim_conversion).toPrecision(pr));
-        const mask_w = font_size * s * (ltext.toString().length * 0.6 + 0.5);
+      const ltext = parseFloat((l * dim_conversion).toPrecision(pr));
+      const mask_w = font_size * s * (ltext.toString().length * 0.6 + 0.5);
 
-        // if overall text width is less than the distance between ticks, then
-        // position the dimension on the line. Otherwise position the dimension
-        // above the line.
-        const text_on_line = mask_w < l;
-        const cp = text_on_line
-          ? v1.add(dim_vector.scale(prev + l / 2)).add(crossoffset)
-          : v1.add(dim_vector.scale(prev + l / 2)).add(crossoffset).add(textoffset);
+      // if overall text width is less than the distance between ticks, then
+      // position the dimension on the line. Otherwise position the dimension
+      // above the line.
+      const text_on_line = mask_w < l;
+      const cp = text_on_line
+        ? v1.add(dim_vector.scale(prev + l / 2)).add(crossoffset)
+        : v1
+            .add(dim_vector.scale(prev + l / 2))
+            .add(crossoffset)
+            .add(textoffset);
 
-        const r = -dim_vector.angleDeg();
-        const rotation = (Math.abs(r) + 1.19209290e-7) > 90
-          ? Math.sign(r) * -180 + r
-          : r;
+      const r = -dim_vector.angleDeg();
+      const rotation =
+        Math.abs(r) + 1.1920929e-7 > 90 ? Math.sign(r) * -180 + r : r;
 
-        if (text_on_line) {
-          const mask_h = font_size * s * 2;
-          const mask_attributes = {
-            x: cp.x - mask_w / 2,
-            y: cp.y - mask_h / 2,
-            width: mask_w,
-            height: mask_h,
-            fill: 'black',
-            transform: `rotate(${-rotation},${cp.x},${cp.y})`,
-          };
-
-          mask_nodes.push({ tag: 'rect', attributes: mask_attributes });
-        }
-
-        return {
-          tag: 'text',
-          contents: parseFloat((l * dim_conversion).toPrecision(pr)),
-          attributes: {
-            rotation,
-            x: cp.x,
-            y: -cp.y,
-            fontsize: font_size * s,
-            fill: svg_color(color),
-            'dominant-baseline': svg_v_align(v_align),
-            'text-anchor': svg_h_align(h_align),
-            transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
-            'font-size': font_size * s,
-            'font-family': 'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
-          },
+      if (text_on_line) {
+        const mask_h = font_size * s * 2;
+        const mask_attributes = {
+          x: cp.x - mask_w / 2,
+          y: cp.y - mask_h / 2,
+          width: mask_w,
+          height: mask_h,
+          fill: 'black',
+          transform: `rotate(${-rotation},${cp.x},${cp.y})`,
         };
-      });
+
+        mask_nodes.push({ tag: 'rect', attributes: mask_attributes });
+      }
+
+      return {
+        tag: 'text',
+        contents: parseFloat((l * dim_conversion).toPrecision(pr)),
+        attributes: {
+          rotation,
+          x: cp.x,
+          y: -cp.y,
+          fontsize: font_size * s,
+          fill: svg_color(color),
+          'dominant-baseline': svg_v_align(v_align),
+          'text-anchor': svg_h_align(h_align),
+          transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
+          'font-size': font_size * s,
+          'font-family':
+            'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
+        },
+      };
+    });
 
     const path_attributes = {
       stroke: svg_color(color),
@@ -493,27 +518,29 @@ const renderers = {
     };
   },
 
-
-  angle_dim: function angle_dim(entity, {
-    annotation_scale = 1,
-    style: {
-      annotation: {
-        extension: ex = 5,
-        text_offset: to = 10,
-        precision: pr = 4,
-        scale = 1,
-        font_size = 12,
-        h_align = 'center',
-        v_align = 'middle',
-        color = 'black',
-        width = '1px',
+  angle_dim: function angle_dim(
+    entity,
+    {
+      annotation_scale = 1,
+      style: {
+        annotation: {
+          extension: ex = 5,
+          text_offset: to = 10,
+          precision: pr = 4,
+          scale = 1,
+          font_size = 12,
+          h_align = 'center',
+          v_align = 'middle',
+          color = 'black',
+          width = '1px',
+        } = {},
       } = {},
-    } = {},
-  }) {
+    }
+  ) {
     const s = annotation_scale * scale;
     const angle = entity.angle;
-    const exta = entity.exta || (ex * s);
-    const extb = entity.extb || (ex * s);
+    const exta = entity.exta || ex * s;
+    const extb = entity.extb || ex * s;
 
     const ctr = Vector(entity.ps);
     const pta = Vector(entity.pe);
@@ -553,7 +580,8 @@ const renderers = {
       'text-anchor': svg_h_align(h_align),
       transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
       'font-size': font_size * s,
-      'font-family': 'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
+      'font-family':
+        'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
     };
 
     return {
@@ -565,23 +593,25 @@ const renderers = {
     };
   },
 
-
-  radius_dim: function radius_dim(entity, {
-    annotation_scale = 1,
-    dim_conversion = 1,
-    style: {
-      annotation: {
-        extension: ex = 5,
-        text_offset: to = 10,
-        precision: pr = 4,
-        scale = 1,
-        font_size = 12,
-        v_align = 'middle',
-        color = 'black',
-        width = '1px',
+  radius_dim: function radius_dim(
+    entity,
+    {
+      annotation_scale = 1,
+      dim_conversion = 1,
+      style: {
+        annotation: {
+          extension: ex = 5,
+          text_offset: to = 10,
+          precision: pr = 4,
+          scale = 1,
+          font_size = 12,
+          v_align = 'middle',
+          color = 'black',
+          width = '1px',
+        } = {},
       } = {},
-    } = {},
-  }) {
+    }
+  ) {
     const s = annotation_scale * scale;
     const pc = Vector(entity.pc);
     const pt = Vector(entity.pt);
@@ -630,7 +660,8 @@ const renderers = {
       'text-anchor': leader_left ? 'end' : 'start',
       transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
       'font-size': font_size * s,
-      'font-family': 'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
+      'font-family':
+        'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
     };
 
     return {
@@ -642,23 +673,25 @@ const renderers = {
     };
   },
 
-
-  diameter_dim: function diameter_dim(entity, {
-    annotation_scale = 1,
-    dim_conversion = 1,
-    style: {
-      annotation: {
-        extension: ex = 5,
-        text_offset: to = 10,
-        precision: pr = 4,
-        scale = 1,
-        font_size = 12,
-        v_align = 'middle',
-        color = 'black',
-        width = '1px',
+  diameter_dim: function diameter_dim(
+    entity,
+    {
+      annotation_scale = 1,
+      dim_conversion = 1,
+      style: {
+        annotation: {
+          extension: ex = 5,
+          text_offset: to = 10,
+          precision: pr = 4,
+          scale = 1,
+          font_size = 12,
+          v_align = 'middle',
+          color = 'black',
+          width = '1px',
+        } = {},
       } = {},
-    } = {},
-  }) {
+    }
+  ) {
     const s = annotation_scale * scale;
     const pc = Vector(entity.pc);
     const pt = Vector(entity.pt);
@@ -708,7 +741,8 @@ const renderers = {
       'text-anchor': leader_left ? 'end' : 'start',
       transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
       'font-size': font_size * s,
-      'font-family': 'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
+      'font-family':
+        'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
     };
 
     return {
@@ -720,33 +754,30 @@ const renderers = {
     };
   },
 
-
-  text: function text(entity, {
-    annotation_scale = 1,
-    style: {
-      annotation: {
-        scale = 1,
-        font_size = 12,
-        h_align = 'center',
-        v_align = 'middle',
-        color = 'black',
+  text: function text(
+    entity,
+    {
+      annotation_scale = 1,
+      style: {
+        annotation: {
+          scale = 1,
+          font_size = 12,
+          h_align = 'center',
+          v_align = 'middle',
+          color = 'black',
+        } = {},
       } = {},
-    } = {},
-    transform,
-  }) {
+      transform,
+    }
+  ) {
     const s = annotation_scale * scale;
 
     let t;
     if (transform) {
-      t = [
-        transform[0],
-        transform[1],
-        transform[2],
-        transform[3],
-        0,
-        0,
-      ];
-      t = `translate(${entity.p.x}, ${entity.p.y}) matrix(${t.join(' ')}) translate(${-entity.p.x}, ${-entity.p.y}) `;
+      t = [transform[0], transform[1], transform[2], transform[3], 0, 0];
+      t = `translate(${entity.p.x}, ${entity.p.y}) matrix(${t.join(
+        ' '
+      )}) translate(${-entity.p.x}, ${-entity.p.y}) `;
     } else {
       t = '';
     }
@@ -758,29 +789,34 @@ const renderers = {
       rotation: entity.rotation,
       'dominant-baseline': svg_v_align(v_align),
       'text-anchor': svg_h_align(h_align),
-      transform: `${t}scale(1 -1) rotate(${rad_to_deg(entity.rotation)},${entity.p.x},${-entity.p.y})`,
+      transform: `${t}scale(1 -1) rotate(${rad_to_deg(entity.rotation)},${
+        entity.p.x
+      },${-entity.p.y})`,
       'font-size': font_size * s,
-      'font-family': 'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
+      'font-family':
+        'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
     };
 
     return { tag: 'text', attributes, contents: entity.text };
   },
 
-
-  leader: function leader(entity, {
-    annotation_scale = 1,
-    style: {
-      annotation: {
-        extension: ex = 5,
-        text_offset: to = 10,
-        scale = 1,
-        font_size = 12,
-        v_align = 'middle',
-        color = 'black',
-        width = '1px',
+  leader: function leader(
+    entity,
+    {
+      annotation_scale = 1,
+      style: {
+        annotation: {
+          extension: ex = 5,
+          text_offset: to = 10,
+          scale = 1,
+          font_size = 12,
+          v_align = 'middle',
+          color = 'black',
+          width = '1px',
+        } = {},
       } = {},
-    } = {},
-  }) {
+    }
+  ) {
     const s = annotation_scale * scale;
     const ps = Vector(entity.ps);
     const pe = Vector(entity.pe);
@@ -823,7 +859,8 @@ const renderers = {
       'text-anchor': leader_left ? 'end' : 'start',
       transform: `scale(1 -1) rotate(${rotation},${cp.x},${-cp.y})`,
       'font-size': font_size * s,
-      'font-family': 'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
+      'font-family':
+        'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
     };
 
     return {
@@ -835,7 +872,6 @@ const renderers = {
     };
   },
 };
-
 
 function svg(entity, { output = 'string', ...options }) {
   const type = base_entity_type(entity);
