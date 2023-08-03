@@ -348,8 +348,9 @@ class Sketch {
           output.node.feature || func.identifier || func.name;
         return output;
       } catch (error) {
+        const argsString = args.map((a) => `\n(${JSON.stringify(a)})`);
         throw new Error(
-          `Error executing ${id}: ${error}: ${[...args].map((a) => a)}`
+          `Error executing ${id}: ${error} \nARGUMENTS RECIEVED: ${argsString}\n`
         );
       }
     }

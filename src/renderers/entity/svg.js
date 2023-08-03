@@ -121,18 +121,28 @@ const renderers = {
     return { tag: 'path', attributes };
   },
 
-  polyface: function polyface(entity, { model_scale = 1, style = {} } = {}) {
+  polyface: function polyface(
+    entity,
+    { model_scale = 1, style = {}, dataset = {} } = {}
+  ) {
     let d = '';
     for (const face of entity.faces) {
       d += face.svg();
     }
 
-    const attributes = {
+    let attributes = {
       ...DEFAULT_ATTRIBUTES,
       'fill-rule': 'evenodd',
       ...style_to_svg(style),
       d,
     };
+
+    if (dataset) {
+      Object.entries(dataset).forEach(([key, val]) => {
+        const attr = `data-${key}`;
+        attributes[attr] = val;
+      });
+    }
 
     const hatch_scale = style.fill?.hatch_scale || 1;
 
