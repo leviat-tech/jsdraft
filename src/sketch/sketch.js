@@ -348,9 +348,9 @@ class Sketch {
           output.node.feature || func.identifier || func.name;
         return output;
       } catch (error) {
-        throw new Error(
-          `Error executing ${id}: ${error}: ${[...args].map((a) => a)}`
-        );
+        let message = `Error executing ${id}: ${error}`;
+
+        throw new Error(message);
       }
     }
     feature.identifier = id;

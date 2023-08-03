@@ -4,7 +4,6 @@ const Segment = require('./segment');
 const Polyface = require('./polyface');
 const { normalize, matches } = require('../../utility/arguments');
 
-
 class Rectangle extends Polyface {
   constructor(...args) {
     args = normalize(args);
@@ -16,7 +15,7 @@ class Rectangle extends Polyface {
           [[xmin, ymin], radius],
           [[xmax, ymin], radius],
           [[xmax, ymax], radius],
-          [[xmin, ymax], radius],
+          [[xmin, ymax], radius]
         );
 
         super();
@@ -51,7 +50,9 @@ class Rectangle extends Polyface {
     super(...args);
   }
 
-  get type() { return 'rectangle'; }
+  get type() {
+    return 'rectangle';
+  }
 
   static from_boundaries(xmin, ymin, xmax, ymax) {
     return new Rectangle(xmin, ymin, xmax, ymax);
@@ -59,7 +60,13 @@ class Rectangle extends Polyface {
 
   static from_origin(origin, width, height, radius) {
     origin = new Point(...origin);
-    return new Rectangle(origin.x, origin.y, origin.x + width, origin.y + height, radius);
+    return new Rectangle(
+      origin.x,
+      origin.y,
+      origin.x + width,
+      origin.y + height,
+      radius
+    );
   }
 
   static from_corners(start, end, radius) {
@@ -72,7 +79,13 @@ class Rectangle extends Polyface {
     const near = new Segment(edge);
     const norm = flatten.line(near.start, near.end).norm;
     const far = near.translate(norm.multiply(height));
-    return new Rectangle(near.start.x, near.start.y, far.end.x, far.end.y, radius);
+    return new Rectangle(
+      near.start.x,
+      near.start.y,
+      far.end.x,
+      far.end.y,
+      radius
+    );
   }
 
   get xmin() {
@@ -91,6 +104,5 @@ class Rectangle extends Polyface {
     return this.box.ymax;
   }
 }
-
 
 module.exports = Rectangle;

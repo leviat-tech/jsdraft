@@ -121,7 +121,10 @@ const renderers = {
     return { tag: 'path', attributes };
   },
 
-  polyface: function polyface(entity, { model_scale = 1, style = {} } = {}) {
+  polyface: function polyface(
+    entity,
+    { model_scale = 1, style = {}, meta = {} } = {}
+  ) {
     let d = '';
     for (const face of entity.faces) {
       d += face.svg();
@@ -133,6 +136,13 @@ const renderers = {
       ...style_to_svg(style),
       d,
     };
+
+    // if (entity.options?.dataset) {
+    //   Object.entries(entity.options.dataset).forEach(([key, val]) => {
+    //     const attr = `data-${key}`;
+    //     attributes[attr] = val;
+    //   });
+    // }
 
     const hatch_scale = style.fill?.hatch_scale || 1;
 

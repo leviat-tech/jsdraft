@@ -3,7 +3,6 @@ const path = require('path');
 const parse_filename = require('../utility/misc/parse-filename.js');
 const load_draft_browser = require('./load-draft.browser.js');
 
-
 function isFile(p) {
   const stat = fs.lstatSync(p);
   return stat.isFile();
@@ -35,7 +34,7 @@ function load_draft_file(d, Draft) {
     draft.add_feature(
       name,
       extension.split('.')[1],
-      fs.readFileSync(p, 'utf-8'),
+      fs.readFileSync(p, 'utf-8')
     );
     return draft;
   }
@@ -58,6 +57,7 @@ function load_draft_file(d, Draft) {
   const settings = index.settings || {};
   const styles = index.styles || {};
   const xrefs = {};
+  debugger;
 
   if (index.xrefs) {
     Object.entries(index.xrefs).forEach(([name, rel_path]) => {
