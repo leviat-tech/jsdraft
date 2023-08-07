@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.50](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.49...jsdraft-v0.0.50) (2023-08-07)
+
+
+### Features
+
+* add data-attributes ([1f18ad5](https://github.com/leviat-tech/jsdraft/commit/1f18ad5067dced75127701fbcca69c36ce8e18d5))
+* added support for dataset ([bab3a82](https://github.com/leviat-tech/jsdraft/commit/bab3a82dfe3fe6eb050c79823c264182f7ac466e))
+
 ## [0.0.49](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.48...jsdraft-v0.0.49) (2023-06-21)
 
 
