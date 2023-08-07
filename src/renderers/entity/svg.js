@@ -43,6 +43,13 @@ function svg_h_align(prop) {
   }[prop];
 }
 
+function addDatasetAttributes(attributes, dataset) {
+  Object.entries(dataset).forEach(([key, val]) => {
+    const attr = `data-${key}`;
+    attributes[attr] = val;
+  });
+}
+
 const renderers = {
   point: function point(entity, { style } = {}) {
     const attributes = {
@@ -137,12 +144,7 @@ const renderers = {
       d,
     };
 
-    if (dataset) {
-      Object.entries(dataset).forEach(([key, val]) => {
-        const attr = `data-${key}`;
-        attributes[attr] = val;
-      });
-    }
+    if (dataset) addDatasetAttributes(attributes, dataset);
 
     const hatch_scale = style.fill?.hatch_scale || 1;
 
@@ -283,12 +285,8 @@ const renderers = {
     };
 
     // add data- properties to <text> element for event handling
-    if (entity.options.dataset) {
-      Object.entries(entity.options.dataset).forEach(([key, val]) => {
-        const attr = `data-${key}`;
-        text_attributes[attr] = val;
-      });
-    }
+    if (entity.options.dataset)
+      addDatasetAttributes(text_attributes, entity.options.dataset);
 
     const dim_min_x = Math.min(a.x, b.x, c.x, d.x, e.x, f.x) - s;
     const dim_max_x = Math.max(a.x, b.x, c.x, d.x, e.x, f.x) + s;
