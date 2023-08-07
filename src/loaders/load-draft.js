@@ -57,7 +57,6 @@ function load_draft_file(d, Draft) {
   const settings = index.settings || {};
   const styles = index.styles || {};
   const xrefs = {};
-  debugger;
 
   if (index.xrefs) {
     Object.entries(index.xrefs).forEach(([name, rel_path]) => {
