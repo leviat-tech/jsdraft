@@ -29,9 +29,11 @@ function convert_transform_matrix(_transform, scale) {
 function svg_arr_to_string(arr) {
   const h = {};
   let entities = arr.reduce((str, entity) => {
-
     if (entity.hatch && hatches[entity.hatch.pattern]) {
-      const transform = convert_transform_matrix(entity.transform, entity.hatch.scale);
+      const transform = convert_transform_matrix(
+        entity.transform,
+        entity.hatch.scale
+      );
       const hash_input = `${entity.hatch.scale}-${entity.hatch.angle}-${entity.hatch.color}-${entity.hatch.background}-${entity.hatch.stroke_width}-${transform}`;
       const hatch_name = `${entity.hatch.pattern}-${hash(hash_input)}`;
       h[hatch_name] = hatches[entity.hatch.pattern](
@@ -41,7 +43,7 @@ function svg_arr_to_string(arr) {
         entity.hatch.color,
         entity.hatch.background,
         entity.hatch.stroke_width,
-        transform,
+        transform
       );
       set(entity, 'attributes.fill', `url(#${hatch_name})`);
     }
@@ -52,14 +54,15 @@ function svg_arr_to_string(arr) {
   const hatch_arr = Object.values(h);
   if (hatch_arr.length > 0) {
     let defs = '\n<defs>';
-    hatch_arr.forEach((hatch) => { defs = defs.concat(hatch); });
+    hatch_arr.forEach((hatch) => {
+      defs = defs.concat(hatch);
+    });
     defs = defs.concat('</defs>\n');
     entities = `${defs}${entities}`;
   }
 
   return entities;
 }
-
 
 // Return an array of JS objects respresenting SVG nodes
 function recurse(sketch, options) {
@@ -82,6 +85,7 @@ function recurse(sketch, options) {
 
   // set z-index and transformation matrix
   options.z = sketch.node.z || options.z;
+  options.dataset = sketch.node.dataset || options.dataset;
   options.transform = sketch.node.transform;
   options.mask = options.mask || (sketch.node.mask && `mask_${sketch.node.id}`);
   options.ignore_mask = sketch.node.ignore_mask || options.ignore_mask;
@@ -106,14 +110,20 @@ function recurse(sketch, options) {
   // draw entities
   if (sketch.node.entity) {
     if (options.mask && !options.ignore_mask) {
-      const entity = svg_renderer(sketch.node.entity, { output: 'js', ...options });
+      const entity = svg_renderer(sketch.node.entity, {
+        output: 'js',
+        ...options,
+      });
 
       if (entity) {
         set(entity, 'attributes.mask', `url(#${options.mask})`);
         svg.push(entity);
       }
     } else {
-      const entity = svg_renderer(sketch.node.entity, { output: 'js', ...options });
+      const entity = svg_renderer(sketch.node.entity, {
+        output: 'js',
+        ...options,
+      });
       if (entity) svg.push(entity);
     }
   }
@@ -126,23 +136,26 @@ function recurse(sketch, options) {
   return svg;
 }
 
-function render(sketch, {
-  viewport = 'svg',
-  show = 'visible',
-  fit = true,
-  padding = 0,
-  padding_top = 0,
-  padding_right = 0,
-  padding_bottom = 0,
-  padding_left = 0,
-  center,
-  aspect_ratio = 1,
-  model_unit = 'mm',
-  plot_unit = model_unit,
-  plot_size = 1000,
-  scale = 1,
-  style = {},
-} = {}) {
+function render(
+  sketch,
+  {
+    viewport = 'svg',
+    show = 'visible',
+    fit = true,
+    padding = 0,
+    padding_top = 0,
+    padding_right = 0,
+    padding_bottom = 0,
+    padding_left = 0,
+    center,
+    aspect_ratio = 1,
+    model_unit = 'mm',
+    plot_unit = model_unit,
+    plot_size = 1000,
+    scale = 1,
+    style = {},
+  } = {}
+) {
   style = cloneDeep(style);
 
   // Normalize plot settings
@@ -156,12 +169,19 @@ function render(sketch, {
   const extents = sketch.extents;
   const size = convert_units(plot_size, plot_unit, model_unit);
   const ref_size = 1000;
-  const annotation_scale = (viewport === 'svg' && fit)
-    ? fit_vbscale(extents, pad, aspect_ratio)
-    : size / (ref_size * scale);
+  const annotation_scale =
+    viewport === 'svg' && fit
+      ? fit_vbscale(extents, pad, aspect_ratio)
+      : size / (ref_size * scale);
   const model_scale = convert_units(1, 'mm', model_unit);
   const dim_conversion = convert_units(1, model_unit, plot_unit);
-  const options = { style, show, annotation_scale, model_scale, dim_conversion };
+  const options = {
+    style,
+    show,
+    annotation_scale,
+    model_scale,
+    dim_conversion,
+  };
 
   // No svg/g viewport defined, raw svg entities will be exported as string
   if (viewport === null) {
@@ -196,6 +216,5 @@ function render(sketch, {
   svg.sort((a, b) => a.z - b.z);
   return `<${viewport}>${svg_arr_to_string(svg)}</${viewport}>`;
 }
-
 
 module.exports = render;

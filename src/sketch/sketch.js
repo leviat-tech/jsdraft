@@ -6,9 +6,7 @@ const { decorate } = require('../loaders/javascript');
 const pick = require('../utility/misc/pick');
 const { base_entity_type } = require('../utility/misc/entity-type.js');
 
-
 class Sketch {
-
   // construct a new empty sketch
   constructor(options) {
     const node = {
@@ -57,7 +55,7 @@ class Sketch {
       if (arg instanceof Sketch) {
         clone.node.children.push(arg);
 
-      // Entities can also be added as child nodes
+        // Entities can also be added as child nodes
       } else {
         clone.node.children.push(clone.create({ entity: arg }));
       }
@@ -132,15 +130,19 @@ class Sketch {
   }
 
   get vertices() {
-    return [].concat(...this.entities.map((e) => {
-      const type = base_entity_type(e);
+    return [].concat(
+      ...this.entities.map((e) => {
+        const type = base_entity_type(e);
 
-      if (type === 'polyface') {
-        return [].concat(...[...e.faces].map((face) => [...face].map((s) => s.start)));
-      }
+        if (type === 'polyface') {
+          return [].concat(
+            ...[...e.faces].map((face) => [...face].map((s) => s.start))
+          );
+        }
 
-      return e.vertices;
-    }));
+        return e.vertices;
+      })
+    );
   }
 
   edge(i) {
@@ -155,7 +157,9 @@ class Sketch {
       if (type === 'polycurve') {
         result.push(...entity.toShapes());
       } else if (type === 'polyface') {
-        const edges = [].concat(...[...entity.faces].map((face) => [...face].map((e) => e.shape)));
+        const edges = [].concat(
+          ...[...entity.faces].map((face) => [...face].map((e) => e.shape))
+        );
         result.push(...edges);
       } else if (['arc', 'segment'].includes(type)) {
         result.push(entity);
@@ -170,13 +174,11 @@ class Sketch {
   }
 
   get polycurves() {
-    return this.entities
-      .filter((e) => base_entity_type(e) === 'polycurve');
+    return this.entities.filter((e) => base_entity_type(e) === 'polycurve');
   }
 
   get polyfaces() {
-    return this.entities
-      .filter((e) => base_entity_type(e) === 'polyface');
+    return this.entities.filter((e) => base_entity_type(e) === 'polyface');
   }
 
   get points() {
@@ -241,7 +243,7 @@ class Sketch {
   }
 
   // create iterator to traverse entities in sketch
-  * shapes(order = 'depth', show = 'visible') {
+  *shapes(order = 'depth', show = 'visible') {
     for (const s of this.tree(order, show)) {
       if (s.node.entity) yield s.node.entity;
     }
@@ -254,9 +256,10 @@ class Sketch {
 
   // find first node where condition returns true (searched in level order)
   find(condition, order, show) {
-    const c = typeof condition === 'string'
-      ? (s) => (s.node.id === condition) || (s.node.name === condition)
-      : condition;
+    const c =
+      typeof condition === 'string'
+        ? (s) => s.node.id === condition || s.node.name === condition
+        : condition;
 
     for (const sketch of this.tree(order, show)) {
       if (c(sketch)) return sketch;
@@ -270,8 +273,10 @@ class Sketch {
     if (sketch) {
       return sketch.node.entity;
     }
-    throw Error("Called shape on a sketch that doesn't have a single shape.", this);
-
+    throw Error(
+      "Called shape on a sketch that doesn't have a single shape.",
+      this
+    );
   }
 
   // access user defined / injected features
@@ -281,36 +286,39 @@ class Sketch {
 
   // access xref-ed draft functions
   get xref() {
-    const xref = Object.entries(this.node.xrefs).reduce((funcs, [name, draft]) => {
-      funcs[name] = {};
+    const xref = Object.entries(this.node.xrefs).reduce(
+      (funcs, [name, draft]) => {
+        funcs[name] = {};
 
-      // Root sketch of the xref-ed draft has the correct user functions + xrefs
-      const root = draft.root;
+        // Root sketch of the xref-ed draft has the correct user functions + xrefs
+        const root = draft.root;
 
-      // Current sketch has the necessary child nodes
-      const clone = this.clone();
+        // Current sketch has the necessary child nodes
+        const clone = this.clone();
 
-      const original_index = clone.node.index;
-      const original_xrefs = clone.node.xrefs;
+        const original_index = clone.node.index;
+        const original_xrefs = clone.node.xrefs;
 
-      // Combine the correct child nodes with the correct user functions
-      clone.node.index = cloneDeep(root.node.index);
-      clone.node.index.owner = () => clone;
-      clone.node.xrefs = root.node.xrefs;
+        // Combine the correct child nodes with the correct user functions
+        clone.node.index = cloneDeep(root.node.index);
+        clone.node.index.owner = () => clone;
+        clone.node.xrefs = root.node.xrefs;
 
-      Object.keys(root.node.index).forEach((func_name) => {
-        funcs[name][func_name] = function d(...args) {
-          const sketch = clone.user[func_name](...args);
+        Object.keys(root.node.index).forEach((func_name) => {
+          funcs[name][func_name] = function d(...args) {
+            const sketch = clone.user[func_name](...args);
 
-          // After calling xref-ed feature, replace index on result
-          sketch.node.index = original_index;
-          sketch.node.xrefs = original_xrefs;
-          return sketch;
-        };
-      });
+            // After calling xref-ed feature, replace index on result
+            sketch.node.index = original_index;
+            sketch.node.xrefs = original_xrefs;
+            return sketch;
+          };
+        });
 
-      return funcs;
-    }, {});
+        return funcs;
+      },
+      {}
+    );
 
     return xref;
   }
@@ -336,10 +344,14 @@ class Sketch {
         const sketch = this.owner ? this.owner() : this;
         const input = cls.clone(sketch);
         const output = func.bind(sketch)(input, ...args);
-        output.node.feature = output.node.feature || func.identifier || func.name;
+        output.node.feature =
+          output.node.feature || func.identifier || func.name;
         return output;
       } catch (error) {
-        throw new Error(`Error executing ${id}: ${error}`);
+        const argsString = args.map((a) => `\n(${JSON.stringify(a)})`);
+        throw new Error(
+          `Error executing ${id}: ${error} \nARGUMENTS RECIEVED: ${argsString}\n`
+        );
       }
     }
     feature.identifier = id;
@@ -360,7 +372,8 @@ class Sketch {
 }
 
 // include all built in js feature functions
-Object.entries(features).forEach(([name, feature]) => Sketch.include(decorate(feature, name)));
-
+Object.entries(features).forEach(([name, feature]) =>
+  Sketch.include(decorate(feature, name))
+);
 
 module.exports = Sketch;
