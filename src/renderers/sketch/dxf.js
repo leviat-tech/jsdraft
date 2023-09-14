@@ -61,12 +61,17 @@ function render(sketch, {
   Object.entries(layers).forEach(([name, layer]) => {
     const color = layer.color || 'white';
     const linetype = layer.linetype || 'continuous';
+    const trueColor = layer.trueColor || -1;
 
     d.addLayer(
       name,
       DxfWriter.ACI[color.toUpperCase()],
       linetype.toUpperCase(),
     );
+    if (trueColor !== -1) {
+      d.setActiveLayer(name);
+      d.setTrueColor(layer.trueColor);
+    }
   });
 
   const layer = '0';
