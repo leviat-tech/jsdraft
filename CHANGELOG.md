@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.51](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.50...jsdraft-v0.0.51) (2023-09-15)
+
+
+### Features
+
+* set trueColor of layer in dxf ([cd67cc9](https://github.com/leviat-tech/jsdraft/commit/cd67cc9a01d2c501031a9b1d68a905da30cdec4a))
+
 ## [0.0.50](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.49...jsdraft-v0.0.50) (2023-08-07)
 
 
