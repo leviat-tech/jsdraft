@@ -71,7 +71,6 @@ const renderers = {
 
 function dxf(entity, { model_unit } = {}) {
   const d = new DxfWriter();
-  d.header('ACADVER', [[1, 'AC1009']]);
   d.setUnits(units[model_unit]);
   const type = base_entity_type(entity);
   const renderer = renderers[type];

@@ -55,7 +55,6 @@ function render(sketch, {
   model_unit = 'mm',
 } = {}) {
   const d = new DxfWriter();
-  d.header('ACADVER', [[1, 'AC1009']]);
   d.setUnits(units[model_unit]);
 
   Object.entries(layers).forEach(([name, layer]) => {

@@ -1,6 +1,6 @@
 {
   "name": "@crhio/jsdraft",
-  "version": "0.0.50",
+  "version": "0.0.51",
   "description": "A functional toolkit for drawing and flexing 2D parametric drawings",
   "bin": "src/cli.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "@crhio/vector": "0.0.4",
     "@flatten-js/core": "^1.2.23",
     "commander": "^7.1.0",
-    "dxf-writer": "1.7.0",
+    "dxf-writer": "1.18.4",
     "js-yaml": "^4.0.0",
     "lodash": "^4.17.21",
     "rbush": "^3.0.1",
