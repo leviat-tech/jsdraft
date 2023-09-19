@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.52](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.51...jsdraft-v0.0.52) (2023-09-19)
+
+
+### Bug Fixes
+
+* delete header('ACADVER', [[1, 'AC1009']]) ([0200faf](https://github.com/leviat-tech/jsdraft/commit/0200faf1c556d8060dfbffae34649fc067a8576f))
+* use dxf-writer version 1.18.4 ([0200faf](https://github.com/leviat-tech/jsdraft/commit/0200faf1c556d8060dfbffae34649fc067a8576f))
+
 ## [0.0.51](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.50...jsdraft-v0.0.51) (2023-09-15)
 
 
