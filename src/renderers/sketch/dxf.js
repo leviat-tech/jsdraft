@@ -51,7 +51,7 @@ function recurse(sketch, d, options) {
   }
 }
 
-function viewPortUpdate(dxfWriter, sketch) {
+function viewportUpdate(dxfWriter, sketch) {
   const { xmin, ymin, ymax } = sketch.extents;
   const paddingPercentage = 1.05;
   const viewportHeight = (Math.abs(ymax) + Math.abs(ymin));
@@ -70,8 +70,8 @@ function render(sketch, {
   model_unit = 'mm',
 } = {}) {
   const d = new DxfWriter();
-  viewPortUpdate(d, sketch);
 
+  viewportUpdate(d, sketch);
   d.setUnits(units[model_unit]);
 
   Object.entries(layers).forEach(([name, layer]) => {
