@@ -4,9 +4,11 @@ const get = require('lodash/get');
 const cloneDeep = require('lodash/cloneDeep');
 const { base_entity_type } = require('../../utility/misc/entity-type');
 const { renderers } = require('../entity/dxf.js');
+const Viewport = require('../utility/viewportExtended.js');
 
 
 const units = {
+  km: 'Kilometers;',
   m: 'Meters',
   cm: 'Centimeters',
   mm: 'Millimeters',
@@ -49,12 +51,24 @@ function recurse(sketch, d, options) {
   }
 }
 
+function viewPortUpdate(dxfWriter, sketch) {
+  // deletes the VPORT  default settings from dxf-writer
+  delete dxfWriter.tables.VPORT.elements[0];
+  console.log(sketch.extents);
+  const viewportHeight = Math.abs(sketch.extents.ymax) + Math.abs(sketch.extents.ymin);
+  dxfWriter.tables.VPORT.add(new Viewport('*ACTIVE', viewportHeight, sketch.extents.xmin, (viewportHeight / 2) + sketch.extents.ymin));
+
+  console.log(dxfWriter.tables.VPORT);
+}
+
 function render(sketch, {
   layers = {},
   show = 'visible',
   model_unit = 'mm',
 } = {}) {
   const d = new DxfWriter();
+  viewPortUpdate(d, sketch);
+
   d.setUnits(units[model_unit]);
 
   Object.entries(layers).forEach(([name, layer]) => {
