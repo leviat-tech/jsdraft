@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.53](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.52...jsdraft-v0.0.53) (2023-12-15)
+
+
+### Bug Fixes
+
+* dxf export set viewport ([6c28154](https://github.com/leviat-tech/jsdraft/commit/6c28154bc83c7ed4dde0c4036cd0eb54200a2eab))
+
 ## [0.0.52](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.51...jsdraft-v0.0.52) (2023-09-19)
 
 
