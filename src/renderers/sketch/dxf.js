@@ -53,13 +53,15 @@ function recurse(sketch, d, options) {
 
 function viewPortUpdate(dxfWriter, sketch) {
   const { xmin, ymin, ymax } = sketch.extents;
-  const viewportHeight = Math.abs(ymax) + Math.abs(ymin);
-  const centreX = xmin;
+  const paddingPercentage = 1.05;
+  const viewportHeight = (Math.abs(ymax) + Math.abs(ymin));
+  const viewportHeightPadded = viewportHeight * paddingPercentage;
+  const centreX = xmin * paddingPercentage;
   const centreY = (viewportHeight / 2) + ymin;
 
   // deletes the VPORT  default settings from dxf-writer
   delete dxfWriter.tables.VPORT.elements[0];
-  dxfWriter.tables.VPORT.add(new Viewport('*ACTIVE', viewportHeight, centreX, centreY));
+  dxfWriter.tables.VPORT.add(new Viewport('*ACTIVE', viewportHeightPadded, centreX, centreY));
 }
 
 function render(sketch, {
