@@ -11,6 +11,7 @@ class Viewport extends DatabaseObject {
   }
 
   tags(manager) {
+    // dxf properties require properties to be in a certain order, if not, dxf file fails to open
     manager.push(0, 'VPORT');
     super.tags(manager);
     manager.push(2, this.name);
