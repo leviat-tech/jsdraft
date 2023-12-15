@@ -54,11 +54,11 @@ function recurse(sketch, d, options) {
 function viewPortUpdate(dxfWriter, sketch) {
   // deletes the VPORT  default settings from dxf-writer
   delete dxfWriter.tables.VPORT.elements[0];
-  console.log(sketch.extents);
   const viewportHeight = Math.abs(sketch.extents.ymax) + Math.abs(sketch.extents.ymin);
-  dxfWriter.tables.VPORT.add(new Viewport('*ACTIVE', viewportHeight, sketch.extents.xmin, (viewportHeight / 2) + sketch.extents.ymin));
+  const centreX = sketch.extents.xmin;
+  const centreY = (viewportHeight / 2) + sketch.extents.ymin;
 
-  console.log(dxfWriter.tables.VPORT);
+  dxfWriter.tables.VPORT.add(new Viewport('*ACTIVE', viewportHeight, centreX, centreY));
 }
 
 function render(sketch, {
