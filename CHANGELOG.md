@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.54](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.53...jsdraft-v0.0.54) (2024-09-05)
+
+
+### Features
+
+* add new stone hatch ([6562215](https://github.com/leviat-tech/jsdraft/commit/656221524afb246adcb69d298e0e55563aac70a2))
+
 ## [0.0.53](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.52...jsdraft-v0.0.53) (2023-12-15)
 
 
