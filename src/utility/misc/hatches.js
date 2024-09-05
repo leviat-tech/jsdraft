@@ -141,6 +141,16 @@ function concrete(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw 
   `;
 }
 
+function stone(name, scale = 1, angle = 0, color = 'black', bg = 'white', sw = 1, transform) {
+  return `
+  <pattern id="${name}" patternUnits="userSpaceOnUse" width="35" height="10" patternTransform="rotate(${45 + angle}) scale(${scale} ${scale})${transform}">
+    <rect fill="${bg}" x="0" y="0" width="35" height="10" />
+	  <line stroke-dasharray="5, 10" stroke="${color}" stroke-width="${sw / scale}" vector-effect="non-scaling-stroke" x1="0" y1="5" x2="35" y2="5"></line>
+    <line stroke="${color}" stroke-width="${sw / scale}" vector-effect="non-scaling-stroke" x1="0" y1="10" x2="35" y2="10"/>
+  </pattern>
+  `;
+}
+
 module.exports = {
   crosshatch,
   lines,
@@ -148,4 +158,5 @@ module.exports = {
   concrete,
   brick,
   insulation,
+  stone,
 };
