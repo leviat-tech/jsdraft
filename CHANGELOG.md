@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.55](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.54...jsdraft-v0.0.55) (2024-10-16)
+
+
+### Features
+
+* annotations - arrow ([109c016](https://github.com/leviat-tech/jsdraft/commit/109c0161d9305d0f7e51566454ae11c77dc1c7c4))
+
 ## [0.0.54](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.53...jsdraft-v0.0.54) (2024-09-05)
 
 
