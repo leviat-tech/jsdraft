@@ -7,6 +7,7 @@ const style_all = require('./style/style_all.js');
 
 const aligned_dim = require('./annotation/aligned-dim.js');
 const angle_dim = require('./annotation/angle-dim.js');
+const arrow = require('./annotation/arrow.js');
 const diameter_dim = require('./annotation/diameter-dim.js');
 const dim_string = require('./annotation/dim-string.js');
 const leader = require('./annotation/leader.js');
@@ -67,6 +68,7 @@ module.exports = {
 
   aligned_dim,
   angle_dim,
+  arrow,
   diameter_dim,
   dim_string,
   leader,
