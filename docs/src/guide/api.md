@@ -301,6 +301,25 @@ Places an angle dimension given a center point, a point along a line, and an ang
 // Construction: center, point, angle
 const result = sketch.angle_dim([0, 0], [100, 0], 30);
 // Will result in an angle dimension indicating 30 degrees.
+
+```
+
+
+### arrow( { startPoint, endPoint, neckWidth, arrowHeadLength, arrowHeadWidth, } )_
+
+Places a basic arrow using the params object structure example below:.
+params = {
+      startPoint: [0, 0],
+      endPoint: [0, 20],
+      neckWidth: 2,
+      arrowHeadLength: 7.5,
+      arrowHeadWidth: 6,
+    }
+
+```js
+const result = sketch.arrow({ startPoint: [0, 0], endPoint: [0, 20], neckWidth: 2, arrowHeadLength: 7.5, arrowHeadWidth: 6 });
+// Will result in an arrow pointing vertically upwards.
+
 ```
 
 ## Operations
