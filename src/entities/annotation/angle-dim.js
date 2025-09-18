@@ -29,7 +29,7 @@ class AngleDim {
   }
 
   transform(matrix = new flatten.Matrix()) {
-    return new AngleDim(this.ps.transform(matrix), this.pe.transform(matrix));
+    return new AngleDim(this.ps.transform(matrix), this.pe.transform(matrix), this.angle);
   }
 
   toJSON() {
