@@ -1,0 +1,30 @@
+name: Deploy VuePress to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Needed for uploading the artifact
+      pages: write # Needed to deploy to Pages
+      id-token: write # This is the key permission for the deploy-pages action
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      - run: npm install
+        working-directory: ./docs
+      - run: npm run build
+        working-directory: ./docs
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs/src/.vuepress/dist
+      - id: deployment
+        uses: actions/deploy-pages@v4
