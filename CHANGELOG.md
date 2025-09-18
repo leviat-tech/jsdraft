@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.56](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.55...jsdraft-v0.0.56) (2025-09-18)
+
+
+### Bug Fixes
+
+* 'angle' is missed in AngleDim returned by transform ([b7445a7](https://github.com/leviat-tech/jsdraft/commit/b7445a786e65070e96ed17577fe7dcdd9cfcf983))
+
 ## [0.0.55](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.54...jsdraft-v0.0.55) (2024-10-16)
 
 
