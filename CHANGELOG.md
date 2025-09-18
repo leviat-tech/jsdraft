@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.56...jsdraft-v0.1.2) (2025-09-18)
+
+
+### Miscellaneous Chores
+
+* release 0.1.2 ([a80bfb4](https://github.com/leviat-tech/jsdraft/commit/a80bfb44625bf33b1c5d3950cbc1bdc964b3ef13))
+
 ## [0.0.56](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.55...jsdraft-v0.0.56) (2025-09-18)
 
 
