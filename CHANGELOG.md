@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.3](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.1.2...jsdraft-v0.1.3) (2025-11-18)
+
+
+### Bug Fixes
+
+* dxf export for newer leviate versions ([5b0dca5](https://github.com/leviat-tech/jsdraft/commit/5b0dca57c7c392ff52774b9ff25055e0ec179285))
+* dxf export for newer leviate versions ([5b0dca5](https://github.com/leviat-tech/jsdraft/commit/5b0dca57c7c392ff52774b9ff25055e0ec179285))
+* dxf export for newer leviate versions ([ccd27d0](https://github.com/leviat-tech/jsdraft/commit/ccd27d0d7541df7930a608e3d844e19f505b8ad6))
+
 ## [0.1.2](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.0.56...jsdraft-v0.1.2) (2025-09-18)
 
 
