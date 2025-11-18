@@ -9,8 +9,8 @@ function polycurve_to_vertices(entity, type) {
 
   vertices.push({ x: pc_vertices[0].x, y: pc_vertices[0].y, bulge: 0 });
   [...entity.edges].forEach((edge, i) => {
-
-    if (!edge.isSegment()) {
+    const isSegment = typeof edge.isSegment === 'function' ? edge.isSegment() : edge.isSegment;
+    if (!isSegment) {
       const arc = edge.shape;
 
       // circles need special handling
