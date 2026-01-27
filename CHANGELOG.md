@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.1.3...jsdraft-v0.1.4) (2026-01-27)
+
+
+### Bug Fixes
+
+* add dataset for angle dim ([c05ea8f](https://github.com/leviat-tech/jsdraft/commit/c05ea8ffe352459d51747a67e23f6e129598f7e2))
+
 ## [0.1.3](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.1.2...jsdraft-v0.1.3) (2025-11-18)
 
 
