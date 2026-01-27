@@ -592,6 +592,10 @@ const renderers = {
         'Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace',
     };
 
+    if (entity.options.dataset) {
+      addDatasetAttributes(text_attributes, entity.options.dataset);
+    }
+
     return {
       tag: 'g',
       nodes: [
