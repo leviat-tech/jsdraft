@@ -1,6 +1,7 @@
 const { description } = require('../../package')
 
 module.exports = {
+  base: '/jsdraft/',
   title: 'JSDraft Documentation',
   description: description,
   head: [
