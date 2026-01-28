@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.1.4...jsdraft-v0.1.5) (2026-01-28)
+
+
+### Features
+
+* add options to angle dim entity ([691b159](https://github.com/leviat-tech/jsdraft/commit/691b1595f13bc3097d3cb257d96f8a412e4c51ac))
+
 ## [0.1.4](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.1.3...jsdraft-v0.1.4) (2026-01-27)
 
 
