@@ -15,6 +15,8 @@ class AngleDim {
     this.ps = new Point(...args[0]);
     this.pe = new Point(...args[1]);
     this.angle = args[2];
+
+     this.options = (typeof args[4] === 'object' && args[4] !== null) ? args[4] : {};
   }
 
   get type() { return 'angle_dim'; }
