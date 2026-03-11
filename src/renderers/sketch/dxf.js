@@ -17,6 +17,16 @@ const units = {
   yd: 'Yards',
 };
 
+const unit_scale = {
+  km: 0.001,
+  m: 1,
+  cm: 100,
+  mm: 1000,
+  in: 39.3701,
+  ft: 3.28084,
+  yd: 1.09361,
+};
+
 function recurse(sketch, d, options) {
   options = cloneDeep(options);
 
@@ -91,7 +101,8 @@ function render(sketch, {
   });
 
   const layer = '0';
-  recurse(sketch, d, { show, layer });
+  const scale = unit_scale[model_unit] || 1;
+  recurse(sketch, d, { show, layer, scale });
 
   return d.toDxfString();
 }
