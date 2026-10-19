@@ -1,6 +1,7 @@
 const flatten = require('@flatten-js/core');
 const fillet_pts = require('./fillet.js');
 const Arc = require('../../entities/geometric/arc.js');
+const is_segment = require('./is-segment.js');
 
 
 function fillet_edges(entity, radius, index) {
@@ -8,9 +9,9 @@ function fillet_edges(entity, radius, index) {
   for (const edge of entity) {
     const should_fillet = (index === undefined || index === i)
       && radius > 0
-      && edge.isSegment()
+      && is_segment(edge)
       && !!edge.next
-      && edge.next.isSegment();
+      && is_segment(edge.next);
 
     if (should_fillet) {
       const a = edge.shape.ps;
