@@ -1,5 +1,6 @@
 const almost_equal = require('../misc/almost-equal.js');
 const arc_to_bulge = require('./arc-to-bulge.js');
+const is_segment = require('./is-segment.js');
 
 // entity can be either a polyface or a polyface
 function polycurve_to_vertices(entity, type) {
@@ -9,7 +10,7 @@ function polycurve_to_vertices(entity, type) {
 
   vertices.push({ x: pc_vertices[0].x, y: pc_vertices[0].y, bulge: 0 });
   [...entity.edges].forEach((edge, i) => {
-    const isSegment = typeof edge.isSegment === 'function' ? edge.isSegment() : edge.isSegment;
+    const isSegment = is_segment(edge);
     if (!isSegment) {
       const arc = edge.shape;
 
