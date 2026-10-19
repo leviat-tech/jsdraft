@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.6](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.1.5...jsdraft-v0.1.6) (2026-10-19)
+
+
+### Bug Fixes
+
+* add is-segmet to handle both func and getter ([db935a3](https://github.com/leviat-tech/jsdraft/commit/db935a3a2104896792ac003ed81ff90b6602f71d))
+* add is-segmet to handle both func and getter ([2c236da](https://github.com/leviat-tech/jsdraft/commit/2c236daa1d0cd4ecd49bd1213b4f7d128e7273cd))
+
 ## [0.1.5](https://github.com/leviat-tech/jsdraft/compare/jsdraft-v0.1.4...jsdraft-v0.1.5) (2026-01-28)
 
 
